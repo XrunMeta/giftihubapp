@@ -17,7 +17,7 @@ export default function v_6da5f5() {
         tabBarButton: v_12330e,
       }}>
       <Tabs.Screen
-        name="index"
+        name="home"
         options={{
           title: 'Home',
           tabBarIcon: ({ color: v_3c2a3a }) => <IconSymbol size={28} name="house.fill" color={v_3c2a3a} />,
