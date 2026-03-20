@@ -33,8 +33,8 @@ export default function GiftiDetailScreen() {
 
   const loadVoucher = async () => {
     try {
-      const data = await getVoucherDetail(id!);
-      setVoucher(data);
+      const res = await getVoucherDetail(id!);
+      setVoucher(res.voucher);
     } catch {
       Alert.alert("오류", "기프티 정보를 불러올 수 없습니다.");
       router.back();

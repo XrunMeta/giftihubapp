@@ -35,8 +35,8 @@ export async function getMyVouchers(
 
 export async function getVoucherDetail(
   id: string,
-): Promise<Voucher> {
-  return apiFetch<Voucher>(`/oth-path${id}`);
+): Promise<{ voucher: Voucher }> {
+  return apiFetch<{ voucher: Voucher }>(`/oth-path${id}`);
 }
 
 export async function getVoucherBarcode(
