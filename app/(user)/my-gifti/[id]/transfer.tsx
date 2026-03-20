@@ -27,7 +27,7 @@ export default function v_7f792b() {
           try {
             await v_2b01b0(v_389afb!, v_e0c7e8);
             v_03e392.alert("완료", "기프티가 양도되었습니다.", [
-              { text: "확인", onPress: () => v_904d46.back() },
+              { text: "확인", onPress: () => v_904d46.replace("/(user)/oth-path") },
             ]);
           } catch (v_49263d) {
             v_03e392.alert("실패", v_49263d.body?.error || "양도에 실패했습니다.");
