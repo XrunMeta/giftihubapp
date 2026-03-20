@@ -35,8 +35,8 @@ export async function v_720509(
 
 export async function v_50a647(
   v_389afb,
-): Promise<Voucher> {
-  return v_bc1b24<Voucher>(`/oth-path${v_389afb}`);
+): Promise<{ voucher: Voucher }> {
+  return v_bc1b24<{ voucher: Voucher }>(`/oth-path${v_389afb}`);
 }
 
 export async function v_eaee10(

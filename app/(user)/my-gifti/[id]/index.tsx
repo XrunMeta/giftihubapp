@@ -33,8 +33,8 @@ export default function v_b89029() {
 
   const v_127ddc = async () => {
     try {
-      const v_9390e8 = await v_50a647(v_389afb!);
-      v_ff27e3(v_9390e8);
+      const v_8f00b9 = await v_50a647(v_389afb!);
+      v_ff27e3(v_8f00b9.voucher);
     } catch {
       v_03e392.alert("오류", "기프티 정보를 불러올 수 없습니다.");
       v_904d46.back();
