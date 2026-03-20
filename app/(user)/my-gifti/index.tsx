@@ -103,7 +103,7 @@ export default function MyGiftiScreen() {
           data={vouchers}
           renderItem={renderVoucher}
           keyExtractor={(item) => item.id}
-          contentContainerStyle={{ paddingBottom: 20 }}
+          contentContainerStyle={vouchers.length === 0 ? { flexGrow: 1, justifyContent: "center" } : { paddingBottom: 20 }}
           ListEmptyComponent={
             <View className="items-center py-20">
               <Text className="text-muted-foreground">기프티가 없습니다.</Text>
