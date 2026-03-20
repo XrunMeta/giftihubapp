@@ -6,18 +6,27 @@ import { Minus, Plus, Trash2 } from "lucide-react-native";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useCart, type CartItem } from "@/context/CartContext";
+import { getProductImageUrl } from "@/services/store";
 
 export default function CartScreen() {
   const router = useRouter();
   const { items, updateQuantity, removeFromCart, getTotalPrice, getCartCount } = useCart();
 
-  const renderItem = ({ item }: { item: CartItem }) => (
+  const renderItem = ({ item }: { item: CartItem }) => {
+    const imgUri = getProductImageUrl(item.product);
+    return (
     <View className="flex-row bg-card rounded-xl border border-border p-3 mx-4 mb-3">
-      <Image
-        source={{ uri: item.product.thumb_url || item.product.image_url }}
-        className="w-20 h-20 rounded-lg"
-        resizeMode="cover"
-      />
+      {imgUri ? (
+        <Image
+          source={{ uri: imgUri }}
+          className="w-20 h-20 rounded-lg"
+          resizeMode="cover"
+        />
+      ) : (
+        <View className="w-20 h-20 rounded-lg bg-muted items-center justify-center">
+          <Text className="text-2xl">🎁</Text>
+        </View>
+      )}
       <View className="flex-1 ml-3 justify-between">
         <View>
           <Text className="text-xs text-muted-foreground">{item.product.brand_name}</Text>
@@ -54,7 +63,8 @@ export default function CartScreen() {
         </View>
       </View>
     </View>
-  );
+    );
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={["top"]}>

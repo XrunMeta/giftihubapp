@@ -1,18 +1,18 @@
-import { apiFetch } from "./api";
+import { apiFetch, BASE_URL } from "./api";
 
 export interface Product {
   id: string;
   brand_slug: string;
   brand_name: string;
-  brand_logo: string;
+  brand_logo: string | null;
   name: string;
   face_value: number;
   face_value_usd: number;
   price: number;
   price_usd: number;
   display_currency: string;
-  image_url: string;
-  thumb_url: string;
+  image_url: string | null;
+  thumb_url: string | null;
   stock_count: number | null;
   total_issued: number;
   status: string;
@@ -20,6 +20,20 @@ export interface Product {
   flexible_currency: string | null;
   flexible_min: number | null;
   flexible_max: number | null;
+}
+
+export function getProductImageUrl(product: Product): string | null {
+  const raw = product.thumb_url || product.image_url || product.brand_logo;
+  if (!raw) return null;
+  if (raw.startsWith("http")) return raw;
+  return `${BASE_URL}${raw}`;
+}
+
+export function getProductFullImageUrl(product: Product): string | null {
+  const raw = product.image_url || product.brand_logo;
+  if (!raw) return null;
+  if (raw.startsWith("http")) return raw;
+  return `${BASE_URL}${raw}`;
 }
 
 export interface StoreResponse {

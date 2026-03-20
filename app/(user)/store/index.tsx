@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Search } from "lucide-react-native";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { getStoreProducts, type Product } from "@/services/store";
+import { getStoreProducts, getProductImageUrl, type Product } from "@/services/store";
 
 export default function StoreScreen() {
   const router = useRouter();
@@ -35,20 +35,29 @@ export default function StoreScreen() {
   );
 
   const renderProduct = ({ item }: { item: Product }) => {
-    const discount = item.price < item.face_value
-      ? Math.round((1 - item.price / item.face_value) * 100)
-      : 0;
+    const isFlexible = item.product_type === "flexible";
+    const discount =
+      !isFlexible && item.price > 0 && item.face_value > 0 && item.price < item.face_value
+        ? Math.round((1 - item.price / item.face_value) * 100)
+        : 0;
+    const imgUri = getProductImageUrl(item);
 
     return (
       <Pressable
         className="flex-1 m-1.5 bg-card rounded-xl border border-border overflow-hidden"
         onPress={() => router.push(`/(user)/store/${item.id}`)}
       >
-        <Image
-          source={{ uri: item.thumb_url || item.image_url }}
-          className="w-full h-32"
-          resizeMode="cover"
-        />
+        {imgUri ? (
+          <Image
+            source={{ uri: imgUri }}
+            className="w-full h-32"
+            resizeMode="cover"
+          />
+        ) : (
+          <View className="w-full h-32 bg-muted items-center justify-center">
+            <Text className="text-3xl">🎁</Text>
+          </View>
+        )}
         <View className="p-3">
           <Text className="text-xs text-muted-foreground" numberOfLines={1}>
             {item.brand_name}
@@ -57,12 +66,20 @@ export default function StoreScreen() {
             {item.name}
           </Text>
           <View className="flex-row items-center mt-2 gap-1.5">
-            {discount > 0 && (
-              <Badge variant="destructive" label={`${discount}%`} />
+            {isFlexible ? (
+              <Text className="text-sm font-bold text-foreground">
+                ₩{(item.flexible_min ?? 0).toLocaleString()}~
+              </Text>
+            ) : (
+              <>
+                {discount > 0 && (
+                  <Badge variant="destructive" label={`${discount}%`} />
+                )}
+                <Text className="text-base font-bold text-foreground">
+                  ₩{(item.price ?? 0).toLocaleString()}
+                </Text>
+              </>
             )}
-            <Text className="text-base font-bold text-foreground">
-              ₩{item.price.toLocaleString()}
-            </Text>
           </View>
         </View>
       </Pressable>

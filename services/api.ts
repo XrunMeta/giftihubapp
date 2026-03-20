@@ -1,6 +1,6 @@
 import * as SecureStore from "expo-secure-store";
 
-const BASE_URL = "https://giftihubapi.pages.dev";
+export const BASE_URL = "https://giftihubapi.pages.dev";
 const TOKEN_KEY = "gifti_jwt";
 
 export async function getToken(): Promise<string | null> {

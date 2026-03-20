@@ -6,7 +6,7 @@ import { Minus, Plus } from "lucide-react-native";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/PageHeader";
 import { useCart } from "@/context/CartContext";
-import { getProductDetail, type Product, type ProductDetailResponse } from "@/services/store";
+import { getProductDetail, getProductFullImageUrl, type Product, type ProductDetailResponse } from "@/services/store";
 
 export default function ProductDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -50,9 +50,9 @@ export default function ProductDetailScreen() {
     <SafeAreaView className="flex-1 bg-background">
       <PageHeader title={product.brand_name} />
       <ScrollView className="flex-1">
-        {product.image_url ? (
+        {getProductFullImageUrl(product) ? (
           <Image
-            source={{ uri: product.image_url }}
+            source={{ uri: getProductFullImageUrl(product)! }}
             className="w-full h-64"
             resizeMode="cover"
           />
