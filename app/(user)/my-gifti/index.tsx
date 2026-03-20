@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { View, Text, FlatList, Pressable, ActivityIndicator } from "react-native";
+import { View, Text, FlatList, Pressable, Image, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollableTabs } from "@/components/ui/scrollable-tabs";
 import { Badge } from "@/components/ui/badge";
+import { resolveImageUrl } from "@/lib/image";
 import { getMyVouchers, type Voucher, type VoucherStatus } from "@/services/vouchers";
 import { format } from "date-fns";
 
@@ -49,27 +50,37 @@ export default function MyGiftiScreen() {
 
   const renderVoucher = ({ item }: { item: Voucher }) => {
     const badge = STATUS_BADGE[item.status] || STATUS_BADGE.active;
+    const imgUri = resolveImageUrl(item.thumb_url, item.image_url, item.brand_logo);
     return (
       <Pressable
-        className="mx-4 mb-3 bg-card rounded-xl border border-border p-4"
+        className="mx-4 mb-3 bg-card rounded-xl border border-border p-3 flex-row"
         onPress={() => router.push(`/(user)/oth-path${item.id}`)}
       >
-        <View className="flex-row justify-between items-start">
-          <View className="flex-1">
-            <Text className="text-xs text-muted-foreground">{item.brand}</Text>
-            <Text className="text-base font-semibold text-foreground mt-0.5" numberOfLines={1}>
-              {item.name}
+        {imgUri ? (
+          <Image source={{ uri: imgUri }} className="w-16 h-16 rounded-lg" resizeMode="cover" />
+        ) : (
+          <View className="w-16 h-16 rounded-lg bg-muted items-center justify-center">
+            <Text className="text-2xl">🎁</Text>
+          </View>
+        )}
+        <View className="flex-1 ml-3">
+          <View className="flex-row justify-between items-start">
+            <View className="flex-1">
+              <Text className="text-xs text-muted-foreground">{item.brand}</Text>
+              <Text className="text-base font-semibold text-foreground mt-0.5" numberOfLines={1}>
+                {item.name}
+              </Text>
+            </View>
+            <Badge variant={badge.variant} label={badge.label} />
+          </View>
+          <View className="flex-row justify-between items-center mt-2">
+            <Text className="text-base font-bold text-foreground">
+              ₩{item.face_value.toLocaleString()}
+            </Text>
+            <Text className="text-xs text-muted-foreground">
+              만료: {format(new Date(item.expiry_date * 1000), "yyyy.MM.dd")}
             </Text>
           </View>
-          <Badge variant={badge.variant} label={badge.label} />
-        </View>
-        <View className="flex-row justify-between items-center mt-3">
-          <Text className="text-lg font-bold text-foreground">
-            ₩{item.face_value.toLocaleString()}
-          </Text>
-          <Text className="text-xs text-muted-foreground">
-            만료: {format(new Date(item.expiry_date * 1000), "yyyy.MM.dd")}
-          </Text>
         </View>
       </Pressable>
     );

@@ -1,4 +1,5 @@
-import { apiFetch, BASE_URL } from "./api";
+import { apiFetch } from "./api";
+import { resolveImageUrl } from "@/lib/image";
 
 export interface Product {
   id: string;
@@ -23,17 +24,11 @@ export interface Product {
 }
 
 export function getProductImageUrl(product: Product): string | null {
-  const raw = product.thumb_url || product.image_url || product.brand_logo;
-  if (!raw) return null;
-  if (raw.startsWith("http")) return raw;
-  return `${BASE_URL}${raw}`;
+  return resolveImageUrl(product.thumb_url, product.image_url, product.brand_logo);
 }
 
 export function getProductFullImageUrl(product: Product): string | null {
-  const raw = product.image_url || product.brand_logo;
-  if (!raw) return null;
-  if (raw.startsWith("http")) return raw;
-  return `${BASE_URL}${raw}`;
+  return resolveImageUrl(product.image_url, product.brand_logo);
 }
 
 export interface StoreResponse {

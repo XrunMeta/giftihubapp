@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { View, Text, ScrollView, ActivityIndicator, Alert } from "react-native";
+import { View, Text, Image, ScrollView, ActivityIndicator, Alert } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Send, RefreshCw, ArrowLeftRight, XCircle } from "lucide-react-native";
@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/PageHeader";
 import { Separator } from "@/components/ui/separator";
+import { resolveImageUrl } from "@/lib/image";
 import { getVoucherDetail, getVoucherBarcode, type Voucher } from "@/services/vouchers";
 import { format } from "date-fns";
 
@@ -82,6 +83,12 @@ export default function GiftiDetailScreen() {
         {}
         <View className="bg-card rounded-xl border border-border p-4">
           <View className="flex-row justify-between items-start">
+            {(() => {
+              const imgUri = resolveImageUrl(voucher.thumb_url, voucher.image_url, voucher.brand_logo);
+              return imgUri ? (
+                <Image source={{ uri: imgUri }} className="w-14 h-14 rounded-lg mr-3" resizeMode="cover" />
+              ) : null;
+            })()}
             <View className="flex-1">
               <Text className="text-xs text-muted-foreground">{voucher.brand}</Text>
               <Text className="text-lg font-bold text-foreground mt-0.5">{voucher.name}</Text>

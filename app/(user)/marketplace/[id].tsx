@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView, ActivityIndicator, Alert } from "react-native";
+import { View, Text, Image, ScrollView, ActivityIndicator, Alert } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/PageHeader";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { resolveImageUrl } from "@/lib/image";
 import { getListingDetail, type MarketplaceListing } from "@/services/marketplace";
 import { format } from "date-fns";
 
@@ -43,7 +44,17 @@ export default function MarketplaceDetailScreen() {
     <SafeAreaView className="flex-1 bg-background">
       <PageHeader title="중고 상세" />
       <ScrollView className="flex-1 px-5">
-        <View className="bg-card rounded-xl border border-border p-5 mt-2">
+        {(() => {
+          const imgUri = resolveImageUrl(listing.image_url, listing.brand_logo);
+          return imgUri ? (
+            <Image source={{ uri: imgUri }} className="w-full h-48 rounded-xl mt-2" resizeMode="cover" />
+          ) : (
+            <View className="w-full h-36 rounded-xl mt-2 bg-muted items-center justify-center">
+              <Text className="text-4xl">🎁</Text>
+            </View>
+          );
+        })()}
+        <View className="bg-card rounded-xl border border-border p-5 mt-3">
           <View className="flex-row justify-between items-start">
             <View className="flex-1">
               <Text className="text-xs text-muted-foreground">{listing.brand}</Text>
