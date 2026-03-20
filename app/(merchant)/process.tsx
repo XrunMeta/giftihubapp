@@ -1,0 +1,83 @@
+import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
+import { v_3094a2, v_19b633, v_39a996, v_03e392 } from "rcmrninabrnb";
+import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
+import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
+import { v_24c64e, v_dc4a73 } from "wjvlskvsbzsrojdbjsl";
+import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
+import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
+import { v_bc1b24 } from "tlrvzsbmctdavs";
+
+export default function v_96d53d() {
+  const { barcode: v_e4a44d } = v_d1a7ac<{ barcode: string }>();
+  const v_904d46 = v_d1d90c();
+  const [v_d308b5, v_5193f8] = v_5ab095<"validating" | "valid" | "invalid">("validating");
+  const [v_ad1545, v_f5b829] = v_5ab095<any>(null);
+
+  v_c4deb2(() => {
+    if (v_e4a44d) v_3181cc();
+  }, [v_e4a44d]);
+
+  const v_3181cc = async () => {
+    try {
+      const v_8f00b9 = await v_bc1b24<any>("/oth-path", {
+        method: "POST",
+        body: JSON.stringify({ barcode: v_e4a44d }),
+      });
+      v_f5b829(v_8f00b9);
+      v_5193f8("valid");
+    } catch {
+      v_5193f8("invalid");
+    }
+  };
+
+  const v_9fd074 = async () => {
+    try {
+      await v_bc1b24("/oth-path", {
+        method: "POST",
+        body: JSON.stringify({ barcode: v_e4a44d }),
+      });
+      v_904d46.replace("/(merchant)/process-complete");
+    } catch (v_49263d) {
+      v_03e392.alert("처리 실패", v_49263d.body?.error || "다시 시도해주세요.");
+    }
+  };
+
+  return (
+    <SafeAreaView className="flex-1 bg-background">
+      <PageHeader title="바우처 확인" />
+      <View className="flex-1 items-center justify-center px-6">
+        {v_d308b5 === "validating" && (
+          <>
+            <ActivityIndicator size="large" color="#CE3630" />
+            <Text className="text-lg font-semibold text-foreground mt-4">확인 중...</Text>
+          </>
+        )}
+
+        {v_d308b5 === "valid" && v_ad1545 && (
+          <View className="items-center w-full">
+            <CheckCircle size={64} color="#22c55e" />
+            <Text className="text-xl font-bold text-foreground mt-4">유효한 바우처</Text>
+            <View className="bg-card rounded-xl border border-border p-4 mt-4 w-full">
+              <Text className="text-sm text-muted-foreground">{v_ad1545.brand}</Text>
+              <Text className="text-base font-semibold text-foreground">{v_ad1545.name}</Text>
+              <Text className="text-lg font-bold text-primary mt-2">
+                ₩{v_ad1545.face_value?.toLocaleString()}
+              </Text>
+            </View>
+            <Button className="w-full mt-6" onPress={v_9fd074}>사용 처리</Button>
+            <Button variant="outline" className="w-full mt-2" onPress={() => v_904d46.back()}>취소</Button>
+          </View>
+        )}
+
+        {v_d308b5 === "invalid" && (
+          <View className="items-center">
+            <XCircle size={64} color="#ef4444" />
+            <Text className="text-xl font-bold text-foreground mt-4">유효하지 않은 바코드</Text>
+            <Text className="text-sm text-muted-foreground mt-2">다시 스캔해주세요.</Text>
+            <Button className="mt-6" onPress={() => v_904d46.back()}>돌아가기</Button>
+          </View>
+        )}
+      </View>
+    </SafeAreaView>
+  );
+}

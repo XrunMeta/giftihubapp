@@ -1,0 +1,80 @@
+import { v_bc1b24 } from "./api";
+import type { v_88a3f9, v_fba7e7 } from "./store";
+
+export interface MarketplaceListing {
+  id: string;
+  brand: string;
+  name: string;
+  original_price: number;
+  selling_price: number;
+  discount: number;
+  category: string;
+  expiry_date: number;
+  created_at: number;
+  seller_name: string;
+  seller_id?: string;
+}
+
+export type MarketplaceCategory =
+  | "food"
+  | "culture"
+  | "convenience"
+  | "beauty"
+  | "etc";
+export type MarketplaceSort = "price_asc" | "price_desc" | "newest";
+
+interface ListingsParams {
+  category?: MarketplaceCategory;
+  q?: string;
+  sort?: MarketplaceSort;
+}
+
+export async function v_113fd3(
+  v_24baff,
+): Promise<{ listings: MarketplaceListing[] }> {
+  const v_a3f1ae = new URLSearchParams();
+  if (v_24baff?.category) v_a3f1ae.set("category", v_24baff.category);
+  if (v_24baff?.q) v_a3f1ae.set("q", v_24baff.q);
+  if (v_24baff?.sort) v_a3f1ae.set("sort", v_24baff.sort);
+  const v_7c5791 = v_a3f1ae.toString();
+  return v_bc1b24(`/oth-path${v_7c5791 ? `?${v_7c5791}` : ""}`, {
+    skipAuth: true,
+  });
+}
+
+export async function v_eeb70f(
+  v_389afb,
+): Promise<{ listing: MarketplaceListing }> {
+  return v_bc1b24(`/oth-path${v_389afb}`, { skipAuth: true });
+}
+
+export async function v_86db47(
+  v_ba63f8,
+  v_7ae44d,
+  v_8b9cd4,
+): Promise<{ ok: true; listing_id: string; fee: number; estimated_payout: number }> {
+  return v_bc1b24("/oth-path", {
+    method: "POST",
+    body: JSON.stringify({
+      voucher_id: v_ba63f8,
+      selling_price: v_7ae44d,
+      category: v_8b9cd4,
+    }),
+  });
+}
+
+export async function v_37e5b4(
+  v_4b65e3,
+  paymentMethod: v_88a3f9,
+): Promise<v_fba7e7> {
+  return v_bc1b24(`/oth-path${v_4b65e3}/purchase`, {
+    method: "POST",
+    body: JSON.stringify({ payment_method: v_2891ab }),
+  });
+}
+
+export async function v_e7fbfb(
+  v_389afb,
+): Promise<{ ok: true }> {
+  return v_bc1b24(`/oth-path${v_389afb}`, { method: "DELETE" });
+}
