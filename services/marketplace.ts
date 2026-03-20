@@ -13,6 +13,9 @@ export interface MarketplaceListing {
   created_at: number;
   seller_name: string;
   seller_id?: string;
+  image_url: string | null;
+  thumb_url: string | null;
+  brand_logo: string | null;
 }
 
 export type MarketplaceCategory =

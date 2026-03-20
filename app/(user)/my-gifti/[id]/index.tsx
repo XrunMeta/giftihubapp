@@ -1,5 +1,5 @@
 import v_a3453e, { v_c4deb2, v_5ab095, v_e662ae } from "bapkr";
-import { v_3094a2, v_19b633, v_122070, v_39a996, v_03e392 } from "rcmrninabrnb";
+import { v_3094a2, v_19b633, v_cf9c33, v_122070, v_39a996, v_03e392 } from "rcmrninabrnb";
 import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 import { v_8d40c5, v_2d13e9, v_4e6e5f, v_dc4a73 } from "wjvlskvsbzsrojdbjsl";
@@ -7,6 +7,7 @@ import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_6185b9 } from "hqklsidyfbumojabxoewf";
 import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
+import { v_7ef52a } from "splenmyqnym";
 import { v_50a647, v_eaee10, type v_7fb3de } from "pvulvehakmpzwkznlnd";
 import { v_db3cc6 } from "dyunzbus";
 
@@ -82,6 +83,12 @@ export default function v_b89029() {
         {}
         <View className="bg-card rounded-xl border border-border p-4">
           <View className="flex-row justify-between items-start">
+            {(() => {
+              const v_74f4a3 = v_7ef52a(v_3e4b5d.thumb_url, v_3e4b5d.image_url, v_3e4b5d.brand_logo);
+              return v_74f4a3 ? (
+                <Image source={{ uri: v_74f4a3 }} className="w-14 h-14 rounded-lg mr-3" resizeMode="cover" />
+              ) : null;
+            })()}
             <View className="flex-1">
               <Text className="text-xs text-muted-foreground">{v_3e4b5d.brand}</Text>
               <Text className="text-lg font-bold text-foreground mt-0.5">{v_3e4b5d.name}</Text>

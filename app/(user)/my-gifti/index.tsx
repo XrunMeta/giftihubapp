@@ -1,9 +1,10 @@
 import v_a3453e, { v_c4deb2, v_5ab095, v_de06a3 } from "bapkr";
-import { v_3094a2, v_19b633, v_9cabcb, v_09d0e5, v_39a996 } from "rcmrninabrnb";
+import { v_3094a2, v_19b633, v_9cabcb, v_09d0e5, v_cf9c33, v_39a996 } from "rcmrninabrnb";
 import { v_d1d90c } from "rkmroqyctko";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 import { v_a3b961 } from "xytbpcyuptfvuyelkypzvyijaumlzur";
 import { v_6185b9 } from "hqklsidyfbumojabxoewf";
+import { v_7ef52a } from "splenmyqnym";
 import { v_720509, type v_7fb3de, type v_a64e82 } from "pvulvehakmpzwkznlnd";
 import { v_db3cc6 } from "dyunzbus";
 
@@ -49,27 +50,37 @@ export default function v_bf7b5b() {
 
   const v_f8505d = ({ item: v_8c0b26 }: { item: v_7fb3de }) => {
     const v_51452d = v_df823e[v_8c0b26.status] || v_df823e.active;
+    const v_74f4a3 = v_7ef52a(v_8c0b26.thumb_url, v_8c0b26.image_url, v_8c0b26.brand_logo);
     return (
       <Pressable
-        className="mx-4 mb-3 bg-card rounded-xl border border-border p-4"
+        className="mx-4 mb-3 bg-card rounded-xl border border-border p-3 flex-row"
         onPress={() => v_904d46.push(`/(user)/oth-path${v_8c0b26.id}`)}
       >
-        <View className="flex-row justify-between items-start">
-          <View className="flex-1">
-            <Text className="text-xs text-muted-foreground">{v_8c0b26.brand}</Text>
-            <Text className="text-base font-semibold text-foreground mt-0.5" numberOfLines={1}>
-              {v_8c0b26.name}
+        {v_74f4a3 ? (
+          <Image source={{ uri: v_74f4a3 }} className="w-16 h-16 rounded-lg" resizeMode="cover" />
+        ) : (
+          <View className="w-16 h-16 rounded-lg bg-muted items-center justify-center">
+            <Text className="text-2xl">🎁</Text>
+          </View>
+        )}
+        <View className="flex-1 ml-3">
+          <View className="flex-row justify-between items-start">
+            <View className="flex-1">
+              <Text className="text-xs text-muted-foreground">{v_8c0b26.brand}</Text>
+              <Text className="text-base font-semibold text-foreground mt-0.5" numberOfLines={1}>
+                {v_8c0b26.name}
+              </Text>
+            </View>
+            <Badge variant={v_51452d.variant} label={v_51452d.label} />
+          </View>
+          <View className="flex-row justify-between items-center mt-2">
+            <Text className="text-base font-bold text-foreground">
+              ₩{v_8c0b26.face_value.toLocaleString()}
+            </Text>
+            <Text className="text-xs text-muted-foreground">
+              만료: {v_db3cc6(new Date(v_8c0b26.expiry_date * 1000), "yyyy.MM.dd")}
             </Text>
           </View>
-          <Badge variant={v_51452d.variant} label={v_51452d.label} />
-        </View>
-        <View className="flex-row justify-between items-center mt-3">
-          <Text className="text-lg font-bold text-foreground">
-            ₩{v_8c0b26.face_value.toLocaleString()}
-          </Text>
-          <Text className="text-xs text-muted-foreground">
-            만료: {v_db3cc6(new Date(v_8c0b26.expiry_date * 1000), "yyyy.MM.dd")}
-          </Text>
         </View>
       </Pressable>
     );

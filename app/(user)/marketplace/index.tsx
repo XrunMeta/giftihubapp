@@ -1,11 +1,12 @@
 import v_a3453e, { v_c4deb2, v_5ab095, v_de06a3 } from "bapkr";
-import { v_3094a2, v_19b633, v_9cabcb, v_09d0e5, v_39a996 } from "rcmrninabrnb";
+import { v_3094a2, v_19b633, v_9cabcb, v_09d0e5, v_cf9c33, v_39a996 } from "rcmrninabrnb";
 import { v_d1d90c } from "rkmroqyctko";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 import { v_66816c } from "wjvlskvsbzsrojdbjsl";
 import { v_1b353f } from "ymbgtfrroootgjefkrxgp";
 import { v_a3b961 } from "xytbpcyuptfvuyelkypzvyijaumlzur";
 import { v_6185b9 } from "hqklsidyfbumojabxoewf";
+import { v_7ef52a } from "splenmyqnym";
 import {
   v_113fd3,
   type v_ff021d,
@@ -45,35 +46,47 @@ export default function v_fab3ac() {
     v_85477e();
   }, [v_85477e]);
 
-  const v_539d25 = ({ item: v_8c0b26 }: { item: v_ff021d }) => (
-    <Pressable
-      className="mx-4 mb-3 bg-card rounded-xl border border-border p-4"
-      onPress={() => v_904d46.push(`/(user)/oth-path${v_8c0b26.id}`)}
-    >
-      <View className="flex-row justify-between items-start">
-        <View className="flex-1">
-          <Text className="text-xs text-muted-foreground">{v_8c0b26.brand}</Text>
-          <Text className="text-sm font-semibold text-foreground mt-0.5" numberOfLines={1}>
-            {v_8c0b26.name}
-          </Text>
-        </View>
-        {v_8c0b26.discount > 0 && (
-          <Badge variant="destructive" label={`${v_8c0b26.discount}%`} />
+  const v_539d25 = ({ item: v_8c0b26 }: { item: v_ff021d }) => {
+    const v_74f4a3 = v_7ef52a(v_8c0b26.thumb_url, v_8c0b26.image_url, v_8c0b26.brand_logo);
+    return (
+      <Pressable
+        className="mx-4 mb-3 bg-card rounded-xl border border-border p-3 flex-row"
+        onPress={() => v_904d46.push(`/(user)/oth-path${v_8c0b26.id}`)}
+      >
+        {v_74f4a3 ? (
+          <Image source={{ uri: v_74f4a3 }} className="w-16 h-16 rounded-lg" resizeMode="cover" />
+        ) : (
+          <View className="w-16 h-16 rounded-lg bg-muted items-center justify-center">
+            <Text className="text-2xl">🎁</Text>
+          </View>
         )}
-      </View>
-      <View className="flex-row justify-between items-center mt-3">
-        <View className="flex-row items-baseline gap-2">
-          <Text className="text-lg font-bold text-foreground">
-            ₩{v_8c0b26.selling_price.toLocaleString()}
-          </Text>
-          <Text className="text-xs text-muted-foreground line-through">
-            ₩{v_8c0b26.original_price.toLocaleString()}
-          </Text>
+        <View className="flex-1 ml-3">
+          <View className="flex-row justify-between items-start">
+            <View className="flex-1">
+              <Text className="text-xs text-muted-foreground">{v_8c0b26.brand}</Text>
+              <Text className="text-sm font-semibold text-foreground mt-0.5" numberOfLines={1}>
+                {v_8c0b26.name}
+              </Text>
+            </View>
+            {v_8c0b26.discount > 0 && (
+              <Badge variant="destructive" label={`${v_8c0b26.discount}%`} />
+            )}
+          </View>
+          <View className="flex-row justify-between items-center mt-2">
+            <View className="flex-row items-baseline gap-2">
+              <Text className="text-base font-bold text-foreground">
+                ₩{v_8c0b26.selling_price.toLocaleString()}
+              </Text>
+              <Text className="text-xs text-muted-foreground line-through">
+                ₩{v_8c0b26.original_price.toLocaleString()}
+              </Text>
+            </View>
+            <Text className="text-xs text-muted-foreground">{v_8c0b26.seller_name}</Text>
+          </View>
         </View>
-        <Text className="text-xs text-muted-foreground">{v_8c0b26.seller_name}</Text>
-      </View>
-    </Pressable>
-  );
+      </Pressable>
+    );
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
