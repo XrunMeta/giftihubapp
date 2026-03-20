@@ -1,56 +1,68 @@
-import React, { useEffect, useState, useRef } from "react";
-import { View, Text, Image, ScrollView, ActivityIndicator, Alert } from "react-native";
+import React, { useEffect, useState, useRef, useCallback } from "react";
+import { View, Text, Image, ScrollView, ActivityIndicator, Alert, Animated, useWindowDimensions } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Send, RefreshCw, ArrowLeftRight, XCircle } from "lucide-react-native";
+import { Send, ArrowLeftRight } from "lucide-react-native";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/PageHeader";
 import { Separator } from "@/components/ui/separator";
 import { resolveImageUrl } from "@/lib/image";
+import Barcode128 from "@/components/Barcode128";
 import { getVoucherDetail, getVoucherBarcode, type Voucher } from "@/services/vouchers";
 import { format } from "date-fns";
+
+const REFRESH_SECONDS = 30;
 
 export default function GiftiDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
+  const { width: screenWidth } = useWindowDimensions();
   const [voucher, setVoucher] = useState<Voucher | null>(null);
   const [barcode, setBarcode] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const progressAnim = useRef(new Animated.Value(1)).current;
+
+  const startProgressBar = useCallback(() => {
+    progressAnim.setValue(1);
+    Animated.timing(progressAnim, {
+      toValue: 0,
+      duration: REFRESH_SECONDS * 1000,
+      useNativeDriver: false,
+    }).start();
+  }, [progressAnim]);
+
+  const loadBarcode = useCallback(async () => {
+    try {
+      const res = await getVoucherBarcode(id!);
+      setBarcode(res.barcode);
+      startProgressBar();
+    } catch {
+
+    }
+  }, [id, startProgressBar]);
 
   useEffect(() => {
     if (id) {
-      loadVoucher();
+      (async () => {
+        try {
+          const res = await getVoucherDetail(id);
+          setVoucher(res.voucher);
+        } catch {
+          Alert.alert("오류", "기프티 정보를 불러올 수 없습니다.");
+          router.back();
+        } finally {
+          setLoading(false);
+        }
+      })();
       loadBarcode();
-
-      intervalRef.current = setInterval(loadBarcode, 30000);
+      intervalRef.current = setInterval(loadBarcode, REFRESH_SECONDS * 1000);
     }
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, [id]);
-
-  const loadVoucher = async () => {
-    try {
-      const res = await getVoucherDetail(id!);
-      setVoucher(res.voucher);
-    } catch {
-      Alert.alert("오류", "기프티 정보를 불러올 수 없습니다.");
-      router.back();
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const loadBarcode = async () => {
-    try {
-      const res = await getVoucherBarcode(id!);
-      setBarcode(res.barcode);
-    } catch {
-
-    }
-  };
 
   if (loading || !voucher) {
     return (
@@ -61,34 +73,52 @@ export default function GiftiDetailScreen() {
   }
 
   const isActive = voucher.status === "active";
+  const barcodeWidth = screenWidth - 80; 
+  const imgUri = resolveImageUrl(voucher.thumb_url, voucher.image_url, voucher.brand_logo);
 
   return (
     <SafeAreaView className="flex-1 bg-background">
       <PageHeader title="기프티 상세" />
       <ScrollView className="flex-1 px-5">
         {}
-        <View className="bg-card rounded-xl border border-border p-6 items-center mb-4">
-          {barcode ? (
-            <View className="items-center">
-              <Text className="text-3xl font-mono tracking-widest text-foreground mb-2">
-                {barcode}
-              </Text>
-              <Text className="text-xs text-muted-foreground">30초마다 자동 갱신</Text>
-            </View>
-          ) : (
-            <Text className="text-muted-foreground">바코드를 불러오는 중...</Text>
-          )}
+        <View className="bg-card rounded-xl border border-border overflow-hidden mb-4">
+          <View className="p-5 items-center">
+            {barcode ? (
+              <View className="items-center">
+                <Barcode128 value={barcode} width={barcodeWidth} height={64} />
+                <Text className="text-base font-mono tracking-[6px] text-foreground mt-3">
+                  {barcode}
+                </Text>
+              </View>
+            ) : (
+              <View className="h-16 items-center justify-center">
+                <ActivityIndicator size="small" color="#CE3630" />
+                <Text className="text-xs text-muted-foreground mt-2">바코드 로딩중...</Text>
+              </View>
+            )}
+          </View>
+          {}
+          <View className="h-1 bg-muted">
+            <Animated.View
+              style={{
+                height: 4,
+                backgroundColor: "#CE3630",
+                borderRadius: 2,
+                width: progressAnim.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: ["0%", "100%"],
+                }),
+              }}
+            />
+          </View>
         </View>
 
         {}
         <View className="bg-card rounded-xl border border-border p-4">
           <View className="flex-row justify-between items-start">
-            {(() => {
-              const imgUri = resolveImageUrl(voucher.thumb_url, voucher.image_url, voucher.brand_logo);
-              return imgUri ? (
-                <Image source={{ uri: imgUri }} className="w-14 h-14 rounded-lg mr-3" resizeMode="cover" />
-              ) : null;
-            })()}
+            {imgUri ? (
+              <Image source={{ uri: imgUri }} className="w-14 h-14 rounded-lg mr-3" resizeMode="cover" />
+            ) : null}
             <View className="flex-1">
               <Text className="text-xs text-muted-foreground">{voucher.brand}</Text>
               <Text className="text-lg font-bold text-foreground mt-0.5">{voucher.name}</Text>
@@ -105,18 +135,20 @@ export default function GiftiDetailScreen() {
             <View className="flex-row justify-between">
               <Text className="text-sm text-muted-foreground">액면가</Text>
               <Text className="text-sm font-medium text-foreground">
-                ₩{voucher.face_value.toLocaleString()}
+                ₩{voucher.face_value?.toLocaleString() ?? "0"}
               </Text>
             </View>
             <View className="flex-row justify-between">
               <Text className="text-sm text-muted-foreground">만료일</Text>
               <Text className="text-sm font-medium text-foreground">
-                {format(new Date(voucher.expiry_date * 1000), "yyyy.MM.dd")}
+                {voucher.expiry_date
+                  ? format(new Date(voucher.expiry_date * 1000), "yyyy.MM.dd")
+                  : "-"}
               </Text>
             </View>
             <View className="flex-row justify-between">
               <Text className="text-sm text-muted-foreground">양도 횟수</Text>
-              <Text className="text-sm font-medium text-foreground">{voucher.transfer_count}회</Text>
+              <Text className="text-sm font-medium text-foreground">{voucher.transfer_count ?? 0}회</Text>
             </View>
           </View>
         </View>
