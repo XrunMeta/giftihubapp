@@ -27,7 +27,7 @@ export default function TransferScreen() {
           try {
             await transferVoucher(id!, email);
             Alert.alert("완료", "기프티가 양도되었습니다.", [
-              { text: "확인", onPress: () => router.back() },
+              { text: "확인", onPress: () => router.replace("/(user)/oth-path") },
             ]);
           } catch (err: any) {
             Alert.alert("실패", err.body?.error || "양도에 실패했습니다.");
