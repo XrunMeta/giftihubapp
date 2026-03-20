@@ -103,7 +103,7 @@ export default function v_bf7b5b() {
           data={v_f9fd27}
           renderItem={v_f8505d}
           keyExtractor={(v_8c0b26) => v_8c0b26.id}
-          contentContainerStyle={{ paddingBottom: 20 }}
+          contentContainerStyle={v_f9fd27.length === 0 ? { flexGrow: 1, justifyContent: "center" } : { paddingBottom: 20 }}
           ListEmptyComponent={
             <View className="items-center py-20">
               <Text className="text-muted-foreground">기프티가 없습니다.</Text>

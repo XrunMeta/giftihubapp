@@ -2,7 +2,7 @@ import v_a3453e, { v_c4deb2, v_5ab095, v_e662ae, v_de06a3 } from "bapkr";
 import { v_3094a2, v_19b633, v_cf9c33, v_122070, v_39a996, v_03e392, v_a2349e, v_e45a99 } from "rcmrninabrnb";
 import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
-import { v_8d40c5, v_4e6e5f } from "wjvlskvsbzsrojdbjsl";
+import { v_8d40c5, v_4e6e5f, v_e4f0c5, v_24c64e, v_20f6a6, v_c1958c, v_dc4a73 } from "wjvlskvsbzsrojdbjsl";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_6185b9 } from "hqklsidyfbumojabxoewf";
 import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
@@ -13,6 +13,39 @@ import { v_50a647, v_eaee10, type v_7fb3de } from "pvulvehakmpzwkznlnd";
 import { v_db3cc6 } from "dyunzbus";
 
 const v_35c58e = 30;
+
+const STATUS_INFO: Record<string, { label: string; icon: typeof v_24c64e; color: string; description: string }> = {
+  used: {
+    label: "사용완료",
+    icon: v_24c64e,
+    color: "#16a34a",
+    description: "이 기프티는 사용이 완료되었습니다.",
+  },
+  listed: {
+    label: "판매중",
+    icon: v_e4f0c5,
+    color: "#f59e0b",
+    description: "이 기프티는 중고마켓에 등록되어 판매중입니다.",
+  },
+  expired: {
+    label: "기간만료",
+    icon: v_20f6a6,
+    color: "#ef4444",
+    description: "이 기프티의 유효기간이 만료되었습니다.",
+  },
+  transferred: {
+    label: "양도됨",
+    icon: v_c1958c,
+    color: "#6366f1",
+    description: "이 기프티는 다른 사용자에게 양도되었습니다.",
+  },
+  refunded: {
+    label: "환불됨",
+    icon: v_dc4a73,
+    color: "#ef4444",
+    description: "이 기프티는 환불 처리되었습니다.",
+  },
+};
 
 export default function v_b89029() {
   const { id: v_389afb } = v_d1a7ac<{ id: string }>();
@@ -48,7 +81,13 @@ export default function v_b89029() {
       (async () => {
         try {
           const v_8f00b9 = await v_50a647(v_389afb);
-          v_ff27e3(v_8f00b9.voucher);
+          const v_81e2ef = v_8f00b9.voucher;
+          v_ff27e3(v_81e2ef);
+
+          if (v_81e2ef.status === "active") {
+            v_4fd68b();
+            v_3ac63b.current = setInterval(v_4fd68b, v_35c58e * 1000);
+          }
         } catch {
           v_03e392.alert("오류", "기프티 정보를 불러올 수 없습니다.");
           v_904d46.back();
@@ -56,8 +95,6 @@ export default function v_b89029() {
           v_34a50a(false);
         }
       })();
-      v_4fd68b();
-      v_3ac63b.current = setInterval(v_4fd68b, v_35c58e * 1000);
     }
     return () => {
       if (v_3ac63b.current) clearInterval(v_3ac63b.current);
@@ -73,45 +110,69 @@ export default function v_b89029() {
   }
 
   const v_26dce6 = v_3e4b5d.status === "active";
-  const v_2d5007 = v_bcfa24 - 80; 
+  const v_2d5007 = v_bcfa24 - 80;
   const v_74f4a3 = v_7ef52a(v_3e4b5d.thumb_url, v_3e4b5d.image_url, v_3e4b5d.brand_logo);
+  const v_866c46 = v_d9da40[v_3e4b5d.status];
 
   return (
     <SafeAreaView className="flex-1 bg-background">
       <PageHeader title="기프티 상세" />
       <ScrollView className="flex-1 px-5">
         {}
-        <View className="bg-card rounded-xl border border-border overflow-hidden mb-4">
-          <View className="p-5 items-center">
-            {v_e4a44d ? (
-              <View className="items-center">
-                <Barcode128 value={v_e4a44d} width={v_2d5007} height={64} />
-                <Text className="text-base font-mono tracking-[6px] text-foreground mt-3">
-                  {v_e4a44d}
+        {v_26dce6 ? (
+          <View className="bg-card rounded-xl border border-border overflow-hidden mb-4">
+            <View className="p-5 items-center">
+              {v_e4a44d ? (
+                <View className="items-center">
+                  <Barcode128 value={v_e4a44d} width={v_2d5007} height={64} />
+                  <Text className="text-base font-mono tracking-[6px] text-foreground mt-3">
+                    {v_e4a44d}
+                  </Text>
+                </View>
+              ) : (
+                <View className="h-16 items-center justify-center">
+                  <ActivityIndicator size="small" color="#CE3630" />
+                  <Text className="text-xs text-muted-foreground mt-2">바코드 로딩중...</Text>
+                </View>
+              )}
+            </View>
+            {}
+            <View className="h-1 bg-muted">
+              <Animated.View
+                style={{
+                  height: 4,
+                  backgroundColor: "#CE3630",
+                  borderRadius: 2,
+                  width: v_f1ce90.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: ["0%", "100%"],
+                  }),
+                }}
+              />
+            </View>
+          </View>
+        ) : v_866c46 ? (
+
+          <View
+            className="rounded-xl border overflow-hidden mb-4"
+            style={{ borderColor: v_866c46.color + "40", backgroundColor: v_866c46.color + "08" }}
+          >
+            <View className="p-5 items-center">
+              <statusInfo.icon size={36} color={v_866c46.color} />
+              <Text className="text-lg font-bold mt-2" style={{ color: v_866c46.color }}>
+                {v_866c46.label}
+              </Text>
+              <Text className="text-sm text-muted-foreground mt-1 text-center">
+                {v_866c46.description}
+              </Text>
+              {v_3e4b5d.updated_at ? (
+                <Text className="text-xs text-muted-foreground mt-2">
+                  {v_db3cc6(new Date(v_3e4b5d.updated_at * 1000), "yyyy.MM.dd HH:mm")}
                 </Text>
-              </View>
-            ) : (
-              <View className="h-16 items-center justify-center">
-                <ActivityIndicator size="small" color="#CE3630" />
-                <Text className="text-xs text-muted-foreground mt-2">바코드 로딩중...</Text>
-              </View>
-            )}
+              ) : null}
+            </View>
           </View>
-          {}
-          <View className="h-1 bg-muted">
-            <Animated.View
-              style={{
-                height: 4,
-                backgroundColor: "#CE3630",
-                borderRadius: 2,
-                width: v_f1ce90.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: ["0%", "100%"],
-                }),
-              }}
-            />
-          </View>
-        </View>
+        ) : null}
 
         {}
         <View className="bg-card rounded-xl border border-border p-4">
@@ -124,8 +185,8 @@ export default function v_b89029() {
               <Text className="text-lg font-bold text-foreground mt-0.5">{v_3e4b5d.name}</Text>
             </View>
             <Badge
-              variant={v_3e4b5d.status === "active" ? "default" : "secondary"}
-              label={v_3e4b5d.status === "active" ? "사용가능" : v_3e4b5d.status}
+              variant={v_26dce6 ? "default" : v_3e4b5d.status === "expired" ? "destructive" : "secondary"}
+              label={v_866c46?.label ?? v_3e4b5d.status}
             />
           </View>
 
