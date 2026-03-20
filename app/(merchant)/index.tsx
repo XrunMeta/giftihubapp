@@ -1,0 +1,72 @@
+import React, { useState } from "react";
+import { View, Text, Alert } from "react-native";
+import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { CameraView, useCameraPermissions } from "expo-camera";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
+export default function MerchantHomeScreen() {
+  const router = useRouter();
+  const [permission, requestPermission] = useCameraPermissions();
+  const [manualCode, setManualCode] = useState("");
+  const [scanned, setScanned] = useState(false);
+
+  const handleBarCodeScanned = ({ data }: { data: string }) => {
+    if (scanned) return;
+    setScanned(true);
+    router.push({ pathname: "/(merchant)/process", params: { barcode: data } });
+    setTimeout(() => setScanned(false), 2000);
+  };
+
+  const handleManualEntry = () => {
+    if (manualCode.length < 8) {
+      Alert.alert("입력 오류", "올바른 바코드를 입력해주세요.");
+      return;
+    }
+    router.push({ pathname: "/(merchant)/process", params: { barcode: manualCode } });
+    setManualCode("");
+  };
+
+  if (!permission?.granted) {
+    return (
+      <SafeAreaView className="flex-1 bg-background items-center justify-center px-6">
+        <Text className="text-lg font-semibold text-foreground mb-4">카메라 권한 필요</Text>
+        <Text className="text-sm text-muted-foreground text-center mb-6">
+          바코드 스캔을 위해 카메라 권한이 필요합니다.
+        </Text>
+        <Button onPress={requestPermission}>권한 허용</Button>
+      </SafeAreaView>
+    );
+  }
+
+  return (
+    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
+      <View className="px-4 py-3">
+        <Text className="text-2xl font-bold text-foreground">바코드 스캔</Text>
+      </View>
+
+      <View className="flex-1 mx-4 rounded-xl overflow-hidden border border-border">
+        <CameraView
+          style={{ flex: 1 }}
+          barcodeScannerSettings={{ barcodeTypes: ["code128", "qr"] }}
+          onBarcodeScanned={handleBarCodeScanned}
+        />
+      </View>
+
+      <View className="px-4 py-4">
+        <Text className="text-sm font-medium text-foreground mb-2">직접 입력</Text>
+        <View className="flex-row gap-2">
+          <Input
+            className="flex-1"
+            placeholder="바코드 번호 입력"
+            keyboardType="numeric"
+            value={manualCode}
+            onChangeText={setManualCode}
+          />
+          <Button onPress={handleManualEntry}>확인</Button>
+        </View>
+      </View>
+    </SafeAreaView>
+  );
+}

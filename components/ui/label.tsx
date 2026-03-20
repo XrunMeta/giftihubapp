@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, TextProps } from 'react-native';
-import { cn } from './button';
+import { cn } from '@/lib/utils';
 
 export function Label({ className, children, ...props }: TextProps) {
     return (

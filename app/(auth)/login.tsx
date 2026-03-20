@@ -1,0 +1,138 @@
+import React, { useState } from "react";
+import { View, Text, KeyboardAvoidingView, Platform, ScrollView, Alert, Image } from "react-native";
+import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
+import * as WebBrowser from "expo-web-browser";
+import * as Linking from "expo-linking";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { useAuth } from "@/context/AuthContext";
+import { loginWithEmail } from "@/services/auth";
+import { images } from "@/assets/images";
+
+export default function LoginScreen() {
+  const router = useRouter();
+  const { login } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleEmailLogin = async () => {
+    if (!email || !password) {
+      Alert.alert("입력 오류", "이메일과 비밀번호를 입력해주세요.");
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await loginWithEmail(email, password);
+      await login(res.token, res.user);
+      const dest = res.user.role === "merchant" ? "/(merchant)" : "/(user)/store";
+      router.replace(dest);
+    } catch (err: any) {
+      Alert.alert("로그인 실패", err.body?.error || "이메일 또는 비밀번호를 확인해주세요.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleTelegramLogin = async () => {
+    try {
+      const redirectUrl = Linking.createURL("auth-callback");
+      const result = await WebBrowser.openAuthSessionAsync(
+        `https://giftihubapi.pages.dev/page/login?redirect=${encodeURIComponent(redirectUrl)}`,
+        redirectUrl,
+      );
+      if (result.type === "success" && result.url) {
+        const parsed = Linking.parse(result.url);
+        const token = parsed.queryParams?.token as string;
+        if (token) {
+          try {
+            const payload = JSON.parse(atob(token.split(".")[1]));
+            const role = payload.role || "user";
+            await login(token, { id: payload.sub, name: payload.name || "", role });
+            const dest = role === "merchant" ? "/(merchant)" : "/(user)/store";
+            router.replace(dest);
+          } catch {
+            Alert.alert("오류", "인증 토큰을 처리할 수 없습니다.");
+          }
+        }
+      }
+    } catch {
+      Alert.alert("오류", "Telegram 로그인을 열 수 없습니다.");
+    }
+  };
+
+  return (
+    <SafeAreaView className="flex-1 bg-background">
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        className="flex-1"
+      >
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1, justifyContent: "center", padding: 24 }}
+          keyboardShouldPersistTaps="handled"
+        >
+          <View className="items-center mb-8">
+            <Image
+              source={images.logo}
+              className="w-24 h-24 mb-4"
+              resizeMode="contain"
+            />
+            <Text className="text-2xl font-bold text-foreground">GiftiHub</Text>
+            <Text className="text-sm text-muted-foreground mt-1">디지털 기프티 플랫폼</Text>
+          </View>
+
+          <View className="mb-4">
+            <Text className="text-sm font-medium text-foreground mb-1.5">이메일</Text>
+            <Input
+              keyboardType="email-address"
+              autoCapitalize="none"
+              placeholder="email@example.com"
+              value={email}
+              onChangeText={setEmail}
+            />
+          </View>
+
+          <View className="mb-6">
+            <Text className="text-sm font-medium text-foreground mb-1.5">비밀번호</Text>
+            <Input
+              secureTextEntry
+              placeholder="••••••••"
+              value={password}
+              onChangeText={setPassword}
+            />
+          </View>
+
+          <Button onPress={handleEmailLogin} disabled={loading} className="mb-3">
+            {loading ? "로그인 중..." : "로그인"}
+          </Button>
+
+          <View className="flex-row items-center my-4">
+            <Separator className="flex-1" />
+            <Text className="mx-3 text-sm text-muted-foreground">또는</Text>
+            <Separator className="flex-1" />
+          </View>
+
+          <Button
+            variant="outline"
+            onPress={handleTelegramLogin}
+            className="mb-6"
+          >
+            Telegram으로 로그인
+          </Button>
+
+          <View className="flex-row justify-center items-center">
+            <Text className="text-sm text-muted-foreground">계정이 없으신가요? </Text>
+            <Text
+              className="text-sm font-medium text-primary"
+              onPress={() => router.push("/(auth)/signup")}
+            >
+              회원가입
+            </Text>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
+  );
+}

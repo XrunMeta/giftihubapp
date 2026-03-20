@@ -1,21 +1,30 @@
-import React from 'react';
-import { TextInput, TextInputProps, View } from 'react-native';
-import { cn } from './button';
+import React from "react";
+import { TextInput, TextInputProps } from "react-native";
+import { cn } from "@/lib/utils";
 
-export const Input = React.forwardRef<TextInput, TextInputProps>(
-    ({ className, placeholderTextColor = '#737373', ...props }, ref) => {
-        return (
-            <TextInput
-                ref={ref}
-                className={cn(
-                    "flex h-12 w-full rounded-md border border-input bg-background px-4 py-2 text-base text-foreground placeholder:text-muted-foreground",
-                    "focus:border-ring focus:border-2",
-                    className
-                )}
-                placeholderTextColor={placeholderTextColor}
-                {...props}
-            />
-        );
-    }
+interface InputProps extends TextInputProps {
+  variant?: "default" | "white";
+}
+
+export const Input = React.forwardRef<TextInput, InputProps>(
+  ({ className, variant = "default", placeholderTextColor = "#737373", ...props }, ref) => {
+    const variantClass =
+      variant === "white"
+        ? "bg-white border-gray-200"
+        : "bg-input-background border-border";
+
+    return (
+      <TextInput
+        ref={ref}
+        className={cn(
+          "flex h-12 w-full rounded-md border px-4 py-2 text-base text-foreground",
+          variantClass,
+          className,
+        )}
+        placeholderTextColor={placeholderTextColor}
+        {...props}
+      />
+    );
+  },
 );
-Input.displayName = 'Input';
+Input.displayName = "Input";
