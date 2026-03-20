@@ -6,7 +6,7 @@ import { v_3b9c43, v_a07c02 } from "wjvlskvsbzsrojdbjsl";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
 import { v_7a943b } from "dxfmfnfvriitbtghyppor";
-import { v_5e3aed, type v_678322, type v_575fb7 } from "vhkgxwheyyipiczd";
+import { v_5e3aed, v_afc1d9, type v_678322, type v_575fb7 } from "vhkgxwheyyipiczd";
 
 export default function v_2b70c8() {
   const { id: v_389afb } = v_d1a7ac<{ id: string }>();
@@ -50,9 +50,9 @@ export default function v_2b70c8() {
     <SafeAreaView className="flex-1 bg-background">
       <PageHeader title={v_01bee9.brand_name} />
       <ScrollView className="flex-1">
-        {v_01bee9.image_url ? (
+        {v_afc1d9(v_01bee9) ? (
           <Image
-            source={{ uri: v_01bee9.image_url }}
+            source={{ uri: v_afc1d9(v_01bee9)! }}
             className="w-full h-64"
             resizeMode="cover"
           />

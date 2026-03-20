@@ -1,18 +1,18 @@
-import { v_bc1b24 } from "./api";
+import { v_bc1b24, v_110ec6 } from "./api";
 
 export interface Product {
   id: string;
   brand_slug: string;
   brand_name: string;
-  brand_logo: string;
+  brand_logo: string | null;
   name: string;
   face_value: number;
   face_value_usd: number;
   price: number;
   price_usd: number;
   display_currency: string;
-  image_url: string;
-  thumb_url: string;
+  image_url: string | null;
+  thumb_url: string | null;
   stock_count: number | null;
   total_issued: number;
   status: string;
@@ -20,6 +20,20 @@ export interface Product {
   flexible_currency: string | null;
   flexible_min: number | null;
   flexible_max: number | null;
+}
+
+export function v_e81ec9(v_01bee9): string | null {
+  const v_479f05 = v_01bee9.thumb_url || v_01bee9.image_url || v_01bee9.brand_logo;
+  if (!v_479f05) return null;
+  if (v_479f05.startsWith("http")) return v_479f05;
+  return `${v_110ec6}${v_479f05}`;
+}
+
+export function v_afc1d9(v_01bee9): string | null {
+  const v_479f05 = v_01bee9.image_url || v_01bee9.brand_logo;
+  if (!v_479f05) return null;
+  if (v_479f05.startsWith("http")) return v_479f05;
+  return `${v_110ec6}${v_479f05}`;
 }
 
 export interface StoreResponse {

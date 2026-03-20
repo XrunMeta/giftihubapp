@@ -5,7 +5,7 @@ import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 import { v_66816c } from "wjvlskvsbzsrojdbjsl";
 import { v_1b353f } from "ymbgtfrroootgjefkrxgp";
 import { v_6185b9 } from "hqklsidyfbumojabxoewf";
-import { v_665284, type v_678322 } from "vhkgxwheyyipiczd";
+import { v_665284, v_e81ec9, type v_678322 } from "vhkgxwheyyipiczd";
 
 export default function v_ec75dd() {
   const v_904d46 = v_d1d90c();
@@ -35,20 +35,29 @@ export default function v_ec75dd() {
   );
 
   const v_a66479 = ({ item: v_8c0b26 }: { item: v_678322 }) => {
-    const v_3ae14a = v_8c0b26.price < v_8c0b26.face_value
-      ? Math.round((1 - v_8c0b26.price / v_8c0b26.face_value) * 100)
-      : 0;
+    const v_e567dc = v_8c0b26.product_type === "flexible";
+    const v_3ae14a =
+      !v_e567dc && v_8c0b26.price > 0 && v_8c0b26.face_value > 0 && v_8c0b26.price < v_8c0b26.face_value
+        ? Math.round((1 - v_8c0b26.price / v_8c0b26.face_value) * 100)
+        : 0;
+    const v_74f4a3 = v_e81ec9(v_8c0b26);
 
     return (
       <Pressable
         className="flex-1 m-1.5 bg-card rounded-xl border border-border overflow-hidden"
         onPress={() => v_904d46.push(`/(user)/store/${v_8c0b26.id}`)}
       >
-        <Image
-          source={{ uri: v_8c0b26.thumb_url || v_8c0b26.image_url }}
-          className="w-full h-32"
-          resizeMode="cover"
-        />
+        {v_74f4a3 ? (
+          <Image
+            source={{ uri: v_74f4a3 }}
+            className="w-full h-32"
+            resizeMode="cover"
+          />
+        ) : (
+          <View className="w-full h-32 bg-muted items-center justify-center">
+            <Text className="text-3xl">🎁</Text>
+          </View>
+        )}
         <View className="p-3">
           <Text className="text-xs text-muted-foreground" numberOfLines={1}>
             {v_8c0b26.brand_name}
@@ -57,12 +66,20 @@ export default function v_ec75dd() {
             {v_8c0b26.name}
           </Text>
           <View className="flex-row items-center mt-2 gap-1.5">
-            {v_3ae14a > 0 && (
-              <Badge variant="destructive" label={`${v_3ae14a}%`} />
+            {v_e567dc ? (
+              <Text className="text-sm font-bold text-foreground">
+                ₩{(v_8c0b26.flexible_min ?? 0).toLocaleString()}~
+              </Text>
+            ) : (
+              <>
+                {v_3ae14a > 0 && (
+                  <Badge variant="destructive" label={`${v_3ae14a}%`} />
+                )}
+                <Text className="text-base font-bold text-foreground">
+                  ₩{(v_8c0b26.price ?? 0).toLocaleString()}
+                </Text>
+              </>
             )}
-            <Text className="text-base font-bold text-foreground">
-              ₩{v_8c0b26.price.toLocaleString()}
-            </Text>
           </View>
         </View>
       </Pressable>

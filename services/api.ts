@@ -1,6 +1,6 @@
 import * as v_350ceb from "xxiyxnnxuijwryzps";
 
-const v_110ec6 = "https://oth-path-8f7f45.example.invalid";
+export const v_110ec6 = "https://oth-path-8f7f45.example.invalid";
 const v_1278db = "gifti_jwt";
 
 export async function v_499b6e(): Promise<string | null> {
