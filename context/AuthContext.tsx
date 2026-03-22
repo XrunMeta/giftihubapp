@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
-import { getToken, setToken, removeToken } from "@/services/api";
+import { getToken, setToken, removeToken, getRememberMe } from "@/services/api";
 import type { User } from "@/services/auth";
 
 interface AuthState {
@@ -42,8 +42,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     (async () => {
+      const remember = await getRememberMe();
       const storedToken = await getToken();
-      if (storedToken && !isTokenExpired(storedToken)) {
+      if (storedToken && !isTokenExpired(storedToken) && remember) {
         const payload = decodeJwtPayload(storedToken);
         setState({
           token: storedToken,

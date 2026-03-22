@@ -23,6 +23,10 @@ export default function ProcessScreen() {
         method: "POST",
         body: JSON.stringify({ barcode }),
       });
+      if (!res.valid) {
+        setStatus("invalid");
+        return;
+      }
       setVoucherInfo(res);
       setStatus("valid");
     } catch {

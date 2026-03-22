@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import { View, Text, Image, ScrollView, ActivityIndicator, Alert, Animated, useWindowDimensions } from "react-native";
+import { View, Text, Image, ScrollView, ActivityIndicator, Alert, Animated, useWindowDimensions, TouchableOpacity } from "react-native";
+import * as Clipboard from "expo-clipboard";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Send, ArrowLeftRight, ShoppingBag, CheckCircle, Clock, ArrowRight, XCircle } from "lucide-react-native";
@@ -71,8 +72,13 @@ export default function GiftiDetailScreen() {
       const res = await getVoucherBarcode(id!);
       setBarcode(res.barcode);
       startProgressBar();
-    } catch {
+    } catch (err: any) {
+      if (err.status === 409) {
 
+        setBarcode(null);
+        if (intervalRef.current) clearInterval(intervalRef.current);
+        setVoucher((prev) => prev ? { ...prev, status: "used" } : prev);
+      }
     }
   }, [id, startProgressBar]);
 
@@ -86,7 +92,7 @@ export default function GiftiDetailScreen() {
 
           if (v.status === "active") {
             loadBarcode();
-            intervalRef.current = setInterval(loadBarcode, REFRESH_SECONDS * 1000);
+            intervalRef.current = setInterval(loadBarcode, 5000);
           }
         } catch {
           Alert.alert("오류", "기프티 정보를 불러올 수 없습니다.");
@@ -125,9 +131,22 @@ export default function GiftiDetailScreen() {
               {barcode ? (
                 <View className="items-center">
                   <Barcode128 value={barcode} width={barcodeWidth} height={64} />
-                  <Text className="text-base font-mono tracking-[6px] text-foreground mt-3">
-                    {barcode}
-                  </Text>
+                  <View className="flex-row items-center mt-3">
+                    <Text className="text-base font-mono tracking-[6px] text-foreground">
+                      {barcode}
+                    </Text>
+                    {__DEV__ && (
+                      <TouchableOpacity
+                        onPress={() => {
+                          Clipboard.setStringAsync(barcode!);
+                          Alert.alert("복사됨", barcode!);
+                        }}
+                        className="ml-2 px-2 py-1 bg-muted rounded"
+                      >
+                        <Text className="text-xs text-muted-foreground">복사</Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
                 </View>
               ) : (
                 <View className="h-16 items-center justify-center">

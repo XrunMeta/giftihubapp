@@ -1,17 +1,22 @@
 import React from "react";
 import { View, Text, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
 import { LogOut } from "lucide-react-native";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 
 export default function MerchantSettingsScreen() {
   const { user, logout } = useAuth();
+  const router = useRouter();
 
   const handleLogout = () => {
     Alert.alert("로그아웃", "정말 로그아웃하시겠습니까?", [
       { text: "취소", style: "cancel" },
-      { text: "로그아웃", onPress: () => logout() },
+      { text: "로그아웃", onPress: async () => {
+        await logout();
+        router.replace("/(auth)/login");
+      }},
     ]);
   };
 

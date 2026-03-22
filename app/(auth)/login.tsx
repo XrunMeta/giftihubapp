@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, Text, KeyboardAvoidingView, Platform, ScrollView, Alert, Image } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, KeyboardAvoidingView, Platform, ScrollView, Alert, Image, Switch } from "react-native";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as WebBrowser from "expo-web-browser";
@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/context/AuthContext";
 import { loginWithEmail } from "@/services/auth";
 import { images } from "@/assets/images";
+import { getSavedEmail, setSavedEmail, removeSavedEmail, getRememberMe, setRememberMe } from "@/services/api";
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -17,6 +18,16 @@ export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [rememberMe, setRememberMeState] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      const saved = await getSavedEmail();
+      if (saved) setEmail(saved);
+      const remember = await getRememberMe();
+      setRememberMeState(remember);
+    })();
+  }, []);
 
   const handleEmailLogin = async () => {
     if (!email || !password) {
@@ -26,6 +37,12 @@ export default function LoginScreen() {
     setLoading(true);
     try {
       const res = await loginWithEmail(email, password);
+      await setRememberMe(rememberMe);
+      if (rememberMe) {
+        await setSavedEmail(email);
+      } else {
+        await removeSavedEmail();
+      }
       await login(res.token, res.user);
       const dest = res.user.role === "merchant" ? "/(merchant)" : "/(user)/store";
       router.replace(dest);
@@ -50,6 +67,7 @@ export default function LoginScreen() {
           try {
             const payload = JSON.parse(atob(token.split(".")[1]));
             const role = payload.role || "user";
+            await setRememberMe(rememberMe);
             await login(token, { id: payload.sub, name: payload.name || "", role });
             const dest = role === "merchant" ? "/(merchant)" : "/(user)/store";
             router.replace(dest);
@@ -94,13 +112,23 @@ export default function LoginScreen() {
             />
           </View>
 
-          <View className="mb-6">
+          <View className="mb-4">
             <Text className="text-sm font-medium text-foreground mb-1.5">비밀번호</Text>
             <Input
               secureTextEntry
               placeholder="••••••••"
               value={password}
               onChangeText={setPassword}
+            />
+          </View>
+
+          <View className="flex-row items-center justify-between mb-6">
+            <Text className="text-sm text-muted-foreground">로그인 유지</Text>
+            <Switch
+              value={rememberMe}
+              onValueChange={setRememberMeState}
+              trackColor={{ false: "#d4d4d4", true: "#CE3630" }}
+              thumbColor="#ffffff"
             />
           </View>
 
@@ -131,6 +159,28 @@ export default function LoginScreen() {
               회원가입
             </Text>
           </View>
+
+          {__DEV__ && (
+            <View className="mt-6 border border-dashed border-muted-foreground/30 rounded-xl p-3">
+              <Text className="text-xs text-muted-foreground text-center mb-2">DEV 빠른 로그인</Text>
+              <View className="flex-row gap-2">
+                <Button
+                  variant="outline"
+                  className="flex-1"
+                  onPress={() => { setEmail("user@test.com"); setPassword("1234"); }}
+                >
+                  <Text className="text-sm font-medium text-foreground">사용자</Text>
+                </Button>
+                <Button
+                  variant="outline"
+                  className="flex-1"
+                  onPress={() => { setEmail("merchant@test.com"); setPassword("1234"); }}
+                >
+                  <Text className="text-sm font-medium text-foreground">상점</Text>
+                </Button>
+              </View>
+            </View>
+          )}
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
