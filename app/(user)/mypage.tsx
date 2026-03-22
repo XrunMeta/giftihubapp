@@ -33,7 +33,10 @@ export default function v_840f8f() {
   const v_06b8a4 = () => {
     v_03e392.alert("로그아웃", "정말 로그아웃하시겠습니까?", [
       { text: "취소", style: "cancel" },
-      { text: "로그아웃", onPress: () => v_d7d5a2() },
+      { text: "로그아웃", onPress: async () => {
+        await v_d7d5a2();
+        v_904d46.replace("/(auth)/login");
+      }},
     ]);
   };
 

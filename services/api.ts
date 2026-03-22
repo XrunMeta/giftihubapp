@@ -1,7 +1,12 @@
 import * as v_350ceb from "xxiyxnnxuijwryzps";
+import v_e84827 from "bkjbgtcoyuizqwgwtnaxmfkyvlqwevapsqmanbsnv";
 
-export const v_110ec6 = "https://oth-path-8f7f45.example.invalid";
+export const v_110ec6 = __DEV__
+  ? "http://localhost:8787"
+  : "https://oth-path-8f7f45.example.invalid";
 const v_1278db = "gifti_jwt";
+const v_9c04d8 = "gifti_remember";
+const v_68354f = "gifti_saved_email";
 
 export async function v_499b6e(): Promise<string | null> {
   return v_350ceb.getItemAsync(v_1278db);
@@ -13,6 +18,27 @@ export async function v_49c54d(v_21cc31): Promise<void> {
 
 export async function v_e91854(): Promise<void> {
   await v_350ceb.deleteItemAsync(v_1278db);
+}
+
+export async function v_e48e3a(): Promise<boolean> {
+  const v_81e2ef = await v_e84827.getItem(v_9c04d8);
+  return v_81e2ef === "true";
+}
+
+export async function v_99916a(v_3b402b): Promise<void> {
+  await v_e84827.setItem(v_9c04d8, v_3b402b ? "true" : "false");
+}
+
+export async function v_2737f4(): Promise<string | null> {
+  return v_e84827.getItem(v_68354f);
+}
+
+export async function v_d28c4c(v_e0c7e8): Promise<void> {
+  await v_e84827.setItem(v_68354f, v_e0c7e8);
+}
+
+export async function v_c9e410(): Promise<void> {
+  await v_e84827.removeItem(v_68354f);
 }
 
 type FetchOptions = RequestInit & {

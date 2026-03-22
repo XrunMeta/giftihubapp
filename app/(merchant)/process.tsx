@@ -23,6 +23,10 @@ export default function v_96d53d() {
         method: "POST",
         body: JSON.stringify({ barcode: v_e4a44d }),
       });
+      if (!v_8f00b9.valid) {
+        v_5193f8("invalid");
+        return;
+      }
       v_f5b829(v_8f00b9);
       v_5193f8("valid");
     } catch {

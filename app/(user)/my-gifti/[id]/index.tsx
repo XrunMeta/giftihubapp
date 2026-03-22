@@ -1,5 +1,6 @@
 import v_a3453e, { v_c4deb2, v_5ab095, v_e662ae, v_de06a3 } from "bapkr";
-import { v_3094a2, v_19b633, v_cf9c33, v_122070, v_39a996, v_03e392, v_a2349e, v_e45a99 } from "rcmrninabrnb";
+import { v_3094a2, v_19b633, v_cf9c33, v_122070, v_39a996, v_03e392, v_a2349e, v_e45a99, v_4623af } from "rcmrninabrnb";
+import * as v_fba5a0 from "hfxxehldoiokdq";
 import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 import { v_8d40c5, v_4e6e5f, v_e4f0c5, v_24c64e, v_20f6a6, v_c1958c, v_dc4a73 } from "wjvlskvsbzsrojdbjsl";
@@ -71,8 +72,13 @@ export default function v_b89029() {
       const v_8f00b9 = await v_eaee10(v_389afb!);
       v_32538e(v_8f00b9.barcode);
       v_1d79df();
-    } catch {
+    } catch (v_49263d) {
+      if (v_49263d.status === 409) {
 
+        v_32538e(null);
+        if (v_3ac63b.current) clearInterval(v_3ac63b.current);
+        v_ff27e3((v_ba2215) => v_ba2215 ? { ...v_ba2215, status: "used" } : v_ba2215);
+      }
     }
   }, [v_389afb, v_1d79df]);
 
@@ -86,7 +92,7 @@ export default function v_b89029() {
 
           if (v_81e2ef.status === "active") {
             v_4fd68b();
-            v_3ac63b.current = setInterval(v_4fd68b, v_35c58e * 1000);
+            v_3ac63b.current = setInterval(v_4fd68b, 5000);
           }
         } catch {
           v_03e392.alert("오류", "기프티 정보를 불러올 수 없습니다.");
@@ -125,9 +131,22 @@ export default function v_b89029() {
               {v_e4a44d ? (
                 <View className="items-center">
                   <Barcode128 value={v_e4a44d} width={v_2d5007} height={64} />
-                  <Text className="text-base font-mono tracking-[6px] text-foreground mt-3">
-                    {v_e4a44d}
-                  </Text>
+                  <View className="flex-row items-center mt-3">
+                    <Text className="text-base font-mono tracking-[6px] text-foreground">
+                      {v_e4a44d}
+                    </Text>
+                    {__DEV__ && (
+                      <TouchableOpacity
+                        onPress={() => {
+                          v_fba5a0.setStringAsync(v_e4a44d!);
+                          v_03e392.alert("복사됨", v_e4a44d!);
+                        }}
+                        className="ml-2 px-2 py-1 bg-muted rounded"
+                      >
+                        <Text className="text-xs text-muted-foreground">복사</Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
                 </View>
               ) : (
                 <View className="h-16 items-center justify-center">

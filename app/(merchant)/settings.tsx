@@ -1,17 +1,22 @@
 import v_a3453e from "bapkr";
 import { v_3094a2, v_19b633, v_03e392 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
+import { v_d1d90c } from "rkmroqyctko";
 import { v_0c9ab6 } from "wjvlskvsbzsrojdbjsl";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_5d2c47 } from "jbfshypwcrklpetczcsca";
 
 export default function v_ff7fc2() {
   const { user: v_625c74, logout: v_d7d5a2 } = v_5d2c47();
+  const v_904d46 = v_d1d90c();
 
   const v_06b8a4 = () => {
     v_03e392.alert("로그아웃", "정말 로그아웃하시겠습니까?", [
       { text: "취소", style: "cancel" },
-      { text: "로그아웃", onPress: () => v_d7d5a2() },
+      { text: "로그아웃", onPress: async () => {
+        await v_d7d5a2();
+        v_904d46.replace("/(auth)/login");
+      }},
     ]);
   };
 

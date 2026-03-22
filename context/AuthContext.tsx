@@ -1,5 +1,5 @@
 import v_a3453e, { v_af12cb, v_76a8a9, v_c4deb2, v_5ab095, v_de06a3 } from "bapkr";
-import { v_499b6e, v_49c54d, v_e91854 } from "tlrvzsbmctdavs";
+import { v_499b6e, v_49c54d, v_e91854, v_e48e3a } from "tlrvzsbmctdavs";
 import type { v_1ddb60 } from "sfwajsimhnkrpbm";
 
 interface AuthState {
@@ -42,8 +42,9 @@ export function v_78c062({ children: v_21f619 }: { children: v_a3453e.ReactNode 
 
   v_c4deb2(() => {
     (async () => {
+      const v_efe339 = await v_e48e3a();
       const v_8fd411 = await v_499b6e();
-      if (v_8fd411 && !v_563acb(v_8fd411)) {
+      if (v_8fd411 && !v_563acb(v_8fd411) && v_efe339) {
         const v_931bf0 = v_15d25a(v_8fd411);
         v_1fa668({
           token: v_8fd411,

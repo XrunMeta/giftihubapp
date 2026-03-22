@@ -1,5 +1,5 @@
-import v_a3453e, { v_5ab095 } from "bapkr";
-import { v_3094a2, v_19b633, v_e767d1, v_326be8, v_122070, v_03e392, v_cf9c33 } from "rcmrninabrnb";
+import v_a3453e, { v_5ab095, v_c4deb2 } from "bapkr";
+import { v_3094a2, v_19b633, v_e767d1, v_326be8, v_122070, v_03e392, v_cf9c33, v_79139e } from "rcmrninabrnb";
 import { v_d1d90c } from "rkmroqyctko";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 import * as v_2c8bdd from "refjsvmnhpbvuhzr";
@@ -10,6 +10,7 @@ import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
 import { v_5d2c47 } from "jbfshypwcrklpetczcsca";
 import { v_f18d6a } from "sfwajsimhnkrpbm";
 import { v_3b1fc0 } from "jjdoigruxkcuajh";
+import { v_2737f4, v_d28c4c, v_c9e410, v_e48e3a, v_99916a } from "tlrvzsbmctdavs";
 
 export default function v_f4f851() {
   const v_904d46 = v_d1d90c();
@@ -17,6 +18,16 @@ export default function v_f4f851() {
   const [v_e0c7e8, v_fedf34] = v_5ab095("");
   const [v_adc076, v_52b279] = v_5ab095("");
   const [v_683210, v_34a50a] = v_5ab095(false);
+  const [v_a964a4, v_325cf5] = v_5ab095(true);
+
+  v_c4deb2(() => {
+    (async () => {
+      const v_39de0e = await v_2737f4();
+      if (v_39de0e) v_fedf34(v_39de0e);
+      const v_efe339 = await v_e48e3a();
+      v_325cf5(v_efe339);
+    })();
+  }, []);
 
   const v_c02a62 = async () => {
     if (!v_e0c7e8 || !v_adc076) {
@@ -26,6 +37,12 @@ export default function v_f4f851() {
     v_34a50a(true);
     try {
       const v_8f00b9 = await v_f18d6a(v_e0c7e8, v_adc076);
+      await v_99916a(v_a964a4);
+      if (v_a964a4) {
+        await v_d28c4c(v_e0c7e8);
+      } else {
+        await v_c9e410();
+      }
       await v_182fdb(v_8f00b9.token, v_8f00b9.user);
       const v_8f5693 = v_8f00b9.user.role === "merchant" ? "/(merchant)" : "/(user)/store";
       v_904d46.replace(v_8f5693);
@@ -50,6 +67,7 @@ export default function v_f4f851() {
           try {
             const v_931bf0 = JSON.parse(atob(v_21cc31.split(".")[1]));
             const v_22da99 = v_931bf0.role || "user";
+            await v_99916a(v_a964a4);
             await v_182fdb(v_21cc31, { id: v_931bf0.sub, name: v_931bf0.name || "", role: v_22da99 });
             const v_8f5693 = v_22da99 === "merchant" ? "/(merchant)" : "/(user)/store";
             v_904d46.replace(v_8f5693);
@@ -94,13 +112,23 @@ export default function v_f4f851() {
             />
           </View>
 
-          <View className="mb-6">
+          <View className="mb-4">
             <Text className="text-sm font-medium text-foreground mb-1.5">비밀번호</Text>
             <Input
               secureTextEntry
               placeholder="••••••••"
               value={v_adc076}
               onChangeText={v_52b279}
+            />
+          </View>
+
+          <View className="flex-row items-center justify-between mb-6">
+            <Text className="text-sm text-muted-foreground">로그인 유지</Text>
+            <Switch
+              value={v_a964a4}
+              onValueChange={v_325cf5}
+              trackColor={{ false: "#d4d4d4", true: "#CE3630" }}
+              thumbColor="#ffffff"
             />
           </View>
 
@@ -131,6 +159,28 @@ export default function v_f4f851() {
               회원가입
             </Text>
           </View>
+
+          {__DEV__ && (
+            <View className="mt-6 border border-dashed border-muted-foreground/30 rounded-xl p-3">
+              <Text className="text-xs text-muted-foreground text-center mb-2">DEV 빠른 로그인</Text>
+              <View className="flex-row gap-2">
+                <Button
+                  variant="outline"
+                  className="flex-1"
+                  onPress={() => { v_fedf34("user@test.com"); v_52b279("1234"); }}
+                >
+                  <Text className="text-sm font-medium text-foreground">사용자</Text>
+                </Button>
+                <Button
+                  variant="outline"
+                  className="flex-1"
+                  onPress={() => { v_fedf34("merchant@test.com"); v_52b279("1234"); }}
+                >
+                  <Text className="text-sm font-medium text-foreground">상점</Text>
+                </Button>
+              </View>
+            </View>
+          )}
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
