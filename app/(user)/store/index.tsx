@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { View, Text, FlatList, Pressable, Image, ActivityIndicator } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, useFocusEffect } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Search } from "lucide-react-native";
 import { Input } from "@/components/ui/input";
@@ -14,9 +14,11 @@ export default function StoreScreen() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
-  useEffect(() => {
-    loadProducts();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      loadProducts();
+    }, [])
+  );
 
   const loadProducts = async () => {
     try {
@@ -114,6 +116,7 @@ export default function StoreScreen() {
       </View>
 
       <FlatList
+        style={{ flex: 1 }}
         data={filtered}
         renderItem={renderProduct}
         keyExtractor={(item) => item.id}

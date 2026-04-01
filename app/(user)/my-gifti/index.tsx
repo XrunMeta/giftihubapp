@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { View, Text, FlatList, Pressable, Image, ActivityIndicator } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, useFocusEffect } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Package } from "lucide-react-native";
 import { ScrollableTabs } from "@/components/ui/scrollable-tabs";
@@ -45,9 +45,11 @@ export default function MyGiftiScreen() {
     }
   }, [activeTab]);
 
-  useEffect(() => {
-    loadVouchers();
-  }, [loadVouchers]);
+  useFocusEffect(
+    useCallback(() => {
+      loadVouchers();
+    }, [loadVouchers])
+  );
 
   type ListItem = { type: "single"; voucher: Voucher } | { type: "bundle"; setId: string; vouchers: Voucher[] };
 
@@ -194,6 +196,7 @@ export default function MyGiftiScreen() {
         </View>
       ) : (
         <FlatList
+          style={{ flex: 1 }}
           data={grouped}
           renderItem={({ item }) =>
             item.type === "bundle"

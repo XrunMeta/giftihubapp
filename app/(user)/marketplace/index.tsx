@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useRef, useState, useCallback } from "react";
 import { View, Text, FlatList, Pressable, Image, ActivityIndicator } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, useFocusEffect } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Search } from "lucide-react-native";
 import { Input } from "@/components/ui/input";
@@ -28,6 +28,7 @@ export default function MarketplaceScreen() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("all");
   const [search, setSearch] = useState("");
+  const listRef = useRef<FlatList>(null);
 
   const loadListings = useCallback(async () => {
     setLoading(true);
@@ -42,9 +43,11 @@ export default function MarketplaceScreen() {
     }
   }, [activeTab, search]);
 
-  useEffect(() => {
-    loadListings();
-  }, [loadListings]);
+  useFocusEffect(
+    useCallback(() => {
+      loadListings();
+    }, [loadListings])
+  );
 
   const renderListing = ({ item }: { item: MarketplaceListing }) => {
     const imgUri = resolveImageUrl(item.thumb_url, item.image_url, item.brand_logo);
@@ -108,23 +111,24 @@ export default function MarketplaceScreen() {
 
       <ScrollableTabs tabs={CATEGORY_TABS} activeTab={activeTab} onTabPress={setActiveTab} className="mb-3" />
 
-      {loading ? (
-        <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" color="#CE3630" />
-        </View>
-      ) : (
-        <FlatList
-          data={listings}
-          renderItem={renderListing}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={{ paddingBottom: 20 }}
-          ListEmptyComponent={
+      <FlatList
+        ref={listRef}
+        data={loading ? [] : listings}
+        renderItem={renderListing}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={{ paddingBottom: 20 }}
+        ListEmptyComponent={
+          loading ? (
+            <View className="items-center py-20">
+              <ActivityIndicator size="large" color="#CE3630" />
+            </View>
+          ) : (
             <View className="items-center py-20">
               <Text className="text-muted-foreground">판매 중인 상품이 없습니다.</Text>
             </View>
-          }
-        />
-      )}
+          )
+        }
+      />
     </SafeAreaView>
   );
 }

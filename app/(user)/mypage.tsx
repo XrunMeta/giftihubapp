@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { View, Text, ScrollView, ActivityIndicator, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useRouter } from "expo-router";
+import { useRouter, useFocusEffect } from "expo-router";
 import { LogOut, ChevronRight, CreditCard, History, Settings } from "lucide-react-native";
 import { Pressable } from "react-native";
 import { Separator } from "@/components/ui/separator";
@@ -15,9 +15,11 @@ export default function MyPageScreen() {
   const [me, setMe] = useState<MeResponse | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    loadMe();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      loadMe();
+    }, [])
+  );
 
   const loadMe = async () => {
     try {
