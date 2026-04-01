@@ -9,6 +9,8 @@ export interface CartItem {
 export interface PackageItem {
   items: CartItem[];
   totalBudget: number;
+  currency: string;
+  composition?: any;
 }
 
 interface CartContextType {

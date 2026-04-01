@@ -6,6 +6,7 @@ import { Search } from "lucide-react-native";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { getStoreProducts, getProductImageUrl, type Product } from "@/services/store";
+import { BundleComposer } from "@/components/BundleComposer";
 
 export default function StoreScreen() {
   const router = useRouter();
@@ -118,6 +119,7 @@ export default function StoreScreen() {
         keyExtractor={(item) => item.id}
         numColumns={2}
         contentContainerStyle={{ paddingHorizontal: 12, paddingBottom: 20 }}
+        ListHeaderComponent={<BundleComposer />}
         ListEmptyComponent={
           <View className="items-center py-20">
             <Text className="text-muted-foreground">상품이 없습니다.</Text>
