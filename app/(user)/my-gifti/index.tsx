@@ -1,7 +1,8 @@
-import v_a3453e, { v_c4deb2, v_5ab095, v_de06a3 } from "bapkr";
+import v_a3453e, { v_c4deb2, v_5ab095, v_de06a3, v_df9f57 } from "bapkr";
 import { v_3094a2, v_19b633, v_9cabcb, v_09d0e5, v_cf9c33, v_39a996 } from "rcmrninabrnb";
 import { v_d1d90c } from "rkmroqyctko";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
+import { v_c62079 } from "wjvlskvsbzsrojdbjsl";
 import { v_a3b961 } from "xytbpcyuptfvuyelkypzvyijaumlzur";
 import { v_6185b9 } from "hqklsidyfbumojabxoewf";
 import { v_7ef52a } from "splenmyqnym";
@@ -47,6 +48,99 @@ export default function v_bf7b5b() {
   v_c4deb2(() => {
     v_cb3615();
   }, [v_cb3615]);
+
+  type ListItem = { type: "single"; voucher: v_7fb3de } | { type: "bundle"; setId: string; vouchers: v_7fb3de[] };
+
+  const v_4d79ca = v_df9f57<ListItem[]>(() => {
+    const v_de9c6f = new Map<string, v_7fb3de[]>();
+    const singles: v_7fb3de[] = [];
+    for (const v_81e2ef of v_f9fd27) {
+      if (v_81e2ef.set_id) {
+        const v_d0c056 = v_de9c6f.get(v_81e2ef.set_id);
+        if (v_d0c056) v_d0c056.push(v_81e2ef);
+        else v_de9c6f.set(v_81e2ef.set_id, [v_81e2ef]);
+      } else {
+        v_d6adfa.push(v_81e2ef);
+      }
+    }
+    const v_43c42e = [];
+    const v_110a8b = new Set<string>();
+    for (const v_81e2ef of v_f9fd27) {
+      if (v_81e2ef.set_id && !v_110a8b.has(v_81e2ef.set_id)) {
+        v_110a8b.add(v_81e2ef.set_id);
+        v_43c42e.push({ type: "bundle", setId: v_81e2ef.set_id, vouchers: v_de9c6f.get(v_81e2ef.set_id)! });
+      } else if (!v_81e2ef.set_id) {
+        v_43c42e.push({ type: "single", voucher: v_81e2ef });
+      }
+    }
+    return v_43c42e;
+  }, [v_f9fd27]);
+
+  const v_192662 = (item: { setId: string; vouchers: v_7fb3de[] }) => {
+    const v_c83285 = v_8c0b26.vouchers.reduce((v_fd5f43, v_81e2ef) => v_fd5f43 + v_81e2ef.face_value, 0);
+    const v_ea719c = v_8c0b26.vouchers[0]!;
+    const v_7e0009 = v_8c0b26.vouchers.length - 1;
+    const v_ee43cf = v_8c0b26.vouchers.every((v_81e2ef) => v_81e2ef.status === "active");
+    const v_74f4a3 = v_7ef52a(v_ea719c.thumb_url, v_ea719c.image_url, v_ea719c.brand_logo);
+
+    return (
+      <Pressable
+        className="mx-4 mb-3 bg-card rounded-xl border border-primary/30 p-3"
+        onPress={() => v_904d46.push(`/(user)/oth-path${v_ea719c.id}`)}
+      >
+        <View className="flex-row items-center mb-2">
+          <View className="w-8 h-8 rounded-lg bg-primary/10 items-center justify-center mr-2">
+            <Package size={18} color="#CE3630" />
+          </View>
+          <Text className="text-sm font-semibold text-primary">구성 상품 ({v_8c0b26.vouchers.length}건)</Text>
+          <View className="flex-1" />
+          <Badge
+            variant={v_ee43cf ? "default" : "secondary"}
+            label={v_ee43cf ? "사용가능" : "혼합"}
+          />
+        </View>
+        <View className="flex-row">
+          {v_74f4a3 ? (
+            <Image source={{ uri: v_74f4a3 }} className="w-14 h-14 rounded-lg" resizeMode="cover" />
+          ) : (
+            <View className="w-14 h-14 rounded-lg bg-muted items-center justify-center">
+              <Text className="text-xl">🎁</Text>
+            </View>
+          )}
+          <View className="flex-1 ml-3">
+            <Text className="text-sm text-foreground font-medium" numberOfLines={1}>
+              {v_ea719c.brand} · {v_ea719c.name}
+              {v_7e0009 > 0 ? ` 외 ${v_7e0009}건` : ""}
+            </Text>
+            <View className="flex-row justify-between items-center mt-1.5">
+              <Text className="text-base font-bold text-foreground">
+                ₩{v_c83285.toLocaleString()}
+              </Text>
+              <Text className="text-xs text-muted-foreground">
+                만료: {v_db3cc6(new Date(v_ea719c.expiry_date * 1000), "yyyy.MM.dd")}
+              </Text>
+            </View>
+          </View>
+        </View>
+        {}
+        <View className="mt-2 pt-2 border-t border-border">
+          {v_8c0b26.vouchers.slice(0, 4).map((v_81e2ef) => (
+            <View key={v_81e2ef.id} className="flex-row justify-between py-0.5">
+              <Text className="text-xs text-muted-foreground flex-1" numberOfLines={1}>
+                {v_81e2ef.brand} · {v_81e2ef.name}
+              </Text>
+              <Text className="text-xs text-muted-foreground">₩{v_81e2ef.face_value.toLocaleString()}</Text>
+            </View>
+          ))}
+          {v_8c0b26.vouchers.length > 4 && (
+            <Text className="text-xs text-muted-foreground text-center mt-1">
+              +{v_8c0b26.vouchers.length - 4}건 더보기
+            </Text>
+          )}
+        </View>
+      </Pressable>
+    );
+  };
 
   const v_f8505d = ({ item: v_8c0b26 }: { item: v_7fb3de }) => {
     const v_51452d = v_df823e[v_8c0b26.status] || v_df823e.active;
@@ -100,10 +194,16 @@ export default function v_bf7b5b() {
         </View>
       ) : (
         <FlatList
-          data={v_f9fd27}
-          renderItem={v_f8505d}
-          keyExtractor={(v_8c0b26) => v_8c0b26.id}
-          contentContainerStyle={v_f9fd27.length === 0 ? { flexGrow: 1, justifyContent: "center" } : { paddingBottom: 20 }}
+          data={v_4d79ca}
+          renderItem={({ item: v_8c0b26 }) =>
+            v_8c0b26.type === "bundle"
+              ? v_192662(v_8c0b26)
+              : v_f8505d({ item: v_8c0b26.voucher })
+          }
+          keyExtractor={(v_8c0b26) =>
+            v_8c0b26.type === "bundle" ? `set-${v_8c0b26.setId}` : v_8c0b26.voucher.id
+          }
+          contentContainerStyle={v_4d79ca.length === 0 ? { flexGrow: 1, justifyContent: "center" } : { paddingBottom: 20 }}
           ListEmptyComponent={
             <View className="items-center py-20">
               <Text className="text-muted-foreground">기프티가 없습니다.</Text>

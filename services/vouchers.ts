@@ -17,6 +17,7 @@ export interface Voucher {
   image_url: string | null;
   thumb_url: string | null;
   brand_logo: string | null;
+  set_id: string | null;
 }
 
 export type VoucherStatus =

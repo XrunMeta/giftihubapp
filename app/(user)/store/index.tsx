@@ -6,6 +6,7 @@ import { v_66816c } from "wjvlskvsbzsrojdbjsl";
 import { v_1b353f } from "ymbgtfrroootgjefkrxgp";
 import { v_6185b9 } from "hqklsidyfbumojabxoewf";
 import { v_665284, v_e81ec9, type v_678322 } from "vhkgxwheyyipiczd";
+import { v_4c40b6 } from "eroshpxpcrjekpsjrhbenwagema";
 
 export default function v_ec75dd() {
   const v_904d46 = v_d1d90c();
@@ -118,6 +119,7 @@ export default function v_ec75dd() {
         keyExtractor={(v_8c0b26) => v_8c0b26.id}
         numColumns={2}
         contentContainerStyle={{ paddingHorizontal: 12, paddingBottom: 20 }}
+        ListHeaderComponent={<BundleComposer />}
         ListEmptyComponent={
           <View className="items-center py-20">
             <Text className="text-muted-foreground">상품이 없습니다.</Text>
