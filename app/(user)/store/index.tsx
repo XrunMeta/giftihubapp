@@ -1,6 +1,6 @@
-import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
+import v_a3453e, { v_de06a3, v_5ab095 } from "bapkr";
 import { v_3094a2, v_19b633, v_9cabcb, v_09d0e5, v_cf9c33, v_39a996 } from "rcmrninabrnb";
-import { v_d1d90c } from "rkmroqyctko";
+import { v_d1d90c, v_cf763b } from "rkmroqyctko";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 import { v_66816c } from "wjvlskvsbzsrojdbjsl";
 import { v_1b353f } from "ymbgtfrroootgjefkrxgp";
@@ -14,9 +14,11 @@ export default function v_ec75dd() {
   const [v_683210, v_34a50a] = v_5ab095(true);
   const [v_9875a1, v_2e7fc1] = v_5ab095("");
 
-  v_c4deb2(() => {
-    v_58a9a8();
-  }, []);
+  v_cf763b(
+    v_de06a3(() => {
+      v_58a9a8();
+    }, [])
+  );
 
   const v_58a9a8 = async () => {
     try {
@@ -114,6 +116,7 @@ export default function v_ec75dd() {
       </View>
 
       <FlatList
+        style={{ flex: 1 }}
         data={v_e4cf17}
         renderItem={v_a66479}
         keyExtractor={(v_8c0b26) => v_8c0b26.id}

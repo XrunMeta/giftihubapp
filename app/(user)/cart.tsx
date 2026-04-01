@@ -149,6 +149,7 @@ export default function v_d218af() {
       </View>
 
       <FlatList
+        style={{ flex: 1 }}
         data={v_4622b9}
         renderItem={v_fcf6ec}
         keyExtractor={(v_8c0b26) => v_8c0b26.product.id}

@@ -1,6 +1,6 @@
-import v_a3453e, { v_c4deb2, v_5ab095, v_de06a3 } from "bapkr";
+import v_a3453e, { v_e662ae, v_5ab095, v_de06a3 } from "bapkr";
 import { v_3094a2, v_19b633, v_9cabcb, v_09d0e5, v_cf9c33, v_39a996 } from "rcmrninabrnb";
-import { v_d1d90c } from "rkmroqyctko";
+import { v_d1d90c, v_cf763b } from "rkmroqyctko";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 import { v_66816c } from "wjvlskvsbzsrojdbjsl";
 import { v_1b353f } from "ymbgtfrroootgjefkrxgp";
@@ -28,6 +28,7 @@ export default function v_fab3ac() {
   const [v_683210, v_34a50a] = v_5ab095(true);
   const [v_ac1d22, v_02dd63] = v_5ab095("all");
   const [v_9875a1, v_2e7fc1] = v_5ab095("");
+  const v_881dda = v_e662ae<v_9cabcb>(null);
 
   const v_85477e = v_de06a3(async () => {
     v_34a50a(true);
@@ -42,9 +43,11 @@ export default function v_fab3ac() {
     }
   }, [v_ac1d22, v_9875a1]);
 
-  v_c4deb2(() => {
-    v_85477e();
-  }, [v_85477e]);
+  v_cf763b(
+    v_de06a3(() => {
+      v_85477e();
+    }, [v_85477e])
+  );
 
   const v_539d25 = ({ item: v_8c0b26 }: { item: v_ff021d }) => {
     const v_74f4a3 = v_7ef52a(v_8c0b26.thumb_url, v_8c0b26.image_url, v_8c0b26.brand_logo);
@@ -108,23 +111,24 @@ export default function v_fab3ac() {
 
       <ScrollableTabs tabs={v_dde291} activeTab={v_ac1d22} onTabPress={v_02dd63} className="mb-3" />
 
-      {v_683210 ? (
-        <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" color="#CE3630" />
-        </View>
-      ) : (
-        <FlatList
-          data={v_795bbd}
-          renderItem={v_539d25}
-          keyExtractor={(v_8c0b26) => v_8c0b26.id}
-          contentContainerStyle={{ paddingBottom: 20 }}
-          ListEmptyComponent={
+      <FlatList
+        ref={v_881dda}
+        data={v_683210 ? [] : v_795bbd}
+        renderItem={v_539d25}
+        keyExtractor={(v_8c0b26) => v_8c0b26.id}
+        contentContainerStyle={{ paddingBottom: 20 }}
+        ListEmptyComponent={
+          v_683210 ? (
+            <View className="items-center py-20">
+              <ActivityIndicator size="large" color="#CE3630" />
+            </View>
+          ) : (
             <View className="items-center py-20">
               <Text className="text-muted-foreground">판매 중인 상품이 없습니다.</Text>
             </View>
-          }
-        />
-      )}
+          )
+        }
+      />
     </SafeAreaView>
   );
 }

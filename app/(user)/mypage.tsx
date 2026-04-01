@@ -1,7 +1,7 @@
-import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
+import v_a3453e, { v_de06a3, v_5ab095 } from "bapkr";
 import { v_3094a2, v_19b633, v_122070, v_39a996, v_03e392 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
-import { v_d1d90c } from "rkmroqyctko";
+import { v_d1d90c, v_cf763b } from "rkmroqyctko";
 import { v_0c9ab6, v_6a6a7c, v_d84748, v_1c7574, v_5dcc4b } from "wjvlskvsbzsrojdbjsl";
 import { v_09d0e5 } from "rcmrninabrnb";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
@@ -15,9 +15,11 @@ export default function v_840f8f() {
   const [v_b32680, v_ee70ba] = v_5ab095<v_44083e | null>(null);
   const [v_683210, v_34a50a] = v_5ab095(true);
 
-  v_c4deb2(() => {
-    v_3fb498();
-  }, []);
+  v_cf763b(
+    v_de06a3(() => {
+      v_3fb498();
+    }, [])
+  );
 
   const v_3fb498 = async () => {
     try {

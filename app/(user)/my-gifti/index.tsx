@@ -1,6 +1,6 @@
-import v_a3453e, { v_c4deb2, v_5ab095, v_de06a3, v_df9f57 } from "bapkr";
+import v_a3453e, { v_5ab095, v_de06a3, v_df9f57 } from "bapkr";
 import { v_3094a2, v_19b633, v_9cabcb, v_09d0e5, v_cf9c33, v_39a996 } from "rcmrninabrnb";
-import { v_d1d90c } from "rkmroqyctko";
+import { v_d1d90c, v_cf763b } from "rkmroqyctko";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 import { v_c62079 } from "wjvlskvsbzsrojdbjsl";
 import { v_a3b961 } from "xytbpcyuptfvuyelkypzvyijaumlzur";
@@ -45,9 +45,11 @@ export default function v_bf7b5b() {
     }
   }, [v_ac1d22]);
 
-  v_c4deb2(() => {
-    v_cb3615();
-  }, [v_cb3615]);
+  v_cf763b(
+    v_de06a3(() => {
+      v_cb3615();
+    }, [v_cb3615])
+  );
 
   type ListItem = { type: "single"; voucher: v_7fb3de } | { type: "bundle"; setId: string; vouchers: v_7fb3de[] };
 
@@ -194,6 +196,7 @@ export default function v_bf7b5b() {
         </View>
       ) : (
         <FlatList
+          style={{ flex: 1 }}
           data={v_4d79ca}
           renderItem={({ item: v_8c0b26 }) =>
             v_8c0b26.type === "bundle"
