@@ -1,113 +1,223 @@
-import { v_5ab095 } from "bapkr";
+import { v_5ab095, v_c4deb2, v_e662ae } from "bapkr";
+import { v_a04f9c } from "wtmgqhsnsiyp";
 import { v_348e5f } from "../../components/UserLayout";
 import { v_2dc782, v_e7d43c } from "../../components/ui/card";
 import { v_1a40c4 } from "../../components/ui/button";
 import { v_6185b9 } from "../../components/ui/badge";
-import { v_c2fdd1, v_1efbac, v_0c1bc0, v_bdaafa, v_8c709b, v_d49c66 } from "../../components/ui/dialog";
-import { v_e4f0c5, v_7dc841, v_429ab0, v_1ddb60 } from "nchqfqoebgwu";
-import { v_732099 } from "../../data/mockData";
+import { v_1b353f } from "../../components/ui/input";
+import {
+  v_ed7c3b,
+  v_38670c,
+  v_63e833,
+  v_afb4f7,
+  v_36bbe2,
+} from "../../components/ui/select";
+import { v_66816c, v_e4f0c5, v_7dc841, v_429ab0, v_c71054, v_a07c02, v_a43dd8, v_4013d8 } from "nchqfqoebgwu";
+import { v_75ac97, type v_ff021d } from "../../lib/api";
+import { v_c55bb9 } from "../../lib/auth";
+
+const v_6e79a1 = [
+  { value: "", label: "전체" },
+  { value: "food", label: "음식" },
+  { value: "culture", label: "문화" },
+  { value: "convenience", label: "편의점" },
+  { value: "beauty", label: "뷰티" },
+  { value: "etc", label: "기타" },
+] as const;
 
 export function v_11d8d2() {
-  const [v_ebb1d9, v_5c219e] = v_5ab095<string | null>(null);
+  const v_9b57fc = v_a04f9c();
+  const [v_795bbd, v_c90f4e] = v_5ab095<v_ff021d[]>([]);
+  const [v_683210, v_34a50a] = v_5ab095(true);
+  const [v_5e9bfe, v_3a7d09] = v_5ab095("");
+  const [v_7c5791, v_c57190] = v_5ab095("");
+  const [v_8b9cd4, v_f38b96] = v_5ab095("");
+  const [v_71d48b, v_0b24a9] = v_5ab095("latest");
+  const v_445b5f = v_e662ae<ReturnType<typeof setTimeout>>();
 
-  const v_dfaad1 = (v_4b65e3) => {
-    alert("중고 기프티 구매가 완료되었습니다!");
-    v_5c219e(null);
+  const v_60f420 = async (v_ab6401, v_9bf432, v_fd5f43) => {
+    v_34a50a(true);
+    v_3a7d09("");
+    try {
+      const v_24baff = {};
+      if (v_ab6401) v_24baff.q = v_ab6401;
+      if (v_9bf432) v_24baff.category = v_9bf432;
+      if (v_fd5f43 && v_fd5f43 !== "latest") v_24baff.sort = v_fd5f43;
+      const v_9390e8 = await v_75ac97.getListings(v_24baff);
+      v_c90f4e(v_9390e8.listings);
+    } catch (v_9e86fd) {
+      v_3a7d09(v_9e86fd instanceof Error ? v_9e86fd.message : "목록을 불러오지 못했습니다");
+    } finally {
+      v_34a50a(false);
+    }
+  };
+
+  v_c4deb2(() => {
+    v_60f420(v_7c5791, v_8b9cd4, v_71d48b);
+  }, [v_8b9cd4, v_71d48b]);
+
+  const v_5e757d = (v_3b402b) => {
+    v_c57190(v_3b402b);
+    if (v_445b5f.current) clearTimeout(v_445b5f.current);
+    v_445b5f.current = setTimeout(() => {
+      v_60f420(v_3b402b, v_8b9cd4, v_71d48b);
+    }, 300);
+  };
+
+  const v_515644 = (listing: v_ff021d) => {
+    v_9b57fc(`/oth-path${v_a8fb42.id}`);
   };
 
   return (
     <UserLayout>
       <div className="max-w-lg mx-auto">
         {}
-        <div className="bg-white border-b p-4">
-          <h1 className="text-xl font-semibold">중고마켓</h1>
-          <p className="text-gray-600 text-sm mt-1">할인된 가격으로 기프티를 구매하세요</p>
+        <div className="bg-white border-b p-4 flex items-center justify-between">
+          <div className="flex items-center">
+            <button onClick={() => v_9b57fc(-1)} className="mr-3">
+              <ArrowLeft className="w-6 h-6" />
+            </button>
+            <div>
+              <h1 className="text-lg font-semibold">중고마켓</h1>
+              <p className="text-gray-500 text-xs">할인된 가격으로 기프티를 구매하세요</p>
+            </div>
+          </div>
+          {v_c55bb9() && (
+            <button
+              onClick={() => v_9b57fc("/oth-path")}
+              className="text-gray-500 hover:text-gray-700"
+            >
+              <ClipboardList className="w-5 h-5" />
+            </button>
+          )}
         </div>
 
-        <div className="p-4 space-y-3">
-          {v_732099.map((v_a8fb42) => (
-            <Card key={v_a8fb42.id} className="hover:shadow-md transition-shadow">
-              <CardContent className="p-5">
-                <div className="flex justify-between items-start mb-4 gap-3">
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-lg">{v_a8fb42.giftiName}</h3>
-                    <div className="flex items-center gap-2 mt-2 text-sm text-gray-600">
-                      <Calendar className="w-3 h-3" />
-                      <span>만기일: {new Date(v_a8fb42.expiryDate).toLocaleDateString("ko-KR")}</span>
-                    </div>
-                  </div>
-                  <Badge className="bg-orange-600 text-white whitespace-nowrap">
-                    <User className="w-3 h-3 mr-1" />
-                    {v_a8fb42.sellerName}
-                  </Badge>
-                </div>
+        <div className="p-4 space-y-4">
+          {}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Input
+              placeholder="브랜드 또는 상품명 검색"
+              value={v_7c5791}
+              onChange={(v_9e86fd) => v_5e757d(v_9e86fd.target.value)}
+              className="pl-9"
+            />
+          </div>
 
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <p className="text-sm text-gray-500 line-through">
-                     ${v_a8fb42.originalPrice.toLocaleString()}
-                    </p>
-                    <p className="text-2xl font-bold text-orange-600">
-                      ${v_a8fb42.sellingPrice.toLocaleString()}
-                    </p>
-                  </div>
-                  <div className="text-right text-sm text-gray-600">
-                    <div className="flex items-center">
-                      <Calendar className="w-4 h-4 mr-1" />
-                      <span>{new Date(v_a8fb42.expiryDate).toLocaleDateString("ko-KR")}</span>
-                    </div>
-                  </div>
-                </div>
+          {}
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex gap-2 overflow-x-auto scrollbar-hide flex-1">
+              {v_6e79a1.map((v_9bf432) => (
+                <button
+                  key={v_9bf432.value}
+                  onClick={() => v_f38b96(v_9bf432.value)}
+                  className={`px-3 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
+                    v_8b9cd4 === v_9bf432.value
+                      ? "bg-orange-600 text-white shadow-md"
+                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  }`}
+                >
+                  {v_9bf432.label}
+                </button>
+              ))}
+            </div>
+            <Select value={v_71d48b} onValueChange={v_0b24a9}>
+              <SelectTrigger className="w-[110px] h-8 text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="latest">최신순</SelectItem>
+                <SelectItem value="price_asc">가격 낮은순</SelectItem>
+                <SelectItem value="price_desc">가격 높은순</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button variant="outline" className="w-full border-orange-600 text-orange-600 hover:bg-orange-50">
-                      <ShoppingBag className="w-4 h-4 mr-2" />
-                      구매하기
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>기프티 구매 확인</DialogTitle>
-                      <DialogDescription>
-                        아래 기프티를 구매하시겠습니까?
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div className="space-y-4 py-4">
-                      <div className="space-y-3">
-                        <p className="font-semibold text-lg">{v_a8fb42.giftiName}</p>
-                        <div className="flex justify-between text-sm">
-                          <span className="text-gray-600">판매자:</span>
-                          <span>{v_a8fb42.sellerName}</span>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span className="text-gray-600">원가:</span>
-                          <span className="line-through">${v_a8fb42.originalPrice.toLocaleString()}</span>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span className="text-gray-600">할인율:</span>
-                          <span className="font-semibold">{v_a8fb42.discount}%</span>
-                        </div>
-                        <div className="flex justify-between pt-2 border-t">
-                          <span className="font-semibold">결제 금액:</span>
-                          <span className="text-xl font-bold text-orange-600">
-                            ${v_a8fb42.sellingPrice.toLocaleString()}
-                          </span>
-                        </div>
+          {}
+          {v_683210 && (
+            <div className="flex justify-center py-12">
+              <Loader2 className="w-6 h-6 animate-spin text-orange-600" />
+            </div>
+          )}
+
+          {}
+          {v_5e9bfe && !v_683210 && (
+            <div className="text-center py-8 text-red-500 text-sm">{v_5e9bfe}</div>
+          )}
+
+          {}
+          {!v_683210 && !v_5e9bfe && v_795bbd.length === 0 && (
+            <div className="text-center py-12">
+              <ShoppingBag className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+              <p className="text-gray-500 text-sm">판매 중인 기프티가 없습니다</p>
+            </div>
+          )}
+
+          {}
+          {!v_683210 && v_795bbd.map((v_a8fb42) => (
+            <Card
+              key={v_a8fb42.id}
+              className="hover:shadow-md transition-shadow cursor-pointer"
+              onClick={() => v_515644(v_a8fb42)}
+            >
+              <CardContent className="p-4">
+                <div className="flex gap-3">
+                  {}
+                  {(v_a8fb42.thumb_url || v_a8fb42.image_url) && (
+                    <div className="w-20 h-20 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                      <img
+                        src={v_a8fb42.thumb_url || v_a8fb42.image_url}
+                        alt={v_a8fb42.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0">
+                        <p className="text-xs text-gray-500">{v_a8fb42.brand}</p>
+                        <h3 className="font-semibold text-sm truncate">{v_a8fb42.name}</h3>
                       </div>
-                      <Button
-                        className="w-full bg-orange-600 hover:bg-orange-700"
-                        onClick={() => v_dfaad1(v_a8fb42.id)}
-                      >
-                        구매 확인
-                      </Button>
+                      {v_a8fb42.discount > 0 && (
+                        <Badge className="bg-red-500 text-white text-xs whitespace-nowrap">
+                          -{v_a8fb42.discount}%
+                        </Badge>
+                      )}
                     </div>
-                  </DialogContent>
-                </Dialog>
+
+                    <div className="flex items-end justify-between mt-2">
+                      <div>
+                        <p className="text-xs text-gray-400 line-through">
+                          ${v_a8fb42.original_price.toLocaleString()}
+                        </p>
+                        <p className="text-lg font-bold text-orange-600">
+                          ${v_a8fb42.selling_price.toLocaleString()}
+                        </p>
+                      </div>
+                      <div className="flex items-center text-xs text-gray-400">
+                        <Calendar className="w-3 h-3 mr-1" />
+                        {v_a8fb42.expiry_date
+                          ? new Date(v_a8fb42.expiry_date * 1000).toLocaleDateString("ko-KR")
+                          : "-"}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           ))}
         </div>
+
+        {}
+        {v_c55bb9() && (
+          <button
+            onClick={() => v_9b57fc("/oth-path")}
+            className="fixed bottom-20 right-4 w-14 h-14 bg-orange-600 text-white rounded-full shadow-lg flex items-center justify-center hover:bg-orange-700 transition-colors"
+          >
+            <Plus className="w-6 h-6" />
+          </button>
+        )}
       </div>
     </UserLayout>
   );

@@ -5,6 +5,11 @@ import { v_6ab0ac } from "./pages/Signup";
 
 import { v_9a33fc } from "./pages/user/UserHome";
 import { v_11d8d2 } from "./pages/user/Marketplace";
+import { v_5e360c } from "./pages/user/MarketplaceDetail";
+import { v_61aaea } from "./pages/user/MarketplacePurchase";
+import { v_a1216b } from "./pages/user/MarketplacePurchaseComplete";
+import { v_6a39e0 } from "./pages/user/MarketplaceSell";
+import { v_366444 } from "./pages/user/MarketplaceHistory";
 import { v_4d54ab } from "./pages/user/MyGifti";
 import { v_f5bc2f } from "./pages/user/UsageHistory";
 import { v_0e1c8d } from "./pages/user/MyPage";
@@ -43,6 +48,11 @@ export const v_904d46 = v_58d265([
     children: [
       { index: true, Component: v_9a33fc },
       { path: "marketplace", Component: v_11d8d2 },
+      { path: "marketplace/sell", Component: v_6a39e0 },
+      { path: "marketplace/history", Component: v_366444 },
+      { path: "marketplace/:id", Component: v_5e360c },
+      { path: "marketplace/:id/purchase", Component: v_61aaea },
+      { path: "marketplace/:id/complete", Component: v_a1216b },
       { path: "my-gifti", Component: v_4d54ab },
       { path: "history", Component: v_f5bc2f },
       { path: "mypage", Component: v_0e1c8d },
