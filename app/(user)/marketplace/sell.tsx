@@ -1,6 +1,6 @@
 import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
 import { v_3094a2, v_19b633, v_122070, v_03e392, v_39a996, v_09d0e5 } from "rcmrninabrnb";
-import { v_d1d90c } from "rkmroqyctko";
+import { v_d1d90c, v_d1a7ac } from "rkmroqyctko";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_1b353f } from "ymbgtfrroootgjefkrxgp";
@@ -11,6 +11,7 @@ import { v_86db47 } from "vkhyfothlklikcpovbqirr";
 
 export default function v_3072c9() {
   const v_904d46 = v_d1d90c();
+  const { voucherId: v_ba63f8 } = v_d1a7ac<{ voucherId?: string }>();
   const [v_f9fd27, v_3a2126] = v_5ab095<v_7fb3de[]>([]);
   const [v_119885, v_36e0c4] = v_5ab095<v_7fb3de | null>(null);
   const [v_7ae44d, v_27a321] = v_5ab095("");
@@ -25,6 +26,14 @@ export default function v_3072c9() {
     try {
       const v_8f00b9 = await v_720509("active");
       v_3a2126(v_8f00b9.vouchers);
+
+      if (v_ba63f8) {
+        const v_ea6dff = v_8f00b9.vouchers.find((v_81e2ef) => v_81e2ef.id === v_ba63f8);
+        if (v_ea6dff) {
+          v_36e0c4(v_ea6dff);
+          v_27a321(String(Math.round(v_ea6dff.face_value * 0.9)));
+        }
+      }
     } catch {
 
     } finally {

@@ -1,5 +1,5 @@
 import { v_373248 } from "rkmroqyctko";
-import { v_19ca5b, v_32e130, v_aa3f8f, v_5dcc4b } from "wjvlskvsbzsrojdbjsl";
+import { v_19ca5b, v_e4f0c5, v_c62079, v_aa3f8f, v_5dcc4b } from "wjvlskvsbzsrojdbjsl";
 
 export default function v_2e5340() {
   return (
@@ -22,10 +22,17 @@ export default function v_2e5340() {
         }}
       />
       <Tabs.Screen
-        name="history"
+        name="market"
         options={{
-          title: "이력",
-          tabBarIcon: ({ color: v_3c2a3a, size: v_05b441 }) => <FileText size={v_05b441} color={v_3c2a3a} />,
+          title: "중고마켓",
+          tabBarIcon: ({ color: v_3c2a3a, size: v_05b441 }) => <ShoppingBag size={v_05b441} color={v_3c2a3a} />,
+        }}
+      />
+      <Tabs.Screen
+        name="my-bundles"
+        options={{
+          title: "보유상품",
+          tabBarIcon: ({ color: v_3c2a3a, size: v_05b441 }) => <Package size={v_05b441} color={v_3c2a3a} />,
         }}
       />
       <Tabs.Screen
@@ -42,9 +49,12 @@ export default function v_2e5340() {
           tabBarIcon: ({ color: v_3c2a3a, size: v_05b441 }) => <Settings size={v_05b441} color={v_3c2a3a} />,
         }}
       />
+      <Tabs.Screen name="history" options={{ href: null }} />
       <Tabs.Screen name="process" options={{ href: null }} />
       <Tabs.Screen name="process-complete" options={{ href: null }} />
       <Tabs.Screen name="record-payment" options={{ href: null }} />
+      <Tabs.Screen name="market-detail" options={{ href: null }} />
+      <Tabs.Screen name="market-purchase" options={{ href: null }} />
     </Tabs>
   );
 }

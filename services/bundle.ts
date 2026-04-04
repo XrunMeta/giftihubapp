@@ -69,3 +69,44 @@ export async function v_331c13(
     }),
   });
 }
+
+export interface MerchantBundle {
+  set_id: string;
+  set_name: string;
+  set_description: string | null;
+  voucher_count: number;
+  total_face_value: number;
+  statuses: string;
+}
+
+export interface BundleSettlementRequest {
+  id: string;
+  bundle_id: string;
+  purchase_price: number;
+  fee_rate: number;
+  fee_amount: number;
+  net_amount: number;
+  status: "pending" | "approved" | "rejected";
+  created_at: number;
+}
+
+export async function v_60b706(): Promise<{
+  bundles: MerchantBundle[];
+}> {
+  return v_bc1b24("/oth-path");
+}
+
+export async function v_9607ec(
+  v_ff0ad4,
+): Promise<BundleSettlementRequest & { ok?: boolean }> {
+  return v_bc1b24("/oth-path", {
+    method: "POST",
+    body: JSON.stringify({ bundle_id: v_ff0ad4 }),
+  });
+}
+
+export async function v_54a47e(): Promise<{
+  requests: BundleSettlementRequest[];
+}> {
+  return v_bc1b24("/oth-path");
+}

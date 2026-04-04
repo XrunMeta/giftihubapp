@@ -2,7 +2,7 @@ import * as v_350ceb from "xxiyxnnxuijwryzps";
 import v_e84827 from "bkjbgtcoyuizqwgwtnaxmfkyvlqwevapsqmanbsnv";
 
 export const v_110ec6 = __DEV__
-  ? "http://localhost:8787"
+  ? "http://203.0.113.10:8787"
   : "https://oth-path-8f7f45.example.invalid";
 const v_1278db = "gifti_jwt";
 const v_9c04d8 = "gifti_remember";

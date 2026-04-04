@@ -8,6 +8,8 @@ import { v_6185b9 } from "hqklsidyfbumojabxoewf";
 import { v_665284, v_e81ec9, type v_678322 } from "vhkgxwheyyipiczd";
 import { v_4c40b6 } from "eroshpxpcrjekpsjrhbenwagema";
 
+const v_928ad6 = { KRW: "₩", USD: "$", IDR: "Rp" };
+
 export default function v_ec75dd() {
   const v_904d46 = v_d1d90c();
   const [v_67dde1, v_9ad464] = v_5ab095<v_678322[]>([]);
@@ -71,7 +73,7 @@ export default function v_ec75dd() {
           <View className="flex-row items-center mt-2 gap-1.5">
             {v_e567dc ? (
               <Text className="text-sm font-bold text-foreground">
-                ₩{(v_8c0b26.flexible_min ?? 0).toLocaleString()}~
+                {v_928ad6[v_8c0b26.flexible_currency ?? "KRW"] ?? "₩"}{(v_8c0b26.flexible_min ?? 0).toLocaleString()}~
               </Text>
             ) : (
               <>
@@ -79,7 +81,7 @@ export default function v_ec75dd() {
                   <Badge variant="destructive" label={`${v_3ae14a}%`} />
                 )}
                 <Text className="text-base font-bold text-foreground">
-                  ₩{(v_8c0b26.price ?? 0).toLocaleString()}
+                  {v_928ad6[v_8c0b26.display_currency] ?? "₩"}{(v_8c0b26.price ?? 0).toLocaleString()}
                 </Text>
               </>
             )}

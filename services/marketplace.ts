@@ -81,3 +81,19 @@ export async function v_e7fbfb(
 ): Promise<{ ok: true }> {
   return v_bc1b24(`/oth-path${v_389afb}`, { method: "DELETE" });
 }
+
+export async function v_aee327(
+  v_90a2ba,
+  v_7ae44d,
+  v_8b9cd4,
+): Promise<{ ok: true; listing_id: string; voucher_count: number; fee: number; estimated_payout: number }> {
+  return v_bc1b24("/oth-path", {
+    method: "POST",
+    body: JSON.stringify({
+      set_id: v_90a2ba,
+      selling_price: v_7ae44d,
+      category: v_8b9cd4,
+    }),
+  });
+}
+

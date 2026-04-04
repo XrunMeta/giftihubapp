@@ -3,15 +3,17 @@ import { v_3094a2, v_19b633, v_cf9c33, v_122070, v_39a996, v_03e392, v_a2349e, v
 import * as v_fba5a0 from "hfxxehldoiokdq";
 import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
-import { v_8d40c5, v_4e6e5f, v_e4f0c5, v_24c64e, v_20f6a6, v_c1958c, v_dc4a73 } from "wjvlskvsbzsrojdbjsl";
+import { v_8d40c5, v_4e6e5f, v_e4f0c5, v_24c64e, v_20f6a6, v_c1958c, v_dc4a73, v_51bb20 } from "wjvlskvsbzsrojdbjsl";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_6185b9 } from "hqklsidyfbumojabxoewf";
 import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
 import { v_7ef52a } from "splenmyqnym";
 import v_c21f17 from "mxokdmnphhuxdntzxetlxyw";
+import v_dc0e55 from "bfgjhdhiuhcmlahuvrfzrfn";
 import { v_50a647, v_eaee10, type v_7fb3de } from "pvulvehakmpzwkznlnd";
 import { v_db3cc6 } from "dyunzbus";
+import { v_f589a4 } from "wplnrzxbcvjvxjmndcjr";
 
 const v_35c58e = 30;
 
@@ -51,6 +53,7 @@ const STATUS_INFO: Record<string, { label: string; icon: typeof v_24c64e; color:
 export default function v_b89029() {
   const { id: v_389afb } = v_d1a7ac<{ id: string }>();
   const v_904d46 = v_d1d90c();
+  const v_1d0b37 = v_f589a4();
   const { width: v_bcfa24 } = v_e45a99();
   const [v_3e4b5d, v_ff27e3] = v_5ab095<v_7fb3de | null>(null);
   const [v_e4a44d, v_32538e] = v_5ab095<string | null>(null);
@@ -58,20 +61,23 @@ export default function v_b89029() {
   const v_3ac63b = v_e662ae<ReturnType<typeof setInterval> | null>(null);
   const v_f1ce90 = v_e662ae(new v_a2349e.Value(1)).current;
 
-  const v_1d79df = v_de06a3(() => {
-    v_f1ce90.setValue(1);
-    v_a2349e.timing(v_f1ce90, {
-      toValue: 0,
-      duration: v_35c58e * 1000,
-      useNativeDriver: false,
-    }).start();
+  const v_ddff9f = v_de06a3((v_545fcf) => {
+    const v_80396f = Math.max(0, Math.min(1, v_545fcf / v_35c58e));
+    v_f1ce90.stopAnimation(() => {
+      v_f1ce90.setValue(v_80396f);
+      v_a2349e.timing(v_f1ce90, {
+        toValue: 0,
+        duration: v_545fcf * 1000,
+        useNativeDriver: false,
+      }).start();
+    });
   }, [v_f1ce90]);
 
   const v_4fd68b = v_de06a3(async () => {
     try {
       const v_8f00b9 = await v_eaee10(v_389afb!);
       v_32538e(v_8f00b9.barcode);
-      v_1d79df();
+      v_ddff9f(v_8f00b9.expires_in);
     } catch (v_49263d) {
       if (v_49263d.status === 409) {
 
@@ -80,7 +86,7 @@ export default function v_b89029() {
         v_ff27e3((v_ba2215) => v_ba2215 ? { ...v_ba2215, status: "used" } : v_ba2215);
       }
     }
-  }, [v_389afb, v_1d79df]);
+  }, [v_389afb, v_ddff9f]);
 
   v_c4deb2(() => {
     if (v_389afb) {
@@ -135,7 +141,7 @@ export default function v_b89029() {
                     <Text className="text-base font-mono tracking-[6px] text-foreground">
                       {v_e4a44d}
                     </Text>
-                    {__DEV__ && (
+                    {v_1d0b37 && (
                       <TouchableOpacity
                         onPress={() => {
                           v_fba5a0.setStringAsync(v_e4a44d!);
@@ -147,6 +153,11 @@ export default function v_b89029() {
                       </TouchableOpacity>
                     )}
                   </View>
+                  {}
+                  <View className="mt-4 p-3 bg-white rounded-lg">
+                    <QRCode value={v_e4a44d} size={120} />
+                  </View>
+                  <Text className="text-xs text-muted-foreground mt-2">휴대폰 카메라로 스캔</Text>
                 </View>
               ) : (
                 <View className="h-16 items-center justify-center">
@@ -254,6 +265,14 @@ export default function v_b89029() {
                 <Text className="text-sm font-medium text-foreground">환불</Text>
               </Button>
             </View>
+            <Button
+              variant="outline"
+              className="flex-row gap-2"
+              onPress={() => v_904d46.push({ pathname: "/(user)/oth-path", params: { voucherId: v_389afb } })}
+            >
+              <Store size={16} color="#0a0a0a" />
+              <Text className="text-sm font-medium text-foreground">중고마켓에 판매</Text>
+            </Button>
           </View>
         )}
       </ScrollView>

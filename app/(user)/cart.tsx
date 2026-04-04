@@ -1,5 +1,5 @@
 import v_a3453e from "bapkr";
-import { v_3094a2, v_19b633, v_9cabcb, v_09d0e5, v_cf9c33 } from "rcmrninabrnb";
+import { v_3094a2, v_19b633, v_9cabcb, v_09d0e5, v_cf9c33, v_03e392 } from "rcmrninabrnb";
 import { v_d1d90c } from "rkmroqyctko";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 import { v_3b9c43, v_a07c02, v_1290fc, v_c62079, v_d55cb2 } from "wjvlskvsbzsrojdbjsl";
@@ -111,28 +111,34 @@ export default function v_d218af() {
             </Text>
           </View>
           <View className="flex-row justify-between items-center">
-            <View className="flex-row items-center border border-border rounded-md">
-              <Pressable
-                onPress={() => v_3fe605(v_8c0b26.product.id, v_8c0b26.quantity - 1)}
-                className="p-1.5"
-              >
-                <Minus size={14} color="#737373" />
-              </Pressable>
-              <Text className="text-sm font-medium w-8 text-center text-foreground">
-                {v_8c0b26.quantity}
-              </Text>
-              <Pressable
-                onPress={() => v_3fe605(v_8c0b26.product.id, v_8c0b26.quantity + 1)}
-                className="p-1.5"
-              >
-                <Plus size={14} color="#737373" />
-              </Pressable>
-            </View>
+            {v_8c0b26.flexibleAmount ? (
+              <Text className="text-xs text-amber-500">금액 지정</Text>
+            ) : (
+              <View className="flex-row items-center border border-border rounded-md">
+                <Pressable
+                  onPress={() => v_3fe605(v_8c0b26.cartId!, v_8c0b26.quantity - 1)}
+                  className="p-1.5"
+                >
+                  <Minus size={14} color="#737373" />
+                </Pressable>
+                <Text className="text-sm font-medium w-8 text-center text-foreground">
+                  {v_8c0b26.quantity}
+                </Text>
+                <Pressable
+                  onPress={() => v_3fe605(v_8c0b26.cartId!, v_8c0b26.quantity + 1)}
+                  className="p-1.5"
+                >
+                  <Plus size={14} color="#737373" />
+                </Pressable>
+              </View>
+            )}
             <View className="flex-row items-center gap-3">
               <Text className="text-sm font-bold text-foreground">
-                ₩{(v_8c0b26.product.price * v_8c0b26.quantity).toLocaleString()}
+                {v_8c0b26.flexibleAmount
+                  ? v_be1e41(v_8c0b26.flexibleAmount, v_8c0b26.product.flexible_currency ?? "KRW")
+                  : `₩${(v_8c0b26.product.price * v_8c0b26.quantity).toLocaleString()}`}
               </Text>
-              <Pressable onPress={() => v_af112b(v_8c0b26.product.id)}>
+              <Pressable onPress={() => v_af112b(v_8c0b26.cartId!)}>
                 <Trash2 size={16} color="#ef4444" />
               </Pressable>
             </View>
@@ -152,7 +158,7 @@ export default function v_d218af() {
         style={{ flex: 1 }}
         data={v_4622b9}
         renderItem={v_fcf6ec}
-        keyExtractor={(v_8c0b26) => v_8c0b26.product.id}
+        keyExtractor={(v_8c0b26) => v_8c0b26.cartId ?? v_8c0b26.product.id}
         contentContainerStyle={{ paddingBottom: 20 }}
         ListHeaderComponent={v_6897aa()}
         ListEmptyComponent={
@@ -164,19 +170,68 @@ export default function v_d218af() {
         }
       />
 
-      {v_4ccc1a && (
-        <View className="px-5 py-4 border-t border-border">
-          <View className="flex-row justify-between mb-3">
-            <Text className="text-base text-foreground">합계 ({v_63e412()}개)</Text>
-            <Text className="text-xl font-bold text-foreground">
-              ₩{v_e60156().toLocaleString()}
-            </Text>
+      {v_4ccc1a && (() => {
+
+        const v_d1b52c = {};
+        for (const v_e42213 of v_5be600) {
+          v_d1b52c[v_e42213.currency] = (v_d1b52c[v_e42213.currency] ?? 0) + v_e42213.totalBudget;
+        }
+        for (const v_8c0b26 of v_4622b9) {
+          if (v_8c0b26.flexibleAmount) {
+            const v_3b170c = v_8c0b26.product.flexible_currency ?? "KRW";
+            v_d1b52c[v_3b170c] = (v_d1b52c[v_3b170c] ?? 0) + v_8c0b26.flexibleAmount;
+          } else {
+            v_d1b52c["KRW"] = (v_d1b52c["KRW"] ?? 0) + v_8c0b26.product.price * v_8c0b26.quantity;
+          }
+        }
+
+        const v_1c3e83 = Object.keys(v_d1b52c).sort((v_779914, v_148ff6) => {
+          const v_5e4f30 = ["USD", "KRW", "IDR"];
+          return (v_5e4f30.indexOf(v_779914) === -1 ? 99 : v_5e4f30.indexOf(v_779914)) - (v_5e4f30.indexOf(v_148ff6) === -1 ? 99 : v_5e4f30.indexOf(v_148ff6));
+        });
+        const v_3aa565 = v_1c3e83.length > 1;
+
+        const v_de7a9a = () => {
+          if (v_3aa565) {
+            const v_3d694a = v_1c3e83.map((v_3f4e2e) => ({
+              text: `${v_3f4e2e} ${v_928ad6[v_3f4e2e]}${v_d1b52c[v_3f4e2e].toLocaleString()}`,
+              onPress: () => v_904d46.push({ pathname: "/(user)/purchase", params: { currency: v_3f4e2e } }),
+            }));
+            v_3d694a.push({ text: "취소", onPress: () => {} });
+            v_03e392.alert("결제할 통화 선택", "한 번에 하나의 통화만 결제할 수 있습니다.", v_3d694a);
+          } else {
+            v_904d46.push({ pathname: "/(user)/purchase", params: { currency: v_1c3e83[0] } });
+          }
+        };
+
+        return (
+          <View className="px-5 py-4 border-t border-border">
+            {v_3aa565 ? (
+              <View className="mb-3">
+                <Text className="text-xs text-muted-foreground mb-1">통화별 ({v_1c3e83.length}건)</Text>
+                {v_1c3e83.map((v_3f4e2e) => (
+                  <View key={v_3f4e2e} className="flex-row justify-between py-0.5">
+                    <Text className="text-sm text-foreground">{v_3f4e2e}</Text>
+                    <Text className="text-sm font-bold text-foreground">
+                      {v_928ad6[v_3f4e2e] ?? ""}{v_d1b52c[v_3f4e2e].toLocaleString()}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            ) : (
+              <View className="flex-row justify-between mb-3">
+                <Text className="text-base text-foreground">합계 ({v_63e412()}개)</Text>
+                <Text className="text-xl font-bold text-foreground">
+                  {v_928ad6[v_1c3e83[0]] ?? "₩"}{(v_d1b52c[v_1c3e83[0]] ?? 0).toLocaleString()}
+                </Text>
+              </View>
+            )}
+            <Button onPress={v_de7a9a}>
+              결제하기
+            </Button>
           </View>
-          <Button onPress={() => v_904d46.push("/(user)/purchase")}>
-            결제하기
-          </Button>
-        </View>
-      )}
+        );
+      })()}
     </SafeAreaView>
   );
 }

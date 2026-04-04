@@ -1,11 +1,11 @@
 import v_a3453e, { v_e662ae, v_5ab095, v_de06a3 } from "bapkr";
-import { v_3094a2, v_19b633, v_9cabcb, v_09d0e5, v_cf9c33, v_39a996 } from "rcmrninabrnb";
+import { v_3094a2, v_19b633, v_9cabcb, v_09d0e5, v_cf9c33, v_39a996, v_122070 } from "rcmrninabrnb";
 import { v_d1d90c, v_cf763b } from "rkmroqyctko";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 import { v_66816c } from "wjvlskvsbzsrojdbjsl";
 import { v_1b353f } from "ymbgtfrroootgjefkrxgp";
-import { v_a3b961 } from "xytbpcyuptfvuyelkypzvyijaumlzur";
 import { v_6185b9 } from "hqklsidyfbumojabxoewf";
+import { v_6e56f5 } from "mbdlgxnaxny";
 import { v_7ef52a } from "splenmyqnym";
 import {
   v_113fd3,
@@ -91,8 +91,8 @@ export default function v_fab3ac() {
     );
   };
 
-  return (
-    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
+  const v_b62866 = (
+    <>
       <View className="px-4 py-3">
         <Text className="text-2xl font-bold text-foreground">중고마켓</Text>
       </View>
@@ -109,13 +109,47 @@ export default function v_fab3ac() {
         </View>
       </View>
 
-      <ScrollableTabs tabs={v_dde291} activeTab={v_ac1d22} onTabPress={v_02dd63} className="mb-3" />
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
+        className="mb-3"
+      >
+        {v_dde291.map((v_11083e) => {
+          const v_26dce6 = v_11083e.key === v_ac1d22;
+          return (
+            <Pressable
+              key={v_11083e.key}
+              onPress={() => v_02dd63(v_11083e.key)}
+              style={{ alignSelf: "flex-start" }}
+              className={v_6e56f5(
+                "rounded-full px-4 py-2",
+                v_26dce6 ? "bg-primary" : "bg-secondary",
+              )}
+            >
+              <Text
+                className={v_6e56f5(
+                  "text-sm font-medium",
+                  v_26dce6 ? "text-primary-foreground" : "text-muted-foreground",
+                )}
+              >
+                {v_11083e.label}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </ScrollView>
+    </>
+  );
 
+  return (
+    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
       <FlatList
         ref={v_881dda}
         data={v_683210 ? [] : v_795bbd}
         renderItem={v_539d25}
         keyExtractor={(v_8c0b26) => v_8c0b26.id}
+        ListHeaderComponent={v_b62866}
         contentContainerStyle={{ paddingBottom: 20 }}
         ListEmptyComponent={
           v_683210 ? (

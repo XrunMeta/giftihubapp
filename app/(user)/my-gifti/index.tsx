@@ -1,13 +1,19 @@
 import v_a3453e, { v_5ab095, v_de06a3, v_df9f57 } from "bapkr";
-import { v_3094a2, v_19b633, v_9cabcb, v_09d0e5, v_cf9c33, v_39a996 } from "rcmrninabrnb";
+import { v_3094a2, v_19b633, v_9cabcb, v_09d0e5, v_cf9c33, v_39a996, v_122070 } from "rcmrninabrnb";
 import { v_d1d90c, v_cf763b } from "rkmroqyctko";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 import { v_c62079 } from "wjvlskvsbzsrojdbjsl";
-import { v_a3b961 } from "xytbpcyuptfvuyelkypzvyijaumlzur";
 import { v_6185b9 } from "hqklsidyfbumojabxoewf";
+import { v_6e56f5 } from "mbdlgxnaxny";
 import { v_7ef52a } from "splenmyqnym";
 import { v_720509, type v_7fb3de, type v_a64e82 } from "pvulvehakmpzwkznlnd";
 import { v_db3cc6 } from "dyunzbus";
+
+const v_928ad6 = { KRW: "₩", USD: "$", IDR: "Rp" };
+function v_48b4c6(v_f63e09, v_a832b3) {
+  const v_c37780 = v_928ad6[v_a832b3 ?? "KRW"] ?? "₩";
+  return `${v_c37780}${v_f63e09.toLocaleString()}`;
+}
 
 const v_1bc355 = [
   { key: "all", label: "전체" },
@@ -32,23 +38,37 @@ export default function v_bf7b5b() {
   const [v_683210, v_34a50a] = v_5ab095(true);
   const [v_ac1d22, v_02dd63] = v_5ab095("all");
 
+  const [v_5e9bfe, v_3a7d09] = v_5ab095<string | null>(null);
+  const [v_49c6c7, v_67d36a] = v_5ab095<string>("");
+
   const v_cb3615 = v_de06a3(async () => {
     v_34a50a(true);
+    v_3a7d09(null);
     try {
       const v_d308b5 = v_ac1d22 === "all" ? undefined : (v_ac1d22 as v_a64e82);
       const v_8f00b9 = await v_720509(v_d308b5);
       v_3a2126(v_8f00b9.vouchers);
+
+      const v_75ae3e = new Set(v_8f00b9.vouchers.filter((v: v_7fb3de) => v_81e2ef.set_id).map((v: v_7fb3de) => v_81e2ef.set_id));
+      v_67d36a(`총 ${v_8f00b9.vouchers.length}건, 세트 ${v_75ae3e.size}개, 개별 ${v_8f00b9.vouchers.filter((v: v_7fb3de) => !v_81e2ef.set_id).length}건`);
     } catch (v_49263d) {
       console.error("Failed to load vouchers:", v_49263d);
+      const v_badeaf = v_49263d.status === 401
+        ? "로그인이 만료되었습니다. 다시 로그인해주세요."
+        : `기프티 목록을 불러올 수 없습니다. (${v_49263d.status || v_49263d.message || "네트워크 오류"})`;
+      v_3a7d09(v_badeaf);
+      v_67d36a(`ERR: status=${v_49263d.status}, msg=${v_49263d.message}`);
     } finally {
       v_34a50a(false);
     }
   }, [v_ac1d22]);
 
+  const v_04c01a = v_a3453e.useRef(v_cb3615);
+  v_04c01a.current = v_cb3615;
   v_cf763b(
     v_de06a3(() => {
-      v_cb3615();
-    }, [v_cb3615])
+      v_04c01a.current();
+    }, [])
   );
 
   type ListItem = { type: "single"; voucher: v_7fb3de } | { type: "bundle"; setId: string; vouchers: v_7fb3de[] };
@@ -79,16 +99,22 @@ export default function v_bf7b5b() {
   }, [v_f9fd27]);
 
   const v_192662 = (item: { setId: string; vouchers: v_7fb3de[] }) => {
-    const v_c83285 = v_8c0b26.vouchers.reduce((v_fd5f43, v_81e2ef) => v_fd5f43 + v_81e2ef.face_value, 0);
     const v_ea719c = v_8c0b26.vouchers[0]!;
+    const v_c3bc75 = v_ea719c.base_currency || "KRW";
+    const v_c83285 = v_8c0b26.vouchers.reduce((v_fd5f43, v_81e2ef) => v_fd5f43 + (v_81e2ef.face_value_base || v_81e2ef.face_value), 0);
     const v_7e0009 = v_8c0b26.vouchers.length - 1;
-    const v_ee43cf = v_8c0b26.vouchers.every((v_81e2ef) => v_81e2ef.status === "active");
     const v_74f4a3 = v_7ef52a(v_ea719c.thumb_url, v_ea719c.image_url, v_ea719c.brand_logo);
+
+    const v_6460d1 = new Set(v_8c0b26.vouchers.map((v_81e2ef) => v_81e2ef.status));
+    const v_666f24 = v_6460d1.size === 1 ? [...v_6460d1][0]! : "mixed";
+    const v_26fb18 = v_666f24 === "mixed"
+      ? { label: "혼합", variant: "secondary" as const }
+      : v_df823e[v_666f24] ?? { label: v_666f24, variant: "secondary" as const };
 
     return (
       <Pressable
         className="mx-4 mb-3 bg-card rounded-xl border border-primary/30 p-3"
-        onPress={() => v_904d46.push(`/(user)/oth-path${v_ea719c.id}`)}
+        onPress={() => v_904d46.push(`/(user)/oth-path${v_8c0b26.setId}`)}
       >
         <View className="flex-row items-center mb-2">
           <View className="w-8 h-8 rounded-lg bg-primary/10 items-center justify-center mr-2">
@@ -97,8 +123,8 @@ export default function v_bf7b5b() {
           <Text className="text-sm font-semibold text-primary">구성 상품 ({v_8c0b26.vouchers.length}건)</Text>
           <View className="flex-1" />
           <Badge
-            variant={v_ee43cf ? "default" : "secondary"}
-            label={v_ee43cf ? "사용가능" : "혼합"}
+            variant={v_26fb18.variant}
+            label={v_26fb18.label}
           />
         </View>
         <View className="flex-row">
@@ -116,7 +142,7 @@ export default function v_bf7b5b() {
             </Text>
             <View className="flex-row justify-between items-center mt-1.5">
               <Text className="text-base font-bold text-foreground">
-                ₩{v_c83285.toLocaleString()}
+                {v_48b4c6(v_c83285, v_c3bc75)}
               </Text>
               <Text className="text-xs text-muted-foreground">
                 만료: {v_db3cc6(new Date(v_ea719c.expiry_date * 1000), "yyyy.MM.dd")}
@@ -131,7 +157,7 @@ export default function v_bf7b5b() {
               <Text className="text-xs text-muted-foreground flex-1" numberOfLines={1}>
                 {v_81e2ef.brand} · {v_81e2ef.name}
               </Text>
-              <Text className="text-xs text-muted-foreground">₩{v_81e2ef.face_value.toLocaleString()}</Text>
+              <Text className="text-xs text-muted-foreground">{v_48b4c6(v_81e2ef.face_value_base || v_81e2ef.face_value, v_c3bc75)}</Text>
             </View>
           ))}
           {v_8c0b26.vouchers.length > 4 && (
@@ -171,7 +197,7 @@ export default function v_bf7b5b() {
           </View>
           <View className="flex-row justify-between items-center mt-2">
             <Text className="text-base font-bold text-foreground">
-              ₩{v_8c0b26.face_value.toLocaleString()}
+              {v_48b4c6(v_8c0b26.face_value_base || v_8c0b26.face_value, v_8c0b26.base_currency)}
             </Text>
             <Text className="text-xs text-muted-foreground">
               만료: {v_db3cc6(new Date(v_8c0b26.expiry_date * 1000), "yyyy.MM.dd")}
@@ -182,38 +208,81 @@ export default function v_bf7b5b() {
     );
   };
 
-  return (
-    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
+  const v_b62866 = (
+    <>
       <View className="px-4 py-3">
         <Text className="text-2xl font-bold text-foreground">내 기프티</Text>
+        {v_49c6c7 ? (
+          <Text className="text-xs text-muted-foreground mt-1" selectable>{v_49c6c7}</Text>
+        ) : null}
       </View>
 
-      <ScrollableTabs tabs={v_1bc355} activeTab={v_ac1d22} onTabPress={v_02dd63} className="mb-3" />
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
+        className="mb-3"
+      >
+        {v_1bc355.map((v_11083e) => {
+          const v_26dce6 = v_11083e.key === v_ac1d22;
+          return (
+            <Pressable
+              key={v_11083e.key}
+              onPress={() => v_02dd63(v_11083e.key)}
+              style={{ alignSelf: "flex-start" }}
+              className={v_6e56f5(
+                "rounded-full px-4 py-2",
+                v_26dce6 ? "bg-primary" : "bg-secondary",
+              )}
+            >
+              <Text
+                className={v_6e56f5(
+                  "text-sm font-medium",
+                  v_26dce6 ? "text-primary-foreground" : "text-muted-foreground",
+                )}
+              >
+                {v_11083e.label}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </ScrollView>
+    </>
+  );
 
-      {v_683210 ? (
-        <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" color="#CE3630" />
-        </View>
-      ) : (
-        <FlatList
-          style={{ flex: 1 }}
-          data={v_4d79ca}
-          renderItem={({ item: v_8c0b26 }) =>
-            v_8c0b26.type === "bundle"
-              ? v_192662(v_8c0b26)
-              : v_f8505d({ item: v_8c0b26.voucher })
-          }
-          keyExtractor={(v_8c0b26) =>
-            v_8c0b26.type === "bundle" ? `set-${v_8c0b26.setId}` : v_8c0b26.voucher.id
-          }
-          contentContainerStyle={v_4d79ca.length === 0 ? { flexGrow: 1, justifyContent: "center" } : { paddingBottom: 20 }}
-          ListEmptyComponent={
+  return (
+    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
+      <FlatList
+        data={v_683210 ? [] : v_4d79ca}
+        renderItem={({ item: v_8c0b26 }) =>
+          v_8c0b26.type === "bundle"
+            ? v_192662(v_8c0b26)
+            : v_f8505d({ item: v_8c0b26.voucher })
+        }
+        keyExtractor={(v_8c0b26) =>
+          v_8c0b26.type === "bundle" ? `set-${v_8c0b26.setId}` : v_8c0b26.voucher.id
+        }
+        ListHeaderComponent={v_b62866}
+        contentContainerStyle={{ paddingBottom: 20 }}
+        ListEmptyComponent={
+          v_683210 ? (
+            <View className="items-center py-20">
+              <ActivityIndicator size="large" color="#CE3630" />
+            </View>
+          ) : v_5e9bfe ? (
+            <View className="items-center py-20 px-6">
+              <Text className="text-destructive text-center">{v_5e9bfe}</Text>
+              <Text className="text-xs text-muted-foreground mt-2" onPress={v_cb3615}>
+                탭하여 다시 시도
+              </Text>
+            </View>
+          ) : (
             <View className="items-center py-20">
               <Text className="text-muted-foreground">기프티가 없습니다.</Text>
             </View>
-          }
-        />
-      )}
+          )
+        }
+      />
     </SafeAreaView>
   );
 }

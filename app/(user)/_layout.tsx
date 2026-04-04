@@ -1,8 +1,9 @@
-import { v_373248 } from "rkmroqyctko";
+import { v_373248, v_d1d90c } from "rkmroqyctko";
 import { v_51bb20, v_e4f0c5, v_f235de, v_6b9090, v_6e86e2 } from "wjvlskvsbzsrojdbjsl";
 import { v_7a943b } from "dxfmfnfvriitbtghyppor";
 
 export default function v_348e5f() {
+  const v_904d46 = v_d1d90c();
   const { getCartCount: v_63e412 } = v_7a943b();
   const v_826967 = v_63e412();
 
@@ -25,6 +26,12 @@ export default function v_348e5f() {
           title: "스토어",
           tabBarIcon: ({ color: v_3c2a3a, size: v_05b441 }) => <Store size={v_05b441} color={v_3c2a3a} />,
         }}
+        listeners={{
+          tabPress: (v_9e86fd) => {
+            v_9e86fd.preventDefault();
+            v_904d46.replace("/(user)/store");
+          },
+        }}
       />
       <Tabs.Screen
         name="marketplace"
@@ -32,12 +39,24 @@ export default function v_348e5f() {
           title: "중고마켓",
           tabBarIcon: ({ color: v_3c2a3a, size: v_05b441 }) => <ShoppingBag size={v_05b441} color={v_3c2a3a} />,
         }}
+        listeners={{
+          tabPress: (v_9e86fd) => {
+            v_9e86fd.preventDefault();
+            v_904d46.replace("/(user)/oth-path");
+          },
+        }}
       />
       <Tabs.Screen
         name="my-gifti"
         options={{
           title: "내 기프티",
           tabBarIcon: ({ color: v_3c2a3a, size: v_05b441 }) => <Wallet size={v_05b441} color={v_3c2a3a} />,
+        }}
+        listeners={{
+          tabPress: (v_9e86fd) => {
+            v_9e86fd.preventDefault();
+            v_904d46.replace("/(user)/oth-path");
+          },
         }}
       />
       <Tabs.Screen

@@ -48,6 +48,29 @@ export async function v_eaee10(
   );
 }
 
+export interface SetDetail {
+  set: {
+    id: string;
+    creator_id: string;
+    currency: string;
+    total_amount: number;
+    voucher_count: number;
+    payment_id: string;
+    created_at: number;
+  };
+  vouchers: Voucher[];
+  summary: {
+    total_count: number;
+    active_count: number;
+    total_value: number;
+    all_active: boolean;
+  };
+}
+
+export async function v_67877b(v_90a2ba): Promise<SetDetail> {
+  return v_bc1b24<SetDetail>(`/oth-path${v_90a2ba}`);
+}
+
 export async function v_2b01b0(
   v_389afb,
   v_1af2e1,

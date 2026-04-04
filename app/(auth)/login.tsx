@@ -11,10 +11,12 @@ import { v_5d2c47 } from "jbfshypwcrklpetczcsca";
 import { v_f18d6a } from "sfwajsimhnkrpbm";
 import { v_3b1fc0 } from "jjdoigruxkcuajh";
 import { v_2737f4, v_d28c4c, v_c9e410, v_e48e3a, v_99916a } from "tlrvzsbmctdavs";
+import { v_f589a4 } from "wplnrzxbcvjvxjmndcjr";
 
 export default function v_f4f851() {
   const v_904d46 = v_d1d90c();
   const { login: v_182fdb } = v_5d2c47();
+  const v_1d0b37 = v_f589a4();
   const [v_e0c7e8, v_fedf34] = v_5ab095("");
   const [v_adc076, v_52b279] = v_5ab095("");
   const [v_683210, v_34a50a] = v_5ab095(false);
@@ -160,21 +162,32 @@ export default function v_f4f851() {
             </Text>
           </View>
 
-          {__DEV__ && (
+          {v_1d0b37 && (
             <View className="mt-6 border border-dashed border-muted-foreground/30 rounded-xl p-3">
+              <View className="bg-secondary/50 rounded-lg px-3 py-2 mb-2">
+                {(() => {
+                  const v_f71b56 = require("tlrvzsbmctdavs").BASE_URL as string;
+                  const v_12c555 = v_f71b56.includes("localhost") || v_f71b56.includes("192.168") || v_f71b56.includes("10.0.");
+                  return (
+                    <Text className="text-xs font-mono text-center" style={{ color: v_12c555 ? "#f59e0b" : "#22c55e" }}>
+                      {v_12c555 ? "LOCAL" : "REMOTE"} {v_f71b56}
+                    </Text>
+                  );
+                })()}
+              </View>
               <Text className="text-xs text-muted-foreground text-center mb-2">DEV 빠른 로그인</Text>
               <View className="flex-row gap-2">
                 <Button
                   variant="outline"
                   className="flex-1"
-                  onPress={() => { v_fedf34("user@test.com"); v_52b279("1234"); }}
+                  onPress={() => { v_fedf34("email@example.com"); v_52b279("1234"); }}
                 >
                   <Text className="text-sm font-medium text-foreground">사용자</Text>
                 </Button>
                 <Button
                   variant="outline"
                   className="flex-1"
-                  onPress={() => { v_fedf34("merchant@test.com"); v_52b279("1234"); }}
+                  onPress={() => { v_fedf34("oth-test@example.invalid"); v_52b279("1234"); }}
                 >
                   <Text className="text-sm font-medium text-foreground">상점</Text>
                 </Button>

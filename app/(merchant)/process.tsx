@@ -12,6 +12,7 @@ export default function v_96d53d() {
   const v_904d46 = v_d1d90c();
   const [v_d308b5, v_5193f8] = v_5ab095<"validating" | "valid" | "invalid">("validating");
   const [v_ad1545, v_f5b829] = v_5ab095<any>(null);
+  const [v_976e82, v_a7e4fc] = v_5ab095<string>("");
 
   v_c4deb2(() => {
     if (v_e4a44d) v_3181cc();
@@ -24,12 +25,15 @@ export default function v_96d53d() {
         body: JSON.stringify({ barcode: v_e4a44d }),
       });
       if (!v_8f00b9.valid) {
+        v_a7e4fc(v_8f00b9.error || "알 수 없는 오류");
         v_5193f8("invalid");
         return;
       }
       v_f5b829(v_8f00b9);
       v_5193f8("valid");
-    } catch {
+    } catch (v_49263d) {
+      const v_badeaf = v_49263d.body?.error || v_49263d.message || "서버 연결 실패";
+      v_a7e4fc(`[${v_49263d.status || "?"}] ${v_badeaf}`);
       v_5193f8("invalid");
     }
   };
@@ -77,7 +81,7 @@ export default function v_96d53d() {
           <View className="items-center">
             <XCircle size={64} color="#ef4444" />
             <Text className="text-xl font-bold text-foreground mt-4">유효하지 않은 바코드</Text>
-            <Text className="text-sm text-muted-foreground mt-2">다시 스캔해주세요.</Text>
+            <Text className="text-sm text-muted-foreground mt-2">{v_976e82 || "다시 스캔해주세요."}</Text>
             <Button className="mt-6" onPress={() => v_904d46.back()}>돌아가기</Button>
           </View>
         )}
