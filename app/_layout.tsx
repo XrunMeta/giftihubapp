@@ -1,4 +1,5 @@
 import "../global.css";
+import { useEffect } from "react";
 import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -9,10 +10,13 @@ import { useColorScheme } from "@/hooks/use-color-scheme";
 import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "@/context/CartContext";
 import { DevModeContext, useDevModeProvider } from "@/hooks/use-dev-mode";
+import { initBaseUrl } from "@/services/api";
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const devMode = useDevModeProvider();
+
+  useEffect(() => { initBaseUrl(); }, []);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

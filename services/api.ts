@@ -1,9 +1,32 @@
 import * as SecureStore from "expo-secure-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const BASE_URL = __DEV__
-  ? "http://203.0.113.10:8787"
-  : "https://giftihubapi.pages.dev";
+const LOCAL_URL = "http://203.0.113.10:8787";
+const REMOTE_URL = "https://giftihubapi.pages.dev";
+const SERVER_KEY = "gifti_server";
+
+let _baseUrl = __DEV__ ? LOCAL_URL : REMOTE_URL;
+
+export function getBaseUrl(): string { return _baseUrl; }
+
+export const BASE_URL = _baseUrl;
+
+export async function initBaseUrl(): Promise<void> {
+  if (!__DEV__) return;
+  const saved = await AsyncStorage.getItem(SERVER_KEY);
+  if (saved === "remote") _baseUrl = REMOTE_URL;
+  else _baseUrl = LOCAL_URL;
+}
+
+export async function setServerMode(mode: "local" | "remote"): Promise<void> {
+  _baseUrl = mode === "remote" ? REMOTE_URL : LOCAL_URL;
+  await AsyncStorage.setItem(SERVER_KEY, mode);
+}
+
+export function getServerMode(): "local" | "remote" {
+  return _baseUrl === LOCAL_URL ? "local" : "remote";
+}
+
 const TOKEN_KEY = "gifti_jwt";
 const REMEMBER_KEY = "gifti_remember";
 const SAVED_EMAIL_KEY = "gifti_saved_email";
@@ -72,7 +95,7 @@ export async function apiFetch<T = unknown>(
     }
   }
 
-  const response = await fetch(`${BASE_URL}${path}`, {
+  const response = await fetch(`${_baseUrl}${path}`, {
     ...fetchOptions,
     headers,
   });

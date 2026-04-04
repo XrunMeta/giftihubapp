@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, KeyboardAvoidingView, Platform, ScrollView, Alert, Image, Switch } from "react-native";
+import { View, Text, KeyboardAvoidingView, Platform, ScrollView, Alert, Image, Switch, Pressable } from "react-native";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as WebBrowser from "expo-web-browser";
@@ -10,7 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/context/AuthContext";
 import { loginWithEmail } from "@/services/auth";
 import { images } from "@/assets/images";
-import { getSavedEmail, setSavedEmail, removeSavedEmail, getRememberMe, setRememberMe } from "@/services/api";
+import { getSavedEmail, setSavedEmail, removeSavedEmail, getRememberMe, setRememberMe, getBaseUrl, getServerMode, setServerMode } from "@/services/api";
 import { useDevMode } from "@/hooks/use-dev-mode";
 
 export default function LoginScreen() {
@@ -21,6 +21,7 @@ export default function LoginScreen() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [rememberMe, setRememberMeState] = useState(true);
+  const [serverMode, setServerModeState] = useState<"local" | "remote">(getServerMode());
 
   useEffect(() => {
     (async () => {
@@ -164,17 +165,25 @@ export default function LoginScreen() {
 
           {isDevMode && (
             <View className="mt-6 border border-dashed border-muted-foreground/30 rounded-xl p-3">
-              <View className="bg-secondary/50 rounded-lg px-3 py-2 mb-2">
-                {(() => {
-                  const url = require("@/services/api").BASE_URL as string;
-                  const isLocal = url.includes("localhost") || url.includes("192.168") || url.includes("10.0.");
-                  return (
-                    <Text className="text-xs font-mono text-center" style={{ color: isLocal ? "#f59e0b" : "#22c55e" }}>
-                      {isLocal ? "LOCAL" : "REMOTE"} {url}
-                    </Text>
-                  );
-                })()}
+              {}
+              <View className="flex-row gap-2 mb-2">
+                <Pressable
+                  className={`flex-1 rounded-lg px-3 py-2 items-center ${serverMode === "local" ? "bg-amber-500" : "bg-secondary/50"}`}
+                  onPress={async () => { await setServerMode("local"); setServerModeState("local"); }}
+                >
+                  <Text className={`text-xs font-bold ${serverMode === "local" ? "text-white" : "text-muted-foreground"}`}>LOCAL</Text>
+                </Pressable>
+                <Pressable
+                  className={`flex-1 rounded-lg px-3 py-2 items-center ${serverMode === "remote" ? "bg-green-500" : "bg-secondary/50"}`}
+                  onPress={async () => { await setServerMode("remote"); setServerModeState("remote"); }}
+                >
+                  <Text className={`text-xs font-bold ${serverMode === "remote" ? "text-white" : "text-muted-foreground"}`}>REMOTE</Text>
+                </Pressable>
               </View>
+              <Text className="text-xs font-mono text-center text-muted-foreground mb-2" selectable>
+                {getBaseUrl()}
+              </Text>
+
               <Text className="text-xs text-muted-foreground text-center mb-2">DEV 빠른 로그인</Text>
               <View className="flex-row gap-2">
                 <Button
