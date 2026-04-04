@@ -2,7 +2,7 @@ import React, { useRef, useState, useCallback } from "react";
 import { View, Text, FlatList, Pressable, Image, ActivityIndicator, ScrollView } from "react-native";
 import { useRouter, useFocusEffect } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Search } from "lucide-react-native";
+import { Search, Package } from "lucide-react-native";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -10,19 +10,14 @@ import { resolveImageUrl } from "@/lib/image";
 import {
   getMarketplaceListings,
   type MarketplaceListing,
-  type MarketplaceCategory,
 } from "@/services/marketplace";
 
 const CATEGORY_TABS = [
   { key: "all", label: "전체" },
-  { key: "food", label: "식품" },
-  { key: "culture", label: "문화" },
-  { key: "convenience", label: "편의점" },
-  { key: "beauty", label: "뷰티" },
-  { key: "etc", label: "기타" },
+  { key: "set", label: "구성상품" },
 ];
 
-export default function MarketplaceScreen() {
+export default function MerchantMarketScreen() {
   const router = useRouter();
   const [listings, setListings] = useState<MarketplaceListing[]>([]);
   const [loading, setLoading] = useState(true);
@@ -33,9 +28,12 @@ export default function MarketplaceScreen() {
   const loadListings = useCallback(async () => {
     setLoading(true);
     try {
-      const category = activeTab === "all" ? undefined : (activeTab as MarketplaceCategory);
-      const res = await getMarketplaceListings({ category, q: search || undefined });
-      setListings(res.listings);
+      const res = await getMarketplaceListings({ q: search || undefined });
+      let items = res.listings;
+      if (activeTab === "set") {
+        items = items.filter((l: any) => !!l.set_id);
+      }
+      setListings(items);
     } catch {
       console.error("Failed to load marketplace listings");
     } finally {
@@ -49,24 +47,39 @@ export default function MarketplaceScreen() {
     }, [loadListings])
   );
 
+  const handleDetail = (item: MarketplaceListing) => {
+    router.push({
+      pathname: "/(merchant)/market-detail",
+      params: { id: item.id },
+    });
+  };
+
   const renderListing = ({ item }: { item: MarketplaceListing }) => {
     const imgUri = resolveImageUrl(item.thumb_url, item.image_url, item.brand_logo);
+    const isSet = !!(item as any).set_id;
     return (
       <Pressable
         className="mx-4 mb-3 bg-card rounded-xl border border-border p-3 flex-row"
-        onPress={() => router.push(`/(user)/oth-path${item.id}`)}
+        onPress={() => handleDetail(item)}
       >
         {imgUri ? (
           <Image source={{ uri: imgUri }} className="w-16 h-16 rounded-lg" resizeMode="cover" />
         ) : (
           <View className="w-16 h-16 rounded-lg bg-muted items-center justify-center">
-            <Text className="text-2xl">🎁</Text>
+            {isSet ? <Package size={24} color="#CE3630" /> : <Text className="text-2xl">🎁</Text>}
           </View>
         )}
         <View className="flex-1 ml-3">
           <View className="flex-row justify-between items-start">
             <View className="flex-1">
-              <Text className="text-xs text-muted-foreground">{item.brand}</Text>
+              <View className="flex-row items-center gap-1">
+                <Text className="text-xs text-muted-foreground">{item.brand}</Text>
+                {isSet && (
+                  <View className="bg-primary/10 rounded px-1.5 py-0.5">
+                    <Text className="text-[10px] font-medium text-primary">구성상품</Text>
+                  </View>
+                )}
+              </View>
               <Text className="text-sm font-semibold text-foreground mt-0.5" numberOfLines={1}>
                 {item.name}
               </Text>

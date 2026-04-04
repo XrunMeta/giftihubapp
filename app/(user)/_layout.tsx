@@ -1,8 +1,9 @@
-import { Tabs } from "expo-router";
+import { Tabs, useRouter } from "expo-router";
 import { Store, ShoppingBag, Wallet, ShoppingCart, UserCircle } from "lucide-react-native";
 import { useCart } from "@/context/CartContext";
 
 export default function UserLayout() {
+  const router = useRouter();
   const { getCartCount } = useCart();
   const cartCount = getCartCount();
 
@@ -25,6 +26,12 @@ export default function UserLayout() {
           title: "스토어",
           tabBarIcon: ({ color, size }) => <Store size={size} color={color} />,
         }}
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+            router.replace("/(user)/store");
+          },
+        }}
       />
       <Tabs.Screen
         name="marketplace"
@@ -32,12 +39,24 @@ export default function UserLayout() {
           title: "중고마켓",
           tabBarIcon: ({ color, size }) => <ShoppingBag size={size} color={color} />,
         }}
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+            router.replace("/(user)/oth-path");
+          },
+        }}
       />
       <Tabs.Screen
         name="my-gifti"
         options={{
           title: "내 기프티",
           tabBarIcon: ({ color, size }) => <Wallet size={size} color={color} />,
+        }}
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+            router.replace("/(user)/oth-path");
+          },
         }}
       />
       <Tabs.Screen

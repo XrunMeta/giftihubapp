@@ -1,0 +1,276 @@
+import React, { useEffect, useState, useCallback } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  ActivityIndicator,
+  TouchableOpacity,
+  Alert,
+  RefreshControl,
+  Image,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Package } from "lucide-react-native";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { resolveImageUrl } from "@/lib/image";
+import {
+  getMyBundles,
+  requestBundleSettlement,
+  getBundleSettlementRequests,
+  type MerchantBundle,
+  type BundleSettlementRequest,
+} from "@/services/bundle";
+
+type Tab = "items" | "requests";
+
+const STATUS_LABELS: Record<string, { label: string; color: string }> = {
+  pending: { label: "대기", color: "text-yellow-600" },
+  approved: { label: "승인", color: "text-green-600" },
+  rejected: { label: "거절", color: "text-red-600" },
+};
+
+const VOUCHER_STATUS: Record<string, { label: string; variant: "default" | "secondary" | "destructive" }> = {
+  active: { label: "사용가능", variant: "default" },
+  used: { label: "사용완료", variant: "secondary" },
+  expired: { label: "만료", variant: "destructive" },
+  listed: { label: "판매중", variant: "secondary" },
+};
+
+type SingleItem = {
+  voucher_id: string;
+  brand: string;
+  name: string;
+  face_value: number;
+  status: string;
+  expiry_date: number;
+  image_url: string | null;
+  thumb_url: string | null;
+  brand_logo: string | null;
+  item_type: "single";
+};
+
+type ListItem = { type: "set"; data: MerchantBundle } | { type: "single"; data: SingleItem };
+
+export default function MyBundlesScreen() {
+  const [tab, setTab] = useState<Tab>("items");
+  const [bundles, setBundles] = useState<MerchantBundle[]>([]);
+  const [singles, setSingles] = useState<SingleItem[]>([]);
+  const [requests, setRequests] = useState<BundleSettlementRequest[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchData = useCallback(async () => {
+    try {
+      if (tab === "items") {
+        const res = await getMyBundles();
+        setBundles(res.bundles ?? []);
+        setSingles((res as any).singles ?? []);
+      } else {
+        const res = await getBundleSettlementRequests();
+        setRequests(res.requests ?? []);
+      }
+    } catch {
+
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, [tab]);
+
+  useEffect(() => {
+    setLoading(true);
+    fetchData();
+  }, [fetchData]);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchData();
+  };
+
+  const handleRequestSettlement = (bundle: MerchantBundle) => {
+    Alert.alert(
+      "정산 요청",
+      `${bundle.set_name}\n총 액면가: ₩${bundle.total_face_value.toLocaleString()}\n${bundle.voucher_count}개 바우처\n\n정산을 요청하시겠습니까?`,
+      [
+        { text: "취소", style: "cancel" },
+        {
+          text: "요청",
+          onPress: async () => {
+            try {
+              const res = await requestBundleSettlement(bundle.set_id);
+              Alert.alert(
+                "정산 요청 완료",
+                `수수료: ₩${res.fee_amount.toLocaleString()} (${(res.fee_rate * 100).toFixed(1)}%)\n지급 예정: ₩${res.net_amount.toLocaleString()}`,
+              );
+              fetchData();
+            } catch (e) {
+              Alert.alert("요청 실패", e instanceof Error ? e.message : "오류가 발생했습니다");
+            }
+          },
+        },
+      ],
+    );
+  };
+
+  const listItems: ListItem[] = [
+    ...bundles.map((b): ListItem => ({ type: "set", data: b })),
+    ...singles.map((s): ListItem => ({ type: "single", data: s })),
+  ];
+
+  const renderItem = ({ item }: { item: ListItem }) => {
+    if (item.type === "set") {
+      const b = item.data;
+      return (
+        <View className="mx-4 mb-2 bg-card rounded-xl border border-primary/30 px-4 py-3">
+          <View className="flex-row items-center mb-2">
+            <View className="w-7 h-7 rounded-lg bg-primary/10 items-center justify-center mr-2">
+              <Package size={14} color="#CE3630" />
+            </View>
+            <Text className="text-xs font-semibold text-primary">구성상품 ({b.voucher_count}건)</Text>
+          </View>
+          <View className="flex-row justify-between items-start">
+            <View className="flex-1 mr-3">
+              <Text className="text-sm font-semibold text-foreground">{b.set_name}</Text>
+              <Text className="text-xs text-muted-foreground mt-0.5">
+                상태: {b.statuses}
+              </Text>
+            </View>
+            <Text className="text-base font-bold text-foreground">
+              ₩{b.total_face_value.toLocaleString()}
+            </Text>
+          </View>
+          <TouchableOpacity
+            onPress={() => handleRequestSettlement(b)}
+            className="mt-2 bg-primary rounded-lg py-2"
+          >
+            <Text className="text-center text-sm font-semibold text-primary-foreground">정산 요청</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+
+    const s = item.data;
+    const badge = VOUCHER_STATUS[s.status] ?? VOUCHER_STATUS.active;
+    const imgUri = resolveImageUrl(s.thumb_url, s.image_url, s.brand_logo);
+    return (
+      <View className="mx-4 mb-2 bg-card rounded-xl border border-border px-4 py-3 flex-row">
+        {imgUri ? (
+          <Image source={{ uri: imgUri }} className="w-12 h-12 rounded-lg" resizeMode="cover" />
+        ) : (
+          <View className="w-12 h-12 rounded-lg bg-muted items-center justify-center">
+            <Text className="text-lg">🎁</Text>
+          </View>
+        )}
+        <View className="flex-1 ml-3">
+          <View className="flex-row justify-between items-start">
+            <View className="flex-1">
+              <Text className="text-xs text-muted-foreground">{s.brand}</Text>
+              <Text className="text-sm font-semibold text-foreground" numberOfLines={1}>{s.name}</Text>
+            </View>
+            <Badge variant={badge.variant} label={badge.label} />
+          </View>
+          <Text className="text-sm font-bold text-foreground mt-1">
+            ₩{s.face_value.toLocaleString()}
+          </Text>
+        </View>
+      </View>
+    );
+  };
+
+  const renderRequest = ({ item }: { item: BundleSettlementRequest }) => {
+    const status = STATUS_LABELS[item.status] ?? { label: item.status, color: "text-foreground" };
+    const date = new Date(item.created_at * 1000);
+    const dateStr = `${date.getMonth() + 1}.${date.getDate()} ${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`;
+
+    return (
+      <View className="mx-4 mb-2 bg-card rounded-xl border border-border px-4 py-3">
+        <View className="flex-row justify-between items-center mb-2">
+          <Text className="text-xs text-muted-foreground">{dateStr}</Text>
+          <Text className={`text-xs font-semibold ${status.color}`}>{status.label}</Text>
+        </View>
+        <Separator className="mb-2" />
+        <View className="flex-row justify-between">
+          <View>
+            <Text className="text-xs text-muted-foreground">구매가</Text>
+            <Text className="text-sm font-medium text-foreground">
+              ₩{item.purchase_price.toLocaleString()}
+            </Text>
+          </View>
+          <View className="items-center">
+            <Text className="text-xs text-muted-foreground">수수료</Text>
+            <Text className="text-sm font-medium text-red-500">
+              -₩{item.fee_amount.toLocaleString()}
+            </Text>
+          </View>
+          <View className="items-end">
+            <Text className="text-xs text-muted-foreground">지급액</Text>
+            <Text className="text-sm font-bold text-primary">
+              ₩{item.net_amount.toLocaleString()}
+            </Text>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
+  return (
+    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
+      <View className="px-4 py-3">
+        <Text className="text-2xl font-bold text-foreground">보유상품</Text>
+      </View>
+
+      <View className="flex-row mx-4 mb-3 gap-2">
+        {(["items", "requests"] as Tab[]).map((t) => (
+          <TouchableOpacity
+            key={t}
+            onPress={() => setTab(t)}
+            className={`flex-1 py-2 rounded-lg border ${
+              tab === t ? "bg-primary border-primary" : "bg-card border-border"
+            }`}
+          >
+            <Text
+              className={`text-center text-sm font-medium ${
+                tab === t ? "text-primary-foreground" : "text-foreground"
+              }`}
+            >
+              {t === "items" ? "보유상품" : "정산 요청"}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      {loading ? (
+        <View className="flex-1 items-center justify-center">
+          <ActivityIndicator size="large" color="#CE3630" />
+        </View>
+      ) : tab === "items" ? (
+        <FlatList
+          data={listItems}
+          keyExtractor={(item) =>
+            item.type === "set" ? `set-${item.data.set_id}` : `v-${item.data.voucher_id}`
+          }
+          renderItem={renderItem}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+          ListEmptyComponent={
+            <View className="flex-1 items-center justify-center py-20">
+              <Text className="text-muted-foreground">보유 중인 상품이 없습니다.</Text>
+            </View>
+          }
+        />
+      ) : (
+        <FlatList
+          data={requests}
+          keyExtractor={(item) => item.id}
+          renderItem={renderRequest}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+          ListEmptyComponent={
+            <View className="flex-1 items-center justify-center py-20">
+              <Text className="text-muted-foreground">정산 요청 내역이 없습니다.</Text>
+            </View>
+          }
+        />
+      )}
+    </SafeAreaView>
+  );
+}

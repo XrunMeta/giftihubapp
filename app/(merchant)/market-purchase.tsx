@@ -18,7 +18,7 @@ const BASE_METHODS: { key: PaymentMethod; label: string; icon: React.ReactNode; 
   { key: "usdt_trc20", label: "USDT (TRC-20)", icon: <Coins size={20} color="#0a0a0a" /> },
 ];
 
-export default function MarketplacePurchaseScreen() {
+export default function MerchantMarketPurchaseScreen() {
   const { listingId } = useLocalSearchParams<{ listingId: string }>();
   const router = useRouter();
   const [selected, setSelected] = useState<PaymentMethod | null>(null);
@@ -37,8 +37,8 @@ export default function MarketplacePurchaseScreen() {
     try {
       const res = await purchaseFromMarketplace(listingId, selected);
       if (selected === "dev_pay" || res.payment_method === "dev_pay") {
-        Alert.alert("구매 완료", "개발페이로 즉시 구매가 완료되었습니다.", [
-          { text: "확인", onPress: () => router.replace("/(user)/oth-path") },
+        Alert.alert("구매 완료", "구매가 완료되었습니다.", [
+          { text: "확인", onPress: () => router.replace("/(merchant)/my-bundles") },
         ]);
         return;
       }
@@ -46,7 +46,7 @@ export default function MarketplacePurchaseScreen() {
         await WebBrowser.openBrowserAsync(res.redirect_url);
       }
       Alert.alert("결제 진행", "결제가 진행됩니다.", [
-        { text: "확인", onPress: () => router.replace("/(user)/oth-path") },
+        { text: "확인", onPress: () => router.replace("/(merchant)/my-bundles") },
       ]);
     } catch (err: any) {
       Alert.alert("결제 실패", err.body?.error || "다시 시도해주세요.");
@@ -57,7 +57,7 @@ export default function MarketplacePurchaseScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      <PageHeader title="중고 구매 결제" />
+      <PageHeader title="결제" />
       <View className="flex-1 px-5 mt-4">
         <Text className="text-base font-semibold text-foreground mb-3">결제 수단</Text>
         <View className="gap-2">

@@ -11,10 +11,12 @@ import { useAuth } from "@/context/AuthContext";
 import { loginWithEmail } from "@/services/auth";
 import { images } from "@/assets/images";
 import { getSavedEmail, setSavedEmail, removeSavedEmail, getRememberMe, setRememberMe } from "@/services/api";
+import { useDevMode } from "@/hooks/use-dev-mode";
 
 export default function LoginScreen() {
   const router = useRouter();
   const { login } = useAuth();
+  const isDevMode = useDevMode();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -160,21 +162,32 @@ export default function LoginScreen() {
             </Text>
           </View>
 
-          {__DEV__ && (
+          {isDevMode && (
             <View className="mt-6 border border-dashed border-muted-foreground/30 rounded-xl p-3">
+              <View className="bg-secondary/50 rounded-lg px-3 py-2 mb-2">
+                {(() => {
+                  const url = require("@/services/api").BASE_URL as string;
+                  const isLocal = url.includes("localhost") || url.includes("192.168") || url.includes("10.0.");
+                  return (
+                    <Text className="text-xs font-mono text-center" style={{ color: isLocal ? "#f59e0b" : "#22c55e" }}>
+                      {isLocal ? "LOCAL" : "REMOTE"} {url}
+                    </Text>
+                  );
+                })()}
+              </View>
               <Text className="text-xs text-muted-foreground text-center mb-2">DEV 빠른 로그인</Text>
               <View className="flex-row gap-2">
                 <Button
                   variant="outline"
                   className="flex-1"
-                  onPress={() => { setEmail("user@test.com"); setPassword("1234"); }}
+                  onPress={() => { setEmail("email@example.com"); setPassword("1234"); }}
                 >
                   <Text className="text-sm font-medium text-foreground">사용자</Text>
                 </Button>
                 <Button
                   variant="outline"
                   className="flex-1"
-                  onPress={() => { setEmail("merchant@test.com"); setPassword("1234"); }}
+                  onPress={() => { setEmail("oth-test@example.invalid"); setPassword("1234"); }}
                 >
                   <Text className="text-sm font-medium text-foreground">상점</Text>
                 </Button>

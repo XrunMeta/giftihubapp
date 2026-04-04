@@ -69,3 +69,44 @@ export async function purchaseBundle(
     }),
   });
 }
+
+export interface MerchantBundle {
+  set_id: string;
+  set_name: string;
+  set_description: string | null;
+  voucher_count: number;
+  total_face_value: number;
+  statuses: string;
+}
+
+export interface BundleSettlementRequest {
+  id: string;
+  bundle_id: string;
+  purchase_price: number;
+  fee_rate: number;
+  fee_amount: number;
+  net_amount: number;
+  status: "pending" | "approved" | "rejected";
+  created_at: number;
+}
+
+export async function getMyBundles(): Promise<{
+  bundles: MerchantBundle[];
+}> {
+  return apiFetch("/oth-path");
+}
+
+export async function requestBundleSettlement(
+  bundleId: string,
+): Promise<BundleSettlementRequest & { ok?: boolean }> {
+  return apiFetch("/oth-path", {
+    method: "POST",
+    body: JSON.stringify({ bundle_id: bundleId }),
+  });
+}
+
+export async function getBundleSettlementRequests(): Promise<{
+  requests: BundleSettlementRequest[];
+}> {
+  return apiFetch("/oth-path");
+}

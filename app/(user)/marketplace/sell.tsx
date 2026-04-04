@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView, Alert, ActivityIndicator, Pressable } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,7 @@ import { createListing } from "@/services/marketplace";
 
 export default function MarketplaceSellScreen() {
   const router = useRouter();
+  const { voucherId } = useLocalSearchParams<{ voucherId?: string }>();
   const [vouchers, setVouchers] = useState<Voucher[]>([]);
   const [selectedVoucher, setSelectedVoucher] = useState<Voucher | null>(null);
   const [sellingPrice, setSellingPrice] = useState("");
@@ -25,6 +26,14 @@ export default function MarketplaceSellScreen() {
     try {
       const res = await getMyVouchers("active");
       setVouchers(res.vouchers);
+
+      if (voucherId) {
+        const found = res.vouchers.find((v) => v.id === voucherId);
+        if (found) {
+          setSelectedVoucher(found);
+          setSellingPrice(String(Math.round(found.face_value * 0.9)));
+        }
+      }
     } catch {
 
     } finally {

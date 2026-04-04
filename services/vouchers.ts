@@ -48,6 +48,29 @@ export async function getVoucherBarcode(
   );
 }
 
+export interface SetDetail {
+  set: {
+    id: string;
+    creator_id: string;
+    currency: string;
+    total_amount: number;
+    voucher_count: number;
+    payment_id: string;
+    created_at: number;
+  };
+  vouchers: Voucher[];
+  summary: {
+    total_count: number;
+    active_count: number;
+    total_value: number;
+    all_active: boolean;
+  };
+}
+
+export async function getSetDetail(setId: string): Promise<SetDetail> {
+  return apiFetch<SetDetail>(`/oth-path${setId}`);
+}
+
 export async function transferVoucher(
   id: string,
   recipientEmail: string,

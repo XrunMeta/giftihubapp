@@ -81,3 +81,19 @@ export async function cancelListing(
 ): Promise<{ ok: true }> {
   return apiFetch(`/oth-path${id}`, { method: "DELETE" });
 }
+
+export async function createSetListing(
+  setId: string,
+  sellingPrice: number,
+  category?: string,
+): Promise<{ ok: true; listing_id: string; voucher_count: number; fee: number; estimated_payout: number }> {
+  return apiFetch("/oth-path", {
+    method: "POST",
+    body: JSON.stringify({
+      set_id: setId,
+      selling_price: sellingPrice,
+      category,
+    }),
+  });
+}
+

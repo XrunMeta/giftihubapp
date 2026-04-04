@@ -40,15 +40,16 @@ export interface PurchaseResponse {
   payment_id: string;
   payment_method: string;
   amount_usd: number;
-  redirect_url: string | null;
-  wallet_address: string | null;
-  amount_usdt: number | null;
-  expires_at: number;
-  expires_in: number;
-  status_url: string;
+  status?: string;
+  redirect_url?: string | null;
+  wallet_address?: string | null;
+  amount_usdt?: number | null;
+  expires_at?: number;
+  expires_in?: number;
+  status_url?: string;
 }
 
-export type PaymentMethod = "paypal" | "dana" | "smileypay" | "usdt_trc20";
+export type PaymentMethod = "paypal" | "dana" | "smileypay" | "usdt_trc20" | "dev_pay";
 
 export async function getStoreProducts(): Promise<StoreResponse> {
   return apiFetch<StoreResponse>("/oth-path", { skipAuth: true });

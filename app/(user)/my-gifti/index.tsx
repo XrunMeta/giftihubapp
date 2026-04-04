@@ -1,13 +1,19 @@
 import React, { useState, useCallback, useMemo } from "react";
-import { View, Text, FlatList, Pressable, Image, ActivityIndicator } from "react-native";
+import { View, Text, FlatList, Pressable, Image, ActivityIndicator, ScrollView } from "react-native";
 import { useRouter, useFocusEffect } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Package } from "lucide-react-native";
-import { ScrollableTabs } from "@/components/ui/scrollable-tabs";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import { resolveImageUrl } from "@/lib/image";
 import { getMyVouchers, type Voucher, type VoucherStatus } from "@/services/vouchers";
 import { format } from "date-fns";
+
+const SYM: Record<string, string> = { KRW: "₩", USD: "$", IDR: "Rp" };
+function fmtPrice(amount: number, currency?: string) {
+  const sym = SYM[currency ?? "KRW"] ?? "₩";
+  return `${sym}${amount.toLocaleString()}`;
+}
 
 const TABS = [
   { key: "all", label: "전체" },
@@ -32,23 +38,37 @@ export default function MyGiftiScreen() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("all");
 
+  const [error, setError] = useState<string | null>(null);
+  const [debugInfo, setDebugInfo] = useState<string>("");
+
   const loadVouchers = useCallback(async () => {
     setLoading(true);
+    setError(null);
     try {
       const status = activeTab === "all" ? undefined : (activeTab as VoucherStatus);
       const res = await getMyVouchers(status);
       setVouchers(res.vouchers);
-    } catch (err) {
+
+      const sets = new Set(res.vouchers.filter((v: Voucher) => v.set_id).map((v: Voucher) => v.set_id));
+      setDebugInfo(`총 ${res.vouchers.length}건, 세트 ${sets.size}개, 개별 ${res.vouchers.filter((v: Voucher) => !v.set_id).length}건`);
+    } catch (err: any) {
       console.error("Failed to load vouchers:", err);
+      const msg = err.status === 401
+        ? "로그인이 만료되었습니다. 다시 로그인해주세요."
+        : `기프티 목록을 불러올 수 없습니다. (${err.status || err.message || "네트워크 오류"})`;
+      setError(msg);
+      setDebugInfo(`ERR: status=${err.status}, msg=${err.message}`);
     } finally {
       setLoading(false);
     }
   }, [activeTab]);
 
+  const loadRef = React.useRef(loadVouchers);
+  loadRef.current = loadVouchers;
   useFocusEffect(
     useCallback(() => {
-      loadVouchers();
-    }, [loadVouchers])
+      loadRef.current();
+    }, [])
   );
 
   type ListItem = { type: "single"; voucher: Voucher } | { type: "bundle"; setId: string; vouchers: Voucher[] };
@@ -79,16 +99,22 @@ export default function MyGiftiScreen() {
   }, [vouchers]);
 
   const renderBundleCard = (item: { setId: string; vouchers: Voucher[] }) => {
-    const total = item.vouchers.reduce((s, v) => s + v.face_value, 0);
     const first = item.vouchers[0]!;
+    const cur = first.base_currency || "KRW";
+    const total = item.vouchers.reduce((s, v) => s + (v.face_value_base || v.face_value), 0);
     const restCount = item.vouchers.length - 1;
-    const allActive = item.vouchers.every((v) => v.status === "active");
     const imgUri = resolveImageUrl(first.thumb_url, first.image_url, first.brand_logo);
+
+    const statuses = new Set(item.vouchers.map((v) => v.status));
+    const bundleStatus = statuses.size === 1 ? [...statuses][0]! : "mixed";
+    const bundleBadge = bundleStatus === "mixed"
+      ? { label: "혼합", variant: "secondary" as const }
+      : STATUS_BADGE[bundleStatus] ?? { label: bundleStatus, variant: "secondary" as const };
 
     return (
       <Pressable
         className="mx-4 mb-3 bg-card rounded-xl border border-primary/30 p-3"
-        onPress={() => router.push(`/(user)/oth-path${first.id}`)}
+        onPress={() => router.push(`/(user)/oth-path${item.setId}`)}
       >
         <View className="flex-row items-center mb-2">
           <View className="w-8 h-8 rounded-lg bg-primary/10 items-center justify-center mr-2">
@@ -97,8 +123,8 @@ export default function MyGiftiScreen() {
           <Text className="text-sm font-semibold text-primary">구성 상품 ({item.vouchers.length}건)</Text>
           <View className="flex-1" />
           <Badge
-            variant={allActive ? "default" : "secondary"}
-            label={allActive ? "사용가능" : "혼합"}
+            variant={bundleBadge.variant}
+            label={bundleBadge.label}
           />
         </View>
         <View className="flex-row">
@@ -116,7 +142,7 @@ export default function MyGiftiScreen() {
             </Text>
             <View className="flex-row justify-between items-center mt-1.5">
               <Text className="text-base font-bold text-foreground">
-                ₩{total.toLocaleString()}
+                {fmtPrice(total, cur)}
               </Text>
               <Text className="text-xs text-muted-foreground">
                 만료: {format(new Date(first.expiry_date * 1000), "yyyy.MM.dd")}
@@ -131,7 +157,7 @@ export default function MyGiftiScreen() {
               <Text className="text-xs text-muted-foreground flex-1" numberOfLines={1}>
                 {v.brand} · {v.name}
               </Text>
-              <Text className="text-xs text-muted-foreground">₩{v.face_value.toLocaleString()}</Text>
+              <Text className="text-xs text-muted-foreground">{fmtPrice(v.face_value_base || v.face_value, cur)}</Text>
             </View>
           ))}
           {item.vouchers.length > 4 && (
@@ -171,7 +197,7 @@ export default function MyGiftiScreen() {
           </View>
           <View className="flex-row justify-between items-center mt-2">
             <Text className="text-base font-bold text-foreground">
-              ₩{item.face_value.toLocaleString()}
+              {fmtPrice(item.face_value_base || item.face_value, item.base_currency)}
             </Text>
             <Text className="text-xs text-muted-foreground">
               만료: {format(new Date(item.expiry_date * 1000), "yyyy.MM.dd")}
@@ -182,38 +208,81 @@ export default function MyGiftiScreen() {
     );
   };
 
-  return (
-    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
+  const listHeader = (
+    <>
       <View className="px-4 py-3">
         <Text className="text-2xl font-bold text-foreground">내 기프티</Text>
+        {debugInfo ? (
+          <Text className="text-xs text-muted-foreground mt-1" selectable>{debugInfo}</Text>
+        ) : null}
       </View>
 
-      <ScrollableTabs tabs={TABS} activeTab={activeTab} onTabPress={setActiveTab} className="mb-3" />
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
+        className="mb-3"
+      >
+        {TABS.map((tab) => {
+          const isActive = tab.key === activeTab;
+          return (
+            <Pressable
+              key={tab.key}
+              onPress={() => setActiveTab(tab.key)}
+              style={{ alignSelf: "flex-start" }}
+              className={cn(
+                "rounded-full px-4 py-2",
+                isActive ? "bg-primary" : "bg-secondary",
+              )}
+            >
+              <Text
+                className={cn(
+                  "text-sm font-medium",
+                  isActive ? "text-primary-foreground" : "text-muted-foreground",
+                )}
+              >
+                {tab.label}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </ScrollView>
+    </>
+  );
 
-      {loading ? (
-        <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" color="#CE3630" />
-        </View>
-      ) : (
-        <FlatList
-          style={{ flex: 1 }}
-          data={grouped}
-          renderItem={({ item }) =>
-            item.type === "bundle"
-              ? renderBundleCard(item)
-              : renderVoucher({ item: item.voucher })
-          }
-          keyExtractor={(item) =>
-            item.type === "bundle" ? `set-${item.setId}` : item.voucher.id
-          }
-          contentContainerStyle={grouped.length === 0 ? { flexGrow: 1, justifyContent: "center" } : { paddingBottom: 20 }}
-          ListEmptyComponent={
+  return (
+    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
+      <FlatList
+        data={loading ? [] : grouped}
+        renderItem={({ item }) =>
+          item.type === "bundle"
+            ? renderBundleCard(item)
+            : renderVoucher({ item: item.voucher })
+        }
+        keyExtractor={(item) =>
+          item.type === "bundle" ? `set-${item.setId}` : item.voucher.id
+        }
+        ListHeaderComponent={listHeader}
+        contentContainerStyle={{ paddingBottom: 20 }}
+        ListEmptyComponent={
+          loading ? (
+            <View className="items-center py-20">
+              <ActivityIndicator size="large" color="#CE3630" />
+            </View>
+          ) : error ? (
+            <View className="items-center py-20 px-6">
+              <Text className="text-destructive text-center">{error}</Text>
+              <Text className="text-xs text-muted-foreground mt-2" onPress={loadVouchers}>
+                탭하여 다시 시도
+              </Text>
+            </View>
+          ) : (
             <View className="items-center py-20">
               <Text className="text-muted-foreground">기프티가 없습니다.</Text>
             </View>
-          }
-        />
-      )}
+          )
+        }
+      />
     </SafeAreaView>
   );
 }

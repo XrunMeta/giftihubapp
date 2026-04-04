@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
-import { QrCode, FileText, DollarSign, Settings } from "lucide-react-native";
+import { QrCode, ShoppingBag, Package, DollarSign, Settings } from "lucide-react-native";
 
 export default function MerchantLayout() {
   return (
@@ -22,10 +22,17 @@ export default function MerchantLayout() {
         }}
       />
       <Tabs.Screen
-        name="history"
+        name="market"
         options={{
-          title: "이력",
-          tabBarIcon: ({ color, size }) => <FileText size={size} color={color} />,
+          title: "중고마켓",
+          tabBarIcon: ({ color, size }) => <ShoppingBag size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="my-bundles"
+        options={{
+          title: "보유상품",
+          tabBarIcon: ({ color, size }) => <Package size={size} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -42,9 +49,12 @@ export default function MerchantLayout() {
           tabBarIcon: ({ color, size }) => <Settings size={size} color={color} />,
         }}
       />
+      <Tabs.Screen name="history" options={{ href: null }} />
       <Tabs.Screen name="process" options={{ href: null }} />
       <Tabs.Screen name="process-complete" options={{ href: null }} />
       <Tabs.Screen name="record-payment" options={{ href: null }} />
+      <Tabs.Screen name="market-detail" options={{ href: null }} />
+      <Tabs.Screen name="market-purchase" options={{ href: null }} />
     </Tabs>
   );
 }

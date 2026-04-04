@@ -2,7 +2,7 @@ import * as SecureStore from "expo-secure-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const BASE_URL = __DEV__
-  ? "http://localhost:8787"
+  ? "http://203.0.113.10:8787"
   : "https://giftihubapi.pages.dev";
 const TOKEN_KEY = "gifti_jwt";
 const REMEMBER_KEY = "gifti_remember";

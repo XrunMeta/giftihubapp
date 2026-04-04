@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, FlatList, Pressable, Image } from "react-native";
+import { View, Text, FlatList, Pressable, Image, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Minus, Plus, Trash2, Package, X } from "lucide-react-native";
@@ -111,28 +111,34 @@ export default function CartScreen() {
             </Text>
           </View>
           <View className="flex-row justify-between items-center">
-            <View className="flex-row items-center border border-border rounded-md">
-              <Pressable
-                onPress={() => updateQuantity(item.product.id, item.quantity - 1)}
-                className="p-1.5"
-              >
-                <Minus size={14} color="#737373" />
-              </Pressable>
-              <Text className="text-sm font-medium w-8 text-center text-foreground">
-                {item.quantity}
-              </Text>
-              <Pressable
-                onPress={() => updateQuantity(item.product.id, item.quantity + 1)}
-                className="p-1.5"
-              >
-                <Plus size={14} color="#737373" />
-              </Pressable>
-            </View>
+            {item.flexibleAmount ? (
+              <Text className="text-xs text-amber-500">금액 지정</Text>
+            ) : (
+              <View className="flex-row items-center border border-border rounded-md">
+                <Pressable
+                  onPress={() => updateQuantity(item.cartId!, item.quantity - 1)}
+                  className="p-1.5"
+                >
+                  <Minus size={14} color="#737373" />
+                </Pressable>
+                <Text className="text-sm font-medium w-8 text-center text-foreground">
+                  {item.quantity}
+                </Text>
+                <Pressable
+                  onPress={() => updateQuantity(item.cartId!, item.quantity + 1)}
+                  className="p-1.5"
+                >
+                  <Plus size={14} color="#737373" />
+                </Pressable>
+              </View>
+            )}
             <View className="flex-row items-center gap-3">
               <Text className="text-sm font-bold text-foreground">
-                ₩{(item.product.price * item.quantity).toLocaleString()}
+                {item.flexibleAmount
+                  ? formatPrice(item.flexibleAmount, item.product.flexible_currency ?? "KRW")
+                  : `₩${(item.product.price * item.quantity).toLocaleString()}`}
               </Text>
-              <Pressable onPress={() => removeFromCart(item.product.id)}>
+              <Pressable onPress={() => removeFromCart(item.cartId!)}>
                 <Trash2 size={16} color="#ef4444" />
               </Pressable>
             </View>
@@ -152,7 +158,7 @@ export default function CartScreen() {
         style={{ flex: 1 }}
         data={items}
         renderItem={renderItem}
-        keyExtractor={(item) => item.product.id}
+        keyExtractor={(item) => item.cartId ?? item.product.id}
         contentContainerStyle={{ paddingBottom: 20 }}
         ListHeaderComponent={renderPackages()}
         ListEmptyComponent={
@@ -164,19 +170,68 @@ export default function CartScreen() {
         }
       />
 
-      {hasItems && (
-        <View className="px-5 py-4 border-t border-border">
-          <View className="flex-row justify-between mb-3">
-            <Text className="text-base text-foreground">합계 ({getCartCount()}개)</Text>
-            <Text className="text-xl font-bold text-foreground">
-              ₩{getTotalPrice().toLocaleString()}
-            </Text>
+      {hasItems && (() => {
+
+        const currTotals: Record<string, number> = {};
+        for (const pkg of packageItems) {
+          currTotals[pkg.currency] = (currTotals[pkg.currency] ?? 0) + pkg.totalBudget;
+        }
+        for (const item of items) {
+          if (item.flexibleAmount) {
+            const fc = item.product.flexible_currency ?? "KRW";
+            currTotals[fc] = (currTotals[fc] ?? 0) + item.flexibleAmount;
+          } else {
+            currTotals["KRW"] = (currTotals["KRW"] ?? 0) + item.product.price * item.quantity;
+          }
+        }
+
+        const currencies = Object.keys(currTotals).sort((a, b) => {
+          const order = ["USD", "KRW", "IDR"];
+          return (order.indexOf(a) === -1 ? 99 : order.indexOf(a)) - (order.indexOf(b) === -1 ? 99 : order.indexOf(b));
+        });
+        const multiCurrency = currencies.length > 1;
+
+        const handleCheckout = () => {
+          if (multiCurrency) {
+            const buttons = currencies.map((c) => ({
+              text: `${c} ${SYM[c]}${currTotals[c].toLocaleString()}`,
+              onPress: () => router.push({ pathname: "/(user)/purchase", params: { currency: c } }),
+            }));
+            buttons.push({ text: "취소", onPress: () => {} });
+            Alert.alert("결제할 통화 선택", "한 번에 하나의 통화만 결제할 수 있습니다.", buttons);
+          } else {
+            router.push({ pathname: "/(user)/purchase", params: { currency: currencies[0] } });
+          }
+        };
+
+        return (
+          <View className="px-5 py-4 border-t border-border">
+            {multiCurrency ? (
+              <View className="mb-3">
+                <Text className="text-xs text-muted-foreground mb-1">통화별 ({currencies.length}건)</Text>
+                {currencies.map((c) => (
+                  <View key={c} className="flex-row justify-between py-0.5">
+                    <Text className="text-sm text-foreground">{c}</Text>
+                    <Text className="text-sm font-bold text-foreground">
+                      {SYM[c] ?? ""}{currTotals[c].toLocaleString()}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            ) : (
+              <View className="flex-row justify-between mb-3">
+                <Text className="text-base text-foreground">합계 ({getCartCount()}개)</Text>
+                <Text className="text-xl font-bold text-foreground">
+                  {SYM[currencies[0]] ?? "₩"}{(currTotals[currencies[0]] ?? 0).toLocaleString()}
+                </Text>
+              </View>
+            )}
+            <Button onPress={handleCheckout}>
+              결제하기
+            </Button>
           </View>
-          <Button onPress={() => router.push("/(user)/purchase")}>
-            결제하기
-          </Button>
-        </View>
-      )}
+        );
+      })()}
     </SafeAreaView>
   );
 }

@@ -8,6 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import { getStoreProducts, getProductImageUrl, type Product } from "@/services/store";
 import { BundleComposer } from "@/components/BundleComposer";
 
+const SYM: Record<string, string> = { KRW: "₩", USD: "$", IDR: "Rp" };
+
 export default function StoreScreen() {
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
@@ -71,7 +73,7 @@ export default function StoreScreen() {
           <View className="flex-row items-center mt-2 gap-1.5">
             {isFlexible ? (
               <Text className="text-sm font-bold text-foreground">
-                ₩{(item.flexible_min ?? 0).toLocaleString()}~
+                {SYM[item.flexible_currency ?? "KRW"] ?? "₩"}{(item.flexible_min ?? 0).toLocaleString()}~
               </Text>
             ) : (
               <>
@@ -79,7 +81,7 @@ export default function StoreScreen() {
                   <Badge variant="destructive" label={`${discount}%`} />
                 )}
                 <Text className="text-base font-bold text-foreground">
-                  ₩{(item.price ?? 0).toLocaleString()}
+                  {SYM[item.display_currency] ?? "₩"}{(item.price ?? 0).toLocaleString()}
                 </Text>
               </>
             )}

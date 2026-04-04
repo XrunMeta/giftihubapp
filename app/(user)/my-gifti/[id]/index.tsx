@@ -3,15 +3,17 @@ import { View, Text, Image, ScrollView, ActivityIndicator, Alert, Animated, useW
 import * as Clipboard from "expo-clipboard";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Send, ArrowLeftRight, ShoppingBag, CheckCircle, Clock, ArrowRight, XCircle } from "lucide-react-native";
+import { Send, ArrowLeftRight, ShoppingBag, CheckCircle, Clock, ArrowRight, XCircle, Store } from "lucide-react-native";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/PageHeader";
 import { Separator } from "@/components/ui/separator";
 import { resolveImageUrl } from "@/lib/image";
 import Barcode128 from "@/components/Barcode128";
+import QRCode from "react-native-qrcode-svg";
 import { getVoucherDetail, getVoucherBarcode, type Voucher } from "@/services/vouchers";
 import { format } from "date-fns";
+import { useDevMode } from "@/hooks/use-dev-mode";
 
 const REFRESH_SECONDS = 30;
 
@@ -51,6 +53,7 @@ const STATUS_INFO: Record<string, { label: string; icon: typeof CheckCircle; col
 export default function GiftiDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
+  const isDevMode = useDevMode();
   const { width: screenWidth } = useWindowDimensions();
   const [voucher, setVoucher] = useState<Voucher | null>(null);
   const [barcode, setBarcode] = useState<string | null>(null);
@@ -58,20 +61,23 @@ export default function GiftiDetailScreen() {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const progressAnim = useRef(new Animated.Value(1)).current;
 
-  const startProgressBar = useCallback(() => {
-    progressAnim.setValue(1);
-    Animated.timing(progressAnim, {
-      toValue: 0,
-      duration: REFRESH_SECONDS * 1000,
-      useNativeDriver: false,
-    }).start();
+  const syncProgressBar = useCallback((expiresIn: number) => {
+    const ratio = Math.max(0, Math.min(1, expiresIn / REFRESH_SECONDS));
+    progressAnim.stopAnimation(() => {
+      progressAnim.setValue(ratio);
+      Animated.timing(progressAnim, {
+        toValue: 0,
+        duration: expiresIn * 1000,
+        useNativeDriver: false,
+      }).start();
+    });
   }, [progressAnim]);
 
   const loadBarcode = useCallback(async () => {
     try {
       const res = await getVoucherBarcode(id!);
       setBarcode(res.barcode);
-      startProgressBar();
+      syncProgressBar(res.expires_in);
     } catch (err: any) {
       if (err.status === 409) {
 
@@ -80,7 +86,7 @@ export default function GiftiDetailScreen() {
         setVoucher((prev) => prev ? { ...prev, status: "used" } : prev);
       }
     }
-  }, [id, startProgressBar]);
+  }, [id, syncProgressBar]);
 
   useEffect(() => {
     if (id) {
@@ -135,7 +141,7 @@ export default function GiftiDetailScreen() {
                     <Text className="text-base font-mono tracking-[6px] text-foreground">
                       {barcode}
                     </Text>
-                    {__DEV__ && (
+                    {isDevMode && (
                       <TouchableOpacity
                         onPress={() => {
                           Clipboard.setStringAsync(barcode!);
@@ -147,6 +153,11 @@ export default function GiftiDetailScreen() {
                       </TouchableOpacity>
                     )}
                   </View>
+                  {}
+                  <View className="mt-4 p-3 bg-white rounded-lg">
+                    <QRCode value={barcode} size={120} />
+                  </View>
+                  <Text className="text-xs text-muted-foreground mt-2">휴대폰 카메라로 스캔</Text>
                 </View>
               ) : (
                 <View className="h-16 items-center justify-center">
@@ -254,6 +265,14 @@ export default function GiftiDetailScreen() {
                 <Text className="text-sm font-medium text-foreground">환불</Text>
               </Button>
             </View>
+            <Button
+              variant="outline"
+              className="flex-row gap-2"
+              onPress={() => router.push({ pathname: "/(user)/oth-path", params: { voucherId: id } })}
+            >
+              <Store size={16} color="#0a0a0a" />
+              <Text className="text-sm font-medium text-foreground">중고마켓에 판매</Text>
+            </Button>
           </View>
         )}
       </ScrollView>

@@ -12,6 +12,7 @@ export default function ProcessScreen() {
   const router = useRouter();
   const [status, setStatus] = useState<"validating" | "valid" | "invalid">("validating");
   const [voucherInfo, setVoucherInfo] = useState<any>(null);
+  const [errorMsg, setErrorMsg] = useState<string>("");
 
   useEffect(() => {
     if (barcode) validate();
@@ -24,12 +25,15 @@ export default function ProcessScreen() {
         body: JSON.stringify({ barcode }),
       });
       if (!res.valid) {
+        setErrorMsg(res.error || "알 수 없는 오류");
         setStatus("invalid");
         return;
       }
       setVoucherInfo(res);
       setStatus("valid");
-    } catch {
+    } catch (err: any) {
+      const msg = err.body?.error || err.message || "서버 연결 실패";
+      setErrorMsg(`[${err.status || "?"}] ${msg}`);
       setStatus("invalid");
     }
   };
@@ -77,7 +81,7 @@ export default function ProcessScreen() {
           <View className="items-center">
             <XCircle size={64} color="#ef4444" />
             <Text className="text-xl font-bold text-foreground mt-4">유효하지 않은 바코드</Text>
-            <Text className="text-sm text-muted-foreground mt-2">다시 스캔해주세요.</Text>
+            <Text className="text-sm text-muted-foreground mt-2">{errorMsg || "다시 스캔해주세요."}</Text>
             <Button className="mt-6" onPress={() => router.back()}>돌아가기</Button>
           </View>
         )}
