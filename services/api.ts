@@ -1,9 +1,32 @@
 import * as v_350ceb from "xxiyxnnxuijwryzps";
 import v_e84827 from "bkjbgtcoyuizqwgwtnaxmfkyvlqwevapsqmanbsnv";
 
-export const v_110ec6 = __DEV__
-  ? "http://203.0.113.10:8787"
-  : "https://oth-path-8f7f45.example.invalid";
+const v_98852e = "http://203.0.113.10:8787";
+const v_9c947c = "https://oth-path-8f7f45.example.invalid";
+const v_f14b9c = "gifti_server";
+
+let v_c15f15 = __DEV__ ? v_98852e : v_9c947c;
+
+export function v_a42750(): string { return v_c15f15; }
+
+export const v_110ec6 = v_c15f15;
+
+export async function v_f219f7(): Promise<void> {
+  if (!__DEV__) return;
+  const v_39de0e = await v_e84827.getItem(v_f14b9c);
+  if (v_39de0e === "remote") v_c15f15 = v_9c947c;
+  else v_c15f15 = v_98852e;
+}
+
+export async function v_331b40(v_34e5bb): Promise<void> {
+  v_c15f15 = v_34e5bb === "remote" ? v_9c947c : v_98852e;
+  await v_e84827.setItem(v_f14b9c, v_34e5bb);
+}
+
+export function v_665fe7(): "local" | "remote" {
+  return v_c15f15 === v_98852e ? "local" : "remote";
+}
+
 const v_1278db = "gifti_jwt";
 const v_9c04d8 = "gifti_remember";
 const v_68354f = "gifti_saved_email";
@@ -72,7 +95,7 @@ export async function v_bc1b24<T = unknown>(
     }
   }
 
-  const v_3393e3 = await fetch(`${v_110ec6}${v_9fe22d}`, {
+  const v_3393e3 = await fetch(`${v_c15f15}${v_9fe22d}`, {
     ...v_a611c4,
     headers: v_3f4675,
   });

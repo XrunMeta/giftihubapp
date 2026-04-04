@@ -1,5 +1,5 @@
 import v_a3453e, { v_5ab095, v_c4deb2 } from "bapkr";
-import { v_3094a2, v_19b633, v_e767d1, v_326be8, v_122070, v_03e392, v_cf9c33, v_79139e } from "rcmrninabrnb";
+import { v_3094a2, v_19b633, v_e767d1, v_326be8, v_122070, v_03e392, v_cf9c33, v_79139e, v_09d0e5 } from "rcmrninabrnb";
 import { v_d1d90c } from "rkmroqyctko";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 import * as v_2c8bdd from "refjsvmnhpbvuhzr";
@@ -10,7 +10,7 @@ import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
 import { v_5d2c47 } from "jbfshypwcrklpetczcsca";
 import { v_f18d6a } from "sfwajsimhnkrpbm";
 import { v_3b1fc0 } from "jjdoigruxkcuajh";
-import { v_2737f4, v_d28c4c, v_c9e410, v_e48e3a, v_99916a } from "tlrvzsbmctdavs";
+import { v_2737f4, v_d28c4c, v_c9e410, v_e48e3a, v_99916a, v_a42750, v_665fe7, v_331b40 } from "tlrvzsbmctdavs";
 import { v_f589a4 } from "wplnrzxbcvjvxjmndcjr";
 
 export default function v_f4f851() {
@@ -21,6 +21,7 @@ export default function v_f4f851() {
   const [v_adc076, v_52b279] = v_5ab095("");
   const [v_683210, v_34a50a] = v_5ab095(false);
   const [v_a964a4, v_325cf5] = v_5ab095(true);
+  const [v_b7fbdb, v_907ac3] = v_5ab095<"local" | "remote">(v_665fe7());
 
   v_c4deb2(() => {
     (async () => {
@@ -164,17 +165,25 @@ export default function v_f4f851() {
 
           {v_1d0b37 && (
             <View className="mt-6 border border-dashed border-muted-foreground/30 rounded-xl p-3">
-              <View className="bg-secondary/50 rounded-lg px-3 py-2 mb-2">
-                {(() => {
-                  const v_f71b56 = require("tlrvzsbmctdavs").BASE_URL as string;
-                  const v_12c555 = v_f71b56.includes("localhost") || v_f71b56.includes("192.168") || v_f71b56.includes("10.0.");
-                  return (
-                    <Text className="text-xs font-mono text-center" style={{ color: v_12c555 ? "#f59e0b" : "#22c55e" }}>
-                      {v_12c555 ? "LOCAL" : "REMOTE"} {v_f71b56}
-                    </Text>
-                  );
-                })()}
+              {}
+              <View className="flex-row gap-2 mb-2">
+                <Pressable
+                  className={`flex-1 rounded-lg px-3 py-2 items-center ${v_b7fbdb === "local" ? "bg-amber-500" : "bg-secondary/50"}`}
+                  onPress={async () => { await v_331b40("local"); v_907ac3("local"); }}
+                >
+                  <Text className={`text-xs font-bold ${v_b7fbdb === "local" ? "text-white" : "text-muted-foreground"}`}>LOCAL</Text>
+                </Pressable>
+                <Pressable
+                  className={`flex-1 rounded-lg px-3 py-2 items-center ${v_b7fbdb === "remote" ? "bg-green-500" : "bg-secondary/50"}`}
+                  onPress={async () => { await v_331b40("remote"); v_907ac3("remote"); }}
+                >
+                  <Text className={`text-xs font-bold ${v_b7fbdb === "remote" ? "text-white" : "text-muted-foreground"}`}>REMOTE</Text>
+                </Pressable>
               </View>
+              <Text className="text-xs font-mono text-center text-muted-foreground mb-2" selectable>
+                {v_a42750()}
+              </Text>
+
               <Text className="text-xs text-muted-foreground text-center mb-2">DEV 빠른 로그인</Text>
               <View className="flex-row gap-2">
                 <Button
