@@ -1,11 +1,11 @@
-import { BASE_URL } from "@/services/api";
+import { getBaseUrl } from "@/services/api";
 
 export function resolveImageUrl(
   ...candidates: (string | null | undefined)[]
 ): string | null {
   for (const raw of candidates) {
     if (raw) {
-      return raw.startsWith("http") ? raw : `${BASE_URL}${raw}`;
+      return raw.startsWith("http") ? raw : `${getBaseUrl()}${raw}`;
     }
   }
   return null;

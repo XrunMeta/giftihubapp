@@ -1,5 +1,5 @@
 import { useState, useEffect, createContext, useContext } from "react";
-import { BASE_URL } from "@/services/api";
+import { getBaseUrl } from "@/services/api";
 
 interface DevModeContextType {
   isDevMode: boolean;
@@ -16,7 +16,7 @@ export function useDevModeProvider(): DevModeContextType {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${BASE_URL}/oth-path`)
+    fetch(`${getBaseUrl()}/oth-path`)
       .then((res) => res.json())
       .then((data: { dev_mode: boolean }) => {
         setServerDevMode(data.dev_mode);
