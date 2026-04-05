@@ -1,7 +1,24 @@
 import { Tabs } from "expo-router";
-import { QrCode, ShoppingBag, Package, DollarSign, Settings } from "lucide-react-native";
+import { QrCode, ShoppingBag, Package, DollarSign, Settings, Bell } from "lucide-react-native";
+import { useEffect, useState } from "react";
+import { View, Text } from "react-native";
+import { apiFetch } from "@/services/api";
 
 export default function MerchantLayout() {
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    const fetchUnread = async () => {
+      try {
+        const data = await apiFetch<{ unread_count: number }>("/oth-path");
+        setUnreadCount(data.unread_count ?? 0);
+      } catch {}
+    };
+    fetchUnread();
+    const interval = setInterval(fetchUnread, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <Tabs
       screenOptions={{
@@ -47,6 +64,37 @@ export default function MerchantLayout() {
         options={{
           title: "설정",
           tabBarIcon: ({ color, size }) => <Settings size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="notifications"
+        options={{
+          title: "알림",
+          tabBarIcon: ({ color, size }) => (
+            <View>
+              <Bell size={size} color={color} />
+              {unreadCount > 0 && (
+                <View
+                  style={{
+                    position: "absolute",
+                    top: -4,
+                    right: -6,
+                    backgroundColor: "#ef4444",
+                    borderRadius: 8,
+                    minWidth: 16,
+                    height: 16,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    paddingHorizontal: 3,
+                  }}
+                >
+                  <Text style={{ color: "#fff", fontSize: 10, fontWeight: "bold" }}>
+                    {unreadCount > 99 ? "99+" : unreadCount}
+                  </Text>
+                </View>
+              )}
+            </View>
+          ),
         }}
       />
       <Tabs.Screen name="history" options={{ href: null }} />

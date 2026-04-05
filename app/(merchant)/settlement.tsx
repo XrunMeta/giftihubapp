@@ -34,7 +34,14 @@ type HistoryResponse = {
   limit: number;
 };
 
-type Tab = "settlement" | "history";
+type SettlementRecord = {
+  id: string; period_from: string; period_to: string; type: string;
+  total_amount: number; fee_amount: number; net_amount: number;
+  status: string; tx_hash: string | null; bank_ref: string | null;
+  memo: string | null; item_count: number; created_at: number; settled_at: number | null;
+};
+
+type Tab = "settlement" | "history" | "records";
 type Period = "7d" | "30d" | "90d";
 
 const PERIODS: { key: Period; label: string; days: number }[] = [
@@ -57,6 +64,22 @@ export default function MerchantSettlementScreen() {
   const [histRefreshing, setHistRefreshing] = useState(false);
   const [histPage, setHistPage] = useState(1);
   const [histHasMore, setHistHasMore] = useState(true);
+
+  const [records, setRecords] = useState<SettlementRecord[]>([]);
+  const [recLoading, setRecLoading] = useState(false);
+  const [recFilter, setRecFilter] = useState<string>("");
+
+  const loadRecords = useCallback(async () => {
+    setRecLoading(true);
+    try {
+      const params = recFilter ? `?status=${recFilter}` : "";
+      const data = await apiFetch<{ records: SettlementRecord[] }>(`/oth-path${params}`);
+      setRecords(data.records);
+    } catch {}
+    setRecLoading(false);
+  }, [recFilter]);
+
+  useEffect(() => { if (tab === "records") loadRecords(); }, [tab, recFilter]);
 
   const fetchSettlement = useCallback(async (p: Period) => {
     setSettlLoading(true);
@@ -137,9 +160,56 @@ export default function MerchantSettlementScreen() {
     </View>
   );
 
+  const STATUS_COLORS: Record<string, string> = {
+    pending: "#f59e0b",
+    settling: "#3b82f6",
+    settled: "#22c55e",
+    rejected: "#ef4444",
+  };
+  const STATUS_LABELS: Record<string, string> = {
+    pending: "대기", settling: "정산중", settled: "완료", rejected: "거절",
+  };
+
+  const renderRecord = ({ item }: { item: SettlementRecord }) => (
+    <View className="mx-4 mb-2 bg-card rounded-xl border border-border p-4">
+      <View className="flex-row justify-between items-start mb-2">
+        <View className="flex-1">
+          <Text className="text-xs text-muted-foreground">
+            {item.period_from} ~ {item.period_to}
+          </Text>
+          <Text className="text-sm font-semibold text-foreground mt-0.5">
+            {item.type === "bundle" ? "묶음" : "일반"} · {item.item_count}건
+          </Text>
+        </View>
+        <View className="px-2 py-1 rounded-full" style={{ backgroundColor: (STATUS_COLORS[item.status] ?? "#737373") + "20" }}>
+          <Text className="text-xs font-medium" style={{ color: STATUS_COLORS[item.status] ?? "#737373" }}>
+            {STATUS_LABELS[item.status] ?? item.status}
+          </Text>
+        </View>
+      </View>
+      <View className="flex-row justify-between mt-1">
+        <Text className="text-xs text-muted-foreground">총액</Text>
+        <Text className="text-xs text-foreground font-medium">₩{item.total_amount?.toLocaleString()}</Text>
+      </View>
+      <View className="flex-row justify-between mt-0.5">
+        <Text className="text-xs text-muted-foreground">수수료</Text>
+        <Text className="text-xs text-muted-foreground">-₩{item.fee_amount?.toLocaleString()}</Text>
+      </View>
+      <View className="flex-row justify-between mt-0.5">
+        <Text className="text-xs text-muted-foreground">실수령</Text>
+        <Text className="text-sm font-bold text-primary">₩{item.net_amount?.toLocaleString()}</Text>
+      </View>
+      {(item.tx_hash || item.bank_ref) && (
+        <Text className="text-xs text-muted-foreground mt-2" numberOfLines={1}>
+          {item.tx_hash ? `TX: ${item.tx_hash}` : `은행: ${item.bank_ref}`}
+        </Text>
+      )}
+    </View>
+  );
+
   const TabSelector = () => (
     <View className="flex-row mx-4 mb-3 gap-2">
-      {(["settlement", "history"] as Tab[]).map((t) => (
+      {(["settlement", "history", "records"] as Tab[]).map((t) => (
         <TouchableOpacity
           key={t}
           onPress={() => setTab(t)}
@@ -152,7 +222,7 @@ export default function MerchantSettlementScreen() {
               tab === t ? "text-primary-foreground" : "text-foreground"
             }`}
           >
-            {t === "settlement" ? "정산 집계" : "사용 이력"}
+            {t === "settlement" ? "정산 집계" : t === "history" ? "사용 이력" : "정산현황"}
           </Text>
         </TouchableOpacity>
       ))}
@@ -228,35 +298,72 @@ export default function MerchantSettlementScreen() {
             />
           )}
         </>
-      ) : histLoading ? (
-        <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" color="#CE3630" />
-        </View>
+      ) : tab === "history" ? (
+        histLoading ? (
+          <View className="flex-1 items-center justify-center">
+            <ActivityIndicator size="large" color="#CE3630" />
+          </View>
+        ) : (
+          <FlatList
+            data={histItems}
+            keyExtractor={(item) => item.id}
+            renderItem={renderHistory}
+            onEndReached={() => {
+              if (!histLoading && histHasMore) fetchHistory(histPage + 1);
+            }}
+            onEndReachedThreshold={0.3}
+            onRefresh={() => {
+              setHistRefreshing(true);
+              fetchHistory(1, true);
+            }}
+            refreshing={histRefreshing}
+            ListEmptyComponent={
+              <View className="flex-1 items-center justify-center py-20">
+                <Text className="text-muted-foreground">사용 이력이 없습니다.</Text>
+              </View>
+            }
+            ListFooterComponent={
+              histHasMore && histItems.length > 0 ? (
+                <ActivityIndicator size="small" color="#CE3630" style={{ padding: 16 }} />
+              ) : null
+            }
+          />
+        )
       ) : (
-        <FlatList
-          data={histItems}
-          keyExtractor={(item) => item.id}
-          renderItem={renderHistory}
-          onEndReached={() => {
-            if (!histLoading && histHasMore) fetchHistory(histPage + 1);
-          }}
-          onEndReachedThreshold={0.3}
-          onRefresh={() => {
-            setHistRefreshing(true);
-            fetchHistory(1, true);
-          }}
-          refreshing={histRefreshing}
-          ListEmptyComponent={
-            <View className="flex-1 items-center justify-center py-20">
-              <Text className="text-muted-foreground">사용 이력이 없습니다.</Text>
+        <>
+          {}
+          <View className="flex-row mx-4 mb-3 gap-2">
+            {[{ key: "", label: "전체" }, { key: "settling", label: "정산중" }, { key: "settled", label: "완료" }].map((f) => (
+              <TouchableOpacity
+                key={f.key}
+                onPress={() => setRecFilter(f.key)}
+                className={`px-3 py-1.5 rounded-full border ${
+                  recFilter === f.key ? "bg-primary border-primary" : "bg-card border-border"
+                }`}
+              >
+                <Text className={`text-xs font-medium ${recFilter === f.key ? "text-primary-foreground" : "text-foreground"}`}>
+                  {f.label}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+          {recLoading ? (
+            <View className="flex-1 items-center justify-center">
+              <ActivityIndicator size="large" color="#CE3630" />
             </View>
-          }
-          ListFooterComponent={
-            histHasMore && histItems.length > 0 ? (
-              <ActivityIndicator size="small" color="#CE3630" style={{ padding: 16 }} />
-            ) : null
-          }
-        />
+          ) : (
+            <FlatList
+              data={records}
+              keyExtractor={(item) => item.id}
+              renderItem={renderRecord}
+              ListEmptyComponent={
+                <View className="flex-1 items-center justify-center py-20">
+                  <Text className="text-muted-foreground">정산 내역이 없습니다.</Text>
+                </View>
+              }
+            />
+          )}
+        </>
       )}
     </SafeAreaView>
   );
