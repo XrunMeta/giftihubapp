@@ -57,7 +57,7 @@ export default function v_b06108() {
         <Text className="text-sm font-medium text-foreground mb-2">직접 입력</Text>
         <View className="flex-row gap-2">
           <Input
-            className="flex-1"
+            className="flex-1 bg-white"
             placeholder="바코드 번호 입력"
             keyboardType="numeric"
             value={v_01eca1}
