@@ -118,7 +118,7 @@ export default function MyGiftiScreen() {
         onPress={() => router.push(`/(user)/oth-path${item.setId}`)}
       >
         <View className="flex-row items-center mb-2">
-          <View className="w-8 h-8 rounded-lg bg-primary/10 items-center justify-center mr-2">
+          <View className="w-8 h-8 rounded-lg bg-primary/10 items-center justify-center">
             <Package size={18} color="#CE3630" />
           </View>
           <Text className="text-sm font-semibold text-primary">구성 상품 ({item.vouchers.length}건)</Text>
@@ -141,7 +141,7 @@ export default function MyGiftiScreen() {
               {first.brand} · {first.name}
               {restCount > 0 ? ` 외 ${restCount}건` : ""}
             </Text>
-            <View className="flex-row justify-between items-center mt-1.5">
+            <View className="flex-row justify-between items-center">
               <Text className="text-base font-bold text-foreground">
                 {fmtPrice(total, cur)}
               </Text>
@@ -154,7 +154,7 @@ export default function MyGiftiScreen() {
         {}
         <View className="mt-2 pt-2 border-t border-border">
           {item.vouchers.slice(0, 4).map((v) => (
-            <View key={v.id} className="flex-row justify-between py-0.5">
+            <View key={v.id} className="flex-row justify-between">
               <Text className="text-xs text-muted-foreground flex-1" numberOfLines={1}>
                 {v.brand} · {v.name}
               </Text>
@@ -190,13 +190,13 @@ export default function MyGiftiScreen() {
           <View className="flex-row justify-between items-start">
             <View className="flex-1">
               <Text className="text-xs text-muted-foreground">{item.brand}</Text>
-              <Text className="text-base font-semibold text-foreground mt-0.5" numberOfLines={1}>
+              <Text className="text-base font-semibold text-foreground" numberOfLines={1}>
                 {item.name}
               </Text>
             </View>
             <Badge variant={badge.variant} label={badge.label} />
           </View>
-          <View className="flex-row justify-between items-center mt-2">
+          <View className="flex-row justify-between items-center mt-1">
             <Text className="text-base font-bold text-foreground">
               {fmtPrice(item.face_value_base || item.face_value, item.base_currency)}
             </Text>

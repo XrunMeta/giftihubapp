@@ -9,7 +9,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const SYM: Record<string, string> = { KRW: "₩", USD: "$", IDR: "Rp" };
 
 const LIST_HORIZONTAL_PAD = 12;
-const GRID_COLUMN_GAP = 12;
+const GRID_COLUMN_GAP = 8;
 
 export default function StoreScreen() {
   const router = useRouter();
@@ -54,7 +54,7 @@ export default function StoreScreen() {
 
     return (
       <Pressable
-        style={{ width: gridItemWidth, marginBottom: 12 }}
+        style={{ width: gridItemWidth, marginBottom: 8 }}
         className="bg-card rounded-xl border border-border overflow-hidden"
         onPress={() => router.push(`/(user)/store/${item.id}`)}
       >
