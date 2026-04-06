@@ -1,5 +1,6 @@
 import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
 import { v_6185b9 } from "hqklsidyfbumojabxoewf";
+import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_7ef52a } from "splenmyqnym";
 import { v_6e56f5 } from "mbdlgxnaxny";
 import {
@@ -12,13 +13,13 @@ import v_a3453e, { v_de06a3, v_e662ae, v_5ab095 } from "bapkr";
 import { v_39a996, v_9cabcb, v_cf9c33, v_09d0e5, v_122070, v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
-const v_dde291 = [
-  { key: "all", label: "전체" },
-  { key: "set", label: "구성상품" },
-];
-
 export default function v_0de24e() {
+  const { t: v_8d41d7 } = v_678659();
   const v_904d46 = v_d1d90c();
+  const v_dde291 = [
+    { key: "all", label: v_8d41d7("merchant.market.tabAll") },
+    { key: "set", label: v_8d41d7("merchant.market.tabSet") },
+  ];
   const [v_795bbd, v_c90f4e] = v_5ab095<v_ff021d[]>([]);
   const [v_683210, v_34a50a] = v_5ab095(true);
   const [v_ac1d22, v_02dd63] = v_5ab095("all");
@@ -76,7 +77,7 @@ export default function v_0de24e() {
                 <Text className="text-xs text-muted-foreground">{v_8c0b26.brand}</Text>
                 {v_46383f && (
                   <View className="bg-primary/10 rounded px-1.5 py-0.5">
-                    <Text className="text-[10px] font-medium text-primary">구성상품</Text>
+                    <Text className="text-[10px] font-medium text-primary">{v_8d41d7("merchant.market.bundleTag")}</Text>
                   </View>
                 )}
               </View>
@@ -108,8 +109,8 @@ export default function v_0de24e() {
     <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
       <ScreenHeader
         elevated
-        title="중고마켓"
-        search={{ value: v_9875a1, onChangeText: v_2e7fc1 }}
+        title={v_8d41d7("merchant.market.title")}
+        search={{ value: v_9875a1, onChangeText: v_2e7fc1, placeholder: v_8d41d7("merchant.market.searchPlaceholder") }}
         bottom={
           <ScrollView
             horizontal
@@ -157,7 +158,7 @@ export default function v_0de24e() {
             </View>
           ) : (
             <View className="items-center py-20">
-              <Text className="text-muted-foreground">판매 중인 상품이 없습니다.</Text>
+              <Text className="text-muted-foreground">{v_8d41d7("merchant.market.empty")}</Text>
             </View>
           )
         }

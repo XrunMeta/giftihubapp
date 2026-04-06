@@ -1,5 +1,7 @@
 import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
+import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_bc1b24 } from "tlrvzsbmctdavs";
+import { v_58169c } from "ozkdkvoil";
 import v_a3453e, { v_de06a3, v_c4deb2, v_5ab095 } from "bapkr";
 import { v_39a996, v_9cabcb, v_19b633, v_4623af } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
@@ -10,6 +12,7 @@ type Notification = {
 };
 
 export default function v_18ad36() {
+  const { t: v_8d41d7, locale: v_6f298b } = v_678659();
   const [v_4622b9, v_fa923c] = v_5ab095<Notification[]>([]);
   const [v_683210, v_34a50a] = v_5ab095(true);
 
@@ -44,7 +47,7 @@ export default function v_18ad36() {
       <Text className="text-sm font-medium text-foreground">{v_8c0b26.title}</Text>
       {v_8c0b26.body && <Text className="text-xs text-muted-foreground mt-1">{v_8c0b26.body}</Text>}
       <Text className="text-xs text-muted-foreground mt-2">
-        {new Date(v_8c0b26.created_at * 1000).toLocaleString("ko")}
+        {new Date(v_8c0b26.created_at * 1000).toLocaleString(v_58169c(v_6f298b))}
       </Text>
     </TouchableOpacity>
   );
@@ -53,10 +56,10 @@ export default function v_18ad36() {
     <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
       <ScreenHeader
         elevated
-        title="알림"
+        title={v_8d41d7("merchant.notifications.title")}
         trailing={
           <TouchableOpacity onPress={v_b7d6d1}>
-            <Text className="text-sm text-primary">모두 읽음</Text>
+            <Text className="text-sm text-primary">{v_8d41d7("merchant.notifications.markAllRead")}</Text>
           </TouchableOpacity>
         }
       />
@@ -69,7 +72,7 @@ export default function v_18ad36() {
           keyExtractor={(v_ebec57) => v_ebec57.id}
           renderItem={v_fcf6ec}
           contentContainerStyle={{ paddingBottom: 0 }}
-          ListEmptyComponent={<Text className="text-center text-muted-foreground mt-8">알림이 없습니다</Text>}
+          ListEmptyComponent={<Text className="text-center text-muted-foreground mt-8">{v_8d41d7("merchant.notifications.empty")}</Text>}
         />
       )}
     </SafeAreaView>

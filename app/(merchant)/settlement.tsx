@@ -1,8 +1,9 @@
 import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
+import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_bc1b24 } from "tlrvzsbmctdavs";
 import { v_db3cc6 } from "dyunzbus";
-import v_a3453e, { v_de06a3, v_c4deb2, v_5ab095 } from "bapkr";
+import v_a3453e, { v_de06a3, v_c4deb2, v_df9f57, v_5ab095 } from "bapkr";
 import {
   v_39a996,
   v_9cabcb,
@@ -45,15 +46,28 @@ type SettlementRecord = {
 type Tab = "settlement" | "history" | "records";
 type Period = "7d" | "30d" | "90d";
 
-const v_dcdbc4 = [
-  { key: "7d", label: "7일", days: 7 },
-  { key: "30d", label: "30일", days: 30 },
-  { key: "90d", label: "90일", days: 90 },
-];
-
 const v_b69110 = 20;
 
 export default function v_0842da() {
+  const { t: v_8d41d7 } = v_678659();
+  const v_21af5b = v_df9f57(
+    () =>
+      [
+        { key: "7d" as const, label: v_8d41d7("merchant.settlement.days7"), days: 7 },
+        { key: "30d" as const, label: v_8d41d7("merchant.settlement.days30"), days: 30 },
+        { key: "90d" as const, label: v_8d41d7("merchant.settlement.days90"), days: 90 },
+      ] as const,
+    [v_8d41d7],
+  );
+  const v_a3aa19 = v_df9f57(
+    () =>
+      [
+        { key: "", label: v_8d41d7("merchant.settlement.filterAll") },
+        { key: "settling", label: v_8d41d7("merchant.settlement.filterSettling") },
+        { key: "settled", label: v_8d41d7("merchant.settlement.filterSettled") },
+      ] as const,
+    [v_8d41d7],
+  );
   const [v_11083e, v_94ee83] = v_5ab095<Tab>("settlement");
 
   const [v_b595e3, v_6231e1] = v_5ab095<SettlementResponse | null>(null);
@@ -85,7 +99,7 @@ export default function v_0842da() {
   const v_77b1a5 = v_de06a3(async (v_e2a85c) => {
     v_cc58f1(true);
     try {
-      const v_6a53fd = v_dcdbc4.find((v_62c214) => v_62c214.key === v_e2a85c)!.days;
+      const v_6a53fd = v_21af5b.find((v_62c214) => v_62c214.key === v_e2a85c)!.days;
       const v_a13c2e = Math.floor(Date.now() / 1000) - v_6a53fd * 86400;
       const v_8f00b9 = await v_bc1b24<SettlementResponse>(`/oth-path?from=${v_a13c2e}`);
       v_6231e1(v_8f00b9);
@@ -94,7 +108,7 @@ export default function v_0842da() {
     } finally {
       v_cc58f1(false);
     }
-  }, []);
+  }, [v_21af5b]);
 
   v_c4deb2(() => {
     if (v_11083e === "settlement") v_77b1a5(v_783ad3);
@@ -126,7 +140,10 @@ export default function v_0842da() {
       <View className="flex-row justify-between items-center">
         <View>
           <Text className="text-sm font-medium text-foreground">{v_8c0b26.date}</Text>
-          <Text className="text-xs text-muted-foreground mt-0.5">{v_8c0b26.count}건</Text>
+          <Text className="text-xs text-muted-foreground mt-0.5">
+            {v_8c0b26.count}
+            {v_8d41d7("merchant.settlement.countSuffix")}
+          </Text>
         </View>
         <Text className="text-base font-bold text-foreground">
           ₩{v_8c0b26.total_amount?.toLocaleString()}
@@ -141,11 +158,11 @@ export default function v_0842da() {
         <View className="flex-1">
           <Text className="text-xs text-muted-foreground">{v_8c0b26.brand ?? "-"}</Text>
           <Text className="text-base font-semibold text-foreground">
-            {v_8c0b26.name ?? "알 수 없음"}
+            {v_8c0b26.name ?? v_8d41d7("merchant.settlement.unknownName")}
           </Text>
           {v_8c0b26.user_name && (
             <Text className="text-xs text-muted-foreground mt-0.5">
-              사용자: {v_8c0b26.user_name}
+              {v_8d41d7("merchant.settlement.userLabel")}: {v_8c0b26.user_name}
             </Text>
           )}
         </View>
@@ -167,9 +184,13 @@ export default function v_0842da() {
     settled: "#22c55e",
     rejected: "#ef4444",
   };
-  const v_e53bff = {
-    pending: "대기", settling: "정산중", settled: "완료", rejected: "거절",
-  };
+  const v_fe653f = (v_fd5f43) =>
+    ({
+      pending: v_8d41d7("merchant.settlement.recPending"),
+      settling: v_8d41d7("merchant.settlement.recSettling"),
+      settled: v_8d41d7("merchant.settlement.recSettled"),
+      rejected: v_8d41d7("merchant.settlement.recRejected"),
+    } as Record<string, string>)[v_fd5f43] ?? v_fd5f43;
 
   const v_bc6f27 = ({ item: v_8c0b26 }: { item: SettlementRecord }) => (
     <View className="mx-4 mb-2 bg-card rounded-xl border border-border p-4">
@@ -179,30 +200,31 @@ export default function v_0842da() {
             {v_8c0b26.period_from} ~ {v_8c0b26.period_to}
           </Text>
           <Text className="text-sm font-semibold text-foreground mt-0.5">
-            {v_8c0b26.type === "bundle" ? "묶음" : "일반"} · {v_8c0b26.item_count}건
+            {v_8c0b26.type === "bundle" ? v_8d41d7("merchant.settlement.typeBundle") : v_8d41d7("merchant.settlement.typeNormal")} · {v_8c0b26.item_count}
+            {v_8d41d7("merchant.settlement.countSuffix")}
           </Text>
         </View>
         <View className="px-2 py-1 rounded-full" style={{ backgroundColor: (v_d8cb4d[v_8c0b26.status] ?? "#737373") + "20" }}>
           <Text className="text-xs font-medium" style={{ color: v_d8cb4d[v_8c0b26.status] ?? "#737373" }}>
-            {v_e53bff[v_8c0b26.status] ?? v_8c0b26.status}
+            {v_fe653f(v_8c0b26.status)}
           </Text>
         </View>
       </View>
       <View className="flex-row justify-between mt-1">
-        <Text className="text-xs text-muted-foreground">총액</Text>
+        <Text className="text-xs text-muted-foreground">{v_8d41d7("merchant.settlement.totalLabel")}</Text>
         <Text className="text-xs text-foreground font-medium">₩{v_8c0b26.total_amount?.toLocaleString()}</Text>
       </View>
       <View className="flex-row justify-between mt-0.5">
-        <Text className="text-xs text-muted-foreground">수수료</Text>
+        <Text className="text-xs text-muted-foreground">{v_8d41d7("merchant.settlement.feeLabel")}</Text>
         <Text className="text-xs text-muted-foreground">-₩{v_8c0b26.fee_amount?.toLocaleString()}</Text>
       </View>
       <View className="flex-row justify-between mt-0.5">
-        <Text className="text-xs text-muted-foreground">실수령</Text>
+        <Text className="text-xs text-muted-foreground">{v_8d41d7("merchant.settlement.netLabel")}</Text>
         <Text className="text-sm font-bold text-primary">₩{v_8c0b26.net_amount?.toLocaleString()}</Text>
       </View>
       {(v_8c0b26.tx_hash || v_8c0b26.bank_ref) && (
         <Text className="text-xs text-muted-foreground mt-2" numberOfLines={1}>
-          {v_8c0b26.tx_hash ? `TX: ${v_8c0b26.tx_hash}` : `은행: ${v_8c0b26.bank_ref}`}
+          {v_8c0b26.tx_hash ? `${v_8d41d7("merchant.settlement.txPrefix")}${v_8c0b26.tx_hash}` : `${v_8d41d7("merchant.settlement.bankPrefix")}${v_8c0b26.bank_ref}`}
         </Text>
       )}
     </View>
@@ -210,18 +232,22 @@ export default function v_0842da() {
 
   const v_61f339 = () => (
     <View className="flex-row mx-4 mb-3 gap-2">
-      {(["settlement", "history", "records"] as Tab[]).map((v_8d41d7) => (
+      {(["settlement", "history", "records"] as Tab[]).map((v_4abce2) => (
         <TouchableOpacity
-          key={v_8d41d7}
-          onPress={() => v_94ee83(v_8d41d7)}
-          className={`flex-1 py-3 rounded-lg border ${v_11083e === v_8d41d7 ? "bg-primary border-primary" : "bg-card border-border"
+          key={v_4abce2}
+          onPress={() => v_94ee83(v_4abce2)}
+          className={`flex-1 py-3 rounded-lg border ${v_11083e === v_4abce2 ? "bg-primary border-primary" : "bg-card border-border"
             }`}
         >
           <Text
-            className={`text-center text-sm font-medium ${v_11083e === v_8d41d7 ? "text-primary-foreground" : "text-foreground"
+            className={`text-center text-sm font-medium ${v_11083e === v_4abce2 ? "text-primary-foreground" : "text-foreground"
               }`}
           >
-            {v_8d41d7 === "settlement" ? "정산 집계" : v_8d41d7 === "history" ? "사용 이력" : "정산현황"}
+            {v_4abce2 === "settlement"
+              ? v_8d41d7("merchant.settlement.tabSummary")
+              : v_4abce2 === "history"
+                ? v_8d41d7("merchant.settlement.tabHistory")
+                : v_8d41d7("merchant.settlement.tabRecords")}
           </Text>
         </TouchableOpacity>
       ))}
@@ -230,13 +256,13 @@ export default function v_0842da() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
-      <ScreenHeader elevated title="정산" bottom={<TabSelector />} />
+      <ScreenHeader elevated title={v_8d41d7("merchant.settlement.title")} bottom={<TabSelector />} />
 
       {v_11083e === "settlement" ? (
         <>
           {}
           <View className="flex-row mx-4 mb-3 gap-2">
-            {v_dcdbc4.map((v_e2a85c) => (
+            {v_21af5b.map((v_e2a85c) => (
               <TouchableOpacity
                 key={v_e2a85c.key}
                 onPress={() => v_6fa4d3(v_e2a85c.key)}
@@ -258,14 +284,15 @@ export default function v_0842da() {
             <View className="mx-4 mb-3 bg-card rounded-xl border border-border p-4">
               <View className="flex-row justify-between">
                 <View className="items-center flex-1">
-                  <Text className="text-xs text-muted-foreground">총 건수</Text>
+                  <Text className="text-xs text-muted-foreground">{v_8d41d7("merchant.settlement.totalCountLabel")}</Text>
                   <Text className="text-xl font-bold text-foreground mt-1">
-                    {v_b595e3.summary.total_count}건
+                    {v_b595e3.summary.total_count}
+                    {v_8d41d7("merchant.settlement.countSuffix")}
                   </Text>
                 </View>
                 <Separator orientation="vertical" />
                 <View className="items-center flex-1">
-                  <Text className="text-xs text-muted-foreground">총 금액</Text>
+                  <Text className="text-xs text-muted-foreground">{v_8d41d7("merchant.settlement.totalAmountLabel")}</Text>
                   <Text className="text-xl font-bold text-primary mt-1">
                     ₩{v_b595e3.summary.total_amount?.toLocaleString()}
                   </Text>
@@ -287,7 +314,7 @@ export default function v_0842da() {
               contentContainerStyle={{ paddingBottom: 0 }}
               ListEmptyComponent={
                 <View className="flex-1 items-center justify-center py-20">
-                  <Text className="text-muted-foreground">정산 내역이 없습니다.</Text>
+                  <Text className="text-muted-foreground">{v_8d41d7("merchant.settlement.emptyDaily")}</Text>
                 </View>
               }
             />
@@ -316,7 +343,7 @@ export default function v_0842da() {
             refreshing={v_854d14}
             ListEmptyComponent={
               <View className="flex-1 items-center justify-center py-20">
-                <Text className="text-muted-foreground">사용 이력이 없습니다.</Text>
+                <Text className="text-muted-foreground">{v_8d41d7("merchant.settlement.emptyHistory")}</Text>
               </View>
             }
             ListFooterComponent={
@@ -330,7 +357,7 @@ export default function v_0842da() {
         <>
           {}
           <View className="flex-row mx-4 mb-3 gap-2">
-            {[{ key: "", label: "전체" }, { key: "settling", label: "정산중" }, { key: "settled", label: "완료" }].map((v_8b5cd8) => (
+            {v_a3aa19.map((v_8b5cd8) => (
               <TouchableOpacity
                 key={v_8b5cd8.key}
                 onPress={() => v_7bd90a(v_8b5cd8.key)}
@@ -356,7 +383,7 @@ export default function v_0842da() {
               contentContainerStyle={{ paddingBottom: 0 }}
               ListEmptyComponent={
                 <View className="flex-1 items-center justify-center py-20">
-                  <Text className="text-muted-foreground">정산 내역이 없습니다.</Text>
+                  <Text className="text-muted-foreground">{v_8d41d7("merchant.settlement.emptyRecords")}</Text>
                 </View>
               }
             />

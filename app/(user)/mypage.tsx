@@ -2,6 +2,7 @@ import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
 import { v_5d2c47 } from "jbfshypwcrklpetczcsca";
+import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_7ef860, type v_44083e } from "eqrxxpgqjbwbqqqhvy";
 import { v_cf763b, v_d1d90c } from "rkmroqyctko";
 import { v_6a6a7c, v_d84748, v_1c7574, v_0c9ab6, v_5dcc4b } from "wjvlskvsbzsrojdbjsl";
@@ -11,6 +12,7 @@ import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 export default function v_840f8f() {
   const v_904d46 = v_d1d90c();
+  const { t: v_8d41d7 } = v_678659();
   const { user: v_625c74, logout: v_d7d5a2 } = v_5d2c47();
   const [v_b32680, v_ee70ba] = v_5ab095<v_44083e | null>(null);
   const [v_683210, v_34a50a] = v_5ab095(true);
@@ -33,13 +35,14 @@ export default function v_840f8f() {
   };
 
   const v_06b8a4 = () => {
-    v_03e392.alert("로그아웃", "정말 로그아웃하시겠습니까?", [
-      { text: "취소", style: "cancel" },
+    v_03e392.alert(v_8d41d7("mypage.alertLogoutTitle"), v_8d41d7("mypage.alertLogoutBody"), [
+      { text: v_8d41d7("mypage.cancel"), style: "cancel" },
       {
-        text: "로그아웃", onPress: async () => {
+        text: v_8d41d7("mypage.logout"),
+        onPress: async () => {
           await v_d7d5a2();
           v_904d46.replace("/(auth)/login");
-        }
+        },
       },
     ]);
   };
@@ -58,7 +61,7 @@ export default function v_840f8f() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
-      <ScreenHeader elevated title="MY" />
+      <ScreenHeader elevated title={v_8d41d7("mypage.title")} />
       <ScrollView className="flex-1">
         {}
         <View className="mx-4 bg-card rounded-xl border border-border p-5 mb-4">
@@ -72,7 +75,7 @@ export default function v_840f8f() {
           <View className="flex-row mt-4 gap-6">
             <View>
               <Text className="text-2xl font-bold text-primary">{v_2ba0d1}</Text>
-              <Text className="text-xs text-muted-foreground">보유 기프티</Text>
+              <Text className="text-xs text-muted-foreground">{v_8d41d7("mypage.giftCount")}</Text>
             </View>
           </View>
         </View>
@@ -81,27 +84,27 @@ export default function v_840f8f() {
         <View className="mx-4 bg-card rounded-xl border border-border overflow-hidden">
           <MenuItem
             icon={<History size={20} color="#737373" />}
-            label="구매 이력"
+            label={v_8d41d7("mypage.purchaseHistory")}
             onPress={() => v_904d46.push("/(user)/settlement")}
           />
           <Separator />
           <MenuItem
             icon={<CreditCard size={20} color="#737373" />}
-            label="결제 내역"
+            label={v_8d41d7("mypage.paymentHistory")}
             onPress={() => v_904d46.push("/(user)/settlement")}
           />
           <Separator />
           <MenuItem
             icon={<Settings size={20} color="#737373" />}
-            label="설정"
-            onPress={() => { }}
+            label={v_8d41d7("mypage.settings")}
+            onPress={() => v_904d46.push("/(user)/settings")}
           />
         </View>
 
         <View className="px-4 mt-6 mb-8">
           <Button variant="outline" onPress={v_06b8a4} className="flex-row gap-2 bg-white">
             <LogOut size={18} color="#ef4444" />
-            <Text className="text-destructive font-medium">로그아웃</Text>
+            <Text className="text-destructive font-medium">{v_8d41d7("mypage.logout")}</Text>
           </Button>
         </View>
       </ScrollView>

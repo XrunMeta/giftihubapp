@@ -1,6 +1,7 @@
 import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_5d2c47 } from "jbfshypwcrklpetczcsca";
+import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_bc1b24 } from "tlrvzsbmctdavs";
 import { v_d1d90c } from "rkmroqyctko";
 import { v_0c9ab6 } from "wjvlskvsbzsrojdbjsl";
@@ -9,14 +10,15 @@ import { v_39a996, v_03e392, v_19b633, v_4623af, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 export default function v_ff7fc2() {
+  const { t: v_8d41d7 } = v_678659();
   const { user: v_625c74, logout: v_d7d5a2 } = v_5d2c47();
   const v_904d46 = v_d1d90c();
 
   type SettlementPolicy = "anytime" | "monthly" | "request_only";
   const v_29551d = [
-    { key: "anytime", label: "자유 정산", desc: "관리자가 아무 때나 정산" },
-    { key: "monthly", label: "월별 정산", desc: "지난달 내역만 정산" },
-    { key: "request_only", label: "요청 정산", desc: "내가 요청한 것만 정산" },
+    { key: "anytime", labelKey: "merchant.mSettings.policyAnytime", descKey: "merchant.mSettings.policyAnytimeDesc" },
+    { key: "monthly", labelKey: "merchant.mSettings.policyMonthly", descKey: "merchant.mSettings.policyMonthlyDesc" },
+    { key: "request_only", labelKey: "merchant.mSettings.policyRequest", descKey: "merchant.mSettings.policyRequestDesc" },
   ];
 
   const [v_efba22, v_f040e1] = v_5ab095<SettlementPolicy>("anytime");
@@ -41,10 +43,10 @@ export default function v_ff7fc2() {
   };
 
   const v_06b8a4 = () => {
-    v_03e392.alert("로그아웃", "정말 로그아웃하시겠습니까?", [
-      { text: "취소", style: "cancel" },
+    v_03e392.alert(v_8d41d7("merchant.mSettings.logoutTitle"), v_8d41d7("merchant.mSettings.logoutBody"), [
+      { text: v_8d41d7("merchant.mSettings.cancel"), style: "cancel" },
       {
-        text: "로그아웃", onPress: async () => {
+        text: v_8d41d7("merchant.mSettings.logout"), onPress: async () => {
           await v_d7d5a2();
           v_904d46.replace("/(auth)/login");
         }
@@ -54,16 +56,16 @@ export default function v_ff7fc2() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
-      <ScreenHeader elevated title="설정" />
+      <ScreenHeader elevated title={v_8d41d7("merchant.mSettings.title")} />
 
       <View className="mx-4 bg-card rounded-xl border border-border p-5 mb-4">
         <Text className="text-lg font-bold text-foreground">{v_625c74?.name}</Text>
         {v_625c74?.email && <Text className="text-sm text-muted-foreground mt-0.5">{v_625c74.email}</Text>}
-        <Text className="text-xs text-primary mt-1">가맹점 계정</Text>
+        <Text className="text-xs text-primary mt-1">{v_8d41d7("merchant.mSettings.merchantAccount")}</Text>
       </View>
 
       <View className="mt-6 px-4">
-        <Text className="text-base font-semibold text-foreground mb-3">정산 정책</Text>
+        <Text className="text-base font-semibold text-foreground mb-3">{v_8d41d7("merchant.mSettings.settlementPolicy")}</Text>
         {v_a6d63c ? (
           <ActivityIndicator size="small" />
         ) : (
@@ -77,8 +79,8 @@ export default function v_ff7fc2() {
                 {v_efba22 === v_68b2be.key && <View className="w-3 h-3 rounded-full bg-primary" />}
               </View>
               <View>
-                <Text className="text-sm font-medium text-foreground">{v_68b2be.label}</Text>
-                <Text className="text-xs text-muted-foreground">{v_68b2be.desc}</Text>
+                <Text className="text-sm font-medium text-foreground">{v_8d41d7(v_68b2be.labelKey)}</Text>
+                <Text className="text-xs text-muted-foreground">{v_8d41d7(v_68b2be.descKey)}</Text>
               </View>
             </TouchableOpacity>
           ))
@@ -88,7 +90,7 @@ export default function v_ff7fc2() {
       <View className="px-4 mt-4">
         <Button variant="outline" onPress={v_06b8a4} className="flex-row gap-2 bg-white">
           <LogOut size={18} color="#ef4444" />
-          <Text className="text-destructive font-medium">로그아웃</Text>
+          <Text className="text-destructive font-medium">{v_8d41d7("merchant.mSettings.logout")}</Text>
         </Button>
       </View>
     </SafeAreaView>

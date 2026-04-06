@@ -1,5 +1,6 @@
 import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
+import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_37e5b4 } from "vkhyfothlklikcpovbqirr";
 import type { v_88a3f9 } from "vhkgxwheyyipiczd";
 import { v_8d53e7 } from "tdwgovnkpylnjynsp";
@@ -10,8 +11,8 @@ import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
 import { v_03e392, v_09d0e5, v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
-const BASE_METHODS: { key: v_88a3f9; label: string; icon: v_a3453e.ReactNode; devOnly?: boolean }[] = [
-  { key: "dev_pay", label: "개발페이", icon: <Zap size={20} color="#3b82f6" />, devOnly: true },
+const BASE_METHODS: { key: v_88a3f9; labelKey?: string; label?: string; icon: v_a3453e.ReactNode; devOnly?: boolean }[] = [
+  { key: "dev_pay", labelKey: "merchant.marketPurchase.payDev", icon: <Zap size={20} color="#3b82f6" />, devOnly: true },
   { key: "paypal", label: "PayPal", icon: <CreditCard size={20} color="#0a0a0a" /> },
   { key: "dana", label: "DANA", icon: <Banknote size={20} color="#0a0a0a" /> },
   { key: "smileypay", label: "SmileyPay", icon: <Banknote size={20} color="#0a0a0a" /> },
@@ -19,6 +20,7 @@ const BASE_METHODS: { key: v_88a3f9; label: string; icon: v_a3453e.ReactNode; de
 ];
 
 export default function v_ffc71e() {
+  const { t: v_8d41d7 } = v_678659();
   const { listingId: v_4b65e3 } = v_d1a7ac<{ listingId: string }>();
   const v_904d46 = v_d1d90c();
   const [v_587413, v_2122dd] = v_5ab095<v_88a3f9 | null>(null);
@@ -37,19 +39,19 @@ export default function v_ffc71e() {
     try {
       const v_8f00b9 = await v_37e5b4(v_4b65e3, v_587413);
       if (v_587413 === "dev_pay" || v_8f00b9.payment_method === "dev_pay") {
-        v_03e392.alert("구매 완료", "구매가 완료되었습니다.", [
-          { text: "확인", onPress: () => v_904d46.replace("/(merchant)/my-bundles") },
+        v_03e392.alert(v_8d41d7("merchant.marketPurchase.successTitle"), v_8d41d7("merchant.marketPurchase.successBody"), [
+          { text: v_8d41d7("merchant.marketPurchase.ok"), onPress: () => v_904d46.replace("/(merchant)/my-bundles") },
         ]);
         return;
       }
       if (v_8f00b9.redirect_url) {
         await v_2c8bdd.openBrowserAsync(v_8f00b9.redirect_url);
       }
-      v_03e392.alert("결제 진행", "결제가 진행됩니다.", [
-        { text: "확인", onPress: () => v_904d46.replace("/(merchant)/my-bundles") },
+      v_03e392.alert(v_8d41d7("merchant.marketPurchase.progressTitle"), v_8d41d7("merchant.marketPurchase.progressBody"), [
+        { text: v_8d41d7("merchant.marketPurchase.ok"), onPress: () => v_904d46.replace("/(merchant)/my-bundles") },
       ]);
     } catch (v_49263d) {
-      v_03e392.alert("결제 실패", v_49263d.body?.error || "다시 시도해주세요.");
+      v_03e392.alert(v_8d41d7("merchant.marketPurchase.failTitle"), v_49263d.body?.error || v_8d41d7("merchant.marketPurchase.failBody"));
     } finally {
       v_34a50a(false);
     }
@@ -57,9 +59,9 @@ export default function v_ffc71e() {
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top"]}>
-      <PageHeader title="결제" />
+      <PageHeader title={v_8d41d7("merchant.marketPurchase.title")} />
       <View className="flex-1 px-5 mt-4">
-        <Text className="text-base font-semibold text-foreground mb-3">결제 수단</Text>
+        <Text className="text-base font-semibold text-foreground mb-3">{v_8d41d7("merchant.marketPurchase.methods")}</Text>
         <View className="gap-2">
           {v_e4fad8.map((v_35f85c) => (
             <Pressable
@@ -69,7 +71,9 @@ export default function v_ffc71e() {
               onPress={() => v_2122dd(v_35f85c.key)}
             >
               {v_35f85c.icon}
-              <Text className="text-base text-foreground ml-3 flex-1">{v_35f85c.label}</Text>
+              <Text className="text-base text-foreground ml-3 flex-1">
+                {v_35f85c.labelKey ? v_8d41d7(v_35f85c.labelKey) : v_35f85c.label}
+              </Text>
               <View
                 className={`w-5 h-5 rounded-full border-2 ${v_587413 === v_35f85c.key ? "border-primary bg-primary" : "border-border"
                   }`}
@@ -80,7 +84,7 @@ export default function v_ffc71e() {
       </View>
       <View className="px-5 py-3 border-t border-border">
         <Button onPress={v_dfaad1} disabled={!v_587413 || v_683210}>
-          {v_683210 ? "결제 중..." : "결제하기"}
+          {v_683210 ? v_8d41d7("merchant.marketPurchase.paying") : v_8d41d7("merchant.marketPurchase.pay")}
         </Button>
       </View>
     </SafeAreaView>

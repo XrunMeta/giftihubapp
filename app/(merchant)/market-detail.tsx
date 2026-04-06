@@ -2,6 +2,7 @@ import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
 import { v_6185b9 } from "hqklsidyfbumojabxoewf";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
+import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_7ef52a } from "splenmyqnym";
 import { v_eeb70f, type v_ff021d } from "vkhyfothlklikcpovbqirr";
 import { v_db3cc6 } from "dyunzbus";
@@ -12,6 +13,7 @@ import { v_39a996, v_03e392, v_cf9c33, v_122070, v_19b633, v_3094a2 } from "rcmr
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 export default function v_271810() {
+  const { t: v_8d41d7 } = v_678659();
   const { id: v_389afb } = v_d1a7ac<{ id: string }>();
   const v_904d46 = v_d1d90c();
   const [v_a8fb42, v_ce7034] = v_5ab095<v_ff021d | null>(null);
@@ -26,7 +28,7 @@ export default function v_271810() {
       const v_8f00b9 = await v_eeb70f(v_389afb!);
       v_ce7034(v_8f00b9.listing);
     } catch {
-      v_03e392.alert("오류", "상품 정보를 불러올 수 없습니다.");
+      v_03e392.alert(v_8d41d7("merchant.marketDetail.loadErrorTitle"), v_8d41d7("merchant.marketDetail.loadErrorBody"));
       v_904d46.back();
     } finally {
       v_34a50a(false);
@@ -45,7 +47,7 @@ export default function v_271810() {
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top"]}>
-      <PageHeader title="상품 상세" />
+      <PageHeader title={v_8d41d7("merchant.marketDetail.title")} />
       <ScrollView className="flex-1 px-5" contentContainerStyle={{ paddingBottom: 0 }}>
         {(() => {
           const v_74f4a3 = v_7ef52a(v_a8fb42.image_url, v_a8fb42.brand_logo);
@@ -64,7 +66,7 @@ export default function v_271810() {
                 <Text className="text-xs text-muted-foreground">{v_a8fb42.brand}</Text>
                 {v_46383f && (
                   <View className="bg-primary/10 rounded px-1.5 py-0.5">
-                    <Text className="text-[10px] font-medium text-primary">구성상품</Text>
+                    <Text className="text-[10px] font-medium text-primary">{v_8d41d7("merchant.market.bundleTag")}</Text>
                   </View>
                 )}
               </View>
@@ -79,25 +81,25 @@ export default function v_271810() {
 
           <View className="gap-2.5">
             <View className="flex-row justify-between">
-              <Text className="text-sm text-muted-foreground">원가</Text>
+              <Text className="text-sm text-muted-foreground">{v_8d41d7("merchant.marketDetail.originalPrice")}</Text>
               <Text className="text-sm text-muted-foreground line-through">
                 ₩{v_a8fb42.original_price.toLocaleString()}
               </Text>
             </View>
             <View className="flex-row justify-between">
-              <Text className="text-base font-semibold text-foreground">판매가</Text>
+              <Text className="text-base font-semibold text-foreground">{v_8d41d7("merchant.marketDetail.salePrice")}</Text>
               <Text className="text-xl font-bold text-primary">
                 ₩{v_a8fb42.selling_price.toLocaleString()}
               </Text>
             </View>
             <View className="flex-row justify-between">
-              <Text className="text-sm text-muted-foreground">만료일</Text>
+              <Text className="text-sm text-muted-foreground">{v_8d41d7("merchant.marketDetail.expiry")}</Text>
               <Text className="text-sm text-foreground">
                 {v_db3cc6(new Date(v_a8fb42.expiry_date * 1000), "yyyy.MM.dd")}
               </Text>
             </View>
             <View className="flex-row justify-between">
-              <Text className="text-sm text-muted-foreground">판매자</Text>
+              <Text className="text-sm text-muted-foreground">{v_8d41d7("merchant.marketDetail.seller")}</Text>
               <Text className="text-sm text-foreground">{v_a8fb42.seller_name}</Text>
             </View>
           </View>
@@ -113,7 +115,7 @@ export default function v_271810() {
             })
           }
         >
-          구매하기
+          {v_8d41d7("merchant.marketDetail.purchase")}
         </Button>
       </View>
     </SafeAreaView>

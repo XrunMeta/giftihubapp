@@ -3,6 +3,7 @@ import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_1b353f } from "ymbgtfrroootgjefkrxgp";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
 import { v_5d2c47 } from "jbfshypwcrklpetczcsca";
+import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_f589a4 } from "wplnrzxbcvjvxjmndcjr";
 import { v_a42750, v_e48e3a, v_2737f4, v_665fe7, v_c9e410, v_99916a, v_d28c4c, v_331b40 } from "tlrvzsbmctdavs";
 import { v_f18d6a } from "sfwajsimhnkrpbm";
@@ -15,6 +16,7 @@ import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 export default function v_f4f851() {
   const v_904d46 = v_d1d90c();
+  const { t: v_8d41d7 } = v_678659();
   const { login: v_182fdb } = v_5d2c47();
   const v_1d0b37 = v_f589a4();
   const [v_e0c7e8, v_fedf34] = v_5ab095("");
@@ -34,7 +36,7 @@ export default function v_f4f851() {
 
   const v_c02a62 = async () => {
     if (!v_e0c7e8 || !v_adc076) {
-      v_03e392.alert("입력 오류", "이메일과 비밀번호를 입력해주세요.");
+      v_03e392.alert(v_8d41d7("auth.login.alertInputTitle"), v_8d41d7("auth.login.alertInputBody"));
       return;
     }
     v_34a50a(true);
@@ -50,7 +52,7 @@ export default function v_f4f851() {
       const v_8f5693 = v_8f00b9.user.role === "merchant" ? "/(merchant)" : "/(user)/store";
       v_904d46.replace(v_8f5693);
     } catch (v_49263d) {
-      v_03e392.alert("로그인 실패", v_49263d.body?.error || "이메일 또는 비밀번호를 확인해주세요.");
+      v_03e392.alert(v_8d41d7("auth.login.alertFailTitle"), v_49263d.body?.error || v_8d41d7("auth.login.alertFailBody"));
     } finally {
       v_34a50a(false);
     }
@@ -75,12 +77,12 @@ export default function v_f4f851() {
             const v_8f5693 = v_22da99 === "merchant" ? "/(merchant)" : "/(user)/store";
             v_904d46.replace(v_8f5693);
           } catch {
-            v_03e392.alert("오류", "인증 토큰을 처리할 수 없습니다.");
+            v_03e392.alert(v_8d41d7("auth.login.alertTokenTitle"), v_8d41d7("auth.login.alertTokenBody"));
           }
         }
       }
     } catch {
-      v_03e392.alert("오류", "Telegram 로그인을 열 수 없습니다.");
+      v_03e392.alert(v_8d41d7("auth.login.alertTelegramTitle"), v_8d41d7("auth.login.alertTelegramBody"));
     }
   };
 
@@ -100,36 +102,34 @@ export default function v_f4f851() {
               className="w-[140px] h-[60px]"
               resizeMode="contain"
             />
-            <Text className="text-2xl font-bold text-foreground">GiftHub에 오신 것을{"\n"}
-              환영합니다
-            </Text>
-            <Text className="text-sm text-muted-foreground mt-1">디지털 기프티 플랫폼</Text>
+            <Text className="text-2xl font-bold text-foreground">{v_8d41d7("auth.login.welcomeTitle")}</Text>
+            <Text className="text-sm text-muted-foreground mt-1">{v_8d41d7("auth.login.tagline")}</Text>
           </View>
 
           <View >
             <View className="mb-4">
-              <Text className="text-sm font-medium text-foreground mb-1.5">이메일</Text>
+              <Text className="text-sm font-medium text-foreground mb-1.5">{v_8d41d7("auth.login.email")}</Text>
               <Input
                 keyboardType="email-address"
                 autoCapitalize="none"
-                placeholder="email@example.com"
+                placeholder={v_8d41d7("auth.login.emailPh")}
                 value={v_e0c7e8}
                 onChangeText={v_fedf34}
               />
             </View>
 
             <View className="mb-4">
-              <Text className="text-sm font-medium text-foreground mb-1.5">비밀번호</Text>
+              <Text className="text-sm font-medium text-foreground mb-1.5">{v_8d41d7("auth.login.password")}</Text>
               <Input
                 secureTextEntry
-                placeholder="••••••••"
+                placeholder={v_8d41d7("auth.login.passwordPh")}
                 value={v_adc076}
                 onChangeText={v_52b279}
               />
             </View>
 
             <View className="flex-row items-center justify-between mb-6">
-              <Text className="text-sm text-muted-foreground">로그인 유지</Text>
+              <Text className="text-sm text-muted-foreground">{v_8d41d7("auth.login.rememberMe")}</Text>
               <Switch
                 value={v_a964a4}
                 onValueChange={v_325cf5}
@@ -139,12 +139,12 @@ export default function v_f4f851() {
             </View>
 
             <Button onPress={v_c02a62} disabled={v_683210} className="mb-3">
-              {v_683210 ? "로그인 중..." : "로그인"}
+              {v_683210 ? v_8d41d7("auth.login.loggingIn") : v_8d41d7("auth.login.login")}
             </Button>
 
             <View className="flex-row items-center my-4">
               <Separator className="flex-1" />
-              <Text className="mx-3 text-sm text-muted-foreground">또는</Text>
+              <Text className="mx-3 text-sm text-muted-foreground">{v_8d41d7("auth.login.or")}</Text>
               <Separator className="flex-1" />
             </View>
 
@@ -153,16 +153,16 @@ export default function v_f4f851() {
               onPress={v_210d20}
               className="mb-6"
             >
-              Telegram으로 로그인
+              {v_8d41d7("auth.login.telegramLogin")}
             </Button>
 
             <View className="flex-row justify-center items-center">
-              <Text className="text-sm text-muted-foreground">계정이 없으신가요? </Text>
+              <Text className="text-sm text-muted-foreground">{v_8d41d7("auth.login.noAccount")}</Text>
               <Text
                 className="text-sm font-medium text-primary"
                 onPress={() => v_904d46.push("/(auth)/signup")}
               >
-                회원가입
+                {v_8d41d7("auth.login.signup")}
               </Text>
             </View>
 
@@ -187,21 +187,21 @@ export default function v_f4f851() {
                   {v_a42750()}
                 </Text>
 
-                <Text className="text-xs text-muted-foreground text-center mb-2">DEV 빠른 로그인</Text>
+                <Text className="text-xs text-muted-foreground text-center mb-2">{v_8d41d7("auth.login.devQuickLogin")}</Text>
                 <View className="flex-row gap-2">
                   <Button
                     variant="outline"
                     className="flex-1"
                     onPress={() => { v_fedf34("email@example.com"); v_52b279("1234"); }}
                   >
-                    <Text className="text-sm font-medium text-foreground">사용자</Text>
+                    <Text className="text-sm font-medium text-foreground">{v_8d41d7("auth.login.devUser")}</Text>
                   </Button>
                   <Button
                     variant="outline"
                     className="flex-1"
                     onPress={() => { v_fedf34("oth-test@example.invalid"); v_52b279("1234"); }}
                   >
-                    <Text className="text-sm font-medium text-foreground">상점</Text>
+                    <Text className="text-sm font-medium text-foreground">{v_8d41d7("auth.login.devMerchant")}</Text>
                   </Button>
                 </View>
               </View>

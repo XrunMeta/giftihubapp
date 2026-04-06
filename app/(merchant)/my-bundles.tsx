@@ -1,6 +1,7 @@
 import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
 import { v_6185b9 } from "hqklsidyfbumojabxoewf";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
+import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_7ef52a } from "splenmyqnym";
 import {
   v_54a47e,
@@ -25,17 +26,17 @@ import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 type Tab = "items" | "requests";
 
-const v_e53bff = {
-  pending: { label: "대기", color: "text-yellow-600" },
-  approved: { label: "승인", color: "text-green-600" },
-  rejected: { label: "거절", color: "text-red-600" },
+const v_2f8e17 = {
+  pending: { labelKey: "merchant.bundles.reqStatusPending", color: "text-yellow-600" },
+  approved: { labelKey: "merchant.bundles.reqStatusApproved", color: "text-green-600" },
+  rejected: { labelKey: "merchant.bundles.reqStatusRejected", color: "text-red-600" },
 };
 
-const v_afb38d = {
-  active: { label: "사용가능", variant: "default" },
-  used: { label: "사용완료", variant: "secondary" },
-  expired: { label: "만료", variant: "destructive" },
-  listed: { label: "판매중", variant: "secondary" },
+const v_ebe3bd = {
+  active: { labelKey: "merchant.bundles.voucherActive", variant: "default" },
+  used: { labelKey: "merchant.bundles.voucherUsed", variant: "secondary" },
+  expired: { labelKey: "merchant.bundles.voucherExpired", variant: "destructive" },
+  listed: { labelKey: "merchant.bundles.voucherListed", variant: "secondary" },
 };
 
 type SingleItem = {
@@ -54,6 +55,7 @@ type SingleItem = {
 type ListItem = { type: "set"; data: v_920170 } | { type: "single"; data: SingleItem };
 
 export default function v_8f53d1() {
+  const { t: v_8d41d7 } = v_678659();
   const [v_11083e, v_94ee83] = v_5ab095<Tab>("items");
   const [v_4bc205, v_d56994] = v_5ab095<v_920170[]>([]);
   const [v_d6adfa, v_746885] = v_5ab095<SingleItem[]>([]);
@@ -91,22 +93,22 @@ export default function v_8f53d1() {
 
   const v_df5cad = (bundle: v_920170) => {
     v_03e392.alert(
-      "정산 요청",
-      `${v_79521f.set_name}\n총 액면가: ₩${v_79521f.total_face_value.toLocaleString()}\n${v_79521f.voucher_count}개 바우처\n\n정산을 요청하시겠습니까?`,
+      v_8d41d7("merchant.bundles.settlementTitle"),
+      `${v_79521f.set_name}\n${v_8d41d7("merchant.bundles.totalFace")}: ₩${v_79521f.total_face_value.toLocaleString()}\n${v_79521f.voucher_count}${v_8d41d7("merchant.bundles.voucherUnit")}\n\n${v_8d41d7("merchant.bundles.askSettlement")}`,
       [
-        { text: "취소", style: "cancel" },
+        { text: v_8d41d7("merchant.bundles.cancel"), style: "cancel" },
         {
-          text: "요청",
+          text: v_8d41d7("merchant.bundles.request"),
           onPress: async () => {
             try {
               const v_8f00b9 = await v_9607ec(v_79521f.set_id);
               v_03e392.alert(
-                "정산 요청 완료",
-                `수수료: ₩${v_8f00b9.fee_amount.toLocaleString()} (${(v_8f00b9.fee_rate * 100).toFixed(1)}%)\n지급 예정: ₩${v_8f00b9.net_amount.toLocaleString()}`,
+                v_8d41d7("merchant.bundles.requestDoneTitle"),
+                `${v_8d41d7("merchant.bundles.feeLine")}: ₩${v_8f00b9.fee_amount.toLocaleString()} (${(v_8f00b9.fee_rate * 100).toFixed(1)}%)\n${v_8d41d7("merchant.bundles.netLine")}: ₩${v_8f00b9.net_amount.toLocaleString()}`,
               );
               v_4fa913();
             } catch (v_9e86fd) {
-              v_03e392.alert("요청 실패", v_9e86fd instanceof Error ? v_9e86fd.message : "오류가 발생했습니다");
+              v_03e392.alert(v_8d41d7("merchant.bundles.requestFailTitle"), v_9e86fd instanceof Error ? v_9e86fd.message : v_8d41d7("merchant.bundles.requestFailBody"));
             }
           },
         },
@@ -128,13 +130,15 @@ export default function v_8f53d1() {
             <View className="w-7 h-7 rounded-lg bg-primary/10 items-center justify-center mr-2">
               <Package size={14} color="#CE3630" />
             </View>
-            <Text className="text-xs font-semibold text-primary">구성상품 ({v_148ff6.voucher_count}건)</Text>
+            <Text className="text-xs font-semibold text-primary">
+              {v_8d41d7("merchant.bundles.bundleBadge").replace(/\{\{count\}\}/g, String(v_148ff6.voucher_count))}
+            </Text>
           </View>
           <View className="flex-row justify-between items-start">
             <View className="flex-1 mr-3">
               <Text className="text-sm font-semibold text-foreground">{v_148ff6.set_name}</Text>
               <Text className="text-xs text-muted-foreground mt-0.5">
-                상태: {v_148ff6.statuses}
+                {v_8d41d7("merchant.bundles.statusPrefix")} {v_148ff6.statuses}
               </Text>
             </View>
             <Text className="text-base font-bold text-foreground">
@@ -145,14 +149,15 @@ export default function v_8f53d1() {
             onPress={() => v_df5cad(v_148ff6)}
             className="mt-2 bg-primary rounded-lg py-2"
           >
-            <Text className="text-center text-sm font-semibold text-primary-foreground">정산 요청</Text>
+            <Text className="text-center text-sm font-semibold text-primary-foreground">{v_8d41d7("merchant.bundles.requestBtn")}</Text>
           </TouchableOpacity>
         </View>
       );
     }
 
     const v_fd5f43 = v_8c0b26.data;
-    const v_51452d = v_afb38d[v_fd5f43.status] ?? v_afb38d.active;
+    const v_ab4c96 = v_ebe3bd[v_fd5f43.status] ?? v_ebe3bd.active;
+    const v_51452d = { label: v_8d41d7(v_ab4c96.labelKey), variant: v_ab4c96.variant };
     const v_74f4a3 = v_7ef52a(v_fd5f43.thumb_url, v_fd5f43.image_url, v_fd5f43.brand_logo);
     return (
       <View className="mx-4 mb-2 bg-card rounded-xl border border-border px-4 py-3 flex-row">
@@ -180,7 +185,10 @@ export default function v_8f53d1() {
   };
 
   const v_9c30ea = ({ item: v_8c0b26 }: { item: v_12efea }) => {
-    const v_d308b5 = v_e53bff[v_8c0b26.status] ?? { label: v_8c0b26.status, color: "text-foreground" };
+    const v_fa219c = v_2f8e17[v_8c0b26.status];
+    const v_d308b5 = v_fa219c
+      ? { label: v_8d41d7(v_fa219c.labelKey), color: v_fa219c.color }
+      : { label: v_8c0b26.status, color: "text-foreground" };
     const v_8dffde = new Date(v_8c0b26.created_at * 1000);
     const v_f8e6b9 = `${v_8dffde.getMonth() + 1}.${v_8dffde.getDate()} ${v_8dffde.getHours().toString().padStart(2, "0")}:${v_8dffde.getMinutes().toString().padStart(2, "0")}`;
 
@@ -193,19 +201,19 @@ export default function v_8f53d1() {
         <Separator className="mb-2" />
         <View className="flex-row justify-between">
           <View>
-            <Text className="text-xs text-muted-foreground">구매가</Text>
+            <Text className="text-xs text-muted-foreground">{v_8d41d7("merchant.bundles.purchasePrice")}</Text>
             <Text className="text-sm font-medium text-foreground">
               ₩{v_8c0b26.purchase_price.toLocaleString()}
             </Text>
           </View>
           <View className="items-center">
-            <Text className="text-xs text-muted-foreground">수수료</Text>
+            <Text className="text-xs text-muted-foreground">{v_8d41d7("merchant.bundles.fee")}</Text>
             <Text className="text-sm font-medium text-red-500">
               -₩{v_8c0b26.fee_amount.toLocaleString()}
             </Text>
           </View>
           <View className="items-end">
-            <Text className="text-xs text-muted-foreground">지급액</Text>
+            <Text className="text-xs text-muted-foreground">{v_8d41d7("merchant.bundles.payout")}</Text>
             <Text className="text-sm font-bold text-primary">
               ₩{v_8c0b26.net_amount.toLocaleString()}
             </Text>
@@ -219,21 +227,21 @@ export default function v_8f53d1() {
     <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
       <ScreenHeader
         elevated
-        title="보유상품"
+        title={v_8d41d7("merchant.bundles.title")}
         bottom={
           <View className="flex-row mx-4 mb-3 gap-2">
-            {(["items", "requests"] as Tab[]).map((v_8d41d7) => (
+            {(["items", "requests"] as Tab[]).map((v_4abce2) => (
               <TouchableOpacity
-                key={v_8d41d7}
-                onPress={() => v_94ee83(v_8d41d7)}
-                className={`flex-1 py-3 rounded-lg border ${v_11083e === v_8d41d7 ? "bg-primary border-primary" : "bg-card border-border"
+                key={v_4abce2}
+                onPress={() => v_94ee83(v_4abce2)}
+                className={`flex-1 py-3 rounded-lg border ${v_11083e === v_4abce2 ? "bg-primary border-primary" : "bg-card border-border"
                   }`}
               >
                 <Text
-                  className={`text-center text-sm font-medium ${v_11083e === v_8d41d7 ? "text-primary-foreground" : "text-foreground"
+                  className={`text-center text-sm font-medium ${v_11083e === v_4abce2 ? "text-primary-foreground" : "text-foreground"
                     }`}
                 >
-                  {v_8d41d7 === "items" ? "보유상품" : "정산 요청"}
+                  {v_4abce2 === "items" ? v_8d41d7("merchant.bundles.tabItems") : v_8d41d7("merchant.bundles.tabRequests")}
                 </Text>
               </TouchableOpacity>
             ))}
@@ -257,7 +265,7 @@ export default function v_8f53d1() {
           contentContainerStyle={{ paddingBottom: 0 }}
           ListEmptyComponent={
             <View className="flex-1 items-center justify-center py-20">
-              <Text className="text-muted-foreground">보유 중인 상품이 없습니다.</Text>
+              <Text className="text-muted-foreground">{v_8d41d7("merchant.bundles.emptyItems")}</Text>
             </View>
           }
         />
@@ -271,7 +279,7 @@ export default function v_8f53d1() {
           contentContainerStyle={{ paddingBottom: 0 }}
           ListEmptyComponent={
             <View className="flex-1 items-center justify-center py-20">
-              <Text className="text-muted-foreground">정산 요청 내역이 없습니다.</Text>
+              <Text className="text-muted-foreground">{v_8d41d7("merchant.bundles.emptyRequests")}</Text>
             </View>
           }
         />
