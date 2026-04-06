@@ -118,7 +118,7 @@ export default function v_bf7b5b() {
         onPress={() => v_904d46.push(`/(user)/oth-path${v_8c0b26.setId}`)}
       >
         <View className="flex-row items-center mb-2">
-          <View className="w-8 h-8 rounded-lg bg-primary/10 items-center justify-center mr-2">
+          <View className="w-8 h-8 rounded-lg bg-primary/10 items-center justify-center">
             <Package size={18} color="#CE3630" />
           </View>
           <Text className="text-sm font-semibold text-primary">구성 상품 ({v_8c0b26.vouchers.length}건)</Text>
@@ -141,7 +141,7 @@ export default function v_bf7b5b() {
               {v_ea719c.brand} · {v_ea719c.name}
               {v_7e0009 > 0 ? ` 외 ${v_7e0009}건` : ""}
             </Text>
-            <View className="flex-row justify-between items-center mt-1.5">
+            <View className="flex-row justify-between items-center">
               <Text className="text-base font-bold text-foreground">
                 {v_48b4c6(v_c83285, v_c3bc75)}
               </Text>
@@ -154,7 +154,7 @@ export default function v_bf7b5b() {
         {}
         <View className="mt-2 pt-2 border-t border-border">
           {v_8c0b26.vouchers.slice(0, 4).map((v_81e2ef) => (
-            <View key={v_81e2ef.id} className="flex-row justify-between py-0.5">
+            <View key={v_81e2ef.id} className="flex-row justify-between">
               <Text className="text-xs text-muted-foreground flex-1" numberOfLines={1}>
                 {v_81e2ef.brand} · {v_81e2ef.name}
               </Text>
@@ -190,13 +190,13 @@ export default function v_bf7b5b() {
           <View className="flex-row justify-between items-start">
             <View className="flex-1">
               <Text className="text-xs text-muted-foreground">{v_8c0b26.brand}</Text>
-              <Text className="text-base font-semibold text-foreground mt-0.5" numberOfLines={1}>
+              <Text className="text-base font-semibold text-foreground" numberOfLines={1}>
                 {v_8c0b26.name}
               </Text>
             </View>
             <Badge variant={v_51452d.variant} label={v_51452d.label} />
           </View>
-          <View className="flex-row justify-between items-center mt-2">
+          <View className="flex-row justify-between items-center mt-1">
             <Text className="text-base font-bold text-foreground">
               {v_48b4c6(v_8c0b26.face_value_base || v_8c0b26.face_value, v_8c0b26.base_currency)}
             </Text>

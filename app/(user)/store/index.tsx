@@ -9,7 +9,7 @@ import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 const v_928ad6 = { KRW: "₩", USD: "$", IDR: "Rp" };
 
 const v_d6d33d = 12;
-const v_656abc = 12;
+const v_656abc = 8;
 
 export default function v_ec75dd() {
   const v_904d46 = v_d1d90c();
@@ -54,7 +54,7 @@ export default function v_ec75dd() {
 
     return (
       <Pressable
-        style={{ width: v_7d15a0, marginBottom: 12 }}
+        style={{ width: v_7d15a0, marginBottom: 8 }}
         className="bg-card rounded-xl border border-border overflow-hidden"
         onPress={() => v_904d46.push(`/(user)/store/${v_8c0b26.id}`)}
       >
