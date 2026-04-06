@@ -6,7 +6,16 @@ import { v_86db47 } from "vkhyfothlklikcpovbqirr";
 import { v_720509, type v_7fb3de } from "pvulvehakmpzwkznlnd";
 import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
 import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
-import { v_39a996, v_03e392, v_09d0e5, v_122070, v_19b633, v_3094a2 } from "rcmrninabrnb";
+import {
+  v_39a996,
+  v_03e392,
+  v_e767d1,
+  v_326be8,
+  v_09d0e5,
+  v_122070,
+  v_19b633,
+  v_3094a2,
+} from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 export default function v_3072c9() {
@@ -64,43 +73,53 @@ export default function v_3072c9() {
 
   if (v_683210) {
     return (
-      <SafeAreaView className="flex-1 bg-white items-center justify-center">
+      <SafeAreaView className="flex-1 bg-white items-center justify-center" edges={["top"]}>
         <ActivityIndicator size="large" color="#CE3630" />
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={["top"]}>
       <PageHeader title="판매 등록" />
-      <ScrollView className="flex-1 px-5">
-        <Text className="text-base font-semibold text-foreground mb-2 mt-2">상품 선택</Text>
-        <View className="gap-2 mb-4">
-          {v_f9fd27.map((v_81e2ef) => (
-            <Pressable
-              key={v_81e2ef.id}
-              className={`p-3 rounded-xl border ${v_119885?.id === v_81e2ef.id ? "border-primary bg-primary/5" : "border-border bg-card"
-                }`}
-              onPress={() => {
-                v_36e0c4(v_81e2ef);
-                v_27a321(String(Math.round(v_81e2ef.face_value * 0.9)));
-              }}
-            >
-              <Text className="text-xs text-muted-foreground">{v_81e2ef.brand}</Text>
-              <Text className="text-sm font-medium text-foreground">{v_81e2ef.name}</Text>
-              <Text className="text-sm font-bold text-foreground mt-1">
-                ₩{v_81e2ef.face_value.toLocaleString()}
-              </Text>
-            </Pressable>
-          ))}
-          {v_f9fd27.length === 0 && (
-            <Text className="text-muted-foreground text-center py-8">판매할 수 있는 기프티가 없습니다.</Text>
-          )}
-        </View>
+      <KeyboardAvoidingView
+        className="flex-1"
+        behavior={v_326be8.OS === "ios" ? "padding" : undefined}
+        keyboardVerticalOffset={0}
+      >
+        <ScrollView
+          className="flex-1 px-5"
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{ paddingTop: 8, paddingBottom: 12 }}
+        >
+          <Text className="text-base font-semibold text-foreground mb-2">상품 선택</Text>
+          <View className="gap-2">
+            {v_f9fd27.map((v_81e2ef) => (
+              <Pressable
+                key={v_81e2ef.id}
+                className={`p-3 rounded-xl border ${v_119885?.id === v_81e2ef.id ? "border-primary bg-primary/5" : "border-border bg-card"
+                  }`}
+                onPress={() => {
+                  v_36e0c4(v_81e2ef);
+                  v_27a321(String(Math.round(v_81e2ef.face_value * 0.9)));
+                }}
+              >
+                <Text className="text-xs text-muted-foreground">{v_81e2ef.brand}</Text>
+                <Text className="text-sm font-medium text-foreground">{v_81e2ef.name}</Text>
+                <Text className="text-sm font-bold text-foreground mt-1">
+                  ₩{v_81e2ef.face_value.toLocaleString()}
+                </Text>
+              </Pressable>
+            ))}
+            {v_f9fd27.length === 0 && (
+              <Text className="text-muted-foreground text-center py-8">판매할 수 있는 기프티가 없습니다.</Text>
+            )}
+          </View>
+        </ScrollView>
 
-        {v_119885 && (
-          <>
-            <Text className="text-base font-semibold text-foreground mb-2">판매가 (KRW)</Text>
+        {v_119885 ? (
+          <View className="border-t border-border bg-white px-5 pt-4 pb-2 gap-3">
+            <Text className="text-base font-semibold text-foreground">판매가 (KRW)</Text>
             <Input
               keyboardType="numeric"
               placeholder="판매 금액 입력"
@@ -108,7 +127,7 @@ export default function v_3072c9() {
               onChangeText={v_27a321}
             />
 
-            <View className="bg-card rounded-xl border border-border p-4 mt-4">
+            <View className="bg-card rounded-xl border border-border p-4">
               <View className="flex-row justify-between">
                 <Text className="text-sm text-muted-foreground">수수료 (5%)</Text>
                 <Text className="text-sm text-foreground">₩{v_2d815e.toLocaleString()}</Text>
@@ -120,12 +139,12 @@ export default function v_3072c9() {
               </View>
             </View>
 
-            <Button onPress={v_585b02} disabled={v_cb66b4} className="mt-6 mb-6">
+            <Button onPress={v_585b02} disabled={v_cb66b4}>
               {v_cb66b4 ? "등록 중..." : "판매 등록"}
             </Button>
-          </>
-        )}
-      </ScrollView>
+          </View>
+        ) : null}
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
