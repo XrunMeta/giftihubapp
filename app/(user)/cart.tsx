@@ -1,6 +1,7 @@
 import { ScreenHeader } from "@/components/ScreenHeader";
 import { Button } from "@/components/ui/button";
 import { useCart, type CartItem } from "@/context/CartContext";
+import { useI18n } from "@/context/I18nContext";
 import { getProductImageUrl } from "@/services/store";
 import { useRouter } from "expo-router";
 import { Minus, Package, Plus, Trash2, X } from "lucide-react-native";
@@ -16,6 +17,7 @@ function formatPrice(amount: number, currency?: string) {
 }
 
 export default function CartScreen() {
+  const { t } = useI18n();
   const router = useRouter();
   const {
     items, packageItems,
@@ -33,8 +35,8 @@ export default function CartScreen() {
           const firstItem = pkg.items[0];
           const restCount = pkg.items.reduce((s, i) => s + i.quantity, 0) - (firstItem?.quantity ?? 0);
           const label = firstItem
-            ? `${firstItem.product.name}${restCount > 0 ? ` 외 ${restCount}건` : ""}`
-            : "구성 상품";
+            ? `${firstItem.product.name}${restCount > 0 ? ` ${t("myGifti.list.restItems").replace("{{count}}", String(restCount))}` : ""}`
+            : t("userCart.fallbackName");
 
           return (
             <View key={`pkg-${idx}`} className="bg-card rounded-xl border border-border p-3 mx-4 mb-3">
@@ -44,7 +46,7 @@ export default function CartScreen() {
                     <Package size={20} color="#CE3630" />
                   </View>
                   <View className="flex-1">
-                    <Text className="text-xs text-primary font-semibold">구성 상품</Text>
+                    <Text className="text-xs text-primary font-semibold">{t("userCart.bundleTag")}</Text>
                     <Text className="text-sm text-foreground" numberOfLines={1}>{label}</Text>
                   </View>
                 </View>
@@ -73,7 +75,7 @@ export default function CartScreen() {
                 {pkg.composition?.flexible_item && (
                   <View className="flex-row justify-between py-0.5">
                     <Text className="text-xs text-amber-500 flex-1">
-                      제휴상품권 · {pkg.composition.flexible_item.name}
+                      {t("userStore.bundle.flexibleVoucher")} · {pkg.composition.flexible_item.name}
                     </Text>
                     <Text className="text-sm text-amber-500">
                       {formatPrice(pkg.composition.flexible_item.flexible_amount, pkg.currency)}
@@ -112,7 +114,7 @@ export default function CartScreen() {
           </View>
           <View className="flex-row justify-between items-center">
             {item.flexibleAmount ? (
-              <Text className="text-xs text-amber-500">금액 지정</Text>
+              <Text className="text-xs text-amber-500">{t("userCart.customAmount")}</Text>
             ) : (
               <View className="flex-row items-center border border-border rounded-md">
                 <Pressable
@@ -150,7 +152,7 @@ export default function CartScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
-      <ScreenHeader elevated title="장바구니" />
+      <ScreenHeader elevated title={t("userCart.title")} />
 
       <FlatList
         style={{ flex: 1 }}
@@ -161,7 +163,7 @@ export default function CartScreen() {
         ListEmptyComponent={
           !packageItems.length ? (
             <View className="items-center py-20">
-              <Text className="text-muted-foreground">장바구니가 비어있습니다.</Text>
+              <Text className="text-muted-foreground">{t("userCart.empty")}</Text>
             </View>
           ) : null
         }
@@ -194,8 +196,8 @@ export default function CartScreen() {
               text: `${c} ${SYM[c]}${currTotals[c].toLocaleString()}`,
               onPress: () => router.push({ pathname: "/(user)/purchase", params: { currency: c } }),
             }));
-            buttons.push({ text: "취소", onPress: () => { } });
-            Alert.alert("결제할 통화 선택", "한 번에 하나의 통화만 결제할 수 있습니다.", buttons);
+            buttons.push({ text: t("userCart.cancel"), onPress: () => { } });
+            Alert.alert(t("userCart.pickCurrencyTitle"), t("userCart.pickCurrencyBody"), buttons);
           } else {
             router.push({ pathname: "/(user)/purchase", params: { currency: currencies[0] } });
           }
@@ -205,7 +207,9 @@ export default function CartScreen() {
           <View className="px-5 py-4 border-t border-border bg-white">
             {multiCurrency ? (
               <View className="mb-3">
-                <Text className="text-xs text-muted-foreground mb-1">통화별 ({currencies.length}건)</Text>
+                <Text className="text-xs text-muted-foreground mb-1">
+                  {t("userCart.byCurrency").replace("{{count}}", String(currencies.length))}
+                </Text>
                 {currencies.map((c) => (
                   <View key={c} className="flex-row justify-between py-0.5">
                     <Text className="text-sm text-foreground">{c}</Text>
@@ -217,14 +221,16 @@ export default function CartScreen() {
               </View>
             ) : (
               <View className="flex-row justify-between mb-3">
-                <Text className="text-base text-foreground">합계 ({getCartCount()}개)</Text>
+                <Text className="text-base text-foreground">
+                  {t("userCart.totalLine").replace("{{count}}", String(getCartCount()))}
+                </Text>
                 <Text className="text-xl font-bold text-foreground">
                   {SYM[currencies[0]] ?? "₩"}{(currTotals[currencies[0]] ?? 0).toLocaleString()}
                 </Text>
               </View>
             )}
             <Button onPress={handleCheckout}>
-              결제하기
+              {t("userCart.checkout")}
             </Button>
           </View>
         );

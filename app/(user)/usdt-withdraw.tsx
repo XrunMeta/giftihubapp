@@ -1,6 +1,7 @@
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useI18n } from "@/context/I18nContext";
 import { apiFetch } from "@/services/api";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -14,6 +15,7 @@ interface WithdrawResponse {
 }
 
 export default function UsdtWithdrawScreen() {
+  const { t } = useI18n();
   const router = useRouter();
   const [walletAddress, setWalletAddress] = useState("");
   const [amount, setAmount] = useState("");
@@ -24,26 +26,29 @@ export default function UsdtWithdrawScreen() {
 
   const handleWithdraw = async () => {
     if (!walletAddress.trim() || !amount.trim()) {
-      Alert.alert("입력 오류", "지갑 주소와 금액을 모두 입력해주세요.");
+      Alert.alert(t("userUsdtWithdraw.errFieldsTitle"), t("userUsdtWithdraw.errFieldsBody"));
       return;
     }
     if (!isValidTrc20(walletAddress)) {
-      Alert.alert("입력 오류", "올바른 TRC-20 지갑 주소를 입력해주세요.");
+      Alert.alert(t("userUsdtWithdraw.errAddrTitle"), t("userUsdtWithdraw.errAddrBody"));
       return;
     }
     const numAmount = parseFloat(amount);
     if (isNaN(numAmount) || numAmount <= 0) {
-      Alert.alert("입력 오류", "올바른 금액을 입력해주세요.");
+      Alert.alert(t("userUsdtWithdraw.errAmountTitle"), t("userUsdtWithdraw.errAmountBody"));
       return;
     }
 
+    const addrPreview = `${walletAddress.substring(0, 8)}...${walletAddress.substring(walletAddress.length - 6)}`;
     Alert.alert(
-      "출금 확인",
-      `${numAmount} USDT를\n${walletAddress.substring(0, 8)}...${walletAddress.substring(walletAddress.length - 6)}\n으로 출금하시겠습니까?`,
+      t("userUsdtWithdraw.confirmTitle"),
+      t("userUsdtWithdraw.confirmBody")
+        .replace("{{amount}}", String(numAmount))
+        .replace("{{addrPreview}}", addrPreview),
       [
-        { text: "취소", style: "cancel" },
+        { text: t("userUsdtWithdraw.cancel"), style: "cancel" },
         {
-          text: "출금하기",
+          text: t("userUsdtWithdraw.submit"),
           style: "destructive",
           onPress: async () => {
             setLoading(true);
@@ -59,16 +64,16 @@ export default function UsdtWithdrawScreen() {
                   }),
                 },
               );
-              Alert.alert(
-                "출금 요청 완료",
-                `출금이 요청되었습니다.\n${res.estimated_time ? `예상 소요시간: ${res.estimated_time}` : "처리까지 시간이 걸릴 수 있습니다."}`,
-                [{ text: "확인", onPress: () => router.back() }],
-              );
+              const successMsg =
+                t("userUsdtWithdraw.successBody") +
+                (res.estimated_time
+                  ? t("userUsdtWithdraw.successEta").replace("{{eta}}", res.estimated_time)
+                  : `\n${t("userUsdtWithdraw.successPending")}`);
+              Alert.alert(t("userUsdtWithdraw.successTitle"), successMsg, [
+                { text: t("userUsdtWithdraw.ok"), onPress: () => router.back() },
+              ]);
             } catch (err: any) {
-              Alert.alert(
-                "출금 실패",
-                err.body?.error || "다시 시도해주세요.",
-              );
+              Alert.alert(t("userUsdtWithdraw.failTitle"), err.body?.error || t("userUsdtWithdraw.failBody"));
             } finally {
               setLoading(false);
             }
@@ -80,21 +85,21 @@ export default function UsdtWithdrawScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <PageHeader title="USDT 출금" />
+      <PageHeader title={t("userUsdtWithdraw.title")} />
       <ScrollView className="flex-1 px-6">
         <View className="bg-card border border-border rounded-xl p-4 mt-4">
-          <Text className="text-xs text-muted-foreground">출금 네트워크</Text>
+          <Text className="text-xs text-muted-foreground">{t("userUsdtWithdraw.networkLabel")}</Text>
           <Text className="text-base font-semibold text-foreground mt-1">
-            TRON (TRC-20)
+            {t("userUsdtWithdraw.networkValue")}
           </Text>
         </View>
 
         <View className="mt-6">
           <Text className="text-sm font-medium text-foreground mb-1.5">
-            TRC-20 지갑 주소
+            {t("userUsdtWithdraw.addrLabel")}
           </Text>
           <Input
-            placeholder="T로 시작하는 34자리 주소"
+            placeholder={t("userUsdtWithdraw.addrPh")}
             value={walletAddress}
             onChangeText={setWalletAddress}
             autoCapitalize="none"
@@ -104,10 +109,10 @@ export default function UsdtWithdrawScreen() {
 
         <View className="mt-4">
           <Text className="text-sm font-medium text-foreground mb-1.5">
-            출금 금액 (USDT)
+            {t("userUsdtWithdraw.amountLabel")}
           </Text>
           <Input
-            placeholder="0.00"
+            placeholder={t("userUsdtWithdraw.amountPh")}
             value={amount}
             onChangeText={setAmount}
             keyboardType="decimal-pad"
@@ -115,12 +120,15 @@ export default function UsdtWithdrawScreen() {
         </View>
 
         <View className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 mt-6">
-          <Text className="text-sm font-medium text-amber-600">⚠️ 주의사항</Text>
+          <Text className="text-sm font-medium text-amber-600">{t("userUsdtWithdraw.noticeTitle")}</Text>
           <Text className="text-xs text-muted-foreground mt-1">
-            • 반드시 TRC-20 네트워크 주소를 입력해주세요.{"\n"}
-            • 잘못된 주소로 전송 시 복구가 불가합니다.{"\n"}
-            • 출금 처리에 최대 24시간이 소요될 수 있습니다.{"\n"}
-            • 최소 출금 금액: 10 USDT
+            {t("userUsdtWithdraw.notice1")}
+            {"\n"}
+            {t("userUsdtWithdraw.notice2")}
+            {"\n"}
+            {t("userUsdtWithdraw.notice3")}
+            {"\n"}
+            {t("userUsdtWithdraw.notice4")}
           </Text>
         </View>
 
@@ -129,7 +137,7 @@ export default function UsdtWithdrawScreen() {
           disabled={loading || !walletAddress.trim() || !amount.trim()}
           className="mt-8"
         >
-          {loading ? "처리 중..." : "출금 요청"}
+          {loading ? t("userUsdtWithdraw.processing") : t("userUsdtWithdraw.requestBtn")}
         </Button>
       </ScrollView>
     </SafeAreaView>

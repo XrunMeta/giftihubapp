@@ -1,6 +1,7 @@
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useI18n } from "@/context/I18nContext";
 import { giftVoucher } from "@/services/vouchers";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -8,6 +9,7 @@ import { Alert, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SendGiftScreen() {
+  const { t } = useI18n();
   const router = useRouter();
   const { voucherId, voucherName } = useLocalSearchParams<{
     voucherId: string;
@@ -18,32 +20,34 @@ export default function SendGiftScreen() {
 
   const handleSendGift = async () => {
     if (!telegramId.trim()) {
-      Alert.alert("입력 오류", "받는 사람의 Telegram ID를 입력해주세요.");
+      Alert.alert(t("userSendGift.errTelegramTitle"), t("userSendGift.errTelegramBody"));
       return;
     }
     if (!voucherId) {
-      Alert.alert("오류", "선물할 기프티를 선택해주세요.");
+      Alert.alert(t("userSendGift.errVoucherTitle"), t("userSendGift.errVoucherBody"));
       return;
     }
 
     Alert.alert(
-      "선물 확인",
-      `"${voucherName || "기프티"}"를 Telegram ID: ${telegramId}에게 선물하시겠습니까?\n\n수수료가 부과될 수 있습니다.`,
+      t("userSendGift.confirmTitle"),
+      t("userSendGift.confirmBody")
+        .replace("{{name}}", voucherName || t("userSendGift.defaultGiftName"))
+        .replace("{{id}}", telegramId),
       [
-        { text: "취소", style: "cancel" },
+        { text: t("userSendGift.cancel"), style: "cancel" },
         {
-          text: "선물하기",
+          text: t("userSendGift.send"),
           onPress: async () => {
             setLoading(true);
             try {
               const res = await giftVoucher(voucherId, telegramId.trim());
               Alert.alert(
-                "선물 완료",
-                `기프티가 성공적으로 전송되었습니다.${res.fee > 0 ? `\n수수료: ${res.fee}원` : ""}`,
-                [{ text: "확인", onPress: () => router.back() }],
+                t("userSendGift.successTitle"),
+                `${t("userSendGift.successBody")}${res.fee > 0 ? t("userSendGift.successFee").replace("{{fee}}", String(res.fee)) : ""}`,
+                [{ text: t("userSendGift.ok"), onPress: () => router.back() }],
               );
             } catch (err: any) {
-              Alert.alert("선물 실패", err.body?.error || "다시 시도해주세요.");
+              Alert.alert(t("userSendGift.failTitle"), err.body?.error || t("userSendGift.failBody"));
             } finally {
               setLoading(false);
             }
@@ -55,11 +59,11 @@ export default function SendGiftScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <PageHeader title="선물하기" />
+      <PageHeader title={t("userSendGift.title")} />
       <ScrollView className="flex-1 px-6">
         {voucherName ? (
           <View className="bg-card border border-border rounded-xl p-4 mt-4">
-            <Text className="text-xs text-muted-foreground">선물할 기프티</Text>
+            <Text className="text-xs text-muted-foreground">{t("userSendGift.voucherLabel")}</Text>
             <Text className="text-base font-semibold text-foreground mt-1">
               {voucherName}
             </Text>
@@ -68,25 +72,25 @@ export default function SendGiftScreen() {
 
         <View className="mt-6">
           <Text className="text-sm font-medium text-foreground mb-1.5">
-            받는 사람 Telegram ID
+            {t("userSendGift.telegramLabel")}
           </Text>
           <Input
-            placeholder="Telegram 사용자 ID 입력"
+            placeholder={t("userSendGift.telegramPh")}
             value={telegramId}
             onChangeText={setTelegramId}
             keyboardType="number-pad"
           />
-          <Text className="text-xs text-muted-foreground mt-2">
-            받는 사람의 Telegram 숫자 ID를 입력해주세요.
-          </Text>
+          <Text className="text-xs text-muted-foreground mt-2">{t("userSendGift.telegramHint")}</Text>
         </View>
 
         <View className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 mt-6">
-          <Text className="text-sm font-medium text-amber-600">⚠️ 주의사항</Text>
+          <Text className="text-sm font-medium text-amber-600">{t("userSendGift.noticeTitle")}</Text>
           <Text className="text-xs text-muted-foreground mt-1">
-            • 선물 후에는 취소할 수 없습니다.{"\n"}
-            • 받는 사람이 GiftiHub에 가입되어 있어야 합니다.{"\n"}
-            • 수수료가 부과될 수 있습니다.
+            {t("userSendGift.notice1")}
+            {"\n"}
+            {t("userSendGift.notice2")}
+            {"\n"}
+            {t("userSendGift.notice3")}
           </Text>
         </View>
 
@@ -95,7 +99,7 @@ export default function SendGiftScreen() {
           disabled={loading || !telegramId.trim()}
           className="mt-8"
         >
-          {loading ? "전송 중..." : "선물 보내기"}
+          {loading ? t("userSendGift.sending") : t("userSendGift.submit")}
         </Button>
       </ScrollView>
     </SafeAreaView>
