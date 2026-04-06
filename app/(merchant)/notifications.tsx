@@ -1,5 +1,7 @@
 import { ScreenHeader } from "@/components/ScreenHeader";
+import { useI18n } from "@/context/I18nContext";
 import { apiFetch } from "@/services/api";
+import { localeToBcp47 } from "@/locales";
 import React, { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -10,6 +12,7 @@ type Notification = {
 };
 
 export default function NotificationsScreen() {
+  const { t, locale } = useI18n();
   const [items, setItems] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -44,7 +47,7 @@ export default function NotificationsScreen() {
       <Text className="text-sm font-medium text-foreground">{item.title}</Text>
       {item.body && <Text className="text-xs text-muted-foreground mt-1">{item.body}</Text>}
       <Text className="text-xs text-muted-foreground mt-2">
-        {new Date(item.created_at * 1000).toLocaleString("ko")}
+        {new Date(item.created_at * 1000).toLocaleString(localeToBcp47(locale))}
       </Text>
     </TouchableOpacity>
   );
@@ -53,10 +56,10 @@ export default function NotificationsScreen() {
     <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
       <ScreenHeader
         elevated
-        title="알림"
+        title={t("merchant.notifications.title")}
         trailing={
           <TouchableOpacity onPress={markAllRead}>
-            <Text className="text-sm text-primary">모두 읽음</Text>
+            <Text className="text-sm text-primary">{t("merchant.notifications.markAllRead")}</Text>
           </TouchableOpacity>
         }
       />
@@ -69,7 +72,7 @@ export default function NotificationsScreen() {
           keyExtractor={(i) => i.id}
           renderItem={renderItem}
           contentContainerStyle={{ paddingBottom: 0 }}
-          ListEmptyComponent={<Text className="text-center text-muted-foreground mt-8">알림이 없습니다</Text>}
+          ListEmptyComponent={<Text className="text-center text-muted-foreground mt-8">{t("merchant.notifications.empty")}</Text>}
         />
       )}
     </SafeAreaView>

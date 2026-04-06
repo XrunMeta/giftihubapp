@@ -81,6 +81,7 @@ export default function UserLayout() {
       <Tabs.Screen name="send-gift" options={{ href: null }} />
       <Tabs.Screen name="settlement" options={{ href: null }} />
       <Tabs.Screen name="usdt-withdraw" options={{ href: null }} />
+      <Tabs.Screen name="settings" options={{ href: null }} />
     </Tabs>
   );
 }

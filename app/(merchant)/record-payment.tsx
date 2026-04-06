@@ -1,6 +1,7 @@
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useI18n } from "@/context/I18nContext";
 import { apiFetch } from "@/services/api";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -8,6 +9,7 @@ import { Alert, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RecordPaymentScreen() {
+  const { t } = useI18n();
   const router = useRouter();
   const [barcode, setBarcode] = useState("");
   const [amount, setAmount] = useState("");
@@ -16,12 +18,12 @@ export default function RecordPaymentScreen() {
 
   const handleRecord = async () => {
     if (!barcode.trim() || !amount.trim()) {
-      Alert.alert("입력 오류", "바코드와 금액을 모두 입력해주세요.");
+      Alert.alert(t("merchant.record.alertMissingTitle"), t("merchant.record.alertMissingBody"));
       return;
     }
     const numAmount = parseFloat(amount);
     if (isNaN(numAmount) || numAmount <= 0) {
-      Alert.alert("입력 오류", "올바른 금액을 입력해주세요.");
+      Alert.alert(t("merchant.record.alertAmountTitle"), t("merchant.record.alertAmountBody"));
       return;
     }
 
@@ -35,11 +37,11 @@ export default function RecordPaymentScreen() {
           memo: memo.trim() || undefined,
         }),
       });
-      Alert.alert("기록 완료", "결제가 기록되었습니다.", [
-        { text: "확인", onPress: () => router.back() },
+      Alert.alert(t("merchant.record.successTitle"), t("merchant.record.successBody"), [
+        { text: t("merchant.record.ok"), onPress: () => router.back() },
       ]);
     } catch (err: any) {
-      Alert.alert("기록 실패", err.body?.error || "다시 시도해주세요.");
+      Alert.alert(t("merchant.record.failTitle"), err.body?.error || t("merchant.record.failBody"));
     } finally {
       setLoading(false);
     }
@@ -47,14 +49,12 @@ export default function RecordPaymentScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top"]}>
-      <PageHeader title="결제 기록" />
+      <PageHeader title={t("merchant.record.title")} />
       <ScrollView className="flex-1 px-6" contentContainerStyle={{ paddingBottom: 0 }}>
         <View className="mt-4">
-          <Text className="text-sm font-medium text-foreground mb-1.5">
-            바코드 번호
-          </Text>
+          <Text className="text-sm font-medium text-foreground mb-1.5">{t("merchant.record.barcode")}</Text>
           <Input
-            placeholder="14자리 바코드 입력"
+            placeholder={t("merchant.record.barcodePh")}
             value={barcode}
             onChangeText={setBarcode}
             keyboardType="number-pad"
@@ -63,11 +63,9 @@ export default function RecordPaymentScreen() {
         </View>
 
         <View className="mt-4">
-          <Text className="text-sm font-medium text-foreground mb-1.5">
-            결제 금액
-          </Text>
+          <Text className="text-sm font-medium text-foreground mb-1.5">{t("merchant.record.amount")}</Text>
           <Input
-            placeholder="0"
+            placeholder={t("merchant.record.amountPh")}
             value={amount}
             onChangeText={setAmount}
             keyboardType="decimal-pad"
@@ -75,14 +73,8 @@ export default function RecordPaymentScreen() {
         </View>
 
         <View className="mt-4">
-          <Text className="text-sm font-medium text-foreground mb-1.5">
-            메모 (선택)
-          </Text>
-          <Input
-            placeholder="메모 입력"
-            value={memo}
-            onChangeText={setMemo}
-          />
+          <Text className="text-sm font-medium text-foreground mb-1.5">{t("merchant.record.memo")}</Text>
+          <Input placeholder={t("merchant.record.memoPh")} value={memo} onChangeText={setMemo} />
         </View>
 
         <Button
@@ -90,7 +82,7 @@ export default function RecordPaymentScreen() {
           disabled={loading || !barcode.trim() || !amount.trim()}
           className="mt-8"
         >
-          {loading ? "기록 중..." : "결제 기록"}
+          {loading ? t("merchant.record.submitting") : t("merchant.record.submit")}
         </Button>
       </ScrollView>
     </SafeAreaView>

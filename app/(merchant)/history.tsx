@@ -1,4 +1,5 @@
 import { ScreenHeader } from "@/components/ScreenHeader";
+import { useI18n } from "@/context/I18nContext";
 import { apiFetch } from "@/services/api";
 import { format } from "date-fns";
 import React, { useCallback, useEffect, useState } from "react";
@@ -26,6 +27,7 @@ type HistoryResponse = {
 const LIMIT = 20;
 
 export default function MerchantHistoryScreen() {
+  const { t } = useI18n();
   const [items, setItems] = useState<HistoryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -67,9 +69,11 @@ export default function MerchantHistoryScreen() {
       <View className="flex-row justify-between items-start">
         <View className="flex-1">
           <Text className="text-xs text-muted-foreground">{item.brand ?? "-"}</Text>
-          <Text className="text-base font-semibold text-foreground">{item.name ?? "알 수 없음"}</Text>
+          <Text className="text-base font-semibold text-foreground">{item.name ?? t("merchant.history.unknownName")}</Text>
           {item.user_name && (
-            <Text className="text-xs text-muted-foreground mt-0.5">사용자: {item.user_name}</Text>
+            <Text className="text-xs text-muted-foreground mt-0.5">
+              {t("merchant.history.userLabel")}: {item.user_name}
+            </Text>
           )}
         </View>
         <View className="items-end">
@@ -92,7 +96,7 @@ export default function MerchantHistoryScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
-      <ScreenHeader elevated title="사용 이력" />
+      <ScreenHeader elevated title={t("merchant.history.title")} />
       <FlatList
         style={{ flex: 1 }}
         data={items}
@@ -105,7 +109,7 @@ export default function MerchantHistoryScreen() {
         contentContainerStyle={{ paddingBottom: 0 }}
         ListEmptyComponent={
           <View className="flex-1 items-center justify-center py-20">
-            <Text className="text-muted-foreground">사용 이력이 없습니다.</Text>
+            <Text className="text-muted-foreground">{t("merchant.history.empty")}</Text>
           </View>
         }
         ListFooterComponent={

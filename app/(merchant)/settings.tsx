@@ -1,6 +1,7 @@
 import { ScreenHeader } from "@/components/ScreenHeader";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
+import { useI18n } from "@/context/I18nContext";
 import { apiFetch } from "@/services/api";
 import { useRouter } from "expo-router";
 import { LogOut } from "lucide-react-native";
@@ -9,14 +10,15 @@ import { ActivityIndicator, Alert, Text, TouchableOpacity, View } from "react-na
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MerchantSettingsScreen() {
+  const { t } = useI18n();
   const { user, logout } = useAuth();
   const router = useRouter();
 
   type SettlementPolicy = "anytime" | "monthly" | "request_only";
-  const POLICY_OPTIONS: { key: SettlementPolicy; label: string; desc: string }[] = [
-    { key: "anytime", label: "자유 정산", desc: "관리자가 아무 때나 정산" },
-    { key: "monthly", label: "월별 정산", desc: "지난달 내역만 정산" },
-    { key: "request_only", label: "요청 정산", desc: "내가 요청한 것만 정산" },
+  const POLICY_OPTIONS: { key: SettlementPolicy; labelKey: string; descKey: string }[] = [
+    { key: "anytime", labelKey: "merchant.mSettings.policyAnytime", descKey: "merchant.mSettings.policyAnytimeDesc" },
+    { key: "monthly", labelKey: "merchant.mSettings.policyMonthly", descKey: "merchant.mSettings.policyMonthlyDesc" },
+    { key: "request_only", labelKey: "merchant.mSettings.policyRequest", descKey: "merchant.mSettings.policyRequestDesc" },
   ];
 
   const [policy, setPolicy] = useState<SettlementPolicy>("anytime");
@@ -41,10 +43,10 @@ export default function MerchantSettingsScreen() {
   };
 
   const handleLogout = () => {
-    Alert.alert("로그아웃", "정말 로그아웃하시겠습니까?", [
-      { text: "취소", style: "cancel" },
+    Alert.alert(t("merchant.mSettings.logoutTitle"), t("merchant.mSettings.logoutBody"), [
+      { text: t("merchant.mSettings.cancel"), style: "cancel" },
       {
-        text: "로그아웃", onPress: async () => {
+        text: t("merchant.mSettings.logout"), onPress: async () => {
           await logout();
           router.replace("/(auth)/login");
         }
@@ -54,16 +56,16 @@ export default function MerchantSettingsScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
-      <ScreenHeader elevated title="설정" />
+      <ScreenHeader elevated title={t("merchant.mSettings.title")} />
 
       <View className="mx-4 bg-card rounded-xl border border-border p-5 mb-4">
         <Text className="text-lg font-bold text-foreground">{user?.name}</Text>
         {user?.email && <Text className="text-sm text-muted-foreground mt-0.5">{user.email}</Text>}
-        <Text className="text-xs text-primary mt-1">가맹점 계정</Text>
+        <Text className="text-xs text-primary mt-1">{t("merchant.mSettings.merchantAccount")}</Text>
       </View>
 
       <View className="mt-6 px-4">
-        <Text className="text-base font-semibold text-foreground mb-3">정산 정책</Text>
+        <Text className="text-base font-semibold text-foreground mb-3">{t("merchant.mSettings.settlementPolicy")}</Text>
         {policyLoading ? (
           <ActivityIndicator size="small" />
         ) : (
@@ -77,8 +79,8 @@ export default function MerchantSettingsScreen() {
                 {policy === opt.key && <View className="w-3 h-3 rounded-full bg-primary" />}
               </View>
               <View>
-                <Text className="text-sm font-medium text-foreground">{opt.label}</Text>
-                <Text className="text-xs text-muted-foreground">{opt.desc}</Text>
+                <Text className="text-sm font-medium text-foreground">{t(opt.labelKey)}</Text>
+                <Text className="text-xs text-muted-foreground">{t(opt.descKey)}</Text>
               </View>
             </TouchableOpacity>
           ))
@@ -88,7 +90,7 @@ export default function MerchantSettingsScreen() {
       <View className="px-4 mt-4">
         <Button variant="outline" onPress={handleLogout} className="flex-row gap-2 bg-white">
           <LogOut size={18} color="#ef4444" />
-          <Text className="text-destructive font-medium">로그아웃</Text>
+          <Text className="text-destructive font-medium">{t("merchant.mSettings.logout")}</Text>
         </Button>
       </View>
     </SafeAreaView>
