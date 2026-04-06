@@ -58,7 +58,7 @@ export function v_1a40c4({
     <TouchableOpacity
       activeOpacity={0.7}
       className={v_6e56f5(
-        "flex flex-row items-center justify-center rounded-lg",
+        "flex flex-row items-center justify-center rounded-lg bg-white",
         v_e43bd9[v_46e192],
         v_956f88[v_05b441],
         v_4a6533 && "opacity-50",

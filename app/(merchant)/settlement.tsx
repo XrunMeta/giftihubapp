@@ -280,9 +280,11 @@ export default function v_0842da() {
             </View>
           ) : (
             <FlatList
+              style={{ flex: 1 }}
               data={v_b595e3?.daily ?? []}
               keyExtractor={(v_8c0b26) => v_8c0b26.date}
               renderItem={v_e01a2e}
+              contentContainerStyle={{ paddingBottom: 0 }}
               ListEmptyComponent={
                 <View className="flex-1 items-center justify-center py-20">
                   <Text className="text-muted-foreground">정산 내역이 없습니다.</Text>
@@ -298,9 +300,11 @@ export default function v_0842da() {
           </View>
         ) : (
           <FlatList
+            style={{ flex: 1 }}
             data={v_09072d}
             keyExtractor={(v_8c0b26) => v_8c0b26.id}
             renderItem={v_5e3978}
+            contentContainerStyle={{ paddingBottom: 0 }}
             onEndReached={() => {
               if (!v_c2880b && v_02e02d) v_337eb3(v_d262dd + 1);
             }}
@@ -317,7 +321,7 @@ export default function v_0842da() {
             }
             ListFooterComponent={
               v_02e02d && v_09072d.length > 0 ? (
-                <ActivityIndicator size="small" color="#CE3630" style={{ padding: 16 }} />
+                <ActivityIndicator size="small" color="#CE3630" style={{ paddingVertical: 8 }} />
               ) : null
             }
           />
@@ -345,9 +349,11 @@ export default function v_0842da() {
             </View>
           ) : (
             <FlatList
+              style={{ flex: 1 }}
               data={v_678155}
               keyExtractor={(v_8c0b26) => v_8c0b26.id}
               renderItem={v_bc6f27}
+              contentContainerStyle={{ paddingBottom: 0 }}
               ListEmptyComponent={
                 <View className="flex-1 items-center justify-center py-20">
                   <Text className="text-muted-foreground">정산 내역이 없습니다.</Text>

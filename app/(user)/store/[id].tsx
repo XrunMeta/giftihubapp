@@ -93,9 +93,7 @@ export default function v_2b70c8() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
-      <View className="bg-white border-b border-border">
-        <PageHeader title={v_01bee9.brand_name} />
-      </View>
+      <PageHeader title={v_01bee9.brand_name} />
 
       <KeyboardAvoidingView
         className="flex-1"
@@ -108,9 +106,9 @@ export default function v_2b70c8() {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 16, paddingBottom: 16 }}
         >
-          <View className="bg-white rounded-2xl border border-border overflow-hidden mb-4 p-4">
+          <View className="overflow-hidden p-4">
             {v_74f4a3 ? (
-              <Image source={{ uri: v_74f4a3 }} className="w-full h-52 bg-white" resizeMode="contain" />
+              <Image source={{ uri: v_74f4a3 }} className="w-full h-52" resizeMode="contain" />
             ) : (
               <View className="w-full h-56 bg-muted/60 items-center justify-center py-10">
                 <Text className="text-5xl">🎁</Text>

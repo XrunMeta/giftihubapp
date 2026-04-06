@@ -157,7 +157,7 @@ export default function v_8f53d1() {
     return (
       <View className="mx-4 mb-2 bg-card rounded-xl border border-border px-4 py-3 flex-row">
         {v_74f4a3 ? (
-          <Image source={{ uri: v_74f4a3 }} className="w-12 h-12 rounded-lg" resizeMode="cover" />
+          <Image source={{ uri: v_74f4a3 }} className="w-12 h-12 rounded-lg" resizeMode="contain" />
         ) : (
           <View className="w-12 h-12 rounded-lg bg-muted items-center justify-center">
             <Text className="text-lg">🎁</Text>
@@ -247,12 +247,14 @@ export default function v_8f53d1() {
         </View>
       ) : v_11083e === "items" ? (
         <FlatList
+          style={{ flex: 1 }}
           data={v_b87ff5}
           keyExtractor={(v_8c0b26) =>
             v_8c0b26.type === "set" ? `set-${v_8c0b26.data.set_id}` : `v-${v_8c0b26.data.voucher_id}`
           }
           renderItem={v_fcf6ec}
           refreshControl={<RefreshControl refreshing={v_612e9f} onRefresh={v_d5345f} />}
+          contentContainerStyle={{ paddingBottom: 0 }}
           ListEmptyComponent={
             <View className="flex-1 items-center justify-center py-20">
               <Text className="text-muted-foreground">보유 중인 상품이 없습니다.</Text>
@@ -261,10 +263,12 @@ export default function v_8f53d1() {
         />
       ) : (
         <FlatList
+          style={{ flex: 1 }}
           data={v_b77158}
           keyExtractor={(v_8c0b26) => v_8c0b26.id}
           renderItem={v_9c30ea}
           refreshControl={<RefreshControl refreshing={v_612e9f} onRefresh={v_d5345f} />}
+          contentContainerStyle={{ paddingBottom: 0 }}
           ListEmptyComponent={
             <View className="flex-1 items-center justify-center py-20">
               <Text className="text-muted-foreground">정산 요청 내역이 없습니다.</Text>

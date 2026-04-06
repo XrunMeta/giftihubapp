@@ -149,6 +149,7 @@ export default function v_0de24e() {
         data={v_683210 ? [] : v_795bbd}
         renderItem={v_539d25}
         keyExtractor={(v_8c0b26) => v_8c0b26.id}
+        contentContainerStyle={{ paddingBottom: 0 }}
         ListEmptyComponent={
           v_683210 ? (
             <View className="items-center py-20">

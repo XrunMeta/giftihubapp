@@ -84,7 +84,7 @@ export default function v_ca8e36() {
 
   if (v_683210) {
     return (
-      <SafeAreaView className="flex-1 bg-gray-50 items-center justify-center">
+      <SafeAreaView className="flex-1 bg-gray-50 items-center justify-center" edges={["top"]}>
         <ActivityIndicator size="large" color="#CE3630" />
       </SafeAreaView>
     );
@@ -94,6 +94,7 @@ export default function v_ca8e36() {
     <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
       <ScreenHeader elevated title="사용 이력" />
       <FlatList
+        style={{ flex: 1 }}
         data={v_4622b9}
         keyExtractor={(v_8c0b26) => v_8c0b26.id}
         renderItem={v_fcf6ec}
@@ -101,6 +102,7 @@ export default function v_ca8e36() {
         onEndReachedThreshold={0.3}
         onRefresh={v_f616ba}
         refreshing={v_612e9f}
+        contentContainerStyle={{ paddingBottom: 0 }}
         ListEmptyComponent={
           <View className="flex-1 items-center justify-center py-20">
             <Text className="text-muted-foreground">사용 이력이 없습니다.</Text>
@@ -108,7 +110,7 @@ export default function v_ca8e36() {
         }
         ListFooterComponent={
           v_6bbe19 && v_4622b9.length > 0 ? (
-            <ActivityIndicator size="small" color="#CE3630" style={{ padding: 16 }} />
+            <ActivityIndicator size="small" color="#CE3630" style={{ paddingVertical: 8 }} />
           ) : null
         }
       />

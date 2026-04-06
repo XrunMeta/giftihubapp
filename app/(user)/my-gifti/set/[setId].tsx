@@ -47,7 +47,7 @@ export default function v_2be872() {
 
   if (v_683210 || !v_9390e8) {
     return (
-      <SafeAreaView className="flex-1 bg-gray-50 items-center justify-center">
+      <SafeAreaView className="flex-1 bg-gray-50 items-center justify-center" edges={["top"]}>
         <ActivityIndicator size="large" color="#CE3630" />
       </SafeAreaView>
     );
@@ -83,7 +83,7 @@ export default function v_2be872() {
 
     return (
       <Pressable
-        className="mx-4 mb-2 bg-card rounded-xl border border-border p-3 flex-row"
+        className="mx-4 mb-2 bg-card bg-white rounded-xl border border-border p-3 flex-row"
         onPress={() => v_904d46.push(`/(user)/oth-path${v_8c0b26.id}`)}
       >
         {v_74f4a3 ? (
@@ -231,13 +231,15 @@ export default function v_2be872() {
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
       <PageHeader title="구성상품 상세" />
       <FlatList
+        style={{ flex: 1 }}
         data={v_f9fd27}
         renderItem={v_8c5481}
         keyExtractor={(v_8c0b26) => v_8c0b26.id}
         ListHeaderComponent={v_b62866}
+        contentContainerStyle={{ paddingBottom: 8 }}
       />
     </SafeAreaView>
   );

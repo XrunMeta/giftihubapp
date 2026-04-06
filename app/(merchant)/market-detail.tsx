@@ -35,7 +35,7 @@ export default function v_271810() {
 
   if (v_683210 || !v_a8fb42) {
     return (
-      <SafeAreaView className="flex-1 bg-white items-center justify-center">
+      <SafeAreaView className="flex-1 bg-white items-center justify-center" edges={["top"]}>
         <ActivityIndicator size="large" color="#CE3630" />
       </SafeAreaView>
     );
@@ -44,13 +44,13 @@ export default function v_271810() {
   const v_46383f = !!(v_a8fb42 as any).set_id;
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={["top"]}>
       <PageHeader title="상품 상세" />
-      <ScrollView className="flex-1 px-5">
+      <ScrollView className="flex-1 px-5" contentContainerStyle={{ paddingBottom: 0 }}>
         {(() => {
           const v_74f4a3 = v_7ef52a(v_a8fb42.image_url, v_a8fb42.brand_logo);
           return v_74f4a3 ? (
-            <Image source={{ uri: v_74f4a3 }} className="w-full h-48 rounded-xl mt-2" resizeMode="cover" />
+            <Image source={{ uri: v_74f4a3 }} className="w-full h-48 rounded-xl mt-2" resizeMode="contain" />
           ) : (
             <View className="w-full h-36 rounded-xl mt-2 bg-muted items-center justify-center">
               {v_46383f ? <Package size={40} color="#CE3630" /> : <Text className="text-4xl">🎁</Text>}
@@ -104,7 +104,7 @@ export default function v_271810() {
         </View>
       </ScrollView>
 
-      <View className="px-5 py-4 border-t border-border">
+      <View className="px-5 pt-3 pb-2 border-t border-border">
         <Button
           onPress={() =>
             v_904d46.push({

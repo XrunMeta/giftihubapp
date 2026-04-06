@@ -51,7 +51,7 @@ export default function v_96d53d() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={["top"]}>
       <PageHeader title="바우처 확인" />
       <View className="flex-1 items-center justify-center px-6">
         {v_d308b5 === "validating" && (

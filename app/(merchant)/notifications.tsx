@@ -68,6 +68,7 @@ export default function v_18ad36() {
           data={v_4622b9}
           keyExtractor={(v_ebec57) => v_ebec57.id}
           renderItem={v_fcf6ec}
+          contentContainerStyle={{ paddingBottom: 0 }}
           ListEmptyComponent={<Text className="text-center text-muted-foreground mt-8">알림이 없습니다</Text>}
         />
       )}

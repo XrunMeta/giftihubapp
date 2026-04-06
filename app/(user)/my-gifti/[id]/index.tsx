@@ -115,7 +115,7 @@ export default function v_b89029() {
 
   if (v_683210 || !v_3e4b5d) {
     return (
-      <SafeAreaView className="flex-1 bg-white items-center justify-center">
+      <SafeAreaView className="flex-1 bg-gray-50 items-center justify-center">
         <ActivityIndicator size="large" color="#CE3630" />
       </SafeAreaView>
     );
@@ -127,12 +127,12 @@ export default function v_b89029() {
   const v_866c46 = v_d9da40[v_3e4b5d.status];
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-gray-50">
       <PageHeader title="기프티 상세" />
       <ScrollView className="flex-1 px-5">
         {}
         {v_26dce6 ? (
-          <View className="bg-card rounded-xl border border-border overflow-hidden mb-4">
+          <View className="bg-card bg-white rounded-xl border border-border overflow-hidden mb-4">
             <View className="p-5 items-center">
               {v_e4a44d ? (
                 <View className="items-center">
@@ -260,7 +260,7 @@ export default function v_b89029() {
             <View className="flex-row gap-3">
               <Button
                 variant="outline"
-                className="flex-1 flex-row gap-2"
+                className="flex-1 flex-row gap-2 bg-white"
                 onPress={() => v_904d46.push(`/(user)/oth-path${v_389afb}/transfer`)}
               >
                 <Send size={16} color="#0a0a0a" />
@@ -268,7 +268,7 @@ export default function v_b89029() {
               </Button>
               <Button
                 variant="outline"
-                className="flex-1 flex-row gap-2"
+                className="flex-1 flex-row gap-2 bg-white"
                 onPress={() => v_904d46.push(`/(user)/oth-path${v_389afb}/refund`)}
               >
                 <ArrowLeftRight size={16} color="#0a0a0a" />
@@ -277,7 +277,7 @@ export default function v_b89029() {
             </View>
             <Button
               variant="outline"
-              className="flex-row gap-2"
+              className="flex-row gap-2 bg-white"
               onPress={() => v_904d46.push({ pathname: "/(user)/oth-path", params: { voucherId: v_389afb } })}
             >
               <Store size={16} color="#0a0a0a" />

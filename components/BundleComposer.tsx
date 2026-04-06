@@ -157,7 +157,7 @@ export function v_4c40b6() {
             return (
               <View key={v_e86ad8} className="flex-row items-center py-2 border-b border-border">
                 {v_74f4a3 ? (
-                  <Image source={{ uri: v_74f4a3 }} className="w-10 h-10 rounded-md mr-3" resizeMode="cover" />
+                  <Image source={{ uri: v_74f4a3 }} className="w-10 h-10 rounded-md mr-3" resizeMode="contain" />
                 ) : (
                   <View className="w-10 h-10 rounded-md bg-muted items-center justify-center mr-3">
                     <Text className="text-lg">🎁</Text>

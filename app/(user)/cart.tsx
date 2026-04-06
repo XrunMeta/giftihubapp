@@ -75,7 +75,7 @@ export default function v_d218af() {
                     <Text className="text-xs text-amber-500 flex-1">
                       제휴상품권 · {v_e42213.composition.flexible_item.name}
                     </Text>
-                    <Text className="text-xs text-amber-500">
+                    <Text className="text-sm text-amber-500">
                       {v_be1e41(v_e42213.composition.flexible_item.flexible_amount, v_e42213.currency)}
                     </Text>
                   </View>
@@ -133,7 +133,7 @@ export default function v_d218af() {
               </View>
             )}
             <View className="flex-row items-center gap-3">
-              <Text className="text-sm font-bold text-foreground">
+              <Text className="text-md font-bold text-foreground">
                 {v_8c0b26.flexibleAmount
                   ? v_be1e41(v_8c0b26.flexibleAmount, v_8c0b26.product.flexible_currency ?? "KRW")
                   : `₩${(v_8c0b26.product.price * v_8c0b26.quantity).toLocaleString()}`}
@@ -202,7 +202,7 @@ export default function v_d218af() {
         };
 
         return (
-          <View className="px-5 py-4 border-t border-border">
+          <View className="px-5 py-4 border-t border-border bg-white">
             {v_3aa565 ? (
               <View className="mb-3">
                 <Text className="text-xs text-muted-foreground mb-1">통화별 ({v_1c3e83.length}건)</Text>
