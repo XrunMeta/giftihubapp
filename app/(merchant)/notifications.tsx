@@ -50,7 +50,7 @@ export default function NotificationsScreen() {
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50">
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
       <ScreenHeader
         elevated
         title="알림"

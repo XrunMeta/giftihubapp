@@ -149,7 +149,7 @@ export default function CartScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
       <ScreenHeader elevated title="장바구니" />
 
       <FlatList

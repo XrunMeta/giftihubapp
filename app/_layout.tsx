@@ -4,6 +4,7 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
+import * as SystemUI from "expo-system-ui";
 import { StatusBar } from "expo-status-bar";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
@@ -26,6 +27,11 @@ export default function RootLayout() {
     initBaseUrl();
   }, []);
 
+  const rootBackground = colorScheme === "dark" ? "#0a0a0a" : "#ffffff";
+  useEffect(() => {
+    SystemUI.setBackgroundColorAsync(rootBackground);
+  }, [rootBackground]);
+
   useEffect(() => {
     if (!fontsLoaded && !fontError) return;
     if (fontsLoaded) applyPretendardTextDefaults();
@@ -37,7 +43,7 @@ export default function RootLayout() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1, backgroundColor: rootBackground }}>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <DevModeContext.Provider value={devMode}>
           <AuthProvider>
@@ -51,7 +57,7 @@ export default function RootLayout() {
             </CartProvider>
           </AuthProvider>
         </DevModeContext.Provider>
-        <StatusBar style="auto" />
+        <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
       </ThemeProvider>
     </GestureHandlerRootView>
   );

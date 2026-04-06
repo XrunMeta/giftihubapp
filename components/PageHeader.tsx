@@ -1,8 +1,8 @@
-import React from "react";
-import { View, Text, Pressable } from "react-native";
+import { cn } from "@/lib/utils";
 import { useRouter } from "expo-router";
 import { ChevronLeft } from "lucide-react-native";
-import { cn } from "@/lib/utils";
+import React from "react";
+import { Pressable, Text, View } from "react-native";
 
 interface PageHeaderProps {
   title: string;
@@ -22,7 +22,7 @@ export function PageHeader({ title, showBack = true, rightAction, className }: P
             <ChevronLeft size={24} color="#0a0a0a" />
           </Pressable>
         )}
-        <Text className="text-lg font-semibold text-foreground" numberOfLines={1}>
+        <Text className="text-2xl font-semibold text-foreground" numberOfLines={1}>
           {title}
         </Text>
       </View>

@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { Search } from "lucide-react-native";
 import React from "react";
 import { Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const DEFAULT_SEARCH_PLACEHOLDER = "브랜드 또는 상품명 검색";
 
@@ -38,6 +39,8 @@ export function ScreenHeader({
   className,
   titleRowClassName,
 }: ScreenHeaderProps) {
+  const insets = useSafeAreaInsets();
+
   const body = (
     <>
       <View
@@ -76,7 +79,10 @@ export function ScreenHeader({
 
   if (elevated) {
     return (
-      <View className={cn("bg-white border-b border-border mb-3", className)}>
+      <View
+        className={cn("bg-white border-b border-border mb-3", className)}
+        style={{ paddingTop: insets.top }}
+      >
         {body}
       </View>
     );
