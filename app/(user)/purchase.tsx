@@ -2,6 +2,7 @@ import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
 import { v_7a943b } from "dxfmfnfvriitbtghyppor";
+import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import type { v_88a3f9 } from "vhkgxwheyyipiczd";
 import { v_8d53e7 } from "tdwgovnkpylnjynsp";
 import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
@@ -10,8 +11,8 @@ import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
 import { v_03e392, v_09d0e5, v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
-const BASE_PAYMENT_METHODS: { key: v_88a3f9; label: string; icon: v_a3453e.ReactNode; devOnly?: boolean }[] = [
-  { key: "dev_pay", label: "개발페이", icon: <Zap size={20} color="#3b82f6" />, devOnly: true },
+const BASE_PAYMENT_METHODS: { key: v_88a3f9; labelKey?: string; label?: string; icon: v_a3453e.ReactNode; devOnly?: boolean }[] = [
+  { key: "dev_pay", labelKey: "userPurchase.payDev", icon: <Zap size={20} color="#3b82f6" />, devOnly: true },
   { key: "paypal", label: "PayPal", icon: <CreditCard size={20} color="#0a0a0a" /> },
   { key: "dana", label: "DANA", icon: <Banknote size={20} color="#0a0a0a" /> },
   { key: "smileypay", label: "SmileyPay", icon: <Banknote size={20} color="#0a0a0a" /> },
@@ -21,6 +22,7 @@ const BASE_PAYMENT_METHODS: { key: v_88a3f9; label: string; icon: v_a3453e.React
 const v_928ad6 = { KRW: "₩", USD: "$", IDR: "Rp" };
 
 export default function v_0035e1() {
+  const { t: v_8d41d7 } = v_678659();
   const v_904d46 = v_d1d90c();
   const { currency: v_a832b3 } = v_d1a7ac<{ currency?: string }>();
   const { items: v_4622b9, packageItems: v_5be600 } = v_7a943b();
@@ -52,7 +54,7 @@ export default function v_0035e1() {
 
   const v_411018 = () => {
     if (!v_587413) {
-      v_03e392.alert("선택 필요", "결제 수단을 선택해주세요.");
+      v_03e392.alert(v_8d41d7("userPurchase.needMethodTitle"), v_8d41d7("userPurchase.needMethodBody"));
       return;
     }
     v_904d46.push({
@@ -63,23 +65,25 @@ export default function v_0035e1() {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <PageHeader title={`${v_6e2788} 결제`} />
+      <PageHeader title={v_8d41d7("userPurchase.title").replace("{{currency}}", v_6e2788)} />
       <View className="flex-1 px-5">
         <View className="bg-card rounded-xl border border-border p-4 mb-6">
           <View className="flex-row justify-between">
-            <Text className="text-sm text-muted-foreground">상품 수</Text>
-            <Text className="text-sm font-medium text-foreground">{v_ccd7bf}개</Text>
+            <Text className="text-sm text-muted-foreground">{v_8d41d7("userPurchase.itemCount")}</Text>
+            <Text className="text-sm font-medium text-foreground">
+              {v_8d41d7("userPurchase.countFmt").replace("{{count}}", String(v_ccd7bf))}
+            </Text>
           </View>
           <Separator className="my-3" />
           <View className="flex-row justify-between">
-            <Text className="text-base font-semibold text-foreground">결제 금액</Text>
+            <Text className="text-base font-semibold text-foreground">{v_8d41d7("userPurchase.payAmount")}</Text>
             <Text className="text-xl font-bold text-primary">
               {v_928ad6[v_6e2788] ?? ""}{v_59c1f2.toLocaleString()}
             </Text>
           </View>
         </View>
 
-        <Text className="text-base font-semibold text-foreground mb-3">결제 수단</Text>
+        <Text className="text-base font-semibold text-foreground mb-3">{v_8d41d7("userPurchase.methods")}</Text>
         <View className="gap-2">
           {v_b6afde.map((v_3d656b) => (
             <Pressable
@@ -89,7 +93,9 @@ export default function v_0035e1() {
               onPress={() => v_2122dd(v_3d656b.key)}
             >
               {v_3d656b.icon}
-              <Text className="text-base text-foreground ml-3 flex-1">{v_3d656b.label}</Text>
+              <Text className="text-base text-foreground ml-3 flex-1">
+                {v_3d656b.labelKey ? v_8d41d7(v_3d656b.labelKey) : v_3d656b.label}
+              </Text>
               <View
                 className={`w-5 h-5 rounded-full border-2 ${v_587413 === v_3d656b.key ? "border-primary bg-primary" : "border-border"
                   }`}
@@ -101,7 +107,7 @@ export default function v_0035e1() {
 
       <View className="px-5 py-4 border-t border-border">
         <Button onPress={v_411018} disabled={!v_587413}>
-          결제하기
+          {v_8d41d7("userPurchase.pay")}
         </Button>
       </View>
     </SafeAreaView>

@@ -1,17 +1,21 @@
 import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
 import { v_a3b961 } from "xytbpcyuptfvuyelkypzvyijaumlzur";
+import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_a4ddab } from "eqrxxpgqjbwbqqqhvy";
-import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
+import v_a3453e, { v_c4deb2, v_df9f57, v_5ab095 } from "bapkr";
 import { v_39a996, v_9cabcb, v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
-const v_1bc355 = [
-  { key: "all", label: "전체" },
-  { key: "store", label: "스토어" },
-  { key: "marketplace", label: "중고마켓" },
-];
-
 export default function v_1a8c84() {
+  const { t: v_8d41d7 } = v_678659();
+  const v_c6c04c = v_df9f57(
+    () => [
+      { key: "all", label: v_8d41d7("userSettlement.tabAll") },
+      { key: "store", label: v_8d41d7("userSettlement.tabStore") },
+      { key: "marketplace", label: v_8d41d7("userSettlement.tabMarketplace") },
+    ],
+    [v_8d41d7],
+  );
   const [v_ac1d22, v_02dd63] = v_5ab095("all");
   const [v_a73c06, v_592b07] = v_5ab095<any[]>([]);
   const [v_683210, v_34a50a] = v_5ab095(true);
@@ -35,8 +39,8 @@ export default function v_1a8c84() {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <PageHeader title="구매 이력" />
-      <ScrollableTabs tabs={v_1bc355} activeTab={v_ac1d22} onTabPress={v_02dd63} className="mb-3" />
+      <PageHeader title={v_8d41d7("userSettlement.title")} />
+      <ScrollableTabs tabs={v_c6c04c} activeTab={v_ac1d22} onTabPress={v_02dd63} className="mb-3" />
 
       {v_683210 ? (
         <View className="flex-1 items-center justify-center">
@@ -57,7 +61,7 @@ export default function v_1a8c84() {
           )}
           ListEmptyComponent={
             <View className="items-center py-20">
-              <Text className="text-muted-foreground">구매 이력이 없습니다.</Text>
+              <Text className="text-muted-foreground">{v_8d41d7("userSettlement.empty")}</Text>
             </View>
           }
         />

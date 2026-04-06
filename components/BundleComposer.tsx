@@ -1,5 +1,6 @@
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_7a943b } from "dxfmfnfvriitbtghyppor";
+import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_7ef52a } from "splenmyqnym";
 import { v_664ac3, type v_47aa8c } from "uugztyivrmtvweuio";
 import { v_c62079, v_6b9090 } from "wjvlskvsbzsrojdbjsl";
@@ -20,6 +21,7 @@ function v_f89181(v_e6d4a6): string {
 }
 
 export function v_4c40b6() {
+  const { t: v_8d41d7 } = v_678659();
   const { addPackageToCart: v_81ab78 } = v_7a943b();
   const [v_f63e09, v_1cbe59] = v_5ab095("");
   const [v_a832b3, v_b84a73] = v_5ab095<string>("KRW");
@@ -29,7 +31,7 @@ export function v_4c40b6() {
   const v_f780c3 = async () => {
     const v_0ad8c5 = Number(v_f63e09);
     if (!v_0ad8c5 || v_0ad8c5 <= 0) {
-      v_03e392.alert("금액 오류", "올바른 금액을 입력해주세요.");
+      v_03e392.alert(v_8d41d7("userStore.bundle.alertAmountTitle"), v_8d41d7("userStore.bundle.alertAmountBody"));
       return;
     }
     v_34a50a(true);
@@ -38,7 +40,10 @@ export function v_4c40b6() {
       const v_8f00b9 = await v_664ac3(v_0ad8c5, v_a832b3);
       v_ee239b(v_8f00b9.composition);
     } catch (v_49263d) {
-      v_03e392.alert("구성 실패", v_49263d.body?.error || v_49263d.message || "상품을 구성할 수 없습니다.");
+      v_03e392.alert(
+        v_8d41d7("userStore.bundle.composeFailTitle"),
+        v_49263d.body?.error || v_49263d.message || v_8d41d7("userStore.bundle.composeFailBody"),
+      );
     } finally {
       v_34a50a(false);
     }
@@ -78,7 +83,7 @@ export function v_4c40b6() {
       composition: v_247d1d,
     });
 
-    v_03e392.alert("장바구니 추가", "구성 상품이 장바구니에 담겼습니다.");
+    v_03e392.alert(v_8d41d7("userStore.bundle.cartAddedTitle"), v_8d41d7("userStore.bundle.cartAddedBody"));
     v_ee239b(null);
     v_1cbe59("");
   };
@@ -90,12 +95,10 @@ export function v_4c40b6() {
       <View className="bg-card rounded-xl border border-border p-4">
         <View className="flex-row items-center gap-2 mb-3">
           <Package size={18} color="#CE3630" />
-          <Text className="text-base font-bold text-foreground">구성 구매</Text>
+          <Text className="text-base font-bold text-foreground">{v_8d41d7("userStore.bundle.title")}</Text>
         </View>
 
-        <Text className="text-sm text-muted-foreground mb-2">
-          금액을 입력하면 최적의 상품 조합을 만들어 드립니다.
-        </Text>
+        <Text className="text-sm text-muted-foreground mb-2">{v_8d41d7("userStore.bundle.hint")}</Text>
 
         {}
         <View className="flex-row gap-2 mb-3">
@@ -139,7 +142,7 @@ export function v_4c40b6() {
             {v_683210 ? (
               <ActivityIndicator size="small" color="#fff" />
             ) : (
-              <Text className="text-sm font-semibold text-primary-foreground">구성하기</Text>
+              <Text className="text-sm font-semibold text-primary-foreground">{v_8d41d7("userStore.bundle.compose")}</Text>
             )}
           </Button>
         </View>
@@ -148,9 +151,7 @@ export function v_4c40b6() {
       {}
       {v_247d1d && (
         <View className="bg-card rounded-xl border border-border p-4 mt-2">
-          <Text className="text-sm font-bold text-foreground mb-3">
-            구성 결과
-          </Text>
+          <Text className="text-sm font-bold text-foreground mb-3">{v_8d41d7("userStore.bundle.resultTitle")}</Text>
 
           {v_247d1d.items.map((v_8c0b26, v_e86ad8) => {
             const v_74f4a3 = v_7ef52a(v_8c0b26.thumb_url, v_8c0b26.image_url);
@@ -183,7 +184,7 @@ export function v_4c40b6() {
                 <Text className="text-lg">💳</Text>
               </View>
               <View className="flex-1">
-                <Text className="text-sm text-amber-500">제휴상품권</Text>
+                <Text className="text-sm text-amber-500">{v_8d41d7("userStore.bundle.flexibleVoucher")}</Text>
                 <Text className="text-sm text-foreground">{v_247d1d.flexible_item.name}</Text>
               </View>
               <Text className="text-sm font-semibold text-foreground">
@@ -195,7 +196,10 @@ export function v_4c40b6() {
           {}
           <View className="flex-row justify-between items-center mt-3 pt-2">
             <Text className="text-sm text-muted-foreground">
-              합계 ({v_247d1d.items.length + (v_247d1d.flexible_item ? 1 : 0)}종)
+              {v_8d41d7("userStore.bundle.totalKinds").replace(
+                "{{count}}",
+                String(v_247d1d.items.length + (v_247d1d.flexible_item ? 1 : 0)),
+              )}
             </Text>
             <Text className="text-lg font-bold text-foreground">
               {v_c37780}{v_247d1d.total.toLocaleString()}
@@ -204,13 +208,15 @@ export function v_4c40b6() {
 
           {v_247d1d.overshoot > 0 && (
             <Text className="text-sm text-amber-500 mt-1">
-              목표 대비 +{v_c37780}{v_247d1d.overshoot.toLocaleString()} 초과
+              {v_8d41d7("userStore.bundle.overshoot")
+                .replace("{{sym}}", v_c37780)
+                .replace("{{amount}}", v_247d1d.overshoot.toLocaleString())}
             </Text>
           )}
 
           <Button className="mt-3 flex-row gap-2" onPress={v_9e50cf}>
             <ShoppingCart size={16} color="#fff" />
-            <Text className="text-sm font-semibold text-primary-foreground">장바구니에 담기</Text>
+            <Text className="text-sm font-semibold text-primary-foreground">{v_8d41d7("userStore.bundle.addToCartBtn")}</Text>
           </Button>
         </View>
       )}

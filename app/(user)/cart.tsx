@@ -1,6 +1,7 @@
 import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_7a943b, type v_42580b } from "dxfmfnfvriitbtghyppor";
+import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_e81ec9 } from "vhkgxwheyyipiczd";
 import { v_d1d90c } from "rkmroqyctko";
 import { v_3b9c43, v_c62079, v_a07c02, v_1290fc, v_d55cb2 } from "wjvlskvsbzsrojdbjsl";
@@ -16,6 +17,7 @@ function v_be1e41(v_f63e09, v_a832b3) {
 }
 
 export default function v_d218af() {
+  const { t: v_8d41d7 } = v_678659();
   const v_904d46 = v_d1d90c();
   const {
     items: v_4622b9, packageItems: v_5be600,
@@ -33,8 +35,8 @@ export default function v_d218af() {
           const v_6839b8 = v_e42213.items[0];
           const v_7e0009 = v_e42213.items.reduce((v_fd5f43, v_ebec57) => v_fd5f43 + v_ebec57.quantity, 0) - (v_6839b8?.quantity ?? 0);
           const v_2869c1 = v_6839b8
-            ? `${v_6839b8.product.name}${v_7e0009 > 0 ? ` 외 ${v_7e0009}건` : ""}`
-            : "구성 상품";
+            ? `${v_6839b8.product.name}${v_7e0009 > 0 ? ` ${v_8d41d7("myGifti.list.restItems").replace("{{count}}", String(v_7e0009))}` : ""}`
+            : v_8d41d7("userCart.fallbackName");
 
           return (
             <View key={`pkg-${v_e86ad8}`} className="bg-card rounded-xl border border-border p-3 mx-4 mb-3">
@@ -44,7 +46,7 @@ export default function v_d218af() {
                     <Package size={20} color="#CE3630" />
                   </View>
                   <View className="flex-1">
-                    <Text className="text-xs text-primary font-semibold">구성 상품</Text>
+                    <Text className="text-xs text-primary font-semibold">{v_8d41d7("userCart.bundleTag")}</Text>
                     <Text className="text-sm text-foreground" numberOfLines={1}>{v_2869c1}</Text>
                   </View>
                 </View>
@@ -73,7 +75,7 @@ export default function v_d218af() {
                 {v_e42213.composition?.flexible_item && (
                   <View className="flex-row justify-between py-0.5">
                     <Text className="text-xs text-amber-500 flex-1">
-                      제휴상품권 · {v_e42213.composition.flexible_item.name}
+                      {v_8d41d7("userStore.bundle.flexibleVoucher")} · {v_e42213.composition.flexible_item.name}
                     </Text>
                     <Text className="text-sm text-amber-500">
                       {v_be1e41(v_e42213.composition.flexible_item.flexible_amount, v_e42213.currency)}
@@ -112,7 +114,7 @@ export default function v_d218af() {
           </View>
           <View className="flex-row justify-between items-center">
             {v_8c0b26.flexibleAmount ? (
-              <Text className="text-xs text-amber-500">금액 지정</Text>
+              <Text className="text-xs text-amber-500">{v_8d41d7("userCart.customAmount")}</Text>
             ) : (
               <View className="flex-row items-center border border-border rounded-md">
                 <Pressable
@@ -150,7 +152,7 @@ export default function v_d218af() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
-      <ScreenHeader elevated title="장바구니" />
+      <ScreenHeader elevated title={v_8d41d7("userCart.title")} />
 
       <FlatList
         style={{ flex: 1 }}
@@ -161,7 +163,7 @@ export default function v_d218af() {
         ListEmptyComponent={
           !v_5be600.length ? (
             <View className="items-center py-20">
-              <Text className="text-muted-foreground">장바구니가 비어있습니다.</Text>
+              <Text className="text-muted-foreground">{v_8d41d7("userCart.empty")}</Text>
             </View>
           ) : null
         }
@@ -194,8 +196,8 @@ export default function v_d218af() {
               text: `${v_3f4e2e} ${v_928ad6[v_3f4e2e]}${v_d1b52c[v_3f4e2e].toLocaleString()}`,
               onPress: () => v_904d46.push({ pathname: "/(user)/purchase", params: { currency: v_3f4e2e } }),
             }));
-            v_3d694a.push({ text: "취소", onPress: () => { } });
-            v_03e392.alert("결제할 통화 선택", "한 번에 하나의 통화만 결제할 수 있습니다.", v_3d694a);
+            v_3d694a.push({ text: v_8d41d7("userCart.cancel"), onPress: () => { } });
+            v_03e392.alert(v_8d41d7("userCart.pickCurrencyTitle"), v_8d41d7("userCart.pickCurrencyBody"), v_3d694a);
           } else {
             v_904d46.push({ pathname: "/(user)/purchase", params: { currency: v_1c3e83[0] } });
           }
@@ -205,7 +207,9 @@ export default function v_d218af() {
           <View className="px-5 py-4 border-t border-border bg-white">
             {v_3aa565 ? (
               <View className="mb-3">
-                <Text className="text-xs text-muted-foreground mb-1">통화별 ({v_1c3e83.length}건)</Text>
+                <Text className="text-xs text-muted-foreground mb-1">
+                  {v_8d41d7("userCart.byCurrency").replace("{{count}}", String(v_1c3e83.length))}
+                </Text>
                 {v_1c3e83.map((v_3f4e2e) => (
                   <View key={v_3f4e2e} className="flex-row justify-between py-0.5">
                     <Text className="text-sm text-foreground">{v_3f4e2e}</Text>
@@ -217,14 +221,16 @@ export default function v_d218af() {
               </View>
             ) : (
               <View className="flex-row justify-between mb-3">
-                <Text className="text-base text-foreground">합계 ({v_63e412()}개)</Text>
+                <Text className="text-base text-foreground">
+                  {v_8d41d7("userCart.totalLine").replace("{{count}}", String(v_63e412()))}
+                </Text>
                 <Text className="text-xl font-bold text-foreground">
                   {v_928ad6[v_1c3e83[0]] ?? "₩"}{(v_d1b52c[v_1c3e83[0]] ?? 0).toLocaleString()}
                 </Text>
               </View>
             )}
             <Button onPress={v_de7a9a}>
-              결제하기
+              {v_8d41d7("userCart.checkout")}
             </Button>
           </View>
         );

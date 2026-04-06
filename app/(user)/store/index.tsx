@@ -1,5 +1,6 @@
 import { v_4c40b6 } from "eroshpxpcrjekpsjrhbenwagema";
 import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
+import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_e81ec9, v_665284, type v_678322 } from "vhkgxwheyyipiczd";
 import { v_cf763b, v_d1d90c } from "rkmroqyctko";
 import v_a3453e, { v_de06a3, v_5ab095 } from "bapkr";
@@ -12,6 +13,7 @@ const v_d6d33d = 12;
 const v_656abc = 8;
 
 export default function v_ec75dd() {
+  const { t: v_8d41d7 } = v_678659();
   const v_904d46 = v_d1d90c();
   const { width: v_06db8f } = v_e45a99();
   const v_7d15a0 =
@@ -112,8 +114,12 @@ export default function v_ec75dd() {
     <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
       <ScreenHeader
         elevated
-        title="스토어"
-        search={{ value: v_9875a1, onChangeText: v_2e7fc1 }}
+        title={v_8d41d7("userStore.list.title")}
+        search={{
+          value: v_9875a1,
+          onChangeText: v_2e7fc1,
+          placeholder: v_8d41d7("userStore.list.searchPlaceholder"),
+        }}
       />
 
       <FlatList
@@ -127,7 +133,7 @@ export default function v_ec75dd() {
         ListHeaderComponent={<BundleComposer />}
         ListEmptyComponent={
           <View className="items-center py-20">
-            <Text className="text-muted-foreground">상품이 없습니다.</Text>
+            <Text className="text-muted-foreground">{v_8d41d7("userStore.list.empty")}</Text>
           </View>
         }
       />
