@@ -14,6 +14,11 @@ const CURRENCY_PLACEHOLDER: Record<string, string> = {
   IDR: "500000",
 };
 
+function formatThousandsFromDigits(digits: string): string {
+  if (!digits) return "";
+  return digits.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 export function BundleComposer() {
   const { addPackageToCart } = useCart();
   const [amount, setAmount] = useState("");
@@ -119,11 +124,11 @@ export function BundleComposer() {
             <Text className="text-md text-muted-foreground mr-1">{sym}</Text>
             <TextInput
               className="flex-1 py-2.5 text-md text-foreground"
-              placeholder={CURRENCY_PLACEHOLDER[currency]}
+              placeholder={formatThousandsFromDigits(CURRENCY_PLACEHOLDER[currency])}
               placeholderTextColor="#737373"
               keyboardType="numeric"
-              value={amount}
-              onChangeText={setAmount}
+              value={formatThousandsFromDigits(amount)}
+              onChangeText={(text) => setAmount(text.replace(/\D/g, ""))}
             />
           </View>
           <Button
