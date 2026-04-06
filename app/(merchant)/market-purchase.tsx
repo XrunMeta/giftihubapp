@@ -56,7 +56,7 @@ export default function MerchantMarketPurchaseScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={["top"]}>
       <PageHeader title="결제" />
       <View className="flex-1 px-5 mt-4">
         <Text className="text-base font-semibold text-foreground mb-3">결제 수단</Text>
@@ -78,7 +78,7 @@ export default function MerchantMarketPurchaseScreen() {
           ))}
         </View>
       </View>
-      <View className="px-5 py-4 border-t border-border">
+      <View className="px-5 py-3 border-t border-border">
         <Button onPress={handlePurchase} disabled={!selected || loading}>
           {loading ? "결제 중..." : "결제하기"}
         </Button>

@@ -47,7 +47,7 @@ export default function SetDetailScreen() {
 
   if (loading || !data) {
     return (
-      <SafeAreaView className="flex-1 bg-gray-50 items-center justify-center">
+      <SafeAreaView className="flex-1 bg-gray-50 items-center justify-center" edges={["top"]}>
         <ActivityIndicator size="large" color="#CE3630" />
       </SafeAreaView>
     );
@@ -83,7 +83,7 @@ export default function SetDetailScreen() {
 
     return (
       <Pressable
-        className="mx-4 mb-2 bg-card rounded-xl border border-border p-3 flex-row"
+        className="mx-4 mb-2 bg-card bg-white rounded-xl border border-border p-3 flex-row"
         onPress={() => router.push(`/(user)/oth-path${item.id}`)}
       >
         {imgUri ? (
@@ -231,13 +231,15 @@ export default function SetDetailScreen() {
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
       <PageHeader title="구성상품 상세" />
       <FlatList
+        style={{ flex: 1 }}
         data={vouchers}
         renderItem={renderVoucherItem}
         keyExtractor={(item) => item.id}
         ListHeaderComponent={listHeader}
+        contentContainerStyle={{ paddingBottom: 8 }}
       />
     </SafeAreaView>
   );

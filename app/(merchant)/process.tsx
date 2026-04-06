@@ -51,7 +51,7 @@ export default function ProcessScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={["top"]}>
       <PageHeader title="바우처 확인" />
       <View className="flex-1 items-center justify-center px-6">
         {status === "validating" && (

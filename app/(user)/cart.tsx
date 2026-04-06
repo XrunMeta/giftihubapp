@@ -75,7 +75,7 @@ export default function CartScreen() {
                     <Text className="text-xs text-amber-500 flex-1">
                       제휴상품권 · {pkg.composition.flexible_item.name}
                     </Text>
-                    <Text className="text-xs text-amber-500">
+                    <Text className="text-sm text-amber-500">
                       {formatPrice(pkg.composition.flexible_item.flexible_amount, pkg.currency)}
                     </Text>
                   </View>
@@ -133,7 +133,7 @@ export default function CartScreen() {
               </View>
             )}
             <View className="flex-row items-center gap-3">
-              <Text className="text-sm font-bold text-foreground">
+              <Text className="text-md font-bold text-foreground">
                 {item.flexibleAmount
                   ? formatPrice(item.flexibleAmount, item.product.flexible_currency ?? "KRW")
                   : `₩${(item.product.price * item.quantity).toLocaleString()}`}
@@ -202,7 +202,7 @@ export default function CartScreen() {
         };
 
         return (
-          <View className="px-5 py-4 border-t border-border">
+          <View className="px-5 py-4 border-t border-border bg-white">
             {multiCurrency ? (
               <View className="mb-3">
                 <Text className="text-xs text-muted-foreground mb-1">통화별 ({currencies.length}건)</Text>

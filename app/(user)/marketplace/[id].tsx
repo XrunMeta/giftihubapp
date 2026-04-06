@@ -34,16 +34,16 @@ export default function MarketplaceDetailScreen() {
 
   if (loading || !listing) {
     return (
-      <SafeAreaView className="flex-1 bg-white items-center justify-center">
+      <SafeAreaView className="flex-1 bg-gray-50 items-center justify-center" edges={["top"]}>
         <ActivityIndicator size="large" color="#CE3630" />
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
       <PageHeader title="중고 상세" />
-      <ScrollView className="flex-1 px-5">
+      <ScrollView className="flex-1 px-5" contentContainerStyle={{ paddingBottom: 12 }}>
         {(() => {
           const imgUri = resolveImageUrl(listing.image_url, listing.brand_logo);
           return imgUri ? (
@@ -94,7 +94,7 @@ export default function MarketplaceDetailScreen() {
         </View>
       </ScrollView>
 
-      <View className="px-5 py-4 border-t border-border">
+      <View className="px-5 py-3 border-t border-border bg-white">
         <Button
           onPress={() =>
             router.push({

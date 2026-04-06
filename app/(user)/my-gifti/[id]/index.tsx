@@ -115,7 +115,7 @@ export default function GiftiDetailScreen() {
 
   if (loading || !voucher) {
     return (
-      <SafeAreaView className="flex-1 bg-white items-center justify-center">
+      <SafeAreaView className="flex-1 bg-gray-50 items-center justify-center">
         <ActivityIndicator size="large" color="#CE3630" />
       </SafeAreaView>
     );
@@ -127,12 +127,12 @@ export default function GiftiDetailScreen() {
   const statusInfo = STATUS_INFO[voucher.status];
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-gray-50">
       <PageHeader title="기프티 상세" />
       <ScrollView className="flex-1 px-5">
         {}
         {isActive ? (
-          <View className="bg-card rounded-xl border border-border overflow-hidden mb-4">
+          <View className="bg-card bg-white rounded-xl border border-border overflow-hidden mb-4">
             <View className="p-5 items-center">
               {barcode ? (
                 <View className="items-center">
@@ -260,7 +260,7 @@ export default function GiftiDetailScreen() {
             <View className="flex-row gap-3">
               <Button
                 variant="outline"
-                className="flex-1 flex-row gap-2"
+                className="flex-1 flex-row gap-2 bg-white"
                 onPress={() => router.push(`/(user)/oth-path${id}/transfer`)}
               >
                 <Send size={16} color="#0a0a0a" />
@@ -268,7 +268,7 @@ export default function GiftiDetailScreen() {
               </Button>
               <Button
                 variant="outline"
-                className="flex-1 flex-row gap-2"
+                className="flex-1 flex-row gap-2 bg-white"
                 onPress={() => router.push(`/(user)/oth-path${id}/refund`)}
               >
                 <ArrowLeftRight size={16} color="#0a0a0a" />
@@ -277,7 +277,7 @@ export default function GiftiDetailScreen() {
             </View>
             <Button
               variant="outline"
-              className="flex-row gap-2"
+              className="flex-row gap-2 bg-white"
               onPress={() => router.push({ pathname: "/(user)/oth-path", params: { voucherId: id } })}
             >
               <Store size={16} color="#0a0a0a" />

@@ -149,6 +149,7 @@ export default function MerchantMarketScreen() {
         data={loading ? [] : listings}
         renderItem={renderListing}
         keyExtractor={(item) => item.id}
+        contentContainerStyle={{ paddingBottom: 0 }}
         ListEmptyComponent={
           loading ? (
             <View className="items-center py-20">

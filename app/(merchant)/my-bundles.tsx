@@ -157,7 +157,7 @@ export default function MyBundlesScreen() {
     return (
       <View className="mx-4 mb-2 bg-card rounded-xl border border-border px-4 py-3 flex-row">
         {imgUri ? (
-          <Image source={{ uri: imgUri }} className="w-12 h-12 rounded-lg" resizeMode="cover" />
+          <Image source={{ uri: imgUri }} className="w-12 h-12 rounded-lg" resizeMode="contain" />
         ) : (
           <View className="w-12 h-12 rounded-lg bg-muted items-center justify-center">
             <Text className="text-lg">🎁</Text>
@@ -247,12 +247,14 @@ export default function MyBundlesScreen() {
         </View>
       ) : tab === "items" ? (
         <FlatList
+          style={{ flex: 1 }}
           data={listItems}
           keyExtractor={(item) =>
             item.type === "set" ? `set-${item.data.set_id}` : `v-${item.data.voucher_id}`
           }
           renderItem={renderItem}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+          contentContainerStyle={{ paddingBottom: 0 }}
           ListEmptyComponent={
             <View className="flex-1 items-center justify-center py-20">
               <Text className="text-muted-foreground">보유 중인 상품이 없습니다.</Text>
@@ -261,10 +263,12 @@ export default function MyBundlesScreen() {
         />
       ) : (
         <FlatList
+          style={{ flex: 1 }}
           data={requests}
           keyExtractor={(item) => item.id}
           renderItem={renderRequest}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+          contentContainerStyle={{ paddingBottom: 0 }}
           ListEmptyComponent={
             <View className="flex-1 items-center justify-center py-20">
               <Text className="text-muted-foreground">정산 요청 내역이 없습니다.</Text>

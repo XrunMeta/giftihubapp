@@ -84,7 +84,7 @@ export default function MerchantHistoryScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView className="flex-1 bg-gray-50 items-center justify-center">
+      <SafeAreaView className="flex-1 bg-gray-50 items-center justify-center" edges={["top"]}>
         <ActivityIndicator size="large" color="#CE3630" />
       </SafeAreaView>
     );
@@ -94,6 +94,7 @@ export default function MerchantHistoryScreen() {
     <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
       <ScreenHeader elevated title="사용 이력" />
       <FlatList
+        style={{ flex: 1 }}
         data={items}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
@@ -101,6 +102,7 @@ export default function MerchantHistoryScreen() {
         onEndReachedThreshold={0.3}
         onRefresh={handleRefresh}
         refreshing={refreshing}
+        contentContainerStyle={{ paddingBottom: 0 }}
         ListEmptyComponent={
           <View className="flex-1 items-center justify-center py-20">
             <Text className="text-muted-foreground">사용 이력이 없습니다.</Text>
@@ -108,7 +110,7 @@ export default function MerchantHistoryScreen() {
         }
         ListFooterComponent={
           hasMore && items.length > 0 ? (
-            <ActivityIndicator size="small" color="#CE3630" style={{ padding: 16 }} />
+            <ActivityIndicator size="small" color="#CE3630" style={{ paddingVertical: 8 }} />
           ) : null
         }
       />

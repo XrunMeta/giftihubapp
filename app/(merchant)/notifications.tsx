@@ -68,6 +68,7 @@ export default function NotificationsScreen() {
           data={items}
           keyExtractor={(i) => i.id}
           renderItem={renderItem}
+          contentContainerStyle={{ paddingBottom: 0 }}
           ListEmptyComponent={<Text className="text-center text-muted-foreground mt-8">알림이 없습니다</Text>}
         />
       )}

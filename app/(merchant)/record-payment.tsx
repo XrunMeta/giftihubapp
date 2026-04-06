@@ -46,9 +46,9 @@ export default function RecordPaymentScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={["top"]}>
       <PageHeader title="결제 기록" />
-      <ScrollView className="flex-1 px-6">
+      <ScrollView className="flex-1 px-6" contentContainerStyle={{ paddingBottom: 0 }}>
         <View className="mt-4">
           <Text className="text-sm font-medium text-foreground mb-1.5">
             바코드 번호

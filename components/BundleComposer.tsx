@@ -157,7 +157,7 @@ export function BundleComposer() {
             return (
               <View key={idx} className="flex-row items-center py-2 border-b border-border">
                 {imgUri ? (
-                  <Image source={{ uri: imgUri }} className="w-10 h-10 rounded-md mr-3" resizeMode="cover" />
+                  <Image source={{ uri: imgUri }} className="w-10 h-10 rounded-md mr-3" resizeMode="contain" />
                 ) : (
                   <View className="w-10 h-10 rounded-md bg-muted items-center justify-center mr-3">
                     <Text className="text-lg">🎁</Text>

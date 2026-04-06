@@ -31,7 +31,7 @@ export default function MerchantHomeScreen() {
 
   if (!permission?.granted) {
     return (
-      <SafeAreaView className="flex-1 bg-gray-50 items-center justify-center px-6">
+      <SafeAreaView className="flex-1 bg-gray-50 items-center justify-center px-6" edges={["top"]}>
         <Text className="text-lg font-semibold text-foreground mb-4">카메라 권한 필요</Text>
         <Text className="text-sm text-muted-foreground text-center mb-6">
           바코드 스캔을 위해 카메라 권한이 필요합니다.
@@ -53,7 +53,7 @@ export default function MerchantHomeScreen() {
         />
       </View>
 
-      <View className="px-4 py-4">
+      <View className="px-4 pt-3 py-4">
         <Text className="text-sm font-medium text-foreground mb-2">직접 입력</Text>
         <View className="flex-row gap-2">
           <Input

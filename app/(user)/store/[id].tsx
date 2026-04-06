@@ -93,9 +93,7 @@ export default function ProductDetailScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
-      <View className="bg-white border-b border-border">
-        <PageHeader title={product.brand_name} />
-      </View>
+      <PageHeader title={product.brand_name} />
 
       <KeyboardAvoidingView
         className="flex-1"
@@ -108,9 +106,9 @@ export default function ProductDetailScreen() {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 16, paddingBottom: 16 }}
         >
-          <View className="bg-white rounded-2xl border border-border overflow-hidden mb-4 p-4">
+          <View className="overflow-hidden p-4">
             {imgUri ? (
-              <Image source={{ uri: imgUri }} className="w-full h-52 bg-white" resizeMode="contain" />
+              <Image source={{ uri: imgUri }} className="w-full h-52" resizeMode="contain" />
             ) : (
               <View className="w-full h-56 bg-muted/60 items-center justify-center py-10">
                 <Text className="text-5xl">🎁</Text>

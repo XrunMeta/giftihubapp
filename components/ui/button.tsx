@@ -58,7 +58,7 @@ export function Button({
     <TouchableOpacity
       activeOpacity={0.7}
       className={cn(
-        "flex flex-row items-center justify-center rounded-lg",
+        "flex flex-row items-center justify-center rounded-lg bg-white",
         variantClasses[variant],
         sizeClasses[size],
         disabled && "opacity-50",

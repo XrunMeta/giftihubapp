@@ -280,9 +280,11 @@ export default function MerchantSettlementScreen() {
             </View>
           ) : (
             <FlatList
+              style={{ flex: 1 }}
               data={settlData?.daily ?? []}
               keyExtractor={(item) => item.date}
               renderItem={renderDaily}
+              contentContainerStyle={{ paddingBottom: 0 }}
               ListEmptyComponent={
                 <View className="flex-1 items-center justify-center py-20">
                   <Text className="text-muted-foreground">정산 내역이 없습니다.</Text>
@@ -298,9 +300,11 @@ export default function MerchantSettlementScreen() {
           </View>
         ) : (
           <FlatList
+            style={{ flex: 1 }}
             data={histItems}
             keyExtractor={(item) => item.id}
             renderItem={renderHistory}
+            contentContainerStyle={{ paddingBottom: 0 }}
             onEndReached={() => {
               if (!histLoading && histHasMore) fetchHistory(histPage + 1);
             }}
@@ -317,7 +321,7 @@ export default function MerchantSettlementScreen() {
             }
             ListFooterComponent={
               histHasMore && histItems.length > 0 ? (
-                <ActivityIndicator size="small" color="#CE3630" style={{ padding: 16 }} />
+                <ActivityIndicator size="small" color="#CE3630" style={{ paddingVertical: 8 }} />
               ) : null
             }
           />
@@ -345,9 +349,11 @@ export default function MerchantSettlementScreen() {
             </View>
           ) : (
             <FlatList
+              style={{ flex: 1 }}
               data={records}
               keyExtractor={(item) => item.id}
               renderItem={renderRecord}
+              contentContainerStyle={{ paddingBottom: 0 }}
               ListEmptyComponent={
                 <View className="flex-1 items-center justify-center py-20">
                   <Text className="text-muted-foreground">정산 내역이 없습니다.</Text>
