@@ -108,9 +108,9 @@ export default function v_2b70c8() {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 16, paddingBottom: 16 }}
         >
-          <View className="bg-white rounded-2xl border border-border overflow-hidden mb-4 py-3">
+          <View className="bg-white rounded-2xl border border-border overflow-hidden mb-4 p-4">
             {v_74f4a3 ? (
-              <Image source={{ uri: v_74f4a3 }} className="w-full h-72 bg-white" resizeMode="contain" />
+              <Image source={{ uri: v_74f4a3 }} className="w-full h-52 bg-white" resizeMode="contain" />
             ) : (
               <View className="w-full h-56 bg-muted/60 items-center justify-center py-10">
                 <Text className="text-5xl">🎁</Text>
@@ -127,15 +127,15 @@ export default function v_2b70c8() {
 
             {v_e567dc ? (
               <>
-                <View className="mt-4 bg-secondary/80 rounded-xl px-4 py-3">
-                  <Text className="text-xs text-muted-foreground">구매 가능 금액</Text>
-                  <Text className="text-sm font-semibold text-foreground mt-1">
+                <View className="mt-2 bg-secondary/80 rounded-xl py-3">
+                  <Text className="text-sm text-muted-foreground">구매 가능 금액</Text>
+                  <Text className="text-smd font-semibold text-foreground mt-1">
                     {v_c37780}
                     {(v_01bee9.flexible_min ?? 0).toLocaleString()} ~ {v_c37780}
                     {(v_01bee9.flexible_max ?? 0).toLocaleString()}
                   </Text>
                 </View>
-                <Text className="text-sm font-medium text-foreground mt-5 mb-2">구매 금액 ({v_d6ed0e})</Text>
+                <Text className="text-sm font-medium text-foreground mt-2 mb-2">구매 금액 ({v_d6ed0e})</Text>
                 <View className="flex-row items-center bg-secondary rounded-xl border border-border px-4 py-3">
                   <Text className="text-base font-bold text-muted-foreground mr-2">{v_c37780}</Text>
                   <TextInput
@@ -175,7 +175,7 @@ export default function v_2b70c8() {
                   )}
                 </View>
 
-                <Text className="text-sm font-medium text-foreground mt-8 mb-3">수량</Text>
+                <Text className="text-sm font-medium text-foreground mt-4 mb-1">수량</Text>
                 <View className="flex-row items-center self-start bg-secondary rounded-xl border border-border">
                   <Button
                     variant="ghost"
