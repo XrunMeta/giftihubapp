@@ -71,7 +71,7 @@ export default function v_ec75dd() {
             </View>
           )}
         </View>
-        <View className="p-3">
+        <View className="px-3 pb-3">
           <Text className="text-xs text-muted-foreground" numberOfLines={1}>
             {v_8c0b26.brand_name}
           </Text>
