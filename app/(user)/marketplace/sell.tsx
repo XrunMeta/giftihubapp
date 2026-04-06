@@ -6,7 +6,16 @@ import { createListing } from "@/services/marketplace";
 import { getMyVouchers, type Voucher } from "@/services/vouchers";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MarketplaceSellScreen() {
@@ -64,43 +73,53 @@ export default function MarketplaceSellScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView className="flex-1 bg-white items-center justify-center">
+      <SafeAreaView className="flex-1 bg-white items-center justify-center" edges={["top"]}>
         <ActivityIndicator size="large" color="#CE3630" />
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={["top"]}>
       <PageHeader title="판매 등록" />
-      <ScrollView className="flex-1 px-5">
-        <Text className="text-base font-semibold text-foreground mb-2 mt-2">상품 선택</Text>
-        <View className="gap-2 mb-4">
-          {vouchers.map((v) => (
-            <Pressable
-              key={v.id}
-              className={`p-3 rounded-xl border ${selectedVoucher?.id === v.id ? "border-primary bg-primary/5" : "border-border bg-card"
-                }`}
-              onPress={() => {
-                setSelectedVoucher(v);
-                setSellingPrice(String(Math.round(v.face_value * 0.9)));
-              }}
-            >
-              <Text className="text-xs text-muted-foreground">{v.brand}</Text>
-              <Text className="text-sm font-medium text-foreground">{v.name}</Text>
-              <Text className="text-sm font-bold text-foreground mt-1">
-                ₩{v.face_value.toLocaleString()}
-              </Text>
-            </Pressable>
-          ))}
-          {vouchers.length === 0 && (
-            <Text className="text-muted-foreground text-center py-8">판매할 수 있는 기프티가 없습니다.</Text>
-          )}
-        </View>
+      <KeyboardAvoidingView
+        className="flex-1"
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        keyboardVerticalOffset={0}
+      >
+        <ScrollView
+          className="flex-1 px-5"
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{ paddingTop: 8, paddingBottom: 12 }}
+        >
+          <Text className="text-base font-semibold text-foreground mb-2">상품 선택</Text>
+          <View className="gap-2">
+            {vouchers.map((v) => (
+              <Pressable
+                key={v.id}
+                className={`p-3 rounded-xl border ${selectedVoucher?.id === v.id ? "border-primary bg-primary/5" : "border-border bg-card"
+                  }`}
+                onPress={() => {
+                  setSelectedVoucher(v);
+                  setSellingPrice(String(Math.round(v.face_value * 0.9)));
+                }}
+              >
+                <Text className="text-xs text-muted-foreground">{v.brand}</Text>
+                <Text className="text-sm font-medium text-foreground">{v.name}</Text>
+                <Text className="text-sm font-bold text-foreground mt-1">
+                  ₩{v.face_value.toLocaleString()}
+                </Text>
+              </Pressable>
+            ))}
+            {vouchers.length === 0 && (
+              <Text className="text-muted-foreground text-center py-8">판매할 수 있는 기프티가 없습니다.</Text>
+            )}
+          </View>
+        </ScrollView>
 
-        {selectedVoucher && (
-          <>
-            <Text className="text-base font-semibold text-foreground mb-2">판매가 (KRW)</Text>
+        {selectedVoucher ? (
+          <View className="border-t border-border bg-white px-5 pt-4 pb-2 gap-3">
+            <Text className="text-base font-semibold text-foreground">판매가 (KRW)</Text>
             <Input
               keyboardType="numeric"
               placeholder="판매 금액 입력"
@@ -108,7 +127,7 @@ export default function MarketplaceSellScreen() {
               onChangeText={setSellingPrice}
             />
 
-            <View className="bg-card rounded-xl border border-border p-4 mt-4">
+            <View className="bg-card rounded-xl border border-border p-4">
               <View className="flex-row justify-between">
                 <Text className="text-sm text-muted-foreground">수수료 (5%)</Text>
                 <Text className="text-sm text-foreground">₩{fee.toLocaleString()}</Text>
@@ -120,12 +139,12 @@ export default function MarketplaceSellScreen() {
               </View>
             </View>
 
-            <Button onPress={handleSubmit} disabled={submitting} className="mt-6 mb-6">
+            <Button onPress={handleSubmit} disabled={submitting}>
               {submitting ? "등록 중..." : "판매 등록"}
             </Button>
-          </>
-        )}
-      </ScrollView>
+          </View>
+        ) : null}
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
