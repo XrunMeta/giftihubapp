@@ -149,7 +149,7 @@ export default function v_d218af() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
       <ScreenHeader elevated title="장바구니" />
 
       <FlatList
@@ -157,7 +157,6 @@ export default function v_d218af() {
         data={v_4622b9}
         renderItem={v_fcf6ec}
         keyExtractor={(v_8c0b26) => v_8c0b26.cartId ?? v_8c0b26.product.id}
-        contentContainerStyle={{ paddingBottom: 20 }}
         ListHeaderComponent={v_6897aa()}
         ListEmptyComponent={
           !v_5be600.length ? (

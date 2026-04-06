@@ -105,7 +105,7 @@ export default function v_0de24e() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
       <ScreenHeader
         elevated
         title="중고마켓"
@@ -149,7 +149,6 @@ export default function v_0de24e() {
         data={v_683210 ? [] : v_795bbd}
         renderItem={v_539d25}
         keyExtractor={(v_8c0b26) => v_8c0b26.id}
-        contentContainerStyle={{ paddingBottom: 20 }}
         ListEmptyComponent={
           v_683210 ? (
             <View className="items-center py-20">

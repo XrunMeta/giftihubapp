@@ -238,7 +238,6 @@ export default function v_2be872() {
         renderItem={v_8c5481}
         keyExtractor={(v_8c0b26) => v_8c0b26.id}
         ListHeaderComponent={v_b62866}
-        contentContainerStyle={{ paddingBottom: 20 }}
       />
     </SafeAreaView>
   );

@@ -57,7 +57,7 @@ export default function v_840f8f() {
   const v_2ba0d1 = v_62676b.find((v_fd5f43) => v_fd5f43.status === "active")?.count || 0;
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
       <ScreenHeader elevated title="MY" />
       <ScrollView className="flex-1">
         {}

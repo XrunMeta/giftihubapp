@@ -50,7 +50,7 @@ export default function v_18ad36() {
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
       <ScreenHeader
         elevated
         title="알림"

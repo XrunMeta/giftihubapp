@@ -109,7 +109,7 @@ export default function v_ec75dd() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
       <ScreenHeader
         elevated
         title="스토어"
@@ -123,7 +123,7 @@ export default function v_ec75dd() {
         keyExtractor={(v_8c0b26) => v_8c0b26.id}
         numColumns={2}
         columnWrapperStyle={{ gap: v_656abc }}
-        contentContainerStyle={{ paddingHorizontal: v_d6d33d, paddingBottom: 20 }}
+        contentContainerStyle={{ paddingHorizontal: v_d6d33d }}
         ListHeaderComponent={<BundleComposer />}
         ListEmptyComponent={
           <View className="items-center py-20">

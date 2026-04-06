@@ -210,7 +210,7 @@ export default function v_bf7b5b() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
       <ScreenHeader
         elevated
         title="내 기프티"
@@ -265,7 +265,6 @@ export default function v_bf7b5b() {
         keyExtractor={(v_8c0b26) =>
           v_8c0b26.type === "bundle" ? `set-${v_8c0b26.setId}` : v_8c0b26.voucher.id
         }
-        contentContainerStyle={{ paddingBottom: 20 }}
         ListEmptyComponent={
           v_683210 ? (
             <View className="items-center py-20">
