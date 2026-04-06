@@ -1,8 +1,8 @@
-import React from "react";
-import { View, Text, ViewProps } from "react-native";
 import { cn } from "@/lib/utils";
+import React from "react";
+import { Text, View, ViewProps } from "react-native";
 
-type BadgeVariant = "default" | "secondary" | "destructive" | "outline";
+export type BadgeVariant = "default" | "secondary" | "destructive" | "outline" | "info" | "success";
 
 interface BadgeProps extends ViewProps {
   variant?: BadgeVariant;
@@ -15,6 +15,8 @@ const variantClasses: Record<BadgeVariant, string> = {
   secondary: "bg-secondary",
   destructive: "bg-destructive",
   outline: "border border-border bg-transparent",
+  info: "bg-blue-600",
+  success: "bg-green-600",
 };
 
 const textClasses: Record<BadgeVariant, string> = {
@@ -22,12 +24,14 @@ const textClasses: Record<BadgeVariant, string> = {
   secondary: "text-secondary-foreground",
   destructive: "text-destructive-foreground",
   outline: "text-foreground",
+  info: "text-white",
+  success: "text-white",
 };
 
 export function Badge({ variant = "default", label, className, textClassName, ...props }: BadgeProps) {
   return (
     <View
-      className={cn("rounded-full px-2.5 py-0.5", variantClasses[variant], className)}
+      className={cn("rounded-md px-2 py-0.5", variantClasses[variant], className)}
       {...props}
     >
       <Text className={cn("text-xs font-semibold", textClasses[variant], textClassName)}>

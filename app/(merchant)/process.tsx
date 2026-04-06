@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, ActivityIndicator, Alert } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { CheckCircle, XCircle } from "lucide-react-native";
-import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/PageHeader";
+import { Button } from "@/components/ui/button";
 import { apiFetch } from "@/services/api";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { CheckCircle, XCircle } from "lucide-react-native";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, Alert, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ProcessScreen() {
   const { barcode } = useLocalSearchParams<{ barcode: string }>();
@@ -51,7 +51,7 @@ export default function ProcessScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-white">
       <PageHeader title="바우처 확인" />
       <View className="flex-1 items-center justify-center px-6">
         {status === "validating" && (

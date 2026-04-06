@@ -17,7 +17,7 @@ export const Input = React.forwardRef<TextInput, InputProps>(
       <TextInput
         ref={ref}
         className={cn(
-          "flex h-12 w-full rounded-md border px-4 py-2 text-base text-foreground",
+          "flex h-[48px] w-full rounded-md border px-4 py-2 text-[16px] text-foreground",
           variantClass,
           className,
         )}

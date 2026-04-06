@@ -1,16 +1,16 @@
-import React, { useRef, useState, useCallback } from "react";
-import { View, Text, FlatList, Pressable, Image, ActivityIndicator, ScrollView } from "react-native";
-import { useRouter, useFocusEffect } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Search, Package } from "lucide-react-native";
-import { Input } from "@/components/ui/input";
+import { ScreenHeader } from "@/components/ScreenHeader";
 import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
 import { resolveImageUrl } from "@/lib/image";
+import { cn } from "@/lib/utils";
 import {
   getMarketplaceListings,
   type MarketplaceListing,
 } from "@/services/marketplace";
+import { useFocusEffect, useRouter } from "expo-router";
+import { Package } from "lucide-react-native";
+import React, { useCallback, useRef, useState } from "react";
+import { ActivityIndicator, FlatList, Image, Pressable, ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const CATEGORY_TABS = [
   { key: "all", label: "전체" },
@@ -63,7 +63,7 @@ export default function MerchantMarketScreen() {
         onPress={() => handleDetail(item)}
       >
         {imgUri ? (
-          <Image source={{ uri: imgUri }} className="w-16 h-16 rounded-lg" resizeMode="cover" />
+          <Image source={{ uri: imgUri }} className="w-16 h-16 rounded-lg" resizeMode="contain" />
         ) : (
           <View className="w-16 h-16 rounded-lg bg-muted items-center justify-center">
             {isSet ? <Package size={24} color="#CE3630" /> : <Text className="text-2xl">🎁</Text>}
@@ -105,58 +105,47 @@ export default function MerchantMarketScreen() {
   };
 
   const listHeader = (
-    <>
-      <View className="px-4 py-3">
-        <Text className="text-2xl font-bold text-foreground">중고마켓</Text>
-      </View>
-
-      <View className="px-4 mb-3">
-        <View className="flex-row items-center bg-secondary rounded-lg px-3">
-          <Search size={18} color="#737373" />
-          <Input
-            className="flex-1 border-0 bg-transparent"
-            placeholder="브랜드 또는 상품명 검색"
-            value={search}
-            onChangeText={setSearch}
-          />
-        </View>
-      </View>
-
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
-        className="mb-3"
-      >
-        {CATEGORY_TABS.map((tab) => {
-          const isActive = tab.key === activeTab;
-          return (
-            <Pressable
-              key={tab.key}
-              onPress={() => setActiveTab(tab.key)}
-              style={{ alignSelf: "flex-start" }}
-              className={cn(
-                "rounded-full px-4 py-2",
-                isActive ? "bg-primary" : "bg-secondary",
-              )}
-            >
-              <Text
+    <ScreenHeader
+      elevated
+      title="중고마켓"
+      search={{ value: search, onChangeText: setSearch }}
+      bottom={
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
+          className="mb-3"
+        >
+          {CATEGORY_TABS.map((tab) => {
+            const isActive = tab.key === activeTab;
+            return (
+              <Pressable
+                key={tab.key}
+                onPress={() => setActiveTab(tab.key)}
+                style={{ alignSelf: "flex-start" }}
                 className={cn(
-                  "text-sm font-medium",
-                  isActive ? "text-primary-foreground" : "text-muted-foreground",
+                  "rounded-full px-4 py-2",
+                  isActive ? "bg-primary" : "bg-secondary",
                 )}
               >
-                {tab.label}
-              </Text>
-            </Pressable>
-          );
-        })}
-      </ScrollView>
-    </>
+                <Text
+                  className={cn(
+                    "text-sm font-medium",
+                    isActive ? "text-primary-foreground" : "text-muted-foreground",
+                  )}
+                >
+                  {tab.label}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </ScrollView>
+      }
+    />
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
       <FlatList
         ref={listRef}
         data={loading ? [] : listings}

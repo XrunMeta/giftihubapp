@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, Image, ScrollView, ActivityIndicator, Alert, TextInput } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Minus, Plus } from "lucide-react-native";
-import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/PageHeader";
+import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
-import { getProductDetail, getProductFullImageUrl, type Product, type ProductDetailResponse } from "@/services/store";
+import { getProductDetail, getProductFullImageUrl, type Product } from "@/services/store";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { Minus, Plus } from "lucide-react-native";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, Alert, Image, ScrollView, Text, TextInput, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const CUR_SYM: Record<string, string> = { KRW: "₩", USD: "$", IDR: "Rp" };
 
@@ -37,7 +37,7 @@ export default function ProductDetailScreen() {
 
   if (loading || !product) {
     return (
-      <SafeAreaView className="flex-1 bg-background items-center justify-center">
+      <SafeAreaView className="flex-1 bg-white items-center justify-center">
         <ActivityIndicator size="large" color="#CE3630" />
       </SafeAreaView>
     );
@@ -52,14 +52,14 @@ export default function ProductDetailScreen() {
       : 0;
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-white ">
       <PageHeader title={product.brand_name} />
-      <ScrollView className="flex-1">
+      <ScrollView className="flex-1 px-5">
         {getProductFullImageUrl(product) ? (
           <Image
             source={{ uri: getProductFullImageUrl(product)! }}
             className="w-full h-64"
-            resizeMode="cover"
+            resizeMode="contain"
           />
         ) : (
           <View className="w-full h-48 bg-muted items-center justify-center">
@@ -67,7 +67,7 @@ export default function ProductDetailScreen() {
             <Text className="text-muted-foreground mt-2">{product.brand_name}</Text>
           </View>
         )}
-        <View className="px-5 py-4">
+        <View className="py-4">
           <Text className="text-xs text-muted-foreground">{product.brand_name}</Text>
           <Text className="text-xl font-bold text-foreground mt-1">{product.name}</Text>
 

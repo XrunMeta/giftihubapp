@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { View, Text, Alert } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/PageHeader";
+import { Button } from "@/components/ui/button";
 import { apiFetch } from "@/services/api";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import React, { useState } from "react";
+import { Alert, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RefundScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -39,7 +39,7 @@ export default function RefundScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-white">
       <PageHeader title="환불 요청" />
       <View className="flex-1 px-5 mt-4">
         <View className="bg-card rounded-xl border border-border p-4">

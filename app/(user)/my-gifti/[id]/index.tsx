@@ -1,19 +1,19 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
-import { View, Text, Image, ScrollView, ActivityIndicator, Alert, Animated, useWindowDimensions, TouchableOpacity } from "react-native";
+import Barcode128 from "@/components/Barcode128";
+import { PageHeader } from "@/components/PageHeader";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { useDevMode } from "@/hooks/use-dev-mode";
+import { resolveImageUrl } from "@/lib/image";
+import { getVoucherBarcode, getVoucherDetail, type Voucher } from "@/services/vouchers";
+import { format } from "date-fns";
 import * as Clipboard from "expo-clipboard";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Send, ArrowLeftRight, ShoppingBag, CheckCircle, Clock, ArrowRight, XCircle, Store } from "lucide-react-native";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { PageHeader } from "@/components/PageHeader";
-import { Separator } from "@/components/ui/separator";
-import { resolveImageUrl } from "@/lib/image";
-import Barcode128 from "@/components/Barcode128";
+import { ArrowLeftRight, ArrowRight, CheckCircle, Clock, Send, ShoppingBag, Store, XCircle } from "lucide-react-native";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { ActivityIndicator, Alert, Animated, Image, ScrollView, Text, TouchableOpacity, useWindowDimensions, View } from "react-native";
 import QRCode from "react-native-qrcode-svg";
-import { getVoucherDetail, getVoucherBarcode, type Voucher } from "@/services/vouchers";
-import { format } from "date-fns";
-import { useDevMode } from "@/hooks/use-dev-mode";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const REFRESH_SECONDS = 30;
 
@@ -27,7 +27,7 @@ const STATUS_INFO: Record<string, { label: string; icon: typeof CheckCircle; col
   listed: {
     label: "판매중",
     icon: ShoppingBag,
-    color: "#f59e0b",
+    color: "#2563eb",
     description: "이 기프티는 중고마켓에 등록되어 판매중입니다.",
   },
   expired: {
@@ -39,7 +39,7 @@ const STATUS_INFO: Record<string, { label: string; icon: typeof CheckCircle; col
   transferred: {
     label: "양도됨",
     icon: ArrowRight,
-    color: "#6366f1",
+    color: "#16a34a",
     description: "이 기프티는 다른 사용자에게 양도되었습니다.",
   },
   refunded: {
@@ -115,7 +115,7 @@ export default function GiftiDetailScreen() {
 
   if (loading || !voucher) {
     return (
-      <SafeAreaView className="flex-1 bg-background items-center justify-center">
+      <SafeAreaView className="flex-1 bg-white items-center justify-center">
         <ActivityIndicator size="large" color="#CE3630" />
       </SafeAreaView>
     );
@@ -127,7 +127,7 @@ export default function GiftiDetailScreen() {
   const statusInfo = STATUS_INFO[voucher.status];
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-white">
       <PageHeader title="기프티 상세" />
       <ScrollView className="flex-1 px-5">
         {}
@@ -208,14 +208,24 @@ export default function GiftiDetailScreen() {
         <View className="bg-card rounded-xl border border-border p-4">
           <View className="flex-row justify-between items-start">
             {imgUri ? (
-              <Image source={{ uri: imgUri }} className="w-14 h-14 rounded-lg mr-3" resizeMode="cover" />
+              <Image source={{ uri: imgUri }} className="w-14 h-14 rounded-lg mr-3" resizeMode="contain" />
             ) : null}
             <View className="flex-1">
               <Text className="text-xs text-muted-foreground">{voucher.brand}</Text>
               <Text className="text-lg font-bold text-foreground mt-0.5">{voucher.name}</Text>
             </View>
             <Badge
-              variant={isActive ? "default" : voucher.status === "expired" ? "destructive" : "secondary"}
+              variant={
+                isActive
+                  ? "default"
+                  : voucher.status === "expired"
+                    ? "destructive"
+                    : voucher.status === "listed"
+                      ? "info"
+                      : voucher.status === "transferred"
+                        ? "success"
+                        : "secondary"
+              }
               label={statusInfo?.label ?? voucher.status}
             />
           </View>

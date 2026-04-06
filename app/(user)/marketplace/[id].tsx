@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, Image, ScrollView, ActivityIndicator, Alert } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/PageHeader";
-import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { resolveImageUrl } from "@/lib/image";
 import { getListingDetail, type MarketplaceListing } from "@/services/marketplace";
 import { format } from "date-fns";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, Alert, Image, ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MarketplaceDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -34,20 +34,20 @@ export default function MarketplaceDetailScreen() {
 
   if (loading || !listing) {
     return (
-      <SafeAreaView className="flex-1 bg-background items-center justify-center">
+      <SafeAreaView className="flex-1 bg-white items-center justify-center">
         <ActivityIndicator size="large" color="#CE3630" />
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-white">
       <PageHeader title="중고 상세" />
       <ScrollView className="flex-1 px-5">
         {(() => {
           const imgUri = resolveImageUrl(listing.image_url, listing.brand_logo);
           return imgUri ? (
-            <Image source={{ uri: imgUri }} className="w-full h-48 rounded-xl mt-2" resizeMode="cover" />
+            <Image source={{ uri: imgUri }} className="w-full h-48 rounded-xl mt-2" resizeMode="contain" />
           ) : (
             <View className="w-full h-36 rounded-xl mt-2 bg-muted items-center justify-center">
               <Text className="text-4xl">🎁</Text>

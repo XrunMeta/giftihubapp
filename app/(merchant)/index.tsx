@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import { View, Text, Alert } from "react-native";
-import { useRouter } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { CameraView, useCameraPermissions } from "expo-camera";
+import { ScreenHeader } from "@/components/ScreenHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { CameraView, useCameraPermissions } from "expo-camera";
+import { useRouter } from "expo-router";
+import React, { useState } from "react";
+import { Alert, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MerchantHomeScreen() {
   const router = useRouter();
@@ -30,7 +31,7 @@ export default function MerchantHomeScreen() {
 
   if (!permission?.granted) {
     return (
-      <SafeAreaView className="flex-1 bg-background items-center justify-center px-6">
+      <SafeAreaView className="flex-1 bg-gray-50 items-center justify-center px-6">
         <Text className="text-lg font-semibold text-foreground mb-4">카메라 권한 필요</Text>
         <Text className="text-sm text-muted-foreground text-center mb-6">
           바코드 스캔을 위해 카메라 권한이 필요합니다.
@@ -41,10 +42,8 @@ export default function MerchantHomeScreen() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
-      <View className="px-4 py-3">
-        <Text className="text-2xl font-bold text-foreground">바코드 스캔</Text>
-      </View>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
+      <ScreenHeader elevated title="바코드 스캔" />
 
       <View className="flex-1 mx-4 rounded-xl overflow-hidden border border-border">
         <CameraView

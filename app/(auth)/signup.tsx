@@ -1,19 +1,17 @@
-import React from "react";
-import { View, Text, Image } from "react-native";
-import { useRouter } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { User, Store } from "lucide-react-native";
 import { Button } from "@/components/ui/button";
-import { images } from "@/assets/images";
+import { useRouter } from "expo-router";
+import { Store, User } from "lucide-react-native";
+import React from "react";
+import { Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SignupScreen() {
   const router = useRouter();
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-gray-50">
       <View className="flex-1 justify-center px-6">
         <View className="items-center mb-10">
-          <Image source={images.logo} className="w-20 h-20 mb-4" resizeMode="contain" />
           <Text className="text-2xl font-bold text-foreground">회원가입</Text>
           <Text className="text-sm text-muted-foreground mt-1">가입 유형을 선택해주세요</Text>
         </View>

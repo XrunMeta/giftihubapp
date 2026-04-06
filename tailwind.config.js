@@ -4,6 +4,9 @@ module.exports = {
   presets: [require("nativewind/preset")],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["Pretendard-Regular"],
+      },
       colors: {
         border: "var(--border)",
         input: {

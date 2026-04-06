@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, Pressable, Alert } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
-import * as WebBrowser from "expo-web-browser";
-import { CreditCard, Banknote, Coins, Zap } from "lucide-react-native";
-import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/PageHeader";
+import { Button } from "@/components/ui/button";
 import { purchaseFromMarketplace } from "@/services/marketplace";
-import { getDevMode } from "@/services/system";
 import type { PaymentMethod } from "@/services/store";
+import { getDevMode } from "@/services/system";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import * as WebBrowser from "expo-web-browser";
+import { Banknote, Coins, CreditCard, Zap } from "lucide-react-native";
+import React, { useEffect, useState } from "react";
+import { Alert, Pressable, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const BASE_METHODS: { key: PaymentMethod; label: string; icon: React.ReactNode; devOnly?: boolean }[] = [
   { key: "dev_pay", label: "개발페이", icon: <Zap size={20} color="#3b82f6" />, devOnly: true },
@@ -26,7 +26,7 @@ export default function MerchantMarketPurchaseScreen() {
   const [devMode, setDevMode] = useState(false);
 
   useEffect(() => {
-    getDevMode().then(setDevMode).catch(() => {});
+    getDevMode().then(setDevMode).catch(() => { });
   }, []);
 
   const METHODS = BASE_METHODS.filter((m) => !m.devOnly || devMode);
@@ -56,7 +56,7 @@ export default function MerchantMarketPurchaseScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-white">
       <PageHeader title="결제" />
       <View className="flex-1 px-5 mt-4">
         <Text className="text-base font-semibold text-foreground mb-3">결제 수단</Text>
@@ -64,17 +64,15 @@ export default function MerchantMarketPurchaseScreen() {
           {METHODS.map((m) => (
             <Pressable
               key={m.key}
-              className={`flex-row items-center p-4 rounded-xl border ${
-                selected === m.key ? "border-primary bg-primary/5" : "border-border bg-card"
-              }`}
+              className={`flex-row items-center p-4 rounded-xl border ${selected === m.key ? "border-primary bg-primary/5" : "border-border bg-card"
+                }`}
               onPress={() => setSelected(m.key)}
             >
               {m.icon}
               <Text className="text-base text-foreground ml-3 flex-1">{m.label}</Text>
               <View
-                className={`w-5 h-5 rounded-full border-2 ${
-                  selected === m.key ? "border-primary bg-primary" : "border-border"
-                }`}
+                className={`w-5 h-5 rounded-full border-2 ${selected === m.key ? "border-primary bg-primary" : "border-border"
+                  }`}
               />
             </Pressable>
           ))}

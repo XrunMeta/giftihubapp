@@ -1,7 +1,9 @@
 import "../global.css";
 import { useEffect } from "react";
 import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
+import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
@@ -10,13 +12,29 @@ import { useColorScheme } from "@/hooks/use-color-scheme";
 import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "@/context/CartContext";
 import { DevModeContext, useDevModeProvider } from "@/hooks/use-dev-mode";
+import { applyPretendardTextDefaults, pretendardFontMap } from "@/lib/pretendard";
 import { initBaseUrl } from "@/services/api";
+
+SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const devMode = useDevModeProvider();
+  const [fontsLoaded, fontError] = useFonts(pretendardFontMap);
 
-  useEffect(() => { initBaseUrl(); }, []);
+  useEffect(() => {
+    initBaseUrl();
+  }, []);
+
+  useEffect(() => {
+    if (!fontsLoaded && !fontError) return;
+    if (fontsLoaded) applyPretendardTextDefaults();
+    SplashScreen.hideAsync();
+  }, [fontsLoaded, fontError]);
+
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

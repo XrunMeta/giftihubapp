@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { View, Text, ScrollView, Alert } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useLocalSearchParams, useRouter } from "expo-router";
 import { PageHeader } from "@/components/PageHeader";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { giftVoucher } from "@/services/vouchers";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import React, { useState } from "react";
+import { Alert, ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SendGiftScreen() {
   const router = useRouter();
@@ -54,7 +54,7 @@ export default function SendGiftScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-white">
       <PageHeader title="선물하기" />
       <ScrollView className="flex-1 px-6">
         {voucherName ? (

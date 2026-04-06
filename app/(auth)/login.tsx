@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, KeyboardAvoidingView, Platform, ScrollView, Alert, Image, Switch, Pressable } from "react-native";
-import { useRouter } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
-import * as WebBrowser from "expo-web-browser";
-import * as Linking from "expo-linking";
+import { images } from "@/assets/images";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/context/AuthContext";
-import { loginWithEmail } from "@/services/auth";
-import { images } from "@/assets/images";
-import { getSavedEmail, setSavedEmail, removeSavedEmail, getRememberMe, setRememberMe, getBaseUrl, getServerMode, setServerMode } from "@/services/api";
 import { useDevMode } from "@/hooks/use-dev-mode";
+import { getBaseUrl, getRememberMe, getSavedEmail, getServerMode, removeSavedEmail, setRememberMe, setSavedEmail, setServerMode } from "@/services/api";
+import { loginWithEmail } from "@/services/auth";
+import * as Linking from "expo-linking";
+import { useRouter } from "expo-router";
+import * as WebBrowser from "expo-web-browser";
+import React, { useEffect, useState } from "react";
+import { Alert, Image, KeyboardAvoidingView, Platform, Pressable, ScrollView, Switch, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -85,124 +85,128 @@ export default function LoginScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-gray-50">
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         className="flex-1"
       >
         <ScrollView
-          contentContainerStyle={{ flexGrow: 1, justifyContent: "center", padding: 24 }}
+          contentContainerStyle={{ flexGrow: 1, padding: 24, justifyContent: "space-between" }}
           keyboardShouldPersistTaps="handled"
         >
-          <View className="items-center mb-8">
+          <View className="items-start mb-8 flex-grow-1">
             <Image
               source={images.logo}
-              className="w-24 h-24 mb-4"
+              className="w-[140px] h-[60px]"
               resizeMode="contain"
             />
-            <Text className="text-2xl font-bold text-foreground">GiftiHub</Text>
+            <Text className="text-2xl font-bold text-foreground">GiftHub에 오신 것을{"\n"}
+              환영합니다
+            </Text>
             <Text className="text-sm text-muted-foreground mt-1">디지털 기프티 플랫폼</Text>
           </View>
 
-          <View className="mb-4">
-            <Text className="text-sm font-medium text-foreground mb-1.5">이메일</Text>
-            <Input
-              keyboardType="email-address"
-              autoCapitalize="none"
-              placeholder="email@example.com"
-              value={email}
-              onChangeText={setEmail}
-            />
-          </View>
-
-          <View className="mb-4">
-            <Text className="text-sm font-medium text-foreground mb-1.5">비밀번호</Text>
-            <Input
-              secureTextEntry
-              placeholder="••••••••"
-              value={password}
-              onChangeText={setPassword}
-            />
-          </View>
-
-          <View className="flex-row items-center justify-between mb-6">
-            <Text className="text-sm text-muted-foreground">로그인 유지</Text>
-            <Switch
-              value={rememberMe}
-              onValueChange={setRememberMeState}
-              trackColor={{ false: "#d4d4d4", true: "#CE3630" }}
-              thumbColor="#ffffff"
-            />
-          </View>
-
-          <Button onPress={handleEmailLogin} disabled={loading} className="mb-3">
-            {loading ? "로그인 중..." : "로그인"}
-          </Button>
-
-          <View className="flex-row items-center my-4">
-            <Separator className="flex-1" />
-            <Text className="mx-3 text-sm text-muted-foreground">또는</Text>
-            <Separator className="flex-1" />
-          </View>
-
-          <Button
-            variant="outline"
-            onPress={handleTelegramLogin}
-            className="mb-6"
-          >
-            Telegram으로 로그인
-          </Button>
-
-          <View className="flex-row justify-center items-center">
-            <Text className="text-sm text-muted-foreground">계정이 없으신가요? </Text>
-            <Text
-              className="text-sm font-medium text-primary"
-              onPress={() => router.push("/(auth)/signup")}
-            >
-              회원가입
-            </Text>
-          </View>
-
-          {isDevMode && (
-            <View className="mt-6 border border-dashed border-muted-foreground/30 rounded-xl p-3">
-              {}
-              <View className="flex-row gap-2 mb-2">
-                <Pressable
-                  className={`flex-1 rounded-lg px-3 py-2 items-center ${serverMode === "local" ? "bg-amber-500" : "bg-secondary/50"}`}
-                  onPress={async () => { await setServerMode("local"); setServerModeState("local"); }}
-                >
-                  <Text className={`text-xs font-bold ${serverMode === "local" ? "text-white" : "text-muted-foreground"}`}>LOCAL</Text>
-                </Pressable>
-                <Pressable
-                  className={`flex-1 rounded-lg px-3 py-2 items-center ${serverMode === "remote" ? "bg-green-500" : "bg-secondary/50"}`}
-                  onPress={async () => { await setServerMode("remote"); setServerModeState("remote"); }}
-                >
-                  <Text className={`text-xs font-bold ${serverMode === "remote" ? "text-white" : "text-muted-foreground"}`}>REMOTE</Text>
-                </Pressable>
-              </View>
-              <Text className="text-xs font-mono text-center text-muted-foreground mb-2" selectable>
-                {getBaseUrl()}
-              </Text>
-
-              <Text className="text-xs text-muted-foreground text-center mb-2">DEV 빠른 로그인</Text>
-              <View className="flex-row gap-2">
-                <Button
-                  variant="outline"
-                  className="flex-1"
-                  onPress={() => { setEmail("email@example.com"); setPassword("1234"); }}
-                >
-                  <Text className="text-sm font-medium text-foreground">사용자</Text>
-                </Button>
-                <Button
-                  variant="outline"
-                  className="flex-1"
-                  onPress={() => { setEmail("oth-test@example.invalid"); setPassword("1234"); }}
-                >
-                  <Text className="text-sm font-medium text-foreground">상점</Text>
-                </Button>
-              </View>
+          <View >
+            <View className="mb-4">
+              <Text className="text-sm font-medium text-foreground mb-1.5">이메일</Text>
+              <Input
+                keyboardType="email-address"
+                autoCapitalize="none"
+                placeholder="email@example.com"
+                value={email}
+                onChangeText={setEmail}
+              />
             </View>
-          )}
+
+            <View className="mb-4">
+              <Text className="text-sm font-medium text-foreground mb-1.5">비밀번호</Text>
+              <Input
+                secureTextEntry
+                placeholder="••••••••"
+                value={password}
+                onChangeText={setPassword}
+              />
+            </View>
+
+            <View className="flex-row items-center justify-between mb-6">
+              <Text className="text-sm text-muted-foreground">로그인 유지</Text>
+              <Switch
+                value={rememberMe}
+                onValueChange={setRememberMeState}
+                trackColor={{ false: "#d4d4d4", true: "#CE3630" }}
+                thumbColor="#ffffff"
+              />
+            </View>
+
+            <Button onPress={handleEmailLogin} disabled={loading} className="mb-3">
+              {loading ? "로그인 중..." : "로그인"}
+            </Button>
+
+            <View className="flex-row items-center my-4">
+              <Separator className="flex-1" />
+              <Text className="mx-3 text-sm text-muted-foreground">또는</Text>
+              <Separator className="flex-1" />
+            </View>
+
+            <Button
+              variant="outline"
+              onPress={handleTelegramLogin}
+              className="mb-6"
+            >
+              Telegram으로 로그인
+            </Button>
+
+            <View className="flex-row justify-center items-center">
+              <Text className="text-sm text-muted-foreground">계정이 없으신가요? </Text>
+              <Text
+                className="text-sm font-medium text-primary"
+                onPress={() => router.push("/(auth)/signup")}
+              >
+                회원가입
+              </Text>
+            </View>
+
+            {isDevMode && (
+              <View className="mt-6 border border-dashed border-muted-foreground/30 rounded-xl p-3">
+                {}
+                <View className="flex-row gap-2 mb-2">
+                  <Pressable
+                    className={`flex-1 rounded-lg px-3 py-2 items-center ${serverMode === "local" ? "bg-amber-500" : "bg-secondary/50"}`}
+                    onPress={async () => { await setServerMode("local"); setServerModeState("local"); }}
+                  >
+                    <Text className={`text-xs font-bold ${serverMode === "local" ? "text-white" : "text-muted-foreground"}`}>LOCAL</Text>
+                  </Pressable>
+                  <Pressable
+                    className={`flex-1 rounded-lg px-3 py-2 items-center ${serverMode === "remote" ? "bg-green-500" : "bg-secondary/50"}`}
+                    onPress={async () => { await setServerMode("remote"); setServerModeState("remote"); }}
+                  >
+                    <Text className={`text-xs font-bold ${serverMode === "remote" ? "text-white" : "text-muted-foreground"}`}>REMOTE</Text>
+                  </Pressable>
+                </View>
+                <Text className="text-xs font-mono text-center text-muted-foreground mb-2" selectable>
+                  {getBaseUrl()}
+                </Text>
+
+                <Text className="text-xs text-muted-foreground text-center mb-2">DEV 빠른 로그인</Text>
+                <View className="flex-row gap-2">
+                  <Button
+                    variant="outline"
+                    className="flex-1"
+                    onPress={() => { setEmail("email@example.com"); setPassword("1234"); }}
+                  >
+                    <Text className="text-sm font-medium text-foreground">사용자</Text>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="flex-1"
+                    onPress={() => { setEmail("oth-test@example.invalid"); setPassword("1234"); }}
+                  >
+                    <Text className="text-sm font-medium text-foreground">상점</Text>
+                  </Button>
+                </View>
+              </View>
+            )}
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
