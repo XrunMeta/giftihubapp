@@ -105,7 +105,7 @@ export default function MerchantMarketScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
       <ScreenHeader
         elevated
         title="중고마켓"
@@ -149,7 +149,6 @@ export default function MerchantMarketScreen() {
         data={loading ? [] : listings}
         renderItem={renderListing}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={{ paddingBottom: 20 }}
         ListEmptyComponent={
           loading ? (
             <View className="items-center py-20">

@@ -53,7 +53,7 @@ export default function MerchantSettingsScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
       <ScreenHeader elevated title="설정" />
 
       <View className="mx-4 bg-card rounded-xl border border-border p-5 mb-4">

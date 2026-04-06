@@ -149,7 +149,7 @@ export default function CartScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
       <ScreenHeader elevated title="장바구니" />
 
       <FlatList
@@ -157,7 +157,6 @@ export default function CartScreen() {
         data={items}
         renderItem={renderItem}
         keyExtractor={(item) => item.cartId ?? item.product.id}
-        contentContainerStyle={{ paddingBottom: 20 }}
         ListHeaderComponent={renderPackages()}
         ListEmptyComponent={
           !packageItems.length ? (

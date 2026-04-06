@@ -109,7 +109,7 @@ export default function StoreScreen() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
       <ScreenHeader
         elevated
         title="스토어"
@@ -123,7 +123,7 @@ export default function StoreScreen() {
         keyExtractor={(item) => item.id}
         numColumns={2}
         columnWrapperStyle={{ gap: GRID_COLUMN_GAP }}
-        contentContainerStyle={{ paddingHorizontal: LIST_HORIZONTAL_PAD, paddingBottom: 20 }}
+        contentContainerStyle={{ paddingHorizontal: LIST_HORIZONTAL_PAD }}
         ListHeaderComponent={<BundleComposer />}
         ListEmptyComponent={
           <View className="items-center py-20">

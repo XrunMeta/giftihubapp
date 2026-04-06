@@ -91,7 +91,7 @@ export default function MerchantHistoryScreen() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
       <ScreenHeader elevated title="사용 이력" />
       <FlatList
         data={items}

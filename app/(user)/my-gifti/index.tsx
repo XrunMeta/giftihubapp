@@ -210,7 +210,7 @@ export default function MyGiftiScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
       <ScreenHeader
         elevated
         title="내 기프티"
@@ -265,7 +265,6 @@ export default function MyGiftiScreen() {
         keyExtractor={(item) =>
           item.type === "bundle" ? `set-${item.setId}` : item.voucher.id
         }
-        contentContainerStyle={{ paddingBottom: 20 }}
         ListEmptyComponent={
           loading ? (
             <View className="items-center py-20">

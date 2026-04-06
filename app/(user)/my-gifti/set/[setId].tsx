@@ -238,7 +238,6 @@ export default function SetDetailScreen() {
         renderItem={renderVoucherItem}
         keyExtractor={(item) => item.id}
         ListHeaderComponent={listHeader}
-        contentContainerStyle={{ paddingBottom: 20 }}
       />
     </SafeAreaView>
   );

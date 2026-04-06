@@ -57,7 +57,7 @@ export default function MyPageScreen() {
   const activeCount = stats.find((s) => s.status === "active")?.count || 0;
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
       <ScreenHeader elevated title="MY" />
       <ScrollView className="flex-1">
         {}
