@@ -1,13 +1,14 @@
-import v_a3453e, { v_5ab095, v_de06a3, v_df9f57 } from "bapkr";
-import { v_3094a2, v_19b633, v_9cabcb, v_09d0e5, v_cf9c33, v_39a996, v_122070 } from "rcmrninabrnb";
-import { v_d1d90c, v_cf763b } from "rkmroqyctko";
-import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
-import { v_c62079 } from "wjvlskvsbzsrojdbjsl";
-import { v_6185b9 } from "hqklsidyfbumojabxoewf";
-import { v_6e56f5 } from "mbdlgxnaxny";
+import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
+import { v_6185b9, type v_dcbdc2 } from "hqklsidyfbumojabxoewf";
 import { v_7ef52a } from "splenmyqnym";
+import { v_6e56f5 } from "mbdlgxnaxny";
 import { v_720509, type v_7fb3de, type v_a64e82 } from "pvulvehakmpzwkznlnd";
 import { v_db3cc6 } from "dyunzbus";
+import { v_cf763b, v_d1d90c } from "rkmroqyctko";
+import { v_c62079 } from "wjvlskvsbzsrojdbjsl";
+import v_a3453e, { v_de06a3, v_df9f57, v_5ab095 } from "bapkr";
+import { v_39a996, v_9cabcb, v_cf9c33, v_09d0e5, v_122070, v_19b633, v_3094a2 } from "rcmrninabrnb";
+import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 const v_928ad6 = { KRW: "₩", USD: "$", IDR: "Rp" };
 function v_48b4c6(v_f63e09, v_a832b3) {
@@ -24,12 +25,12 @@ const v_1bc355 = [
   { key: "transferred", label: "양도됨" },
 ];
 
-const v_df823e = {
+const STATUS_BADGE: Record<string, { label: string; variant: v_dcbdc2 }> = {
   active: { label: "사용가능", variant: "default" },
-  listed: { label: "판매중", variant: "secondary" },
+  listed: { label: "판매중", variant: "info" },
   used: { label: "사용완료", variant: "secondary" },
   expired: { label: "만료", variant: "destructive" },
-  transferred: { label: "양도됨", variant: "secondary" },
+  transferred: { label: "양도됨", variant: "success" },
 };
 
 export default function v_bf7b5b() {
@@ -68,7 +69,7 @@ export default function v_bf7b5b() {
   v_cf763b(
     v_de06a3(() => {
       v_04c01a.current();
-    }, [])
+    }, [v_ac1d22])
   );
 
   type ListItem = { type: "single"; voucher: v_7fb3de } | { type: "bundle"; setId: string; vouchers: v_7fb3de[] };
@@ -129,7 +130,7 @@ export default function v_bf7b5b() {
         </View>
         <View className="flex-row">
           {v_74f4a3 ? (
-            <Image source={{ uri: v_74f4a3 }} className="w-14 h-14 rounded-lg" resizeMode="cover" />
+            <Image source={{ uri: v_74f4a3 }} className="w-14 h-14 rounded-lg" resizeMode="contain" />
           ) : (
             <View className="w-14 h-14 rounded-lg bg-muted items-center justify-center">
               <Text className="text-xl">🎁</Text>
@@ -179,7 +180,7 @@ export default function v_bf7b5b() {
         onPress={() => v_904d46.push(`/(user)/oth-path${v_8c0b26.id}`)}
       >
         {v_74f4a3 ? (
-          <Image source={{ uri: v_74f4a3 }} className="w-16 h-16 rounded-lg" resizeMode="cover" />
+          <Image source={{ uri: v_74f4a3 }} className="w-16 h-16 rounded-lg" resizeMode="contain" />
         ) : (
           <View className="w-16 h-16 rounded-lg bg-muted items-center justify-center">
             <Text className="text-2xl">🎁</Text>
@@ -209,49 +210,53 @@ export default function v_bf7b5b() {
   };
 
   const v_b62866 = (
-    <>
-      <View className="px-4 py-3">
-        <Text className="text-2xl font-bold text-foreground">내 기프티</Text>
-        {v_49c6c7 ? (
-          <Text className="text-xs text-muted-foreground mt-1" selectable>{v_49c6c7}</Text>
-        ) : null}
-      </View>
-
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
-        className="mb-3"
-      >
-        {v_1bc355.map((v_11083e) => {
-          const v_26dce6 = v_11083e.key === v_ac1d22;
-          return (
-            <Pressable
-              key={v_11083e.key}
-              onPress={() => v_02dd63(v_11083e.key)}
-              style={{ alignSelf: "flex-start" }}
-              className={v_6e56f5(
-                "rounded-full px-4 py-2",
-                v_26dce6 ? "bg-primary" : "bg-secondary",
-              )}
-            >
-              <Text
+    <ScreenHeader
+      elevated
+      title="내 기프티"
+      subtitle={
+        v_49c6c7 ? (
+          <Text className="text-xs text-muted-foreground mt-1" selectable>
+            {v_49c6c7}
+          </Text>
+        ) : undefined
+      }
+      bottom={
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
+          className="mb-3"
+        >
+          {v_1bc355.map((v_11083e) => {
+            const v_26dce6 = v_11083e.key === v_ac1d22;
+            return (
+              <Pressable
+                key={v_11083e.key}
+                onPress={() => v_02dd63(v_11083e.key)}
+                style={{ alignSelf: "flex-start" }}
                 className={v_6e56f5(
-                  "text-sm font-medium",
-                  v_26dce6 ? "text-primary-foreground" : "text-muted-foreground",
+                  "rounded-full px-4 py-2",
+                  v_26dce6 ? "bg-primary" : "bg-secondary",
                 )}
               >
-                {v_11083e.label}
-              </Text>
-            </Pressable>
-          );
-        })}
-      </ScrollView>
-    </>
+                <Text
+                  className={v_6e56f5(
+                    "text-sm font-medium",
+                    v_26dce6 ? "text-primary-foreground" : "text-muted-foreground",
+                  )}
+                >
+                  {v_11083e.label}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </ScrollView>
+      }
+    />
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
       <FlatList
         data={v_683210 ? [] : v_4d79ca}
         renderItem={({ item: v_8c0b26 }) =>

@@ -1,14 +1,14 @@
-import v_a3453e, { v_5ab095, v_c4deb2 } from "bapkr";
-import { v_3094a2, v_19b633, v_09d0e5, v_03e392 } from "rcmrninabrnb";
-import { v_d1d90c, v_d1a7ac } from "rkmroqyctko";
-import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
-import { v_d84748, v_82416d, v_1a7837, v_27dabc } from "wjvlskvsbzsrojdbjsl";
-import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
+import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
 import { v_7a943b } from "dxfmfnfvriitbtghyppor";
-import { v_8d53e7 } from "tdwgovnkpylnjynsp";
 import type { v_88a3f9 } from "vhkgxwheyyipiczd";
+import { v_8d53e7 } from "tdwgovnkpylnjynsp";
+import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
+import { v_82416d, v_1a7837, v_d84748, v_27dabc } from "wjvlskvsbzsrojdbjsl";
+import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
+import { v_03e392, v_09d0e5, v_19b633, v_3094a2 } from "rcmrninabrnb";
+import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 const BASE_PAYMENT_METHODS: { key: v_88a3f9; label: string; icon: v_a3453e.ReactNode; devOnly?: boolean }[] = [
   { key: "dev_pay", label: "개발페이", icon: <Zap size={20} color="#3b82f6" />, devOnly: true },
@@ -28,7 +28,7 @@ export default function v_0035e1() {
   const [v_36b75f, v_f99445] = v_5ab095(false);
 
   v_c4deb2(() => {
-    v_8d53e7().then(v_f99445).catch(() => {});
+    v_8d53e7().then(v_f99445).catch(() => { });
   }, []);
 
   const v_b6afde = v_5f78bd.filter((v_35f85c) => !v_35f85c.devOnly || v_36b75f);
@@ -62,7 +62,7 @@ export default function v_0035e1() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-white">
       <PageHeader title={`${v_6e2788} 결제`} />
       <View className="flex-1 px-5">
         <View className="bg-card rounded-xl border border-border p-4 mb-6">
@@ -84,17 +84,15 @@ export default function v_0035e1() {
           {v_b6afde.map((v_3d656b) => (
             <Pressable
               key={v_3d656b.key}
-              className={`flex-row items-center p-4 rounded-xl border ${
-                v_587413 === v_3d656b.key ? "border-primary bg-primary/5" : "border-border bg-card"
-              }`}
+              className={`flex-row items-center p-4 rounded-xl border ${v_587413 === v_3d656b.key ? "border-primary bg-primary/5" : "border-border bg-card"
+                }`}
               onPress={() => v_2122dd(v_3d656b.key)}
             >
               {v_3d656b.icon}
               <Text className="text-base text-foreground ml-3 flex-1">{v_3d656b.label}</Text>
               <View
-                className={`w-5 h-5 rounded-full border-2 ${
-                  v_587413 === v_3d656b.key ? "border-primary bg-primary" : "border-border"
-                }`}
+                className={`w-5 h-5 rounded-full border-2 ${v_587413 === v_3d656b.key ? "border-primary bg-primary" : "border-border"
+                  }`}
               />
             </Pressable>
           ))}

@@ -1,10 +1,11 @@
-import v_a3453e, { v_5ab095 } from "bapkr";
-import { v_3094a2, v_19b633, v_03e392 } from "rcmrninabrnb";
-import { v_d1d90c } from "rkmroqyctko";
-import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
-import { v_78ceb7, v_d4f1cc } from "mbgbsytfgyr";
+import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_1b353f } from "ymbgtfrroootgjefkrxgp";
+import { v_78ceb7, v_d4f1cc } from "mbgbsytfgyr";
+import { v_d1d90c } from "rkmroqyctko";
+import v_a3453e, { v_5ab095 } from "bapkr";
+import { v_03e392, v_19b633, v_3094a2 } from "rcmrninabrnb";
+import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 export default function v_b06108() {
   const v_904d46 = v_d1d90c();
@@ -30,7 +31,7 @@ export default function v_b06108() {
 
   if (!v_d1a6bb?.granted) {
     return (
-      <SafeAreaView className="flex-1 bg-background items-center justify-center px-6">
+      <SafeAreaView className="flex-1 bg-gray-50 items-center justify-center px-6">
         <Text className="text-lg font-semibold text-foreground mb-4">카메라 권한 필요</Text>
         <Text className="text-sm text-muted-foreground text-center mb-6">
           바코드 스캔을 위해 카메라 권한이 필요합니다.
@@ -41,10 +42,8 @@ export default function v_b06108() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
-      <View className="px-4 py-3">
-        <Text className="text-2xl font-bold text-foreground">바코드 스캔</Text>
-      </View>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
+      <ScreenHeader elevated title="바코드 스캔" />
 
       <View className="flex-1 mx-4 rounded-xl overflow-hidden border border-border">
         <CameraView

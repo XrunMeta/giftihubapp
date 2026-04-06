@@ -17,7 +17,7 @@ export const v_1b353f = v_a3453e.forwardRef<v_79c4f2, InputProps>(
       <TextInput
         ref={v_6d4ed3}
         className={v_6e56f5(
-          "flex h-12 w-full rounded-md border px-4 py-2 text-base text-foreground",
+          "flex h-[48px] w-full rounded-md border px-4 py-2 text-[16px] text-foreground",
           v_09519e,
           v_7ec75f,
         )}

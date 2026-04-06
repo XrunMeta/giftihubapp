@@ -1,11 +1,11 @@
-import v_a3453e, { v_5ab095 } from "bapkr";
-import { v_3094a2, v_19b633, v_03e392 } from "rcmrninabrnb";
-import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
-import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
+import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_1b353f } from "ymbgtfrroootgjefkrxgp";
-import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
 import { v_2b01b0 } from "pvulvehakmpzwkznlnd";
+import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
+import v_a3453e, { v_5ab095 } from "bapkr";
+import { v_03e392, v_19b633, v_3094a2 } from "rcmrninabrnb";
+import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 export default function v_7f792b() {
   const { id: v_389afb } = v_d1a7ac<{ id: string }>();
@@ -40,7 +40,7 @@ export default function v_7f792b() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-white">
       <PageHeader title="기프티 양도" />
       <View className="flex-1 px-5 mt-4">
         <Text className="text-sm font-medium text-foreground mb-1.5">수신자 이메일</Text>

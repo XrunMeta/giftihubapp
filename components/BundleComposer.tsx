@@ -1,17 +1,17 @@
-import v_a3453e, { v_5ab095 } from "bapkr";
-import { v_3094a2, v_19b633, v_79c4f2, v_09d0e5, v_39a996, v_03e392, v_cf9c33 } from "rcmrninabrnb";
-import { v_c62079, v_6b9090 } from "wjvlskvsbzsrojdbjsl";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_7a943b } from "dxfmfnfvriitbtghyppor";
-import { v_664ac3, type v_47aa8c } from "uugztyivrmtvweuio";
 import { v_7ef52a } from "splenmyqnym";
+import { v_664ac3, type v_47aa8c } from "uugztyivrmtvweuio";
+import { v_c62079, v_6b9090 } from "wjvlskvsbzsrojdbjsl";
+import v_a3453e, { v_5ab095 } from "bapkr";
+import { v_39a996, v_03e392, v_cf9c33, v_09d0e5, v_19b633, v_79c4f2, v_3094a2 } from "rcmrninabrnb";
 
 const v_78e25d = ["KRW", "USD", "IDR"] as const;
 const v_165211 = { KRW: "₩", USD: "$", IDR: "Rp" };
 const v_054e7a = {
-  KRW: "예: 50000",
-  USD: "예: 50",
-  IDR: "예: 500000",
+  KRW: "50000",
+  USD: "50",
+  IDR: "500000",
 };
 
 export function v_4c40b6() {
@@ -88,7 +88,7 @@ export function v_4c40b6() {
           <Text className="text-base font-bold text-foreground">구성 구매</Text>
         </View>
 
-        <Text className="text-xs text-muted-foreground mb-2">
+        <Text className="text-sm text-muted-foreground mb-2">
           금액을 입력하면 최적의 상품 조합을 만들어 드립니다.
         </Text>
 
@@ -98,16 +98,14 @@ export function v_4c40b6() {
             <Pressable
               key={v_3f4e2e}
               onPress={() => { v_b84a73(v_3f4e2e); v_ee239b(null); }}
-              className={`flex-1 py-1.5 rounded-lg border items-center ${
-                v_a832b3 === v_3f4e2e
-                  ? "bg-primary border-primary"
-                  : "bg-secondary border-border"
-              }`}
+              className={`flex-1 py-3  rounded-lg border items-center ${v_a832b3 === v_3f4e2e
+                ? "bg-primary border-primary"
+                : "bg-secondary border-border"
+                }`}
             >
               <Text
-                className={`text-xs font-semibold ${
-                  v_a832b3 === v_3f4e2e ? "text-primary-foreground" : "text-muted-foreground"
-                }`}
+                className={`text-sm font-semibold ${v_a832b3 === v_3f4e2e ? "text-primary-foreground" : "text-muted-foreground"
+                  }`}
               >
                 {v_3f4e2e}
               </Text>
@@ -118,9 +116,9 @@ export function v_4c40b6() {
         {}
         <View className="flex-row gap-2">
           <View className="flex-1 flex-row items-center bg-secondary rounded-lg px-3 border border-border">
-            <Text className="text-sm text-muted-foreground mr-1">{v_c37780}</Text>
+            <Text className="text-md text-muted-foreground mr-1">{v_c37780}</Text>
             <TextInput
-              className="flex-1 py-2.5 text-sm text-foreground"
+              className="flex-1 py-2.5 text-md text-foreground"
               placeholder={v_054e7a[v_a832b3]}
               placeholderTextColor="#737373"
               keyboardType="numeric"
@@ -161,11 +159,11 @@ export function v_4c40b6() {
                   </View>
                 )}
                 <View className="flex-1">
-                  <Text className="text-xs text-muted-foreground">{v_8c0b26.brand_name}</Text>
+                  <Text className="text-sm text-muted-foreground">{v_8c0b26.brand_name}</Text>
                   <Text className="text-sm text-foreground" numberOfLines={1}>{v_8c0b26.name}</Text>
                 </View>
                 <View className="items-end">
-                  <Text className="text-xs text-muted-foreground">x{v_8c0b26.quantity}</Text>
+                  <Text className="text-sm text-muted-foreground">x{v_8c0b26.quantity}</Text>
                   <Text className="text-sm font-semibold text-foreground">
                     {v_c37780}{v_8c0b26.subtotal.toLocaleString()}
                   </Text>
@@ -180,7 +178,7 @@ export function v_4c40b6() {
                 <Text className="text-lg">💳</Text>
               </View>
               <View className="flex-1">
-                <Text className="text-xs text-amber-500">제휴상품권</Text>
+                <Text className="text-sm text-amber-500">제휴상품권</Text>
                 <Text className="text-sm text-foreground">{v_247d1d.flexible_item.name}</Text>
               </View>
               <Text className="text-sm font-semibold text-foreground">
@@ -200,7 +198,7 @@ export function v_4c40b6() {
           </View>
 
           {v_247d1d.overshoot > 0 && (
-            <Text className="text-xs text-amber-500 mt-1">
+            <Text className="text-sm text-amber-500 mt-1">
               목표 대비 +{v_c37780}{v_247d1d.overshoot.toLocaleString()} 초과
             </Text>
           )}

@@ -1,26 +1,27 @@
-import v_a3453e, { v_c4deb2, v_5ab095, v_de06a3 } from "bapkr";
-import {
-  v_3094a2,
-  v_19b633,
-  v_9cabcb,
-  v_39a996,
-  v_4623af,
-  v_03e392,
-  v_6c4f62,
-  v_cf9c33,
-} from "rcmrninabrnb";
-import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
-import { v_c62079 } from "wjvlskvsbzsrojdbjsl";
+import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
 import { v_6185b9 } from "hqklsidyfbumojabxoewf";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
 import { v_7ef52a } from "splenmyqnym";
 import {
+  v_54a47e,
   v_60b706,
   v_9607ec,
-  v_54a47e,
-  type v_920170,
   type v_12efea,
+  type v_920170,
 } from "uugztyivrmtvweuio";
+import { v_c62079 } from "wjvlskvsbzsrojdbjsl";
+import v_a3453e, { v_de06a3, v_c4deb2, v_5ab095 } from "bapkr";
+import {
+  v_39a996,
+  v_03e392,
+  v_9cabcb,
+  v_cf9c33,
+  v_6c4f62,
+  v_19b633,
+  v_4623af,
+  v_3094a2,
+} from "rcmrninabrnb";
+import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 type Tab = "items" | "requests";
 
@@ -215,30 +216,30 @@ export default function v_8f53d1() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
-      <View className="px-4 py-3">
-        <Text className="text-2xl font-bold text-foreground">보유상품</Text>
-      </View>
-
-      <View className="flex-row mx-4 mb-3 gap-2">
-        {(["items", "requests"] as Tab[]).map((v_8d41d7) => (
-          <TouchableOpacity
-            key={v_8d41d7}
-            onPress={() => v_94ee83(v_8d41d7)}
-            className={`flex-1 py-2 rounded-lg border ${
-              v_11083e === v_8d41d7 ? "bg-primary border-primary" : "bg-card border-border"
-            }`}
-          >
-            <Text
-              className={`text-center text-sm font-medium ${
-                v_11083e === v_8d41d7 ? "text-primary-foreground" : "text-foreground"
-              }`}
-            >
-              {v_8d41d7 === "items" ? "보유상품" : "정산 요청"}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
+      <ScreenHeader
+        elevated
+        title="보유상품"
+        bottom={
+          <View className="flex-row mx-4 mb-3 gap-2">
+            {(["items", "requests"] as Tab[]).map((v_8d41d7) => (
+              <TouchableOpacity
+                key={v_8d41d7}
+                onPress={() => v_94ee83(v_8d41d7)}
+                className={`flex-1 py-3 rounded-lg border ${v_11083e === v_8d41d7 ? "bg-primary border-primary" : "bg-card border-border"
+                  }`}
+              >
+                <Text
+                  className={`text-center text-sm font-medium ${v_11083e === v_8d41d7 ? "text-primary-foreground" : "text-foreground"
+                    }`}
+                >
+                  {v_8d41d7 === "items" ? "보유상품" : "정산 요청"}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        }
+      />
 
       {v_683210 ? (
         <View className="flex-1 items-center justify-center">

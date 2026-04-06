@@ -1,15 +1,16 @@
-import v_a3453e, { v_c4deb2, v_5ab095, v_de06a3 } from "bapkr";
+import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
+import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
+import { v_bc1b24 } from "tlrvzsbmctdavs";
+import { v_db3cc6 } from "dyunzbus";
+import v_a3453e, { v_de06a3, v_c4deb2, v_5ab095 } from "bapkr";
 import {
-  v_3094a2,
-  v_19b633,
-  v_9cabcb,
   v_39a996,
+  v_9cabcb,
+  v_19b633,
   v_4623af,
+  v_3094a2,
 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
-import { v_bc1b24 } from "tlrvzsbmctdavs";
-import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
-import { v_db3cc6 } from "dyunzbus";
 
 type DailyItem = { date: string; count: number; total_amount: number };
 type SettlementResponse = {
@@ -75,7 +76,7 @@ export default function v_0842da() {
       const v_24baff = v_ded9f6 ? `?status=${v_ded9f6}` : "";
       const v_9390e8 = await v_bc1b24<{ records: SettlementRecord[] }>(`/oth-path${v_24baff}`);
       v_9ed182(v_9390e8.records);
-    } catch {}
+    } catch { }
     v_018923(false);
   }, [v_ded9f6]);
 
@@ -213,14 +214,12 @@ export default function v_0842da() {
         <TouchableOpacity
           key={v_8d41d7}
           onPress={() => v_94ee83(v_8d41d7)}
-          className={`flex-1 py-2 rounded-lg border ${
-            v_11083e === v_8d41d7 ? "bg-primary border-primary" : "bg-card border-border"
-          }`}
+          className={`flex-1 py-3 rounded-lg border ${v_11083e === v_8d41d7 ? "bg-primary border-primary" : "bg-card border-border"
+            }`}
         >
           <Text
-            className={`text-center text-sm font-medium ${
-              v_11083e === v_8d41d7 ? "text-primary-foreground" : "text-foreground"
-            }`}
+            className={`text-center text-sm font-medium ${v_11083e === v_8d41d7 ? "text-primary-foreground" : "text-foreground"
+              }`}
           >
             {v_8d41d7 === "settlement" ? "정산 집계" : v_8d41d7 === "history" ? "사용 이력" : "정산현황"}
           </Text>
@@ -230,12 +229,8 @@ export default function v_0842da() {
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
-      <View className="px-4 py-3">
-        <Text className="text-2xl font-bold text-foreground">정산</Text>
-      </View>
-
-      <TabSelector />
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
+      <ScreenHeader elevated title="정산" bottom={<TabSelector />} />
 
       {v_11083e === "settlement" ? (
         <>
@@ -245,14 +240,12 @@ export default function v_0842da() {
               <TouchableOpacity
                 key={v_e2a85c.key}
                 onPress={() => v_6fa4d3(v_e2a85c.key)}
-                className={`flex-1 py-2 rounded-lg border ${
-                  v_783ad3 === v_e2a85c.key ? "bg-primary border-primary" : "bg-card border-border"
-                }`}
+                className={`flex-1 py-3 rounded-lg border ${v_783ad3 === v_e2a85c.key ? "bg-primary border-primary" : "bg-card border-border"
+                  }`}
               >
                 <Text
-                  className={`text-center text-sm font-medium ${
-                    v_783ad3 === v_e2a85c.key ? "text-primary-foreground" : "text-foreground"
-                  }`}
+                  className={`text-center text-sm font-medium ${v_783ad3 === v_e2a85c.key ? "text-primary-foreground" : "text-foreground"
+                    }`}
                 >
                   {v_e2a85c.label}
                 </Text>
@@ -337,9 +330,8 @@ export default function v_0842da() {
               <TouchableOpacity
                 key={v_8b5cd8.key}
                 onPress={() => v_7bd90a(v_8b5cd8.key)}
-                className={`px-3 py-1.5 rounded-full border ${
-                  v_ded9f6 === v_8b5cd8.key ? "bg-primary border-primary" : "bg-card border-border"
-                }`}
+                className={`px-3 py-1.5 rounded-full border ${v_ded9f6 === v_8b5cd8.key ? "bg-primary border-primary" : "bg-card border-border"
+                  }`}
               >
                 <Text className={`text-xs font-medium ${v_ded9f6 === v_8b5cd8.key ? "text-primary-foreground" : "text-foreground"}`}>
                   {v_8b5cd8.label}

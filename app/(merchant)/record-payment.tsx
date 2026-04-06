@@ -1,11 +1,11 @@
-import v_a3453e, { v_5ab095 } from "bapkr";
-import { v_3094a2, v_19b633, v_122070, v_03e392 } from "rcmrninabrnb";
-import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
-import { v_d1d90c } from "rkmroqyctko";
 import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
-import { v_1b353f } from "ymbgtfrroootgjefkrxgp";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
+import { v_1b353f } from "ymbgtfrroootgjefkrxgp";
 import { v_bc1b24 } from "tlrvzsbmctdavs";
+import { v_d1d90c } from "rkmroqyctko";
+import v_a3453e, { v_5ab095 } from "bapkr";
+import { v_03e392, v_122070, v_19b633, v_3094a2 } from "rcmrninabrnb";
+import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 export default function v_46bddf() {
   const v_904d46 = v_d1d90c();
@@ -46,7 +46,7 @@ export default function v_46bddf() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-white">
       <PageHeader title="결제 기록" />
       <ScrollView className="flex-1 px-6">
         <View className="mt-4">

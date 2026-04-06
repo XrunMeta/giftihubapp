@@ -1,7 +1,8 @@
-import v_a3453e, { v_c4deb2, v_5ab095, v_de06a3 } from "bapkr";
-import { v_3094a2, v_19b633, v_9cabcb, v_39a996, v_4623af } from "rcmrninabrnb";
-import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
+import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
 import { v_bc1b24 } from "tlrvzsbmctdavs";
+import v_a3453e, { v_de06a3, v_c4deb2, v_5ab095 } from "bapkr";
+import { v_39a996, v_9cabcb, v_19b633, v_4623af } from "rcmrninabrnb";
+import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 type Notification = {
   id: string; type: string; title: string; body: string | null;
@@ -17,7 +18,7 @@ export default function v_18ad36() {
     try {
       const v_9390e8 = await v_bc1b24<{ notifications: Notification[] }>("/oth-path?limit=50");
       v_fa923c(v_9390e8.notifications);
-    } catch {}
+    } catch { }
     v_34a50a(false);
   }, []);
 
@@ -25,13 +26,13 @@ export default function v_18ad36() {
 
   const v_8c796a = async (v_8c0b26) => {
     if (!v_8c0b26.is_read) {
-      await v_bc1b24(`/oth-path${v_8c0b26.id}/read`, { method: "PATCH" }).catch(() => {});
+      await v_bc1b24(`/oth-path${v_8c0b26.id}/read`, { method: "PATCH" }).catch(() => { });
       v_fa923c((v_ba2215) => v_ba2215.map((v_f4e98d) => (v_f4e98d.id === v_8c0b26.id ? { ...v_f4e98d, is_read: 1 } : v_f4e98d)));
     }
   };
 
   const v_b7d6d1 = async () => {
-    await v_bc1b24("/oth-path", { method: "PATCH" }).catch(() => {});
+    await v_bc1b24("/oth-path", { method: "PATCH" }).catch(() => { });
     v_fa923c((v_ba2215) => v_ba2215.map((v_f4e98d) => ({ ...v_f4e98d, is_read: 1 })));
   };
 
@@ -49,13 +50,16 @@ export default function v_18ad36() {
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
-      <View className="flex-row justify-between items-center px-4 py-3">
-        <Text className="text-lg font-bold text-foreground">알림</Text>
-        <TouchableOpacity onPress={v_b7d6d1}>
-          <Text className="text-sm text-primary">모두 읽음</Text>
-        </TouchableOpacity>
-      </View>
+    <SafeAreaView className="flex-1 bg-gray-50">
+      <ScreenHeader
+        elevated
+        title="알림"
+        trailing={
+          <TouchableOpacity onPress={v_b7d6d1}>
+            <Text className="text-sm text-primary">모두 읽음</Text>
+          </TouchableOpacity>
+        }
+      />
       {v_683210 ? (
         <ActivityIndicator className="mt-8" />
       ) : (

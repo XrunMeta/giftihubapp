@@ -1,17 +1,22 @@
-import v_a3453e, { v_de06a3, v_5ab095 } from "bapkr";
-import { v_3094a2, v_19b633, v_9cabcb, v_09d0e5, v_cf9c33, v_39a996 } from "rcmrninabrnb";
-import { v_d1d90c, v_cf763b } from "rkmroqyctko";
-import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
-import { v_66816c } from "wjvlskvsbzsrojdbjsl";
-import { v_1b353f } from "ymbgtfrroootgjefkrxgp";
-import { v_6185b9 } from "hqklsidyfbumojabxoewf";
-import { v_665284, v_e81ec9, type v_678322 } from "vhkgxwheyyipiczd";
 import { v_4c40b6 } from "eroshpxpcrjekpsjrhbenwagema";
+import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
+import { v_e81ec9, v_665284, type v_678322 } from "vhkgxwheyyipiczd";
+import { v_cf763b, v_d1d90c } from "rkmroqyctko";
+import v_a3453e, { v_de06a3, v_5ab095 } from "bapkr";
+import { v_39a996, v_9cabcb, v_cf9c33, v_09d0e5, v_19b633, v_e45a99, v_3094a2 } from "rcmrninabrnb";
+import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 const v_928ad6 = { KRW: "₩", USD: "$", IDR: "Rp" };
 
+const v_d6d33d = 12;
+const v_656abc = 12;
+
 export default function v_ec75dd() {
   const v_904d46 = v_d1d90c();
+  const { width: v_06db8f } = v_e45a99();
+  const v_7d15a0 =
+    (v_06db8f - v_d6d33d * 2 - v_656abc) / 2;
+
   const [v_67dde1, v_9ad464] = v_5ab095<v_678322[]>([]);
   const [v_683210, v_34a50a] = v_5ab095(true);
   const [v_9875a1, v_2e7fc1] = v_5ab095("");
@@ -49,36 +54,38 @@ export default function v_ec75dd() {
 
     return (
       <Pressable
-        className="flex-1 m-1.5 bg-card rounded-xl border border-border overflow-hidden"
+        style={{ width: v_7d15a0, marginBottom: 12 }}
+        className="bg-card rounded-xl border border-border overflow-hidden p-3"
         onPress={() => v_904d46.push(`/(user)/store/${v_8c0b26.id}`)}
       >
         {v_74f4a3 ? (
           <Image
             source={{ uri: v_74f4a3 }}
-            className="w-full h-32"
-            resizeMode="cover"
+            className="w-full h-32 mb-4"
+            resizeMode="contain"
           />
         ) : (
           <View className="w-full h-32 bg-muted items-center justify-center">
             <Text className="text-3xl">🎁</Text>
           </View>
         )}
-        <View className="p-3">
+        <View>
           <Text className="text-xs text-muted-foreground" numberOfLines={1}>
             {v_8c0b26.brand_name}
           </Text>
-          <Text className="text-sm font-medium text-foreground mt-0.5" numberOfLines={2}>
+          <Text className="text-sm font-medium text-foreground" numberOfLines={2}>
             {v_8c0b26.name}
           </Text>
-          <View className="flex-row items-center mt-2 gap-1.5">
+          <View className="flex-row items-center  mt-1 gap-1.5">
             {v_e567dc ? (
-              <Text className="text-sm font-bold text-foreground">
+              <Text className="text-base font-bold text-foreground">
                 {v_928ad6[v_8c0b26.flexible_currency ?? "KRW"] ?? "₩"}{(v_8c0b26.flexible_min ?? 0).toLocaleString()}~
               </Text>
             ) : (
               <>
                 {v_3ae14a > 0 && (
-                  <Badge variant="destructive" label={`${v_3ae14a}%`} />
+
+                  <Text className="text-base font-bold text-red-500">{v_3ae14a}%</Text>
                 )}
                 <Text className="text-base font-bold text-foreground">
                   {v_928ad6[v_8c0b26.display_currency] ?? "₩"}{(v_8c0b26.price ?? 0).toLocaleString()}
@@ -93,29 +100,19 @@ export default function v_ec75dd() {
 
   if (v_683210) {
     return (
-      <SafeAreaView className="flex-1 bg-background items-center justify-center">
+      <SafeAreaView className="flex-1 bg-gray-50 items-center justify-center">
         <ActivityIndicator size="large" color="#CE3630" />
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
-      <View className="px-4 py-3">
-        <Text className="text-2xl font-bold text-foreground">스토어</Text>
-      </View>
-
-      <View className="px-4 mb-3">
-        <View className="flex-row items-center bg-secondary rounded-lg px-3">
-          <Search size={18} color="#737373" />
-          <Input
-            className="flex-1 border-0 bg-transparent"
-            placeholder="브랜드 또는 상품명 검색"
-            value={v_9875a1}
-            onChangeText={v_2e7fc1}
-          />
-        </View>
-      </View>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
+      <ScreenHeader
+        elevated
+        title="스토어"
+        search={{ value: v_9875a1, onChangeText: v_2e7fc1 }}
+      />
 
       <FlatList
         style={{ flex: 1 }}
@@ -123,7 +120,8 @@ export default function v_ec75dd() {
         renderItem={v_a66479}
         keyExtractor={(v_8c0b26) => v_8c0b26.id}
         numColumns={2}
-        contentContainerStyle={{ paddingHorizontal: 12, paddingBottom: 20 }}
+        columnWrapperStyle={{ gap: v_656abc }}
+        contentContainerStyle={{ paddingHorizontal: v_d6d33d, paddingBottom: 20 }}
         ListHeaderComponent={<BundleComposer />}
         ListEmptyComponent={
           <View className="items-center py-20">

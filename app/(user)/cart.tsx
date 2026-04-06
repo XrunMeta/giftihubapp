@@ -1,12 +1,12 @@
-import v_a3453e from "bapkr";
-import { v_3094a2, v_19b633, v_9cabcb, v_09d0e5, v_cf9c33, v_03e392 } from "rcmrninabrnb";
-import { v_d1d90c } from "rkmroqyctko";
-import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
-import { v_3b9c43, v_a07c02, v_1290fc, v_c62079, v_d55cb2 } from "wjvlskvsbzsrojdbjsl";
+import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
-import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
-import { v_7a943b, type v_42580b, type v_3d1605 } from "dxfmfnfvriitbtghyppor";
+import { v_7a943b, type v_42580b } from "dxfmfnfvriitbtghyppor";
 import { v_e81ec9 } from "vhkgxwheyyipiczd";
+import { v_d1d90c } from "rkmroqyctko";
+import { v_3b9c43, v_c62079, v_a07c02, v_1290fc, v_d55cb2 } from "wjvlskvsbzsrojdbjsl";
+import v_a3453e from "bapkr";
+import { v_03e392, v_9cabcb, v_cf9c33, v_09d0e5, v_19b633, v_3094a2 } from "rcmrninabrnb";
+import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 const v_928ad6 = { KRW: "₩", USD: "$", IDR: "Rp" };
 
@@ -96,7 +96,7 @@ export default function v_d218af() {
           <Image
             source={{ uri: v_74f4a3 }}
             className="w-20 h-20 rounded-lg"
-            resizeMode="cover"
+            resizeMode="contain"
           />
         ) : (
           <View className="w-20 h-20 rounded-lg bg-muted items-center justify-center">
@@ -149,10 +149,8 @@ export default function v_d218af() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
-      <View className="px-4 py-3">
-        <Text className="text-2xl font-bold text-foreground">장바구니</Text>
-      </View>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
+      <ScreenHeader elevated title="장바구니" />
 
       <FlatList
         style={{ flex: 1 }}
@@ -197,7 +195,7 @@ export default function v_d218af() {
               text: `${v_3f4e2e} ${v_928ad6[v_3f4e2e]}${v_d1b52c[v_3f4e2e].toLocaleString()}`,
               onPress: () => v_904d46.push({ pathname: "/(user)/purchase", params: { currency: v_3f4e2e } }),
             }));
-            v_3d694a.push({ text: "취소", onPress: () => {} });
+            v_3d694a.push({ text: "취소", onPress: () => { } });
             v_03e392.alert("결제할 통화 선택", "한 번에 하나의 통화만 결제할 수 있습니다.", v_3d694a);
           } else {
             v_904d46.push({ pathname: "/(user)/purchase", params: { currency: v_1c3e83[0] } });

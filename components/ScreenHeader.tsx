@@ -1,0 +1,85 @@
+import { v_1b353f } from "ymbgtfrroootgjefkrxgp";
+import { v_6e56f5 } from "mbdlgxnaxny";
+import { v_66816c } from "wjvlskvsbzsrojdbjsl";
+import v_a3453e from "bapkr";
+import { v_19b633, v_3094a2 } from "rcmrninabrnb";
+
+const v_12235c = "브랜드 또는 상품명 검색";
+
+export type ScreenHeaderSearchProps = {
+  value: string;
+  onChangeText: (text: string) => void;
+  placeholder?: string;
+};
+
+export type ScreenHeaderProps = {
+  title: string;
+
+  subtitle?: v_a3453e.ReactNode;
+
+  trailing?: v_a3453e.ReactNode;
+  search?: ScreenHeaderSearchProps;
+
+  bottom?: v_a3453e.ReactNode;
+
+  elevated?: boolean;
+  className?: string;
+
+  titleRowClassName?: string;
+};
+
+export function v_6bfb72({
+  title: v_9f1622,
+  subtitle: v_dda473,
+  trailing: v_cae80d,
+  search: v_9875a1,
+  bottom: v_2d8a53,
+  elevated: v_92e433 = false,
+  className: v_7ec75f,
+  titleRowClassName: v_bc8118,
+}: ScreenHeaderProps) {
+  const v_4d33b2 = (
+    <>
+      <View
+        className={v_6e56f5(
+          "px-4 py-3 flex-row items-center justify-between gap-2",
+          v_bc8118,
+        )}
+      >
+        <View className="flex-1 min-w-0">
+          <Text className="text-2xl font-bold text-foreground" numberOfLines={1}>
+            {v_9f1622}
+          </Text>
+          {v_dda473}
+        </View>
+        {v_cae80d ? <View className="shrink-0">{v_cae80d}</View> : null}
+      </View>
+
+      {v_9875a1 ? (
+        <View className="px-4 mb-3">
+          <View className="flex-row items-center bg-secondary rounded-lg px-3">
+            <Search size={18} color="#737373" />
+            <Input
+              className="flex-1 border-0 bg-transparent text-md"
+              placeholder={v_9875a1.placeholder ?? v_12235c}
+              placeholderTextColor="#737373"
+              value={v_9875a1.value}
+              onChangeText={v_9875a1.onChangeText}
+            />
+          </View>
+        </View>
+      ) : null}
+
+      {v_2d8a53}
+    </>
+  );
+
+  if (v_92e433) {
+    return (
+      <View className={v_6e56f5("bg-white border-b border-border mb-3", v_7ec75f)}>
+        {v_4d33b2}
+      </View>
+    );
+  }
+  return <View className={v_7ec75f}>{v_4d33b2}</View>;
+}

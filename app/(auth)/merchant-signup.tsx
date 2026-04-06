@@ -1,12 +1,12 @@
-import v_a3453e, { v_5ab095 } from "bapkr";
-import { v_3094a2, v_19b633, v_e767d1, v_326be8, v_122070, v_03e392 } from "rcmrninabrnb";
-import { v_d1d90c } from "rkmroqyctko";
-import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
+import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_1b353f } from "ymbgtfrroootgjefkrxgp";
-import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
 import { v_5d2c47 } from "jbfshypwcrklpetczcsca";
 import { v_6ba87b } from "sfwajsimhnkrpbm";
+import { v_d1d90c } from "rkmroqyctko";
+import v_a3453e, { v_5ab095 } from "bapkr";
+import { v_03e392, v_e767d1, v_326be8, v_122070, v_19b633, v_3094a2 } from "rcmrninabrnb";
+import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 export default function v_73ba8c() {
   const v_904d46 = v_d1d90c();
@@ -37,7 +37,7 @@ export default function v_73ba8c() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-white">
       <PageHeader title="가맹점 회원가입" />
       <KeyboardAvoidingView
         behavior={v_326be8.OS === "ios" ? "padding" : "height"}

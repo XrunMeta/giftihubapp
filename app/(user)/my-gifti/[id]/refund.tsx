@@ -1,10 +1,10 @@
-import v_a3453e, { v_5ab095 } from "bapkr";
-import { v_3094a2, v_19b633, v_03e392 } from "rcmrninabrnb";
-import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
-import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
-import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
+import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_bc1b24 } from "tlrvzsbmctdavs";
+import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
+import v_a3453e, { v_5ab095 } from "bapkr";
+import { v_03e392, v_19b633, v_3094a2 } from "rcmrninabrnb";
+import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 export default function v_a3b24a() {
   const { id: v_389afb } = v_d1a7ac<{ id: string }>();
@@ -39,7 +39,7 @@ export default function v_a3b24a() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-white">
       <PageHeader title="환불 요청" />
       <View className="flex-1 px-5 mt-4">
         <View className="bg-card rounded-xl border border-border p-4">

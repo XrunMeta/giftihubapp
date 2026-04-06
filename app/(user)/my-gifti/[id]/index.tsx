@@ -1,19 +1,19 @@
-import v_a3453e, { v_c4deb2, v_5ab095, v_e662ae, v_de06a3 } from "bapkr";
-import { v_3094a2, v_19b633, v_cf9c33, v_122070, v_39a996, v_03e392, v_a2349e, v_e45a99, v_4623af } from "rcmrninabrnb";
+import v_c21f17 from "mxokdmnphhuxdntzxetlxyw";
+import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
+import { v_6185b9 } from "hqklsidyfbumojabxoewf";
+import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
+import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
+import { v_f589a4 } from "wplnrzxbcvjvxjmndcjr";
+import { v_7ef52a } from "splenmyqnym";
+import { v_eaee10, v_50a647, type v_7fb3de } from "pvulvehakmpzwkznlnd";
+import { v_db3cc6 } from "dyunzbus";
 import * as v_fba5a0 from "hfxxehldoiokdq";
 import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
-import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
-import { v_8d40c5, v_4e6e5f, v_e4f0c5, v_24c64e, v_20f6a6, v_c1958c, v_dc4a73, v_51bb20 } from "wjvlskvsbzsrojdbjsl";
-import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
-import { v_6185b9 } from "hqklsidyfbumojabxoewf";
-import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
-import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
-import { v_7ef52a } from "splenmyqnym";
-import v_c21f17 from "mxokdmnphhuxdntzxetlxyw";
+import { v_4e6e5f, v_c1958c, v_24c64e, v_20f6a6, v_8d40c5, v_e4f0c5, v_51bb20, v_dc4a73 } from "wjvlskvsbzsrojdbjsl";
+import v_a3453e, { v_de06a3, v_c4deb2, v_e662ae, v_5ab095 } from "bapkr";
+import { v_39a996, v_03e392, v_a2349e, v_cf9c33, v_122070, v_19b633, v_4623af, v_e45a99, v_3094a2 } from "rcmrninabrnb";
 import v_dc0e55 from "bfgjhdhiuhcmlahuvrfzrfn";
-import { v_50a647, v_eaee10, type v_7fb3de } from "pvulvehakmpzwkznlnd";
-import { v_db3cc6 } from "dyunzbus";
-import { v_f589a4 } from "wplnrzxbcvjvxjmndcjr";
+import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 const v_35c58e = 30;
 
@@ -27,7 +27,7 @@ const STATUS_INFO: Record<string, { label: string; icon: typeof v_24c64e; color:
   listed: {
     label: "판매중",
     icon: v_e4f0c5,
-    color: "#f59e0b",
+    color: "#2563eb",
     description: "이 기프티는 중고마켓에 등록되어 판매중입니다.",
   },
   expired: {
@@ -39,7 +39,7 @@ const STATUS_INFO: Record<string, { label: string; icon: typeof v_24c64e; color:
   transferred: {
     label: "양도됨",
     icon: v_c1958c,
-    color: "#6366f1",
+    color: "#16a34a",
     description: "이 기프티는 다른 사용자에게 양도되었습니다.",
   },
   refunded: {
@@ -115,7 +115,7 @@ export default function v_b89029() {
 
   if (v_683210 || !v_3e4b5d) {
     return (
-      <SafeAreaView className="flex-1 bg-background items-center justify-center">
+      <SafeAreaView className="flex-1 bg-white items-center justify-center">
         <ActivityIndicator size="large" color="#CE3630" />
       </SafeAreaView>
     );
@@ -127,7 +127,7 @@ export default function v_b89029() {
   const v_866c46 = v_d9da40[v_3e4b5d.status];
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-white">
       <PageHeader title="기프티 상세" />
       <ScrollView className="flex-1 px-5">
         {}
@@ -208,14 +208,24 @@ export default function v_b89029() {
         <View className="bg-card rounded-xl border border-border p-4">
           <View className="flex-row justify-between items-start">
             {v_74f4a3 ? (
-              <Image source={{ uri: v_74f4a3 }} className="w-14 h-14 rounded-lg mr-3" resizeMode="cover" />
+              <Image source={{ uri: v_74f4a3 }} className="w-14 h-14 rounded-lg mr-3" resizeMode="contain" />
             ) : null}
             <View className="flex-1">
               <Text className="text-xs text-muted-foreground">{v_3e4b5d.brand}</Text>
               <Text className="text-lg font-bold text-foreground mt-0.5">{v_3e4b5d.name}</Text>
             </View>
             <Badge
-              variant={v_26dce6 ? "default" : v_3e4b5d.status === "expired" ? "destructive" : "secondary"}
+              variant={
+                v_26dce6
+                  ? "default"
+                  : v_3e4b5d.status === "expired"
+                    ? "destructive"
+                    : v_3e4b5d.status === "listed"
+                      ? "info"
+                      : v_3e4b5d.status === "transferred"
+                        ? "success"
+                        : "secondary"
+              }
               label={v_866c46?.label ?? v_3e4b5d.status}
             />
           </View>

@@ -1,8 +1,9 @@
-import v_a3453e, { v_c4deb2, v_5ab095, v_de06a3 } from "bapkr";
-import { v_3094a2, v_19b633, v_9cabcb, v_39a996 } from "rcmrninabrnb";
-import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
+import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
 import { v_bc1b24 } from "tlrvzsbmctdavs";
 import { v_db3cc6 } from "dyunzbus";
+import v_a3453e, { v_de06a3, v_c4deb2, v_5ab095 } from "bapkr";
+import { v_39a996, v_9cabcb, v_19b633, v_3094a2 } from "rcmrninabrnb";
+import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 type HistoryItem = {
   id: string;
@@ -83,17 +84,15 @@ export default function v_ca8e36() {
 
   if (v_683210) {
     return (
-      <SafeAreaView className="flex-1 bg-background items-center justify-center">
+      <SafeAreaView className="flex-1 bg-gray-50 items-center justify-center">
         <ActivityIndicator size="large" color="#CE3630" />
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
-      <View className="px-4 py-3">
-        <Text className="text-2xl font-bold text-foreground">사용 이력</Text>
-      </View>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
+      <ScreenHeader elevated title="사용 이력" />
       <FlatList
         data={v_4622b9}
         keyExtractor={(v_8c0b26) => v_8c0b26.id}

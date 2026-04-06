@@ -1,9 +1,9 @@
-import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
-import { v_3094a2, v_19b633, v_9cabcb, v_39a996 } from "rcmrninabrnb";
-import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
 import { v_a3b961 } from "xytbpcyuptfvuyelkypzvyijaumlzur";
 import { v_a4ddab } from "eqrxxpgqjbwbqqqhvy";
+import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
+import { v_39a996, v_9cabcb, v_19b633, v_3094a2 } from "rcmrninabrnb";
+import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 const v_1bc355 = [
   { key: "all", label: "전체" },
@@ -34,7 +34,7 @@ export default function v_1a8c84() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-white">
       <PageHeader title="구매 이력" />
       <ScrollableTabs tabs={v_1bc355} activeTab={v_ac1d22} onTabPress={v_02dd63} className="mb-3" />
 
