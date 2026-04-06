@@ -64,7 +64,7 @@ export default function v_0035e1() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={["top"]}>
       <PageHeader title={v_8d41d7("userPurchase.title").replace("{{currency}}", v_6e2788)} />
       <View className="flex-1 px-5">
         <View className="bg-card rounded-xl border border-border p-4 mb-6">
