@@ -209,55 +209,53 @@ export default function v_bf7b5b() {
     );
   };
 
-  const v_b62866 = (
-    <ScreenHeader
-      elevated
-      title="내 기프티"
-      subtitle={
-        v_49c6c7 ? (
-          <Text className="text-xs text-muted-foreground mt-1" selectable>
-            {v_49c6c7}
-          </Text>
-        ) : undefined
-      }
-      bottom={
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
-          className="mb-3"
-        >
-          {v_1bc355.map((v_11083e) => {
-            const v_26dce6 = v_11083e.key === v_ac1d22;
-            return (
-              <Pressable
-                key={v_11083e.key}
-                onPress={() => v_02dd63(v_11083e.key)}
-                style={{ alignSelf: "flex-start" }}
-                className={v_6e56f5(
-                  "rounded-full px-4 py-2",
-                  v_26dce6 ? "bg-primary" : "bg-secondary",
-                )}
-              >
-                <Text
-                  className={v_6e56f5(
-                    "text-sm font-medium",
-                    v_26dce6 ? "text-primary-foreground" : "text-muted-foreground",
-                  )}
-                >
-                  {v_11083e.label}
-                </Text>
-              </Pressable>
-            );
-          })}
-        </ScrollView>
-      }
-    />
-  );
-
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
+      <ScreenHeader
+        elevated
+        title="내 기프티"
+        subtitle={
+          v_49c6c7 ? (
+            <Text className="text-xs text-muted-foreground mt-1" selectable>
+              {v_49c6c7}
+            </Text>
+          ) : undefined
+        }
+        bottom={
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
+            className="mb-3"
+          >
+            {v_1bc355.map((v_11083e) => {
+              const v_26dce6 = v_11083e.key === v_ac1d22;
+              return (
+                <Pressable
+                  key={v_11083e.key}
+                  onPress={() => v_02dd63(v_11083e.key)}
+                  style={{ alignSelf: "flex-start" }}
+                  className={v_6e56f5(
+                    "rounded-full px-4 py-2",
+                    v_26dce6 ? "bg-primary" : "bg-secondary",
+                  )}
+                >
+                  <Text
+                    className={v_6e56f5(
+                      "text-sm font-medium",
+                      v_26dce6 ? "text-primary-foreground" : "text-muted-foreground",
+                    )}
+                  >
+                    {v_11083e.label}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </ScrollView>
+        }
+      />
       <FlatList
+        style={{ flex: 1 }}
         data={v_683210 ? [] : v_4d79ca}
         renderItem={({ item: v_8c0b26 }) =>
           v_8c0b26.type === "bundle"
@@ -267,7 +265,6 @@ export default function v_bf7b5b() {
         keyExtractor={(v_8c0b26) =>
           v_8c0b26.type === "bundle" ? `set-${v_8c0b26.setId}` : v_8c0b26.voucher.id
         }
-        ListHeaderComponent={v_b62866}
         contentContainerStyle={{ paddingBottom: 20 }}
         ListEmptyComponent={
           v_683210 ? (

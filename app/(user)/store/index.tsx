@@ -55,21 +55,23 @@ export default function v_ec75dd() {
     return (
       <Pressable
         style={{ width: v_7d15a0, marginBottom: 12 }}
-        className="bg-card rounded-xl border border-border overflow-hidden p-3"
+        className="bg-card rounded-xl border border-border overflow-hidden"
         onPress={() => v_904d46.push(`/(user)/store/${v_8c0b26.id}`)}
       >
-        {v_74f4a3 ? (
-          <Image
-            source={{ uri: v_74f4a3 }}
-            className="w-full h-32 mb-4"
-            resizeMode="contain"
-          />
-        ) : (
-          <View className="w-full h-32 bg-muted items-center justify-center">
-            <Text className="text-3xl">🎁</Text>
-          </View>
-        )}
-        <View>
+        <View className="w-full h-32 bg-gray-100 p-3">
+          {v_74f4a3 ? (
+            <Image
+              source={{ uri: v_74f4a3 }}
+              className="w-full h-full"
+              resizeMode="contain"
+            />
+          ) : (
+            <View className="w-full h-32 bg-muted items-center justify-center">
+              <Text className="text-3xl">🎁</Text>
+            </View>
+          )}
+        </View>
+        <View className="p-3">
           <Text className="text-xs text-muted-foreground" numberOfLines={1}>
             {v_8c0b26.brand_name}
           </Text>

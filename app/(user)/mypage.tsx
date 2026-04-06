@@ -58,9 +58,8 @@ export default function v_840f8f() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
+      <ScreenHeader elevated title="MY" />
       <ScrollView className="flex-1">
-        <ScreenHeader elevated title="MY" />
-
         {}
         <View className="mx-4 bg-card rounded-xl border border-border p-5 mb-4">
           <Text className="text-lg font-bold text-foreground">{v_727031?.name}</Text>

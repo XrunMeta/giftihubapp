@@ -64,6 +64,7 @@ export default function v_18ad36() {
         <ActivityIndicator className="mt-8" />
       ) : (
         <FlatList
+          style={{ flex: 1 }}
           data={v_4622b9}
           keyExtractor={(v_ebec57) => v_ebec57.id}
           renderItem={v_fcf6ec}
