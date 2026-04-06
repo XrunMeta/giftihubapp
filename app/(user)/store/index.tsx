@@ -58,7 +58,7 @@ export default function StoreScreen() {
         className="bg-card rounded-xl border border-border overflow-hidden"
         onPress={() => router.push(`/(user)/store/${item.id}`)}
       >
-        <View className="w-full h-32 bg-gray-100 p-3">
+        <View className="w-full h-32 bg-white p-3">
           {imgUri ? (
             <Image
               source={{ uri: imgUri }}
