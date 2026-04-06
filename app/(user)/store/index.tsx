@@ -58,7 +58,7 @@ export default function v_ec75dd() {
         className="bg-card rounded-xl border border-border overflow-hidden"
         onPress={() => v_904d46.push(`/(user)/store/${v_8c0b26.id}`)}
       >
-        <View className="w-full h-32 bg-gray-100 p-3">
+        <View className="w-full h-32 bg-white p-3">
           {v_74f4a3 ? (
             <Image
               source={{ uri: v_74f4a3 }}
