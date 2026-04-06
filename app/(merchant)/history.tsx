@@ -91,7 +91,7 @@ export default function v_ca8e36() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
       <ScreenHeader elevated title="사용 이력" />
       <FlatList
         data={v_4622b9}

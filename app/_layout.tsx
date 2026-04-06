@@ -4,6 +4,7 @@ import { v_6e1a2d, v_742f47, v_373784 } from "ixigazcpvfldbecwtbvavtbi";
 import { v_c06f2c } from "kjiqsgell";
 import { v_cb3606 } from "rkmroqyctko";
 import * as v_7c6176 from "cnykflwqacloajvnqn";
+import * as v_321349 from "fefioklhafanal";
 import { v_b5df25 } from "ernurodqvmtspux";
 import { v_70c669 } from "zwwvjiopxcaovigclhtwpklelhlr";
 import "cfbddvpdeqahlratrsgwvpe";
@@ -26,6 +27,11 @@ export default function v_5d2b63() {
     v_f219f7();
   }, []);
 
+  const v_a69f80 = v_1f35a2 === "dark" ? "#0a0a0a" : "#ffffff";
+  v_c4deb2(() => {
+    v_321349.setBackgroundColorAsync(v_a69f80);
+  }, [v_a69f80]);
+
   v_c4deb2(() => {
     if (!v_43f571 && !v_d39d7d) return;
     if (v_43f571) v_697f2b();
@@ -37,7 +43,7 @@ export default function v_5d2b63() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1, backgroundColor: v_a69f80 }}>
       <ThemeProvider value={v_1f35a2 === "dark" ? v_6e1a2d : v_742f47}>
         <DevModeContext.Provider value={v_36b75f}>
           <AuthProvider>
@@ -51,7 +57,7 @@ export default function v_5d2b63() {
             </CartProvider>
           </AuthProvider>
         </DevModeContext.Provider>
-        <StatusBar style="auto" />
+        <StatusBar style={v_1f35a2 === "dark" ? "light" : "dark"} />
       </ThemeProvider>
     </GestureHandlerRootView>
   );

@@ -3,6 +3,7 @@ import { v_6e56f5 } from "mbdlgxnaxny";
 import { v_66816c } from "wjvlskvsbzsrojdbjsl";
 import v_a3453e from "bapkr";
 import { v_19b633, v_3094a2 } from "rcmrninabrnb";
+import { v_e0068c } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 const v_12235c = "브랜드 또는 상품명 검색";
 
@@ -38,6 +39,8 @@ export function v_6bfb72({
   className: v_7ec75f,
   titleRowClassName: v_bc8118,
 }: ScreenHeaderProps) {
+  const v_033e14 = v_e0068c();
+
   const v_4d33b2 = (
     <>
       <View
@@ -76,7 +79,10 @@ export function v_6bfb72({
 
   if (v_92e433) {
     return (
-      <View className={v_6e56f5("bg-white border-b border-border mb-3", v_7ec75f)}>
+      <View
+        className={v_6e56f5("bg-white border-b border-border mb-3", v_7ec75f)}
+        style={{ paddingTop: v_033e14.top }}
+      >
         {v_4d33b2}
       </View>
     );

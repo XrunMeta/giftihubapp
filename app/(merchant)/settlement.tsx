@@ -229,7 +229,7 @@ export default function v_0842da() {
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
       <ScreenHeader elevated title="정산" bottom={<TabSelector />} />
 
       {v_11083e === "settlement" ? (

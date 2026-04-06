@@ -91,7 +91,7 @@ export default function v_fab3ac() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
       <ScreenHeader
         elevated
         title="중고마켓"

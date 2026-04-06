@@ -216,7 +216,7 @@ export default function v_8f53d1() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
       <ScreenHeader
         elevated
         title="보유상품"
