@@ -209,55 +209,53 @@ export default function MyGiftiScreen() {
     );
   };
 
-  const listHeader = (
-    <ScreenHeader
-      elevated
-      title="내 기프티"
-      subtitle={
-        debugInfo ? (
-          <Text className="text-xs text-muted-foreground mt-1" selectable>
-            {debugInfo}
-          </Text>
-        ) : undefined
-      }
-      bottom={
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
-          className="mb-3"
-        >
-          {TABS.map((tab) => {
-            const isActive = tab.key === activeTab;
-            return (
-              <Pressable
-                key={tab.key}
-                onPress={() => setActiveTab(tab.key)}
-                style={{ alignSelf: "flex-start" }}
-                className={cn(
-                  "rounded-full px-4 py-2",
-                  isActive ? "bg-primary" : "bg-secondary",
-                )}
-              >
-                <Text
-                  className={cn(
-                    "text-sm font-medium",
-                    isActive ? "text-primary-foreground" : "text-muted-foreground",
-                  )}
-                >
-                  {tab.label}
-                </Text>
-              </Pressable>
-            );
-          })}
-        </ScrollView>
-      }
-    />
-  );
-
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
+      <ScreenHeader
+        elevated
+        title="내 기프티"
+        subtitle={
+          debugInfo ? (
+            <Text className="text-xs text-muted-foreground mt-1" selectable>
+              {debugInfo}
+            </Text>
+          ) : undefined
+        }
+        bottom={
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
+            className="mb-3"
+          >
+            {TABS.map((tab) => {
+              const isActive = tab.key === activeTab;
+              return (
+                <Pressable
+                  key={tab.key}
+                  onPress={() => setActiveTab(tab.key)}
+                  style={{ alignSelf: "flex-start" }}
+                  className={cn(
+                    "rounded-full px-4 py-2",
+                    isActive ? "bg-primary" : "bg-secondary",
+                  )}
+                >
+                  <Text
+                    className={cn(
+                      "text-sm font-medium",
+                      isActive ? "text-primary-foreground" : "text-muted-foreground",
+                    )}
+                  >
+                    {tab.label}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </ScrollView>
+        }
+      />
       <FlatList
+        style={{ flex: 1 }}
         data={loading ? [] : grouped}
         renderItem={({ item }) =>
           item.type === "bundle"
@@ -267,7 +265,6 @@ export default function MyGiftiScreen() {
         keyExtractor={(item) =>
           item.type === "bundle" ? `set-${item.setId}` : item.voucher.id
         }
-        ListHeaderComponent={listHeader}
         contentContainerStyle={{ paddingBottom: 20 }}
         ListEmptyComponent={
           loading ? (

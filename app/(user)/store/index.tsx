@@ -55,21 +55,23 @@ export default function StoreScreen() {
     return (
       <Pressable
         style={{ width: gridItemWidth, marginBottom: 12 }}
-        className="bg-card rounded-xl border border-border overflow-hidden p-3"
+        className="bg-card rounded-xl border border-border overflow-hidden"
         onPress={() => router.push(`/(user)/store/${item.id}`)}
       >
-        {imgUri ? (
-          <Image
-            source={{ uri: imgUri }}
-            className="w-full h-32 mb-4"
-            resizeMode="contain"
-          />
-        ) : (
-          <View className="w-full h-32 bg-muted items-center justify-center">
-            <Text className="text-3xl">🎁</Text>
-          </View>
-        )}
-        <View>
+        <View className="w-full h-32 bg-gray-100 p-3">
+          {imgUri ? (
+            <Image
+              source={{ uri: imgUri }}
+              className="w-full h-full"
+              resizeMode="contain"
+            />
+          ) : (
+            <View className="w-full h-32 bg-muted items-center justify-center">
+              <Text className="text-3xl">🎁</Text>
+            </View>
+          )}
+        </View>
+        <View className="p-3">
           <Text className="text-xs text-muted-foreground" numberOfLines={1}>
             {item.brand_name}
           </Text>

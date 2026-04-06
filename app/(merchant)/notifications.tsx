@@ -64,6 +64,7 @@ export default function NotificationsScreen() {
         <ActivityIndicator className="mt-8" />
       ) : (
         <FlatList
+          style={{ flex: 1 }}
           data={items}
           keyExtractor={(i) => i.id}
           renderItem={renderItem}

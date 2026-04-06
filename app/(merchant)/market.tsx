@@ -104,54 +104,51 @@ export default function MerchantMarketScreen() {
     );
   };
 
-  const listHeader = (
-    <ScreenHeader
-      elevated
-      title="중고마켓"
-      search={{ value: search, onChangeText: setSearch }}
-      bottom={
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
-          className="mb-3"
-        >
-          {CATEGORY_TABS.map((tab) => {
-            const isActive = tab.key === activeTab;
-            return (
-              <Pressable
-                key={tab.key}
-                onPress={() => setActiveTab(tab.key)}
-                style={{ alignSelf: "flex-start" }}
-                className={cn(
-                  "rounded-full px-4 py-2",
-                  isActive ? "bg-primary" : "bg-secondary",
-                )}
-              >
-                <Text
-                  className={cn(
-                    "text-sm font-medium",
-                    isActive ? "text-primary-foreground" : "text-muted-foreground",
-                  )}
-                >
-                  {tab.label}
-                </Text>
-              </Pressable>
-            );
-          })}
-        </ScrollView>
-      }
-    />
-  );
-
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
+      <ScreenHeader
+        elevated
+        title="중고마켓"
+        search={{ value: search, onChangeText: setSearch }}
+        bottom={
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
+            className="mb-3"
+          >
+            {CATEGORY_TABS.map((tab) => {
+              const isActive = tab.key === activeTab;
+              return (
+                <Pressable
+                  key={tab.key}
+                  onPress={() => setActiveTab(tab.key)}
+                  style={{ alignSelf: "flex-start" }}
+                  className={cn(
+                    "rounded-full px-4 py-2",
+                    isActive ? "bg-primary" : "bg-secondary",
+                  )}
+                >
+                  <Text
+                    className={cn(
+                      "text-sm font-medium",
+                      isActive ? "text-primary-foreground" : "text-muted-foreground",
+                    )}
+                  >
+                    {tab.label}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </ScrollView>
+        }
+      />
       <FlatList
         ref={listRef}
+        style={{ flex: 1 }}
         data={loading ? [] : listings}
         renderItem={renderListing}
         keyExtractor={(item) => item.id}
-        ListHeaderComponent={listHeader}
         contentContainerStyle={{ paddingBottom: 20 }}
         ListEmptyComponent={
           loading ? (
