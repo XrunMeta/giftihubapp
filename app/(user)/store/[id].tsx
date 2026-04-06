@@ -5,10 +5,25 @@ import { getProductDetail, getProductFullImageUrl, type Product } from "@/servic
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Minus, Plus } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, Image, ScrollView, Text, TextInput, View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const CUR_SYM: Record<string, string> = { KRW: "₩", USD: "$", IDR: "Rp" };
+
+function formatThousandsFromDigits(digits: string): string {
+  if (!digits) return "";
+  return digits.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
 export default function ProductDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -17,7 +32,7 @@ export default function ProductDetailScreen() {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
-  const [flexAmount, setFlexAmount] = useState("");
+  const [flexDigits, setFlexDigits] = useState("");
 
   useEffect(() => {
     if (id) loadProduct();
@@ -37,7 +52,7 @@ export default function ProductDetailScreen() {
 
   if (loading || !product) {
     return (
-      <SafeAreaView className="flex-1 bg-white items-center justify-center">
+      <SafeAreaView className="flex-1 bg-gray-50 items-center justify-center" edges={["top"]}>
         <ActivityIndicator size="large" color="#CE3630" />
       </SafeAreaView>
     );
@@ -51,128 +66,151 @@ export default function ProductDetailScreen() {
       ? Math.round((1 - product.price / product.face_value) * 100)
       : 0;
 
-  return (
-    <SafeAreaView className="flex-1 bg-white ">
-      <PageHeader title={product.brand_name} />
-      <ScrollView className="flex-1 px-5">
-        {getProductFullImageUrl(product) ? (
-          <Image
-            source={{ uri: getProductFullImageUrl(product)! }}
-            className="w-full h-64"
-            resizeMode="contain"
-          />
-        ) : (
-          <View className="w-full h-48 bg-muted items-center justify-center">
-            <Text className="text-4xl">🎁</Text>
-            <Text className="text-muted-foreground mt-2">{product.brand_name}</Text>
-          </View>
-        )}
-        <View className="py-4">
-          <Text className="text-xs text-muted-foreground">{product.brand_name}</Text>
-          <Text className="text-xl font-bold text-foreground mt-1">{product.name}</Text>
+  const flexAmountNum = flexDigits ? Number(flexDigits) : 0;
 
-          {isFlexible ? (
-            <>
-              <View className="mt-3">
-                <Text className="text-sm text-muted-foreground">
-                  {sym}{(product.flexible_min ?? 0).toLocaleString()} ~ {sym}{(product.flexible_max ?? 0).toLocaleString()} 범위에서 입력
-                </Text>
+  const addCartFlow = (thenGoCart: boolean) => {
+    if (isFlexible) {
+      const amt = flexAmountNum;
+      if (!amt || amt < (product.flexible_min ?? 0) || amt > (product.flexible_max ?? 0)) {
+        Alert.alert(
+          "금액 오류",
+          `${sym}${(product.flexible_min ?? 0).toLocaleString()} ~ ${sym}${(product.flexible_max ?? 0).toLocaleString()} 범위에서 입력해주세요.`,
+        );
+        return;
+      }
+      addToCart(product, 1, amt);
+    } else {
+      addToCart(product, quantity);
+    }
+    if (thenGoCart) {
+      router.push("/(user)/cart");
+    } else {
+      Alert.alert("장바구니", "장바구니에 추가되었습니다.");
+    }
+  };
+
+  const imgUri = getProductFullImageUrl(product);
+
+  return (
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
+      <View className="bg-white border-b border-border">
+        <PageHeader title={product.brand_name} />
+      </View>
+
+      <KeyboardAvoidingView
+        className="flex-1"
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        keyboardVerticalOffset={0}
+      >
+        <ScrollView
+          className="flex-1"
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 16, paddingBottom: 16 }}
+        >
+          <View className="bg-white rounded-2xl border border-border overflow-hidden mb-4 py-3">
+            {imgUri ? (
+              <Image source={{ uri: imgUri }} className="w-full h-72 bg-white" resizeMode="contain" />
+            ) : (
+              <View className="w-full h-56 bg-muted/60 items-center justify-center py-10">
+                <Text className="text-5xl">🎁</Text>
+                <Text className="text-sm text-muted-foreground mt-3">{product.brand_name}</Text>
               </View>
-              <View className="mt-4">
-                <Text className="text-sm font-medium text-foreground mb-2">구매 금액 ({flexCur})</Text>
-                <View className="flex-row items-center border border-border rounded-lg px-3 py-2">
-                  <Text className="text-lg font-bold text-muted-foreground mr-1">{sym}</Text>
+            )}
+          </View>
+
+          <View className="bg-white rounded-2xl border border-border p-5">
+            <Text className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
+              {product.brand_name}
+            </Text>
+            <Text className="text-xl font-bold text-foreground  leading-7">{product.name}</Text>
+
+            {isFlexible ? (
+              <>
+                <View className="mt-4 bg-secondary/80 rounded-xl px-4 py-3">
+                  <Text className="text-xs text-muted-foreground">구매 가능 금액</Text>
+                  <Text className="text-sm font-semibold text-foreground mt-1">
+                    {sym}
+                    {(product.flexible_min ?? 0).toLocaleString()} ~ {sym}
+                    {(product.flexible_max ?? 0).toLocaleString()}
+                  </Text>
+                </View>
+                <Text className="text-sm font-medium text-foreground mt-5 mb-2">구매 금액 ({flexCur})</Text>
+                <View className="flex-row items-center bg-secondary rounded-xl border border-border px-4 py-3">
+                  <Text className="text-base font-bold text-muted-foreground mr-2">{sym}</Text>
                   <TextInput
-                    className="flex-1 text-lg font-bold text-foreground"
-                    placeholder={`${(product.flexible_min ?? 0).toLocaleString()}`}
+                    className="flex-1 text-lg font-semibold text-foreground py-0.5"
+                    placeholder={formatThousandsFromDigits(String(product.flexible_min ?? 0))}
+                    placeholderTextColor="#737373"
                     keyboardType="numeric"
-                    value={flexAmount}
-                    onChangeText={setFlexAmount}
+                    value={formatThousandsFromDigits(flexDigits)}
+                    onChangeText={(t) => setFlexDigits(t.replace(/\D/g, ""))}
                   />
                 </View>
-              </View>
-            </>
-          ) : (
-            <>
-              <View className="flex-row items-baseline mt-3 gap-2">
-                {discount > 0 && (
-                  <Text className="text-lg font-bold text-primary">{discount}%</Text>
-                )}
-                <Text className="text-2xl font-bold text-foreground">
-                  {CUR_SYM[product.display_currency] ?? "₩"}{(product.price ?? 0).toLocaleString()}
-                </Text>
-                {discount > 0 && (
-                  <Text className="text-sm text-muted-foreground line-through">
-                    {CUR_SYM[product.display_currency] ?? "₩"}{(product.face_value ?? 0).toLocaleString()}
-                  </Text>
-                )}
-              </View>
-              <View className="flex-row items-center mt-6 gap-4">
-                <Text className="text-sm text-foreground">수량</Text>
-                <View className="flex-row items-center border border-border rounded-lg">
+              </>
+            ) : (
+              <>
+                <View className="flex-row items-end justify-between gap-3 mt-4">
+                  {discount > 0 ? (
+                    <>
+                      <View className="flex-1 min-w-0">
+                        <View className="bg-primary/12 self-start rounded-full ">
+                          <Text className="text-sm font-bold text-primary">{discount}% 할인</Text>
+                        </View>
+                        <Text className="text-sm text-muted-foreground line-through">
+                          {CUR_SYM[product.display_currency] ?? "₩"}
+                          {(product.face_value ?? 0).toLocaleString()}
+                        </Text>
+                      </View>
+                      <Text className="text-2xl font-bold text-foreground shrink-0">
+                        {CUR_SYM[product.display_currency] ?? "₩"}
+                        {(product.price ?? 0).toLocaleString()}
+                      </Text>
+                    </>
+                  ) : (
+                    <Text className="text-2xl font-bold text-foreground">
+                      {CUR_SYM[product.display_currency] ?? "₩"}
+                      {(product.price ?? 0).toLocaleString()}
+                    </Text>
+                  )}
+                </View>
+
+                <Text className="text-sm font-medium text-foreground mt-8 mb-3">수량</Text>
+                <View className="flex-row items-center self-start bg-secondary rounded-xl border border-border">
                   <Button
                     variant="ghost"
                     size="icon"
+                    className="rounded-xl rounded-r-none"
                     onPress={() => setQuantity(Math.max(1, quantity - 1))}
                   >
-                    <Minus size={16} color="#0a0a0a" />
+                    <Minus size={18} color="#0a0a0a" />
                   </Button>
-                  <Text className="text-base font-medium w-10 text-center text-foreground">
+                  <Text className="text-base font-semibold min-w-[44px] text-center text-foreground">
                     {quantity}
                   </Text>
                   <Button
                     variant="ghost"
                     size="icon"
+                    className="rounded-xl rounded-l-none"
                     onPress={() => setQuantity(quantity + 1)}
                   >
-                    <Plus size={16} color="#0a0a0a" />
+                    <Plus size={18} color="#0a0a0a" />
                   </Button>
                 </View>
-              </View>
-            </>
-          )}
-        </View>
-      </ScrollView>
+              </>
+            )}
+          </View>
+        </ScrollView>
 
-      <View className="flex-row gap-3 px-5 py-4 border-t border-border">
-        <Button
-          variant="outline"
-          className="flex-1"
-          onPress={() => {
-            if (isFlexible) {
-              const amt = Number(flexAmount);
-              if (!amt || amt < (product.flexible_min ?? 0) || amt > (product.flexible_max ?? 0)) {
-                Alert.alert("금액 오류", `${sym}${(product.flexible_min ?? 0).toLocaleString()} ~ ${sym}${(product.flexible_max ?? 0).toLocaleString()} 범위에서 입력해주세요.`);
-                return;
-              }
-              addToCart(product, 1, amt);
-            } else {
-              addToCart(product, quantity);
-            }
-            Alert.alert("장바구니", "장바구니에 추가되었습니다.");
-          }}
-        >
-          장바구니
-        </Button>
-        <Button
-          className="flex-1"
-          onPress={() => {
-            if (isFlexible) {
-              const amt = Number(flexAmount);
-              if (!amt || amt < (product.flexible_min ?? 0) || amt > (product.flexible_max ?? 0)) {
-                Alert.alert("금액 오류", `${sym}${(product.flexible_min ?? 0).toLocaleString()} ~ ${sym}${(product.flexible_max ?? 0).toLocaleString()} 범위에서 입력해주세요.`);
-                return;
-              }
-              addToCart(product, 1, amt);
-            } else {
-              addToCart(product, quantity);
-            }
-            router.push("/(user)/cart");
-          }}
-        >
-          구매하기
-        </Button>
-      </View>
+        <View className="flex-row gap-3 bg-white border-t border-border px-4 py-4">
+          <Button variant="outline" className="flex-1 border-border bg-gray-50" onPress={() => addCartFlow(false)}>
+            장바구니
+          </Button>
+          <Button className="flex-1" onPress={() => addCartFlow(true)}>
+            구매하기
+          </Button>
+        </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
