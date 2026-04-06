@@ -1,13 +1,13 @@
-import React, { useCallback, useState } from "react";
-import { View, Text, ScrollView, ActivityIndicator, Alert } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useRouter, useFocusEffect } from "expo-router";
-import { LogOut, ChevronRight, CreditCard, History, Settings } from "lucide-react-native";
-import { Pressable } from "react-native";
-import { Separator } from "@/components/ui/separator";
+import { ScreenHeader } from "@/components/ScreenHeader";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/context/AuthContext";
 import { getMe, type MeResponse } from "@/services/account";
+import { useFocusEffect, useRouter } from "expo-router";
+import { ChevronRight, CreditCard, History, LogOut, Settings } from "lucide-react-native";
+import React, { useCallback, useState } from "react";
+import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MyPageScreen() {
   const router = useRouter();
@@ -35,16 +35,18 @@ export default function MyPageScreen() {
   const handleLogout = () => {
     Alert.alert("로그아웃", "정말 로그아웃하시겠습니까?", [
       { text: "취소", style: "cancel" },
-      { text: "로그아웃", onPress: async () => {
-        await logout();
-        router.replace("/(auth)/login");
-      }},
+      {
+        text: "로그아웃", onPress: async () => {
+          await logout();
+          router.replace("/(auth)/login");
+        }
+      },
     ]);
   };
 
   if (loading) {
     return (
-      <SafeAreaView className="flex-1 bg-background items-center justify-center">
+      <SafeAreaView className="flex-1 bg-gray-50 items-center justify-center">
         <ActivityIndicator size="large" color="#CE3630" />
       </SafeAreaView>
     );
@@ -55,12 +57,9 @@ export default function MyPageScreen() {
   const activeCount = stats.find((s) => s.status === "active")?.count || 0;
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
+      <ScreenHeader elevated title="MY" />
       <ScrollView className="flex-1">
-        <View className="px-5 py-6">
-          <Text className="text-2xl font-bold text-foreground">MY</Text>
-        </View>
-
         {}
         <View className="mx-4 bg-card rounded-xl border border-border p-5 mb-4">
           <Text className="text-lg font-bold text-foreground">{profile?.name}</Text>
@@ -95,12 +94,12 @@ export default function MyPageScreen() {
           <MenuItem
             icon={<Settings size={20} color="#737373" />}
             label="설정"
-            onPress={() => {}}
+            onPress={() => { }}
           />
         </View>
 
         <View className="px-4 mt-6 mb-8">
-          <Button variant="outline" onPress={handleLogout} className="flex-row gap-2">
+          <Button variant="outline" onPress={handleLogout} className="flex-row gap-2 bg-white">
             <LogOut size={18} color="#ef4444" />
             <Text className="text-destructive font-medium">로그아웃</Text>
           </Button>
@@ -121,7 +120,7 @@ function MenuItem({
 }) {
   return (
     <Pressable
-      className="flex-row items-center justify-between px-4 py-3.5"
+      className="flex-row items-center justify-between px-4 py-6"
       onPress={onPress}
     >
       <View className="flex-row items-center gap-3">

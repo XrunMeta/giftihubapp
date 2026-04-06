@@ -1,17 +1,17 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
-import { View, Text, Image, FlatList, ActivityIndicator, Alert, Pressable, TextInput } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Package, CheckCircle, Clock, XCircle, ShoppingCart } from "lucide-react-native";
+import { PageHeader } from "@/components/PageHeader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { PageHeader } from "@/components/PageHeader";
 import { Separator } from "@/components/ui/separator";
 import { resolveImageUrl } from "@/lib/image";
-import QRCode from "react-native-qrcode-svg";
-import { getSetDetail, type SetDetail, type Voucher } from "@/services/vouchers";
 import { createSetListing } from "@/services/marketplace";
+import { getSetDetail, type SetDetail, type Voucher } from "@/services/vouchers";
 import { format } from "date-fns";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { Package, ShoppingCart } from "lucide-react-native";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, Alert, FlatList, Image, Pressable, Text, TextInput, View } from "react-native";
+import QRCode from "react-native-qrcode-svg";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const STATUS_BADGE: Record<string, { label: string; variant: "default" | "secondary" | "destructive" }> = {
   active: { label: "사용가능", variant: "default" },
@@ -47,7 +47,7 @@ export default function SetDetailScreen() {
 
   if (loading || !data) {
     return (
-      <SafeAreaView className="flex-1 bg-background items-center justify-center">
+      <SafeAreaView className="flex-1 bg-gray-50 items-center justify-center">
         <ActivityIndicator size="large" color="#CE3630" />
       </SafeAreaView>
     );
@@ -87,7 +87,7 @@ export default function SetDetailScreen() {
         onPress={() => router.push(`/(user)/oth-path${item.id}`)}
       >
         {imgUri ? (
-          <Image source={{ uri: imgUri }} style={{ width: 48, height: 48 }} className="rounded-lg" resizeMode="cover" />
+          <Image source={{ uri: imgUri }} style={{ width: 48, height: 48 }} className="rounded-lg" resizeMode="contain" />
         ) : (
           <View style={{ width: 48, height: 48 }} className="rounded-lg bg-muted items-center justify-center">
             <Text className="text-lg">🎁</Text>
@@ -174,7 +174,7 @@ export default function SetDetailScreen() {
         <View className="mx-4 mb-4 bg-card rounded-xl border border-primary/30 p-4">
           <Text className="text-sm font-semibold text-foreground mb-2">판매가 설정 (KRW)</Text>
           <TextInput
-            className="bg-background border border-border rounded-lg px-3 py-2.5 text-foreground text-base"
+            className="bg-gray-50 border border-border rounded-lg px-3 py-2.5 text-foreground text-base"
             keyboardType="numeric"
             placeholder="판매 금액 입력"
             value={sellingPrice}
@@ -231,7 +231,7 @@ export default function SetDetailScreen() {
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-white">
       <PageHeader title="구성상품 상세" />
       <FlatList
         data={vouchers}

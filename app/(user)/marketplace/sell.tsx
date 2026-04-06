@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView, Alert, ActivityIndicator, Pressable } from "react-native";
-import { useRouter, useLocalSearchParams } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { PageHeader } from "@/components/PageHeader";
 import { Separator } from "@/components/ui/separator";
-import { getMyVouchers, type Voucher } from "@/services/vouchers";
 import { createListing } from "@/services/marketplace";
+import { getMyVouchers, type Voucher } from "@/services/vouchers";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MarketplaceSellScreen() {
   const router = useRouter();
@@ -64,14 +64,14 @@ export default function MarketplaceSellScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView className="flex-1 bg-background items-center justify-center">
+      <SafeAreaView className="flex-1 bg-white items-center justify-center">
         <ActivityIndicator size="large" color="#CE3630" />
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-white">
       <PageHeader title="판매 등록" />
       <ScrollView className="flex-1 px-5">
         <Text className="text-base font-semibold text-foreground mb-2 mt-2">상품 선택</Text>
@@ -79,9 +79,8 @@ export default function MarketplaceSellScreen() {
           {vouchers.map((v) => (
             <Pressable
               key={v.id}
-              className={`p-3 rounded-xl border ${
-                selectedVoucher?.id === v.id ? "border-primary bg-primary/5" : "border-border bg-card"
-              }`}
+              className={`p-3 rounded-xl border ${selectedVoucher?.id === v.id ? "border-primary bg-primary/5" : "border-border bg-card"
+                }`}
               onPress={() => {
                 setSelectedVoucher(v);
                 setSellingPrice(String(Math.round(v.face_value * 0.9)));

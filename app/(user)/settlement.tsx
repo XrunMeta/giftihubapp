@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, ActivityIndicator } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { PageHeader } from "@/components/PageHeader";
 import { ScrollableTabs } from "@/components/ui/scrollable-tabs";
 import { getPurchases } from "@/services/account";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, FlatList, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const TABS = [
   { key: "all", label: "전체" },
@@ -34,7 +34,7 @@ export default function SettlementScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-white">
       <PageHeader title="구매 이력" />
       <ScrollableTabs tabs={TABS} activeTab={activeTab} onTabPress={setActiveTab} className="mb-3" />
 

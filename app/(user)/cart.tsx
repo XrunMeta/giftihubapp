@@ -1,12 +1,12 @@
-import React from "react";
-import { View, Text, FlatList, Pressable, Image, Alert } from "react-native";
-import { useRouter } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Minus, Plus, Trash2, Package, X } from "lucide-react-native";
+import { ScreenHeader } from "@/components/ScreenHeader";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { useCart, type CartItem, type PackageItem } from "@/context/CartContext";
+import { useCart, type CartItem } from "@/context/CartContext";
 import { getProductImageUrl } from "@/services/store";
+import { useRouter } from "expo-router";
+import { Minus, Package, Plus, Trash2, X } from "lucide-react-native";
+import React from "react";
+import { Alert, FlatList, Image, Pressable, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const SYM: Record<string, string> = { KRW: "₩", USD: "$", IDR: "Rp" };
 
@@ -96,7 +96,7 @@ export default function CartScreen() {
           <Image
             source={{ uri: imgUri }}
             className="w-20 h-20 rounded-lg"
-            resizeMode="cover"
+            resizeMode="contain"
           />
         ) : (
           <View className="w-20 h-20 rounded-lg bg-muted items-center justify-center">
@@ -149,10 +149,8 @@ export default function CartScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
-      <View className="px-4 py-3">
-        <Text className="text-2xl font-bold text-foreground">장바구니</Text>
-      </View>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
+      <ScreenHeader elevated title="장바구니" />
 
       <FlatList
         style={{ flex: 1 }}
@@ -197,7 +195,7 @@ export default function CartScreen() {
               text: `${c} ${SYM[c]}${currTotals[c].toLocaleString()}`,
               onPress: () => router.push({ pathname: "/(user)/purchase", params: { currency: c } }),
             }));
-            buttons.push({ text: "취소", onPress: () => {} });
+            buttons.push({ text: "취소", onPress: () => { } });
             Alert.alert("결제할 통화 선택", "한 번에 하나의 통화만 결제할 수 있습니다.", buttons);
           } else {
             router.push({ pathname: "/(user)/purchase", params: { currency: currencies[0] } });

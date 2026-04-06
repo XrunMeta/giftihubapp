@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { View, Text, KeyboardAvoidingView, Platform, ScrollView, Alert } from "react-native";
-import { useRouter } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { PageHeader } from "@/components/PageHeader";
 import { useAuth } from "@/context/AuthContext";
 import { register } from "@/services/auth";
+import { useRouter } from "expo-router";
+import React, { useState } from "react";
+import { Alert, KeyboardAvoidingView, Platform, ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MerchantSignupScreen() {
   const router = useRouter();
@@ -37,7 +37,7 @@ export default function MerchantSignupScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-white">
       <PageHeader title="가맹점 회원가입" />
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}

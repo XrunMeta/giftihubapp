@@ -1,15 +1,16 @@
-import React, { useEffect, useState, useCallback } from "react";
+import { ScreenHeader } from "@/components/ScreenHeader";
+import { Separator } from "@/components/ui/separator";
+import { apiFetch } from "@/services/api";
+import { format } from "date-fns";
+import React, { useCallback, useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  FlatList,
   ActivityIndicator,
+  FlatList,
+  Text,
   TouchableOpacity,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { apiFetch } from "@/services/api";
-import { Separator } from "@/components/ui/separator";
-import { format } from "date-fns";
 
 type DailyItem = { date: string; count: number; total_amount: number };
 type SettlementResponse = {
@@ -75,7 +76,7 @@ export default function MerchantSettlementScreen() {
       const params = recFilter ? `?status=${recFilter}` : "";
       const data = await apiFetch<{ records: SettlementRecord[] }>(`/oth-path${params}`);
       setRecords(data.records);
-    } catch {}
+    } catch { }
     setRecLoading(false);
   }, [recFilter]);
 
@@ -213,14 +214,12 @@ export default function MerchantSettlementScreen() {
         <TouchableOpacity
           key={t}
           onPress={() => setTab(t)}
-          className={`flex-1 py-2 rounded-lg border ${
-            tab === t ? "bg-primary border-primary" : "bg-card border-border"
-          }`}
+          className={`flex-1 py-3 rounded-lg border ${tab === t ? "bg-primary border-primary" : "bg-card border-border"
+            }`}
         >
           <Text
-            className={`text-center text-sm font-medium ${
-              tab === t ? "text-primary-foreground" : "text-foreground"
-            }`}
+            className={`text-center text-sm font-medium ${tab === t ? "text-primary-foreground" : "text-foreground"
+              }`}
           >
             {t === "settlement" ? "정산 집계" : t === "history" ? "사용 이력" : "정산현황"}
           </Text>
@@ -230,12 +229,8 @@ export default function MerchantSettlementScreen() {
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
-      <View className="px-4 py-3">
-        <Text className="text-2xl font-bold text-foreground">정산</Text>
-      </View>
-
-      <TabSelector />
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
+      <ScreenHeader elevated title="정산" bottom={<TabSelector />} />
 
       {tab === "settlement" ? (
         <>
@@ -245,14 +240,12 @@ export default function MerchantSettlementScreen() {
               <TouchableOpacity
                 key={p.key}
                 onPress={() => setPeriod(p.key)}
-                className={`flex-1 py-2 rounded-lg border ${
-                  period === p.key ? "bg-primary border-primary" : "bg-card border-border"
-                }`}
+                className={`flex-1 py-3 rounded-lg border ${period === p.key ? "bg-primary border-primary" : "bg-card border-border"
+                  }`}
               >
                 <Text
-                  className={`text-center text-sm font-medium ${
-                    period === p.key ? "text-primary-foreground" : "text-foreground"
-                  }`}
+                  className={`text-center text-sm font-medium ${period === p.key ? "text-primary-foreground" : "text-foreground"
+                    }`}
                 >
                   {p.label}
                 </Text>
@@ -337,9 +330,8 @@ export default function MerchantSettlementScreen() {
               <TouchableOpacity
                 key={f.key}
                 onPress={() => setRecFilter(f.key)}
-                className={`px-3 py-1.5 rounded-full border ${
-                  recFilter === f.key ? "bg-primary border-primary" : "bg-card border-border"
-                }`}
+                className={`px-3 py-1.5 rounded-full border ${recFilter === f.key ? "bg-primary border-primary" : "bg-card border-border"
+                  }`}
               >
                 <Text className={`text-xs font-medium ${recFilter === f.key ? "text-primary-foreground" : "text-foreground"}`}>
                   {f.label}

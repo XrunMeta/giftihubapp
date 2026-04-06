@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { View, Text, ScrollView, Alert } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useRouter } from "expo-router";
 import { PageHeader } from "@/components/PageHeader";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { apiFetch } from "@/services/api";
+import { useRouter } from "expo-router";
+import React, { useState } from "react";
+import { Alert, ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 interface WithdrawResponse {
   ok: boolean;
@@ -79,7 +79,7 @@ export default function UsdtWithdrawScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-white">
       <PageHeader title="USDT 출금" />
       <ScrollView className="flex-1 px-6">
         <View className="bg-card border border-border rounded-xl p-4 mt-4">

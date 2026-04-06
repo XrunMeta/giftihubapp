@@ -1,17 +1,17 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, Pressable, ActivityIndicator, Alert, Image } from "react-native";
-import { Package, ShoppingCart } from "lucide-react-native";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
-import { getBundlePreview, type BundleComposition } from "@/services/bundle";
 import { resolveImageUrl } from "@/lib/image";
+import { getBundlePreview, type BundleComposition } from "@/services/bundle";
+import { Package, ShoppingCart } from "lucide-react-native";
+import React, { useState } from "react";
+import { ActivityIndicator, Alert, Image, Pressable, Text, TextInput, View } from "react-native";
 
 const CURRENCIES = ["KRW", "USD", "IDR"] as const;
 const CURRENCY_SYMBOLS: Record<string, string> = { KRW: "₩", USD: "$", IDR: "Rp" };
 const CURRENCY_PLACEHOLDER: Record<string, string> = {
-  KRW: "예: 50000",
-  USD: "예: 50",
-  IDR: "예: 500000",
+  KRW: "50000",
+  USD: "50",
+  IDR: "500000",
 };
 
 export function BundleComposer() {
@@ -88,7 +88,7 @@ export function BundleComposer() {
           <Text className="text-base font-bold text-foreground">구성 구매</Text>
         </View>
 
-        <Text className="text-xs text-muted-foreground mb-2">
+        <Text className="text-sm text-muted-foreground mb-2">
           금액을 입력하면 최적의 상품 조합을 만들어 드립니다.
         </Text>
 
@@ -98,16 +98,14 @@ export function BundleComposer() {
             <Pressable
               key={c}
               onPress={() => { setCurrency(c); setComposition(null); }}
-              className={`flex-1 py-1.5 rounded-lg border items-center ${
-                currency === c
-                  ? "bg-primary border-primary"
-                  : "bg-secondary border-border"
-              }`}
+              className={`flex-1 py-3  rounded-lg border items-center ${currency === c
+                ? "bg-primary border-primary"
+                : "bg-secondary border-border"
+                }`}
             >
               <Text
-                className={`text-xs font-semibold ${
-                  currency === c ? "text-primary-foreground" : "text-muted-foreground"
-                }`}
+                className={`text-sm font-semibold ${currency === c ? "text-primary-foreground" : "text-muted-foreground"
+                  }`}
               >
                 {c}
               </Text>
@@ -118,9 +116,9 @@ export function BundleComposer() {
         {}
         <View className="flex-row gap-2">
           <View className="flex-1 flex-row items-center bg-secondary rounded-lg px-3 border border-border">
-            <Text className="text-sm text-muted-foreground mr-1">{sym}</Text>
+            <Text className="text-md text-muted-foreground mr-1">{sym}</Text>
             <TextInput
-              className="flex-1 py-2.5 text-sm text-foreground"
+              className="flex-1 py-2.5 text-md text-foreground"
               placeholder={CURRENCY_PLACEHOLDER[currency]}
               placeholderTextColor="#737373"
               keyboardType="numeric"
@@ -161,11 +159,11 @@ export function BundleComposer() {
                   </View>
                 )}
                 <View className="flex-1">
-                  <Text className="text-xs text-muted-foreground">{item.brand_name}</Text>
+                  <Text className="text-sm text-muted-foreground">{item.brand_name}</Text>
                   <Text className="text-sm text-foreground" numberOfLines={1}>{item.name}</Text>
                 </View>
                 <View className="items-end">
-                  <Text className="text-xs text-muted-foreground">x{item.quantity}</Text>
+                  <Text className="text-sm text-muted-foreground">x{item.quantity}</Text>
                   <Text className="text-sm font-semibold text-foreground">
                     {sym}{item.subtotal.toLocaleString()}
                   </Text>
@@ -180,7 +178,7 @@ export function BundleComposer() {
                 <Text className="text-lg">💳</Text>
               </View>
               <View className="flex-1">
-                <Text className="text-xs text-amber-500">제휴상품권</Text>
+                <Text className="text-sm text-amber-500">제휴상품권</Text>
                 <Text className="text-sm text-foreground">{composition.flexible_item.name}</Text>
               </View>
               <Text className="text-sm font-semibold text-foreground">
@@ -200,7 +198,7 @@ export function BundleComposer() {
           </View>
 
           {composition.overshoot > 0 && (
-            <Text className="text-xs text-amber-500 mt-1">
+            <Text className="text-sm text-amber-500 mt-1">
               목표 대비 +{sym}{composition.overshoot.toLocaleString()} 초과
             </Text>
           )}

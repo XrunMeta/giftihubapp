@@ -1,8 +1,9 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { View, Text, FlatList, ActivityIndicator } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { ScreenHeader } from "@/components/ScreenHeader";
 import { apiFetch } from "@/services/api";
 import { format } from "date-fns";
+import React, { useCallback, useEffect, useState } from "react";
+import { ActivityIndicator, FlatList, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type HistoryItem = {
   id: string;
@@ -83,17 +84,15 @@ export default function MerchantHistoryScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView className="flex-1 bg-background items-center justify-center">
+      <SafeAreaView className="flex-1 bg-gray-50 items-center justify-center">
         <ActivityIndicator size="large" color="#CE3630" />
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
-      <View className="px-4 py-3">
-        <Text className="text-2xl font-bold text-foreground">사용 이력</Text>
-      </View>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
+      <ScreenHeader elevated title="사용 이력" />
       <FlatList
         data={items}
         keyExtractor={(item) => item.id}

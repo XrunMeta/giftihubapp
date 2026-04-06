@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, Alert, TouchableOpacity, ActivityIndicator } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useRouter } from "expo-router";
-import { LogOut } from "lucide-react-native";
+import { ScreenHeader } from "@/components/ScreenHeader";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import { apiFetch } from "@/services/api";
+import { useRouter } from "expo-router";
+import { LogOut } from "lucide-react-native";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, Alert, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MerchantSettingsScreen() {
   const { user, logout } = useAuth();
@@ -24,7 +25,7 @@ export default function MerchantSettingsScreen() {
   useEffect(() => {
     apiFetch<{ settlement_policy: string }>("/oth-path")
       .then((data) => setPolicy(data.settlement_policy as SettlementPolicy))
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setPolicyLoading(false));
   }, []);
 
@@ -42,18 +43,18 @@ export default function MerchantSettingsScreen() {
   const handleLogout = () => {
     Alert.alert("로그아웃", "정말 로그아웃하시겠습니까?", [
       { text: "취소", style: "cancel" },
-      { text: "로그아웃", onPress: async () => {
-        await logout();
-        router.replace("/(auth)/login");
-      }},
+      {
+        text: "로그아웃", onPress: async () => {
+          await logout();
+          router.replace("/(auth)/login");
+        }
+      },
     ]);
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
-      <View className="px-4 py-3">
-        <Text className="text-2xl font-bold text-foreground">설정</Text>
-      </View>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
+      <ScreenHeader elevated title="설정" />
 
       <View className="mx-4 bg-card rounded-xl border border-border p-5 mb-4">
         <Text className="text-lg font-bold text-foreground">{user?.name}</Text>
@@ -70,7 +71,7 @@ export default function MerchantSettingsScreen() {
             <TouchableOpacity
               key={opt.key}
               onPress={() => changePolicy(opt.key)}
-              className={"flex-row items-center p-3 mb-2 rounded-lg border " + (policy === opt.key ? "border-primary bg-primary/10" : "border-border")}
+              className={"flex-row items-center p-3 mb-2 rounded-lg border bg-white " + (policy === opt.key ? "border-primary bg-primary/10" : "border-border")}
             >
               <View className={"w-5 h-5 rounded-full border-2 mr-3 items-center justify-center " + (policy === opt.key ? "border-primary" : "border-muted-foreground")}>
                 {policy === opt.key && <View className="w-3 h-3 rounded-full bg-primary" />}
@@ -85,7 +86,7 @@ export default function MerchantSettingsScreen() {
       </View>
 
       <View className="px-4 mt-4">
-        <Button variant="outline" onPress={handleLogout} className="flex-row gap-2">
+        <Button variant="outline" onPress={handleLogout} className="flex-row gap-2 bg-white">
           <LogOut size={18} color="#ef4444" />
           <Text className="text-destructive font-medium">로그아웃</Text>
         </Button>

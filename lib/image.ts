@@ -5,7 +5,9 @@ export function resolveImageUrl(
 ): string | null {
   for (const raw of candidates) {
     if (raw) {
-      return raw.startsWith("http") ? raw : `${getBaseUrl()}${raw}`;
+      return raw.startsWith("http")
+        ? raw
+        : `${getBaseUrl()}${raw.startsWith("/") ? "" : "/"}${raw}`;
     }
   }
   return null;

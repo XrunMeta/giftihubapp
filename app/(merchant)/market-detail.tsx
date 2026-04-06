@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, Image, ScrollView, ActivityIndicator, Alert } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Package } from "lucide-react-native";
-import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/PageHeader";
-import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { resolveImageUrl } from "@/lib/image";
 import { getListingDetail, type MarketplaceListing } from "@/services/marketplace";
 import { format } from "date-fns";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { Package } from "lucide-react-native";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, Alert, Image, ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MerchantMarketDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -35,7 +35,7 @@ export default function MerchantMarketDetailScreen() {
 
   if (loading || !listing) {
     return (
-      <SafeAreaView className="flex-1 bg-background items-center justify-center">
+      <SafeAreaView className="flex-1 bg-white items-center justify-center">
         <ActivityIndicator size="large" color="#CE3630" />
       </SafeAreaView>
     );
@@ -44,7 +44,7 @@ export default function MerchantMarketDetailScreen() {
   const isSet = !!(listing as any).set_id;
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-white">
       <PageHeader title="상품 상세" />
       <ScrollView className="flex-1 px-5">
         {(() => {

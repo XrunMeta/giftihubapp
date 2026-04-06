@@ -1,17 +1,22 @@
-import React, { useCallback, useState } from "react";
-import { View, Text, FlatList, Pressable, Image, ActivityIndicator } from "react-native";
-import { useRouter, useFocusEffect } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Search } from "lucide-react-native";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { getStoreProducts, getProductImageUrl, type Product } from "@/services/store";
 import { BundleComposer } from "@/components/BundleComposer";
+import { ScreenHeader } from "@/components/ScreenHeader";
+import { getProductImageUrl, getStoreProducts, type Product } from "@/services/store";
+import { useFocusEffect, useRouter } from "expo-router";
+import React, { useCallback, useState } from "react";
+import { ActivityIndicator, FlatList, Image, Pressable, Text, useWindowDimensions, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const SYM: Record<string, string> = { KRW: "₩", USD: "$", IDR: "Rp" };
 
+const LIST_HORIZONTAL_PAD = 12;
+const GRID_COLUMN_GAP = 12;
+
 export default function StoreScreen() {
   const router = useRouter();
+  const { width: windowWidth } = useWindowDimensions();
+  const gridItemWidth =
+    (windowWidth - LIST_HORIZONTAL_PAD * 2 - GRID_COLUMN_GAP) / 2;
+
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -49,36 +54,40 @@ export default function StoreScreen() {
 
     return (
       <Pressable
-        className="flex-1 m-1.5 bg-card rounded-xl border border-border overflow-hidden"
+        style={{ width: gridItemWidth, marginBottom: 12 }}
+        className="bg-card rounded-xl border border-border overflow-hidden"
         onPress={() => router.push(`/(user)/store/${item.id}`)}
       >
-        {imgUri ? (
-          <Image
-            source={{ uri: imgUri }}
-            className="w-full h-32"
-            resizeMode="cover"
-          />
-        ) : (
-          <View className="w-full h-32 bg-muted items-center justify-center">
-            <Text className="text-3xl">🎁</Text>
-          </View>
-        )}
+        <View className="w-full h-32 bg-white p-3">
+          {imgUri ? (
+            <Image
+              source={{ uri: imgUri }}
+              className="w-full h-full"
+              resizeMode="contain"
+            />
+          ) : (
+            <View className="w-full h-32 bg-muted items-center justify-center">
+              <Text className="text-3xl">🎁</Text>
+            </View>
+          )}
+        </View>
         <View className="p-3">
           <Text className="text-xs text-muted-foreground" numberOfLines={1}>
             {item.brand_name}
           </Text>
-          <Text className="text-sm font-medium text-foreground mt-0.5" numberOfLines={2}>
+          <Text className="text-sm font-medium text-foreground" numberOfLines={2}>
             {item.name}
           </Text>
-          <View className="flex-row items-center mt-2 gap-1.5">
+          <View className="flex-row items-center  mt-1 gap-1.5">
             {isFlexible ? (
-              <Text className="text-sm font-bold text-foreground">
+              <Text className="text-base font-bold text-foreground">
                 {SYM[item.flexible_currency ?? "KRW"] ?? "₩"}{(item.flexible_min ?? 0).toLocaleString()}~
               </Text>
             ) : (
               <>
                 {discount > 0 && (
-                  <Badge variant="destructive" label={`${discount}%`} />
+
+                  <Text className="text-base font-bold text-red-500">{discount}%</Text>
                 )}
                 <Text className="text-base font-bold text-foreground">
                   {SYM[item.display_currency] ?? "₩"}{(item.price ?? 0).toLocaleString()}
@@ -93,29 +102,19 @@ export default function StoreScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView className="flex-1 bg-background items-center justify-center">
+      <SafeAreaView className="flex-1 bg-gray-50 items-center justify-center">
         <ActivityIndicator size="large" color="#CE3630" />
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
-      <View className="px-4 py-3">
-        <Text className="text-2xl font-bold text-foreground">스토어</Text>
-      </View>
-
-      <View className="px-4 mb-3">
-        <View className="flex-row items-center bg-secondary rounded-lg px-3">
-          <Search size={18} color="#737373" />
-          <Input
-            className="flex-1 border-0 bg-transparent"
-            placeholder="브랜드 또는 상품명 검색"
-            value={search}
-            onChangeText={setSearch}
-          />
-        </View>
-      </View>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
+      <ScreenHeader
+        elevated
+        title="스토어"
+        search={{ value: search, onChangeText: setSearch }}
+      />
 
       <FlatList
         style={{ flex: 1 }}
@@ -123,7 +122,8 @@ export default function StoreScreen() {
         renderItem={renderProduct}
         keyExtractor={(item) => item.id}
         numColumns={2}
-        contentContainerStyle={{ paddingHorizontal: 12, paddingBottom: 20 }}
+        columnWrapperStyle={{ gap: GRID_COLUMN_GAP }}
+        contentContainerStyle={{ paddingHorizontal: LIST_HORIZONTAL_PAD, paddingBottom: 20 }}
         ListHeaderComponent={<BundleComposer />}
         ListEmptyComponent={
           <View className="items-center py-20">

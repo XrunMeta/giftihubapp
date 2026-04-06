@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, Pressable, Alert } from "react-native";
-import { useRouter, useLocalSearchParams } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { CreditCard, Banknote, Coins, Zap } from "lucide-react-native";
-import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/PageHeader";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useCart } from "@/context/CartContext";
-import { getDevMode } from "@/services/system";
 import type { PaymentMethod } from "@/services/store";
+import { getDevMode } from "@/services/system";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { Banknote, Coins, CreditCard, Zap } from "lucide-react-native";
+import React, { useEffect, useState } from "react";
+import { Alert, Pressable, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const BASE_PAYMENT_METHODS: { key: PaymentMethod; label: string; icon: React.ReactNode; devOnly?: boolean }[] = [
   { key: "dev_pay", label: "개발페이", icon: <Zap size={20} color="#3b82f6" />, devOnly: true },
@@ -28,7 +28,7 @@ export default function PurchaseScreen() {
   const [devMode, setDevMode] = useState(false);
 
   useEffect(() => {
-    getDevMode().then(setDevMode).catch(() => {});
+    getDevMode().then(setDevMode).catch(() => { });
   }, []);
 
   const PAYMENT_METHODS = BASE_PAYMENT_METHODS.filter((m) => !m.devOnly || devMode);
@@ -62,7 +62,7 @@ export default function PurchaseScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-white">
       <PageHeader title={`${targetCurrency} 결제`} />
       <View className="flex-1 px-5">
         <View className="bg-card rounded-xl border border-border p-4 mb-6">
@@ -84,17 +84,15 @@ export default function PurchaseScreen() {
           {PAYMENT_METHODS.map((pm) => (
             <Pressable
               key={pm.key}
-              className={`flex-row items-center p-4 rounded-xl border ${
-                selected === pm.key ? "border-primary bg-primary/5" : "border-border bg-card"
-              }`}
+              className={`flex-row items-center p-4 rounded-xl border ${selected === pm.key ? "border-primary bg-primary/5" : "border-border bg-card"
+                }`}
               onPress={() => setSelected(pm.key)}
             >
               {pm.icon}
               <Text className="text-base text-foreground ml-3 flex-1">{pm.label}</Text>
               <View
-                className={`w-5 h-5 rounded-full border-2 ${
-                  selected === pm.key ? "border-primary bg-primary" : "border-border"
-                }`}
+                className={`w-5 h-5 rounded-full border-2 ${selected === pm.key ? "border-primary bg-primary" : "border-border"
+                  }`}
               />
             </Pressable>
           ))}

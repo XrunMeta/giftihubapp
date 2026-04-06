@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { View, Text, Alert } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { PageHeader } from "@/components/PageHeader";
 import { transferVoucher } from "@/services/vouchers";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import React, { useState } from "react";
+import { Alert, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function TransferScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -40,7 +40,7 @@ export default function TransferScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-white">
       <PageHeader title="기프티 양도" />
       <View className="flex-1 px-5 mt-4">
         <Text className="text-sm font-medium text-foreground mb-1.5">수신자 이메일</Text>

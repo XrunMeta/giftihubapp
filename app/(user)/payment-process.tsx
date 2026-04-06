@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, ActivityIndicator, Alert } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
-import * as WebBrowser from "expo-web-browser";
-import { CheckCircle, XCircle } from "lucide-react-native";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
-import { purchaseProduct, type PaymentMethod } from "@/services/store";
 import { purchaseBundle } from "@/services/bundle";
 import { getPaymentStatus } from "@/services/payment";
+import { purchaseProduct, type PaymentMethod } from "@/services/store";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import * as WebBrowser from "expo-web-browser";
+import { CheckCircle, XCircle } from "lucide-react-native";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, Alert, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function PaymentProcessScreen() {
   const { method, currency } = useLocalSearchParams<{ method: string; currency?: string }>();
@@ -135,7 +135,7 @@ export default function PaymentProcessScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background items-center justify-center px-6">
+    <SafeAreaView className="flex-1 bg-gray-50 items-center justify-center px-6">
       {status === "processing" && (
         <View className="items-center">
           <ActivityIndicator size="large" color="#CE3630" />

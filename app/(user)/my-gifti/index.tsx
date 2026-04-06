@@ -1,13 +1,14 @@
-import React, { useState, useCallback, useMemo } from "react";
-import { View, Text, FlatList, Pressable, Image, ActivityIndicator, ScrollView } from "react-native";
-import { useRouter, useFocusEffect } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Package } from "lucide-react-native";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
+import { ScreenHeader } from "@/components/ScreenHeader";
+import { Badge, type BadgeVariant } from "@/components/ui/badge";
 import { resolveImageUrl } from "@/lib/image";
+import { cn } from "@/lib/utils";
 import { getMyVouchers, type Voucher, type VoucherStatus } from "@/services/vouchers";
 import { format } from "date-fns";
+import { useFocusEffect, useRouter } from "expo-router";
+import { Package } from "lucide-react-native";
+import React, { useCallback, useMemo, useState } from "react";
+import { ActivityIndicator, FlatList, Image, Pressable, ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const SYM: Record<string, string> = { KRW: "₩", USD: "$", IDR: "Rp" };
 function fmtPrice(amount: number, currency?: string) {
@@ -24,12 +25,12 @@ const TABS = [
   { key: "transferred", label: "양도됨" },
 ];
 
-const STATUS_BADGE: Record<string, { label: string; variant: "default" | "secondary" | "destructive" }> = {
+const STATUS_BADGE: Record<string, { label: string; variant: BadgeVariant }> = {
   active: { label: "사용가능", variant: "default" },
-  listed: { label: "판매중", variant: "secondary" },
+  listed: { label: "판매중", variant: "info" },
   used: { label: "사용완료", variant: "secondary" },
   expired: { label: "만료", variant: "destructive" },
-  transferred: { label: "양도됨", variant: "secondary" },
+  transferred: { label: "양도됨", variant: "success" },
 };
 
 export default function MyGiftiScreen() {
@@ -68,7 +69,7 @@ export default function MyGiftiScreen() {
   useFocusEffect(
     useCallback(() => {
       loadRef.current();
-    }, [])
+    }, [activeTab])
   );
 
   type ListItem = { type: "single"; voucher: Voucher } | { type: "bundle"; setId: string; vouchers: Voucher[] };
@@ -129,7 +130,7 @@ export default function MyGiftiScreen() {
         </View>
         <View className="flex-row">
           {imgUri ? (
-            <Image source={{ uri: imgUri }} className="w-14 h-14 rounded-lg" resizeMode="cover" />
+            <Image source={{ uri: imgUri }} className="w-14 h-14 rounded-lg" resizeMode="contain" />
           ) : (
             <View className="w-14 h-14 rounded-lg bg-muted items-center justify-center">
               <Text className="text-xl">🎁</Text>
@@ -179,7 +180,7 @@ export default function MyGiftiScreen() {
         onPress={() => router.push(`/(user)/oth-path${item.id}`)}
       >
         {imgUri ? (
-          <Image source={{ uri: imgUri }} className="w-16 h-16 rounded-lg" resizeMode="cover" />
+          <Image source={{ uri: imgUri }} className="w-16 h-16 rounded-lg" resizeMode="contain" />
         ) : (
           <View className="w-16 h-16 rounded-lg bg-muted items-center justify-center">
             <Text className="text-2xl">🎁</Text>
@@ -208,51 +209,53 @@ export default function MyGiftiScreen() {
     );
   };
 
-  const listHeader = (
-    <>
-      <View className="px-4 py-3">
-        <Text className="text-2xl font-bold text-foreground">내 기프티</Text>
-        {debugInfo ? (
-          <Text className="text-xs text-muted-foreground mt-1" selectable>{debugInfo}</Text>
-        ) : null}
-      </View>
-
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
-        className="mb-3"
-      >
-        {TABS.map((tab) => {
-          const isActive = tab.key === activeTab;
-          return (
-            <Pressable
-              key={tab.key}
-              onPress={() => setActiveTab(tab.key)}
-              style={{ alignSelf: "flex-start" }}
-              className={cn(
-                "rounded-full px-4 py-2",
-                isActive ? "bg-primary" : "bg-secondary",
-              )}
-            >
-              <Text
-                className={cn(
-                  "text-sm font-medium",
-                  isActive ? "text-primary-foreground" : "text-muted-foreground",
-                )}
-              >
-                {tab.label}
-              </Text>
-            </Pressable>
-          );
-        })}
-      </ScrollView>
-    </>
-  );
-
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
+      <ScreenHeader
+        elevated
+        title="내 기프티"
+        subtitle={
+          debugInfo ? (
+            <Text className="text-xs text-muted-foreground mt-1" selectable>
+              {debugInfo}
+            </Text>
+          ) : undefined
+        }
+        bottom={
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
+            className="mb-3"
+          >
+            {TABS.map((tab) => {
+              const isActive = tab.key === activeTab;
+              return (
+                <Pressable
+                  key={tab.key}
+                  onPress={() => setActiveTab(tab.key)}
+                  style={{ alignSelf: "flex-start" }}
+                  className={cn(
+                    "rounded-full px-4 py-2",
+                    isActive ? "bg-primary" : "bg-secondary",
+                  )}
+                >
+                  <Text
+                    className={cn(
+                      "text-sm font-medium",
+                      isActive ? "text-primary-foreground" : "text-muted-foreground",
+                    )}
+                  >
+                    {tab.label}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </ScrollView>
+        }
+      />
       <FlatList
+        style={{ flex: 1 }}
         data={loading ? [] : grouped}
         renderItem={({ item }) =>
           item.type === "bundle"
@@ -262,7 +265,6 @@ export default function MyGiftiScreen() {
         keyExtractor={(item) =>
           item.type === "bundle" ? `set-${item.setId}` : item.voucher.id
         }
-        ListHeaderComponent={listHeader}
         contentContainerStyle={{ paddingBottom: 20 }}
         ListEmptyComponent={
           loading ? (

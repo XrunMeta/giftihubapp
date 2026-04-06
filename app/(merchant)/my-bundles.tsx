@@ -1,26 +1,27 @@
-import React, { useEffect, useState, useCallback } from "react";
-import {
-  View,
-  Text,
-  FlatList,
-  ActivityIndicator,
-  TouchableOpacity,
-  Alert,
-  RefreshControl,
-  Image,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Package } from "lucide-react-native";
+import { ScreenHeader } from "@/components/ScreenHeader";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { resolveImageUrl } from "@/lib/image";
 import {
+  getBundleSettlementRequests,
   getMyBundles,
   requestBundleSettlement,
-  getBundleSettlementRequests,
-  type MerchantBundle,
   type BundleSettlementRequest,
+  type MerchantBundle,
 } from "@/services/bundle";
+import { Package } from "lucide-react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  Alert,
+  FlatList,
+  Image,
+  RefreshControl,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type Tab = "items" | "requests";
 
@@ -215,30 +216,30 @@ export default function MyBundlesScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
-      <View className="px-4 py-3">
-        <Text className="text-2xl font-bold text-foreground">보유상품</Text>
-      </View>
-
-      <View className="flex-row mx-4 mb-3 gap-2">
-        {(["items", "requests"] as Tab[]).map((t) => (
-          <TouchableOpacity
-            key={t}
-            onPress={() => setTab(t)}
-            className={`flex-1 py-2 rounded-lg border ${
-              tab === t ? "bg-primary border-primary" : "bg-card border-border"
-            }`}
-          >
-            <Text
-              className={`text-center text-sm font-medium ${
-                tab === t ? "text-primary-foreground" : "text-foreground"
-              }`}
-            >
-              {t === "items" ? "보유상품" : "정산 요청"}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
+      <ScreenHeader
+        elevated
+        title="보유상품"
+        bottom={
+          <View className="flex-row mx-4 mb-3 gap-2">
+            {(["items", "requests"] as Tab[]).map((t) => (
+              <TouchableOpacity
+                key={t}
+                onPress={() => setTab(t)}
+                className={`flex-1 py-3 rounded-lg border ${tab === t ? "bg-primary border-primary" : "bg-card border-border"
+                  }`}
+              >
+                <Text
+                  className={`text-center text-sm font-medium ${tab === t ? "text-primary-foreground" : "text-foreground"
+                    }`}
+                >
+                  {t === "items" ? "보유상품" : "정산 요청"}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        }
+      />
 
       {loading ? (
         <View className="flex-1 items-center justify-center">

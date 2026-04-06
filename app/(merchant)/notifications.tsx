@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { View, Text, FlatList, ActivityIndicator, TouchableOpacity } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { ScreenHeader } from "@/components/ScreenHeader";
 import { apiFetch } from "@/services/api";
+import React, { useCallback, useEffect, useState } from "react";
+import { ActivityIndicator, FlatList, Text, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type Notification = {
   id: string; type: string; title: string; body: string | null;
@@ -17,7 +18,7 @@ export default function NotificationsScreen() {
     try {
       const data = await apiFetch<{ notifications: Notification[] }>("/oth-path?limit=50");
       setItems(data.notifications);
-    } catch {}
+    } catch { }
     setLoading(false);
   }, []);
 
@@ -25,13 +26,13 @@ export default function NotificationsScreen() {
 
   const markRead = async (item: Notification) => {
     if (!item.is_read) {
-      await apiFetch(`/oth-path${item.id}/read`, { method: "PATCH" }).catch(() => {});
+      await apiFetch(`/oth-path${item.id}/read`, { method: "PATCH" }).catch(() => { });
       setItems((prev) => prev.map((n) => (n.id === item.id ? { ...n, is_read: 1 } : n)));
     }
   };
 
   const markAllRead = async () => {
-    await apiFetch("/oth-path", { method: "PATCH" }).catch(() => {});
+    await apiFetch("/oth-path", { method: "PATCH" }).catch(() => { });
     setItems((prev) => prev.map((n) => ({ ...n, is_read: 1 })));
   };
 
@@ -49,17 +50,21 @@ export default function NotificationsScreen() {
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
-      <View className="flex-row justify-between items-center px-4 py-3">
-        <Text className="text-lg font-bold text-foreground">알림</Text>
-        <TouchableOpacity onPress={markAllRead}>
-          <Text className="text-sm text-primary">모두 읽음</Text>
-        </TouchableOpacity>
-      </View>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
+      <ScreenHeader
+        elevated
+        title="알림"
+        trailing={
+          <TouchableOpacity onPress={markAllRead}>
+            <Text className="text-sm text-primary">모두 읽음</Text>
+          </TouchableOpacity>
+        }
+      />
       {loading ? (
         <ActivityIndicator className="mt-8" />
       ) : (
         <FlatList
+          style={{ flex: 1 }}
           data={items}
           keyExtractor={(i) => i.id}
           renderItem={renderItem}
