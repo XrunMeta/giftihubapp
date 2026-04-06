@@ -14,6 +14,11 @@ const v_054e7a = {
   IDR: "500000",
 };
 
+function v_f89181(v_e6d4a6): string {
+  if (!v_e6d4a6) return "";
+  return v_e6d4a6.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 export function v_4c40b6() {
   const { addPackageToCart: v_81ab78 } = v_7a943b();
   const [v_f63e09, v_1cbe59] = v_5ab095("");
@@ -119,11 +124,11 @@ export function v_4c40b6() {
             <Text className="text-md text-muted-foreground mr-1">{v_c37780}</Text>
             <TextInput
               className="flex-1 py-2.5 text-md text-foreground"
-              placeholder={v_054e7a[v_a832b3]}
+              placeholder={v_f89181(v_054e7a[v_a832b3])}
               placeholderTextColor="#737373"
               keyboardType="numeric"
-              value={v_f63e09}
-              onChangeText={v_1cbe59}
+              value={v_f89181(v_f63e09)}
+              onChangeText={(v_9b6134) => v_1cbe59(v_9b6134.replace(/\D/g, ""))}
             />
           </View>
           <Button
