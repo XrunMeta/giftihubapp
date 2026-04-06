@@ -1,12 +1,12 @@
-import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
-import { v_3094a2, v_19b633, v_cf9c33, v_122070, v_39a996, v_03e392, v_79c4f2 } from "rcmrninabrnb";
-import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
-import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
-import { v_3b9c43, v_a07c02 } from "wjvlskvsbzsrojdbjsl";
-import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
+import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_7a943b } from "dxfmfnfvriitbtghyppor";
-import { v_5e3aed, v_afc1d9, type v_678322, type v_575fb7 } from "vhkgxwheyyipiczd";
+import { v_5e3aed, v_afc1d9, type v_678322 } from "vhkgxwheyyipiczd";
+import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
+import { v_3b9c43, v_a07c02 } from "wjvlskvsbzsrojdbjsl";
+import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
+import { v_39a996, v_03e392, v_cf9c33, v_122070, v_19b633, v_79c4f2, v_3094a2 } from "rcmrninabrnb";
+import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 const v_6b1440 = { KRW: "₩", USD: "$", IDR: "Rp" };
 
@@ -37,7 +37,7 @@ export default function v_2b70c8() {
 
   if (v_683210 || !v_01bee9) {
     return (
-      <SafeAreaView className="flex-1 bg-background items-center justify-center">
+      <SafeAreaView className="flex-1 bg-white items-center justify-center">
         <ActivityIndicator size="large" color="#CE3630" />
       </SafeAreaView>
     );
@@ -52,14 +52,14 @@ export default function v_2b70c8() {
       : 0;
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-white ">
       <PageHeader title={v_01bee9.brand_name} />
-      <ScrollView className="flex-1">
+      <ScrollView className="flex-1 px-5">
         {v_afc1d9(v_01bee9) ? (
           <Image
             source={{ uri: v_afc1d9(v_01bee9)! }}
             className="w-full h-64"
-            resizeMode="cover"
+            resizeMode="contain"
           />
         ) : (
           <View className="w-full h-48 bg-muted items-center justify-center">
@@ -67,7 +67,7 @@ export default function v_2b70c8() {
             <Text className="text-muted-foreground mt-2">{v_01bee9.brand_name}</Text>
           </View>
         )}
-        <View className="px-5 py-4">
+        <View className="py-4">
           <Text className="text-xs text-muted-foreground">{v_01bee9.brand_name}</Text>
           <Text className="text-xl font-bold text-foreground mt-1">{v_01bee9.name}</Text>
 

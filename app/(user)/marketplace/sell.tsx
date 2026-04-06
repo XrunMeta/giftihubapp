@@ -1,13 +1,13 @@
-import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
-import { v_3094a2, v_19b633, v_122070, v_03e392, v_39a996, v_09d0e5 } from "rcmrninabrnb";
-import { v_d1d90c, v_d1a7ac } from "rkmroqyctko";
-import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
+import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_1b353f } from "ymbgtfrroootgjefkrxgp";
-import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
-import { v_720509, type v_7fb3de } from "pvulvehakmpzwkznlnd";
 import { v_86db47 } from "vkhyfothlklikcpovbqirr";
+import { v_720509, type v_7fb3de } from "pvulvehakmpzwkznlnd";
+import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
+import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
+import { v_39a996, v_03e392, v_09d0e5, v_122070, v_19b633, v_3094a2 } from "rcmrninabrnb";
+import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 export default function v_3072c9() {
   const v_904d46 = v_d1d90c();
@@ -64,14 +64,14 @@ export default function v_3072c9() {
 
   if (v_683210) {
     return (
-      <SafeAreaView className="flex-1 bg-background items-center justify-center">
+      <SafeAreaView className="flex-1 bg-white items-center justify-center">
         <ActivityIndicator size="large" color="#CE3630" />
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-white">
       <PageHeader title="판매 등록" />
       <ScrollView className="flex-1 px-5">
         <Text className="text-base font-semibold text-foreground mb-2 mt-2">상품 선택</Text>
@@ -79,9 +79,8 @@ export default function v_3072c9() {
           {v_f9fd27.map((v_81e2ef) => (
             <Pressable
               key={v_81e2ef.id}
-              className={`p-3 rounded-xl border ${
-                v_119885?.id === v_81e2ef.id ? "border-primary bg-primary/5" : "border-border bg-card"
-              }`}
+              className={`p-3 rounded-xl border ${v_119885?.id === v_81e2ef.id ? "border-primary bg-primary/5" : "border-border bg-card"
+                }`}
               onPress={() => {
                 v_36e0c4(v_81e2ef);
                 v_27a321(String(Math.round(v_81e2ef.face_value * 0.9)));

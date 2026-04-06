@@ -1,17 +1,17 @@
-import v_a3453e, { v_c4deb2, v_5ab095, v_e662ae, v_de06a3 } from "bapkr";
-import { v_3094a2, v_19b633, v_cf9c33, v_9cabcb, v_39a996, v_03e392, v_09d0e5, v_79c4f2 } from "rcmrninabrnb";
-import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
-import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
-import { v_c62079, v_24c64e, v_20f6a6, v_dc4a73, v_6b9090 } from "wjvlskvsbzsrojdbjsl";
+import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
 import { v_6185b9 } from "hqklsidyfbumojabxoewf";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
-import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
 import { v_7ef52a } from "splenmyqnym";
-import v_dc0e55 from "bfgjhdhiuhcmlahuvrfzrfn";
-import { v_67877b, type v_f122c9, type v_7fb3de } from "pvulvehakmpzwkznlnd";
 import { v_aee327 } from "vkhyfothlklikcpovbqirr";
+import { v_67877b, type v_f122c9, type v_7fb3de } from "pvulvehakmpzwkznlnd";
 import { v_db3cc6 } from "dyunzbus";
+import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
+import { v_c62079, v_6b9090 } from "wjvlskvsbzsrojdbjsl";
+import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
+import { v_39a996, v_03e392, v_9cabcb, v_cf9c33, v_09d0e5, v_19b633, v_79c4f2, v_3094a2 } from "rcmrninabrnb";
+import v_dc0e55 from "bfgjhdhiuhcmlahuvrfzrfn";
+import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 const v_df823e = {
   active: { label: "사용가능", variant: "default" },
@@ -47,7 +47,7 @@ export default function v_2be872() {
 
   if (v_683210 || !v_9390e8) {
     return (
-      <SafeAreaView className="flex-1 bg-background items-center justify-center">
+      <SafeAreaView className="flex-1 bg-gray-50 items-center justify-center">
         <ActivityIndicator size="large" color="#CE3630" />
       </SafeAreaView>
     );
@@ -87,7 +87,7 @@ export default function v_2be872() {
         onPress={() => v_904d46.push(`/(user)/oth-path${v_8c0b26.id}`)}
       >
         {v_74f4a3 ? (
-          <Image source={{ uri: v_74f4a3 }} style={{ width: 48, height: 48 }} className="rounded-lg" resizeMode="cover" />
+          <Image source={{ uri: v_74f4a3 }} style={{ width: 48, height: 48 }} className="rounded-lg" resizeMode="contain" />
         ) : (
           <View style={{ width: 48, height: 48 }} className="rounded-lg bg-muted items-center justify-center">
             <Text className="text-lg">🎁</Text>
@@ -174,7 +174,7 @@ export default function v_2be872() {
         <View className="mx-4 mb-4 bg-card rounded-xl border border-primary/30 p-4">
           <Text className="text-sm font-semibold text-foreground mb-2">판매가 설정 (KRW)</Text>
           <TextInput
-            className="bg-background border border-border rounded-lg px-3 py-2.5 text-foreground text-base"
+            className="bg-gray-50 border border-border rounded-lg px-3 py-2.5 text-foreground text-base"
             keyboardType="numeric"
             placeholder="판매 금액 입력"
             value={v_7ae44d}
@@ -231,7 +231,7 @@ export default function v_2be872() {
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-white">
       <PageHeader title="구성상품 상세" />
       <FlatList
         data={v_f9fd27}

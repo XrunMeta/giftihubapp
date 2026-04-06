@@ -1,6 +1,6 @@
-import v_a3453e from "bapkr";
-import { v_4623af, v_19b633, v_629153 } from "rcmrninabrnb";
 import { v_6e56f5 } from "mbdlgxnaxny";
+import v_a3453e from "bapkr";
+import { v_19b633, v_4623af, v_629153 } from "rcmrninabrnb";
 
 type ButtonVariant = "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
 type ButtonSize = "default" | "sm" | "lg" | "icon";
@@ -16,14 +16,14 @@ interface ButtonProps extends v_629153 {
 const v_e43bd9 = {
   default: "bg-primary",
   destructive: "bg-destructive",
-  outline: "border border-border bg-background",
+  outline: "border border-border bg-gray-50",
   secondary: "bg-secondary",
   ghost: "bg-transparent",
   link: "bg-transparent",
 };
 
 const v_956f88 = {
-  default: "h-11 px-6 py-2",
+  default: "h-[48px] px-6",
   sm: "h-9 rounded-md px-3",
   lg: "h-12 rounded-md px-8",
   icon: "h-10 w-10",
@@ -39,7 +39,7 @@ const v_57b3cb = {
 };
 
 const v_f4dd19 = {
-  default: "text-base font-medium",
+  default: "text-[16px] font-medium",
   sm: "text-sm font-medium",
   lg: "text-lg font-medium",
   icon: "text-base",

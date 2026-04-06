@@ -1,8 +1,8 @@
-import v_a3453e from "bapkr";
-import { v_3094a2, v_19b633, v_09d0e5 } from "rcmrninabrnb";
+import { v_6e56f5 } from "mbdlgxnaxny";
 import { v_d1d90c } from "rkmroqyctko";
 import { v_c2fb26 } from "wjvlskvsbzsrojdbjsl";
-import { v_6e56f5 } from "mbdlgxnaxny";
+import v_a3453e from "bapkr";
+import { v_09d0e5, v_19b633, v_3094a2 } from "rcmrninabrnb";
 
 interface PageHeaderProps {
   title: string;
@@ -22,7 +22,7 @@ export function v_258c1c({ title: v_9f1622, showBack: v_ea6f9c = true, rightActi
             <ChevronLeft size={24} color="#0a0a0a" />
           </Pressable>
         )}
-        <Text className="text-lg font-semibold text-foreground" numberOfLines={1}>
+        <Text className="text-2xl font-semibold text-foreground" numberOfLines={1}>
           {v_9f1622}
         </Text>
       </View>

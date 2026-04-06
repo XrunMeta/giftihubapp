@@ -1,7 +1,7 @@
-import { v_c4deb2 } from "bapkr";
-import { v_3094a2, v_39a996 } from "rcmrninabrnb";
-import { v_d1d90c } from "rkmroqyctko";
 import { v_5d2c47 } from "jbfshypwcrklpetczcsca";
+import { v_d1d90c } from "rkmroqyctko";
+import { v_c4deb2 } from "bapkr";
+import { v_39a996, v_3094a2 } from "rcmrninabrnb";
 
 export default function v_53e1da() {
   const { isAuthenticated: v_c55bb9, isLoading: v_cd31a8, user: v_625c74 } = v_5d2c47();
@@ -20,7 +20,7 @@ export default function v_53e1da() {
   }, [v_c55bb9, v_cd31a8, v_625c74]);
 
   return (
-    <View className="flex-1 items-center justify-center bg-background">
+    <View className="flex-1 items-center justify-center bg-gray-50">
       <ActivityIndicator size="large" color="#CE3630" />
     </View>
   );

@@ -1,14 +1,14 @@
-import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
-import { v_3094a2, v_19b633, v_39a996, v_03e392 } from "rcmrninabrnb";
-import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
-import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
-import * as v_2c8bdd from "refjsvmnhpbvuhzr";
-import { v_24c64e, v_dc4a73 } from "wjvlskvsbzsrojdbjsl";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_7a943b } from "dxfmfnfvriitbtghyppor";
-import { v_338caf, type v_88a3f9 } from "vhkgxwheyyipiczd";
 import { v_331c13 } from "uugztyivrmtvweuio";
 import { v_9f95ab } from "ztkoagfdprzignsbie";
+import { v_338caf, type v_88a3f9 } from "vhkgxwheyyipiczd";
+import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
+import * as v_2c8bdd from "refjsvmnhpbvuhzr";
+import { v_24c64e, v_dc4a73 } from "wjvlskvsbzsrojdbjsl";
+import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
+import { v_39a996, v_03e392, v_19b633, v_3094a2 } from "rcmrninabrnb";
+import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 export default function v_14045c() {
   const { method: v_bfe9b9, currency: v_a832b3 } = v_d1a7ac<{ method: string; currency?: string }>();
@@ -135,7 +135,7 @@ export default function v_14045c() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background items-center justify-center px-6">
+    <SafeAreaView className="flex-1 bg-gray-50 items-center justify-center px-6">
       {v_d308b5 === "processing" && (
         <View className="items-center">
           <ActivityIndicator size="large" color="#CE3630" />

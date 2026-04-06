@@ -1,11 +1,12 @@
-import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
-import { v_3094a2, v_19b633, v_03e392, v_4623af, v_39a996 } from "rcmrninabrnb";
-import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
-import { v_d1d90c } from "rkmroqyctko";
-import { v_0c9ab6 } from "wjvlskvsbzsrojdbjsl";
+import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_5d2c47 } from "jbfshypwcrklpetczcsca";
 import { v_bc1b24 } from "tlrvzsbmctdavs";
+import { v_d1d90c } from "rkmroqyctko";
+import { v_0c9ab6 } from "wjvlskvsbzsrojdbjsl";
+import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
+import { v_39a996, v_03e392, v_19b633, v_4623af, v_3094a2 } from "rcmrninabrnb";
+import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 export default function v_ff7fc2() {
   const { user: v_625c74, logout: v_d7d5a2 } = v_5d2c47();
@@ -24,7 +25,7 @@ export default function v_ff7fc2() {
   v_c4deb2(() => {
     v_bc1b24<{ settlement_policy: string }>("/oth-path")
       .then((v_9390e8) => v_f040e1(v_9390e8.settlement_policy as SettlementPolicy))
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => v_81ab8f(false));
   }, []);
 
@@ -42,18 +43,18 @@ export default function v_ff7fc2() {
   const v_06b8a4 = () => {
     v_03e392.alert("로그아웃", "정말 로그아웃하시겠습니까?", [
       { text: "취소", style: "cancel" },
-      { text: "로그아웃", onPress: async () => {
-        await v_d7d5a2();
-        v_904d46.replace("/(auth)/login");
-      }},
+      {
+        text: "로그아웃", onPress: async () => {
+          await v_d7d5a2();
+          v_904d46.replace("/(auth)/login");
+        }
+      },
     ]);
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
-      <View className="px-4 py-3">
-        <Text className="text-2xl font-bold text-foreground">설정</Text>
-      </View>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["bottom"]}>
+      <ScreenHeader elevated title="설정" />
 
       <View className="mx-4 bg-card rounded-xl border border-border p-5 mb-4">
         <Text className="text-lg font-bold text-foreground">{v_625c74?.name}</Text>
@@ -70,7 +71,7 @@ export default function v_ff7fc2() {
             <TouchableOpacity
               key={v_68b2be.key}
               onPress={() => v_392585(v_68b2be.key)}
-              className={"flex-row items-center p-3 mb-2 rounded-lg border " + (v_efba22 === v_68b2be.key ? "border-primary bg-primary/10" : "border-border")}
+              className={"flex-row items-center p-3 mb-2 rounded-lg border bg-white " + (v_efba22 === v_68b2be.key ? "border-primary bg-primary/10" : "border-border")}
             >
               <View className={"w-5 h-5 rounded-full border-2 mr-3 items-center justify-center " + (v_efba22 === v_68b2be.key ? "border-primary" : "border-muted-foreground")}>
                 {v_efba22 === v_68b2be.key && <View className="w-3 h-3 rounded-full bg-primary" />}
@@ -85,7 +86,7 @@ export default function v_ff7fc2() {
       </View>
 
       <View className="px-4 mt-4">
-        <Button variant="outline" onPress={v_06b8a4} className="flex-row gap-2">
+        <Button variant="outline" onPress={v_06b8a4} className="flex-row gap-2 bg-white">
           <LogOut size={18} color="#ef4444" />
           <Text className="text-destructive font-medium">로그아웃</Text>
         </Button>
