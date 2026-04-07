@@ -1,10 +1,12 @@
-import { v_373248 } from "rkmroqyctko";
-import { v_19ca5b, v_e4f0c5, v_c62079, v_aa3f8f, v_5dcc4b, v_0ae9ff } from "wjvlskvsbzsrojdbjsl";
-import { v_c4deb2, v_5ab095 } from "bapkr";
-import { v_3094a2, v_19b633 } from "rcmrninabrnb";
+import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_bc1b24 } from "tlrvzsbmctdavs";
+import { v_373248 } from "rkmroqyctko";
+import { v_0ae9ff, v_aa3f8f, v_c62079, v_19ca5b, v_5dcc4b, v_e4f0c5 } from "wjvlskvsbzsrojdbjsl";
+import { v_c4deb2, v_5ab095 } from "bapkr";
+import { v_19b633, v_3094a2 } from "rcmrninabrnb";
 
 export default function v_2e5340() {
+  const { t: v_8d41d7 } = v_678659();
   const [v_8a6db3, v_5fedc2] = v_5ab095(0);
 
   v_c4deb2(() => {
@@ -34,42 +36,42 @@ export default function v_2e5340() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "QR 스캔",
+          title: v_8d41d7("merchant.tabs.qrScan"),
           tabBarIcon: ({ color: v_3c2a3a, size: v_05b441 }) => <QrCode size={v_05b441} color={v_3c2a3a} />,
         }}
       />
       <Tabs.Screen
         name="market"
         options={{
-          title: "중고마켓",
+          title: v_8d41d7("merchant.tabs.market"),
           tabBarIcon: ({ color: v_3c2a3a, size: v_05b441 }) => <ShoppingBag size={v_05b441} color={v_3c2a3a} />,
         }}
       />
       <Tabs.Screen
         name="my-bundles"
         options={{
-          title: "보유상품",
+          title: v_8d41d7("merchant.tabs.myBundles"),
           tabBarIcon: ({ color: v_3c2a3a, size: v_05b441 }) => <Package size={v_05b441} color={v_3c2a3a} />,
         }}
       />
       <Tabs.Screen
         name="settlement"
         options={{
-          title: "정산",
+          title: v_8d41d7("merchant.tabs.settlement"),
           tabBarIcon: ({ color: v_3c2a3a, size: v_05b441 }) => <DollarSign size={v_05b441} color={v_3c2a3a} />,
         }}
       />
       <Tabs.Screen
         name="settings"
         options={{
-          title: "설정",
+          title: v_8d41d7("merchant.tabs.settings"),
           tabBarIcon: ({ color: v_3c2a3a, size: v_05b441 }) => <Settings size={v_05b441} color={v_3c2a3a} />,
         }}
       />
       <Tabs.Screen
         name="notifications"
         options={{
-          title: "알림",
+          title: v_8d41d7("merchant.tabs.notifications"),
           tabBarIcon: ({ color: v_3c2a3a, size: v_05b441 }) => (
             <View>
               <Bell size={v_05b441} color={v_3c2a3a} />

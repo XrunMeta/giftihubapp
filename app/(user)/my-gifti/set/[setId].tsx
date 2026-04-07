@@ -2,6 +2,7 @@ import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
 import { v_6185b9 } from "hqklsidyfbumojabxoewf";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
+import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_7ef52a } from "splenmyqnym";
 import { v_aee327 } from "vkhyfothlklikcpovbqirr";
 import { v_67877b, type v_f122c9, type v_7fb3de } from "pvulvehakmpzwkznlnd";
@@ -13,15 +14,16 @@ import { v_39a996, v_03e392, v_9cabcb, v_cf9c33, v_09d0e5, v_19b633, v_79c4f2, v
 import v_dc0e55 from "bfgjhdhiuhcmlahuvrfzrfn";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
-const v_df823e = {
-  active: { label: "사용가능", variant: "default" },
-  used: { label: "사용완료", variant: "secondary" },
-  expired: { label: "만료", variant: "destructive" },
-  transferred: { label: "양도됨", variant: "secondary" },
-  listed: { label: "판매중", variant: "secondary" },
+const v_119921 = {
+  active: { labelKey: "myGifti.list.statusActive", variant: "default" },
+  used: { labelKey: "myGifti.list.statusUsed", variant: "secondary" },
+  expired: { labelKey: "myGifti.list.statusExpired", variant: "destructive" },
+  transferred: { labelKey: "myGifti.list.statusTransferred", variant: "secondary" },
+  listed: { labelKey: "myGifti.list.statusListed", variant: "secondary" },
 };
 
 export default function v_2be872() {
+  const { t: v_8d41d7 } = v_678659();
   const { setId: v_90a2ba } = v_d1a7ac<{ setId: string }>();
   const v_904d46 = v_d1d90c();
   const [v_9390e8, v_d57c80] = v_5ab095<v_f122c9 | null>(null);
@@ -37,7 +39,7 @@ export default function v_2be872() {
         const v_8f00b9 = await v_67877b(v_90a2ba);
         v_d57c80(v_8f00b9);
       } catch {
-        v_03e392.alert("오류", "구성상품 정보를 불러올 수 없습니다.");
+        v_03e392.alert(v_8d41d7("myGifti.setDetail.loadErrorTitle"), v_8d41d7("myGifti.setDetail.loadErrorBody"));
         v_904d46.back();
       } finally {
         v_34a50a(false);
@@ -61,24 +63,25 @@ export default function v_2be872() {
 
   const v_333e15 = async () => {
     if (!v_7ae44d || Number(v_7ae44d) <= 0) {
-      v_03e392.alert("입력 오류", "판매가를 입력해주세요.");
+      v_03e392.alert(v_8d41d7("myGifti.setDetail.alertPriceTitle"), v_8d41d7("myGifti.setDetail.alertPriceBody"));
       return;
     }
     v_ee9ec1(true);
     try {
       await v_aee327(v_90a2ba!, Number(v_7ae44d));
-      v_03e392.alert("등록 완료", "중고마켓에 구성상품이 등록되었습니다.", [
-        { text: "확인", onPress: () => v_904d46.back() },
+      v_03e392.alert(v_8d41d7("myGifti.setDetail.successTitle"), v_8d41d7("myGifti.setDetail.successBody"), [
+        { text: v_8d41d7("myGifti.setDetail.ok"), onPress: () => v_904d46.back() },
       ]);
     } catch (v_49263d) {
-      v_03e392.alert("등록 실패", v_49263d.body?.error || "다시 시도해주세요.");
+      v_03e392.alert(v_8d41d7("myGifti.setDetail.failTitle"), v_49263d.body?.error || v_8d41d7("myGifti.setDetail.failBody"));
     } finally {
       v_ee9ec1(false);
     }
   };
 
   const v_8c5481 = ({ item: v_8c0b26 }: { item: v_7fb3de }) => {
-    const v_51452d = v_df823e[v_8c0b26.status] || v_df823e.active;
+    const v_ab4c96 = v_119921[v_8c0b26.status] || v_119921.active;
+    const v_51452d = { label: v_8d41d7(v_ab4c96.labelKey), variant: v_ab4c96.variant };
     const v_74f4a3 = v_7ef52a(v_8c0b26.thumb_url, v_8c0b26.image_url, v_8c0b26.brand_logo);
 
     return (
@@ -123,30 +126,32 @@ export default function v_2be872() {
         <View className="p-5 items-center">
           <View className="flex-row items-center mb-3">
             <Package size={20} color="#CE3630" />
-            <Text className="text-base font-bold text-foreground ml-2">구성상품</Text>
+            <Text className="text-base font-bold text-foreground ml-2">{v_8d41d7("myGifti.setDetail.bundleLabel")}</Text>
           </View>
           <View className="p-3 bg-white rounded-lg">
             <QRCode value={`gifti-set:${v_90a2ba}`} size={160} />
           </View>
-          <Text className="text-xs text-muted-foreground mt-2">상점에서 스캔하여 유효성 확인</Text>
+          <Text className="text-xs text-muted-foreground mt-2">{v_8d41d7("myGifti.setDetail.qrHint")}</Text>
         </View>
       </View>
 
       {}
       <View className="mx-4 mb-4 bg-card rounded-xl border border-border p-4">
         <View className="flex-row justify-between mb-2">
-          <Text className="text-sm text-muted-foreground">총 구성</Text>
-          <Text className="text-sm font-medium text-foreground">{v_b9f2b7.total_count}건</Text>
+          <Text className="text-sm text-muted-foreground">{v_8d41d7("myGifti.setDetail.summaryTotal")}</Text>
+          <Text className="text-sm font-medium text-foreground">
+            {v_8d41d7("myGifti.setDetail.countUnitFmt").replace("{{count}}", String(v_b9f2b7.total_count))}
+          </Text>
         </View>
         <View className="flex-row justify-between mb-2">
-          <Text className="text-sm text-muted-foreground">사용 가능</Text>
+          <Text className="text-sm text-muted-foreground">{v_8d41d7("myGifti.setDetail.summaryActive")}</Text>
           <Text className="text-sm font-medium" style={{ color: v_b9f2b7.all_active ? "#22c55e" : "#f59e0b" }}>
-            {v_b9f2b7.active_count}건
+            {v_8d41d7("myGifti.setDetail.countUnitFmt").replace("{{count}}", String(v_b9f2b7.active_count))}
           </Text>
         </View>
         <Separator className="my-2" />
         <View className="flex-row justify-between">
-          <Text className="text-sm font-semibold text-foreground">총 액면가</Text>
+          <Text className="text-sm font-semibold text-foreground">{v_8d41d7("myGifti.setDetail.totalFace")}</Text>
           <Text className="text-base font-bold text-foreground">
             ₩{v_b9f2b7.total_value?.toLocaleString()}
           </Text>
@@ -164,7 +169,7 @@ export default function v_2be872() {
           >
             <View className="flex-row items-center justify-center gap-2">
               <ShoppingCart size={16} color="#fff" />
-              <Text className="text-primary-foreground font-semibold">중고마켓에 판매하기</Text>
+              <Text className="text-primary-foreground font-semibold">{v_8d41d7("myGifti.setDetail.sellButton")}</Text>
             </View>
           </Button>
         </View>
@@ -172,27 +177,27 @@ export default function v_2be872() {
 
       {v_8584c0 && (
         <View className="mx-4 mb-4 bg-card rounded-xl border border-primary/30 p-4">
-          <Text className="text-sm font-semibold text-foreground mb-2">판매가 설정 (KRW)</Text>
+          <Text className="text-sm font-semibold text-foreground mb-2">{v_8d41d7("myGifti.setDetail.sellPriceTitle")}</Text>
           <TextInput
             className="bg-gray-50 border border-border rounded-lg px-3 py-2.5 text-foreground text-base"
             keyboardType="numeric"
-            placeholder="판매 금액 입력"
+            placeholder={v_8d41d7("myGifti.setDetail.sellPricePh")}
             value={v_7ae44d}
             onChangeText={v_27a321}
             placeholderTextColor="#999"
           />
           <View className="mt-3">
             <View className="flex-row justify-between mb-1">
-              <Text className="text-xs text-muted-foreground">총 액면가</Text>
+              <Text className="text-xs text-muted-foreground">{v_8d41d7("myGifti.setDetail.totalFace")}</Text>
               <Text className="text-xs text-foreground">₩{v_b9f2b7.total_value?.toLocaleString()}</Text>
             </View>
             <View className="flex-row justify-between mb-1">
-              <Text className="text-xs text-muted-foreground">수수료 (5%)</Text>
+              <Text className="text-xs text-muted-foreground">{v_8d41d7("myGifti.setDetail.feeLabel")}</Text>
               <Text className="text-xs text-foreground">₩{v_2d815e.toLocaleString()}</Text>
             </View>
             <Separator className="my-1.5" />
             <View className="flex-row justify-between">
-              <Text className="text-sm font-semibold text-foreground">정산 예정금액</Text>
+              <Text className="text-sm font-semibold text-foreground">{v_8d41d7("myGifti.setDetail.payoutLabel")}</Text>
               <Text className="text-sm font-bold text-primary">₩{v_daa996.toLocaleString()}</Text>
             </View>
           </View>
@@ -201,7 +206,7 @@ export default function v_2be872() {
               className="flex-1 py-2.5 rounded-lg bg-secondary items-center"
               onPress={() => v_31dffa(false)}
             >
-              <Text className="text-sm font-medium text-muted-foreground">취소</Text>
+              <Text className="text-sm font-medium text-muted-foreground">{v_8d41d7("myGifti.setDetail.cancel")}</Text>
             </Pressable>
             <Pressable
               className="flex-1 py-2.5 rounded-lg bg-primary items-center"
@@ -209,7 +214,7 @@ export default function v_2be872() {
               disabled={v_cb66b4}
             >
               <Text className="text-sm font-semibold text-primary-foreground">
-                {v_cb66b4 ? "등록 중..." : "판매 등록"}
+                {v_cb66b4 ? v_8d41d7("myGifti.setDetail.submitting") : v_8d41d7("myGifti.setDetail.submitSell")}
               </Text>
             </Pressable>
           </View>
@@ -218,21 +223,23 @@ export default function v_2be872() {
 
       {(v_bb8024 as any).status === 'listed' && (
         <View className="mx-4 mb-4 bg-yellow-500/10 rounded-xl border border-yellow-500/30 p-3">
-          <Text className="text-sm font-semibold text-yellow-600 text-center">현재 중고마켓에 판매 중입니다</Text>
+          <Text className="text-sm font-semibold text-yellow-600 text-center">{v_8d41d7("myGifti.setDetail.listedBanner")}</Text>
         </View>
       )}
 
       {}
       <View className="mx-4 mb-2 flex-row items-center">
-        <Text className="text-sm font-semibold text-foreground">구성 상품 목록</Text>
-        <Text className="text-xs text-muted-foreground ml-2">({v_f9fd27.length}건)</Text>
+        <Text className="text-sm font-semibold text-foreground">{v_8d41d7("myGifti.setDetail.listHeader")}</Text>
+        <Text className="text-xs text-muted-foreground ml-2">
+          {v_8d41d7("myGifti.setDetail.listCountFmt").replace("{{count}}", String(v_f9fd27.length))}
+        </Text>
       </View>
     </>
   );
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
-      <PageHeader title="구성상품 상세" />
+      <PageHeader title={v_8d41d7("myGifti.setDetail.title")} />
       <FlatList
         style={{ flex: 1 }}
         data={v_f9fd27}

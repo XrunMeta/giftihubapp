@@ -3,6 +3,7 @@ import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
 import { v_6185b9 } from "hqklsidyfbumojabxoewf";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
+import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_f589a4 } from "wplnrzxbcvjvxjmndcjr";
 import { v_7ef52a } from "splenmyqnym";
 import { v_eaee10, v_50a647, type v_7fb3de } from "pvulvehakmpzwkznlnd";
@@ -17,40 +18,44 @@ import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 const v_35c58e = 30;
 
-const STATUS_INFO: Record<string, { label: string; icon: typeof v_24c64e; color: string; description: string }> = {
+const STATUS_META: Record<
+  string,
+  { labelKey: string; descKey: string; icon: typeof v_24c64e; color: string }
+> = {
   used: {
-    label: "사용완료",
+    labelKey: "myGifti.detail.usedLabel",
+    descKey: "myGifti.detail.usedDesc",
     icon: v_24c64e,
     color: "#16a34a",
-    description: "이 기프티는 사용이 완료되었습니다.",
   },
   listed: {
-    label: "판매중",
+    labelKey: "myGifti.detail.listedLabel",
+    descKey: "myGifti.detail.listedDesc",
     icon: v_e4f0c5,
     color: "#2563eb",
-    description: "이 기프티는 중고마켓에 등록되어 판매중입니다.",
   },
   expired: {
-    label: "기간만료",
+    labelKey: "myGifti.detail.expiredLabel",
+    descKey: "myGifti.detail.expiredDesc",
     icon: v_20f6a6,
     color: "#ef4444",
-    description: "이 기프티의 유효기간이 만료되었습니다.",
   },
   transferred: {
-    label: "양도됨",
+    labelKey: "myGifti.detail.transferredLabel",
+    descKey: "myGifti.detail.transferredDesc",
     icon: v_c1958c,
     color: "#16a34a",
-    description: "이 기프티는 다른 사용자에게 양도되었습니다.",
   },
   refunded: {
-    label: "환불됨",
+    labelKey: "myGifti.detail.refundedLabel",
+    descKey: "myGifti.detail.refundedDesc",
     icon: v_dc4a73,
     color: "#ef4444",
-    description: "이 기프티는 환불 처리되었습니다.",
   },
 };
 
 export default function v_b89029() {
+  const { t: v_8d41d7 } = v_678659();
   const { id: v_389afb } = v_d1a7ac<{ id: string }>();
   const v_904d46 = v_d1d90c();
   const v_1d0b37 = v_f589a4();
@@ -101,7 +106,7 @@ export default function v_b89029() {
             v_3ac63b.current = setInterval(v_4fd68b, 5000);
           }
         } catch {
-          v_03e392.alert("오류", "기프티 정보를 불러올 수 없습니다.");
+          v_03e392.alert(v_8d41d7("myGifti.detail.loadErrorTitle"), v_8d41d7("myGifti.detail.loadErrorBody"));
           v_904d46.back();
         } finally {
           v_34a50a(false);
@@ -124,11 +129,19 @@ export default function v_b89029() {
   const v_26dce6 = v_3e4b5d.status === "active";
   const v_2d5007 = v_bcfa24 - 80;
   const v_74f4a3 = v_7ef52a(v_3e4b5d.thumb_url, v_3e4b5d.image_url, v_3e4b5d.brand_logo);
-  const v_866c46 = v_d9da40[v_3e4b5d.status];
+  const v_7a8d0e = v_265f62[v_3e4b5d.status];
+  const v_866c46 = v_7a8d0e
+    ? {
+        label: v_8d41d7(v_7a8d0e.labelKey),
+        description: v_8d41d7(v_7a8d0e.descKey),
+        icon: v_7a8d0e.icon,
+        color: v_7a8d0e.color,
+      }
+    : null;
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50">
-      <PageHeader title="기프티 상세" />
+      <PageHeader title={v_8d41d7("myGifti.detail.title")} />
       <ScrollView className="flex-1 px-5">
         {}
         {v_26dce6 ? (
@@ -145,11 +158,11 @@ export default function v_b89029() {
                       <TouchableOpacity
                         onPress={() => {
                           v_fba5a0.setStringAsync(v_e4a44d!);
-                          v_03e392.alert("복사됨", v_e4a44d!);
+                          v_03e392.alert(v_8d41d7("myGifti.detail.copyTitle"), v_e4a44d!);
                         }}
                         className="ml-2 px-2 py-1 bg-muted rounded"
                       >
-                        <Text className="text-xs text-muted-foreground">복사</Text>
+                        <Text className="text-xs text-muted-foreground">{v_8d41d7("myGifti.detail.copyBtn")}</Text>
                       </TouchableOpacity>
                     )}
                   </View>
@@ -157,12 +170,12 @@ export default function v_b89029() {
                   <View className="mt-4 p-3 bg-white rounded-lg">
                     <QRCode value={v_e4a44d} size={120} />
                   </View>
-                  <Text className="text-xs text-muted-foreground mt-2">휴대폰 카메라로 스캔</Text>
+                  <Text className="text-xs text-muted-foreground mt-2">{v_8d41d7("myGifti.detail.scanHint")}</Text>
                 </View>
               ) : (
                 <View className="h-16 items-center justify-center">
                   <ActivityIndicator size="small" color="#CE3630" />
-                  <Text className="text-xs text-muted-foreground mt-2">바코드 로딩중...</Text>
+                  <Text className="text-xs text-muted-foreground mt-2">{v_8d41d7("myGifti.detail.barcodeLoading")}</Text>
                 </View>
               )}
             </View>
@@ -183,12 +196,15 @@ export default function v_b89029() {
           </View>
         ) : v_866c46 ? (
 
+          (() => {
+            const v_355e79 = v_866c46.icon;
+            return (
           <View
             className="rounded-xl border overflow-hidden mb-4"
             style={{ borderColor: v_866c46.color + "40", backgroundColor: v_866c46.color + "08" }}
           >
             <View className="p-5 items-center">
-              <statusInfo.icon size={36} color={v_866c46.color} />
+              <StatusIcon size={36} color={v_866c46.color} />
               <Text className="text-lg font-bold mt-2" style={{ color: v_866c46.color }}>
                 {v_866c46.label}
               </Text>
@@ -202,6 +218,8 @@ export default function v_b89029() {
               ) : null}
             </View>
           </View>
+            );
+          })()
         ) : null}
 
         {}
@@ -226,7 +244,7 @@ export default function v_b89029() {
                         ? "success"
                         : "secondary"
               }
-              label={v_866c46?.label ?? v_3e4b5d.status}
+              label={v_866c46?.label ?? (v_26dce6 ? v_8d41d7("myGifti.list.statusActive") : v_3e4b5d.status)}
             />
           </View>
 
@@ -234,13 +252,13 @@ export default function v_b89029() {
 
           <View className="gap-2">
             <View className="flex-row justify-between">
-              <Text className="text-sm text-muted-foreground">액면가</Text>
+              <Text className="text-sm text-muted-foreground">{v_8d41d7("myGifti.detail.faceValue")}</Text>
               <Text className="text-sm font-medium text-foreground">
                 ₩{v_3e4b5d.face_value?.toLocaleString() ?? "0"}
               </Text>
             </View>
             <View className="flex-row justify-between">
-              <Text className="text-sm text-muted-foreground">만료일</Text>
+              <Text className="text-sm text-muted-foreground">{v_8d41d7("myGifti.detail.expiryDate")}</Text>
               <Text className="text-sm font-medium text-foreground">
                 {v_3e4b5d.expiry_date
                   ? v_db3cc6(new Date(v_3e4b5d.expiry_date * 1000), "yyyy.MM.dd")
@@ -248,8 +266,10 @@ export default function v_b89029() {
               </Text>
             </View>
             <View className="flex-row justify-between">
-              <Text className="text-sm text-muted-foreground">양도 횟수</Text>
-              <Text className="text-sm font-medium text-foreground">{v_3e4b5d.transfer_count ?? 0}회</Text>
+              <Text className="text-sm text-muted-foreground">{v_8d41d7("myGifti.detail.transferCount")}</Text>
+              <Text className="text-sm font-medium text-foreground">
+                {v_8d41d7("myGifti.detail.transferCountFmt").replace("{{count}}", String(v_3e4b5d.transfer_count ?? 0))}
+              </Text>
             </View>
           </View>
         </View>
@@ -264,7 +284,7 @@ export default function v_b89029() {
                 onPress={() => v_904d46.push(`/(user)/oth-path${v_389afb}/transfer`)}
               >
                 <Send size={16} color="#0a0a0a" />
-                <Text className="text-sm font-medium text-foreground">양도</Text>
+                <Text className="text-sm font-medium text-foreground">{v_8d41d7("myGifti.detail.actionTransfer")}</Text>
               </Button>
               <Button
                 variant="outline"
@@ -272,7 +292,7 @@ export default function v_b89029() {
                 onPress={() => v_904d46.push(`/(user)/oth-path${v_389afb}/refund`)}
               >
                 <ArrowLeftRight size={16} color="#0a0a0a" />
-                <Text className="text-sm font-medium text-foreground">환불</Text>
+                <Text className="text-sm font-medium text-foreground">{v_8d41d7("myGifti.detail.actionRefund")}</Text>
               </Button>
             </View>
             <Button
@@ -281,7 +301,7 @@ export default function v_b89029() {
               onPress={() => v_904d46.push({ pathname: "/(user)/oth-path", params: { voucherId: v_389afb } })}
             >
               <Store size={16} color="#0a0a0a" />
-              <Text className="text-sm font-medium text-foreground">중고마켓에 판매</Text>
+              <Text className="text-sm font-medium text-foreground">{v_8d41d7("myGifti.detail.sellOnMarketplace")}</Text>
             </Button>
           </View>
         )}

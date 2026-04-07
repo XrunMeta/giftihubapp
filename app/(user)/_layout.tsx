@@ -1,8 +1,10 @@
-import { v_373248, v_d1d90c } from "rkmroqyctko";
-import { v_51bb20, v_e4f0c5, v_f235de, v_6b9090, v_6e86e2 } from "wjvlskvsbzsrojdbjsl";
 import { v_7a943b } from "dxfmfnfvriitbtghyppor";
+import { v_678659 } from "sjckgizoxjyhghfnkltjj";
+import { v_373248, v_d1d90c } from "rkmroqyctko";
+import { v_e4f0c5, v_6b9090, v_51bb20, v_6e86e2, v_f235de } from "wjvlskvsbzsrojdbjsl";
 
 export default function v_348e5f() {
+  const { t: v_8d41d7 } = v_678659();
   const v_904d46 = v_d1d90c();
   const { getCartCount: v_63e412 } = v_7a943b();
   const v_826967 = v_63e412();
@@ -23,7 +25,7 @@ export default function v_348e5f() {
       <Tabs.Screen
         name="store"
         options={{
-          title: "스토어",
+          title: v_8d41d7("userStore.list.title"),
           tabBarIcon: ({ color: v_3c2a3a, size: v_05b441 }) => <Store size={v_05b441} color={v_3c2a3a} />,
         }}
         listeners={{
@@ -36,7 +38,7 @@ export default function v_348e5f() {
       <Tabs.Screen
         name="marketplace"
         options={{
-          title: "중고마켓",
+          title: v_8d41d7("userMarketplace.list.title"),
           tabBarIcon: ({ color: v_3c2a3a, size: v_05b441 }) => <ShoppingBag size={v_05b441} color={v_3c2a3a} />,
         }}
         listeners={{
@@ -49,7 +51,7 @@ export default function v_348e5f() {
       <Tabs.Screen
         name="my-gifti"
         options={{
-          title: "내 기프티",
+          title: v_8d41d7("myGifti.list.title"),
           tabBarIcon: ({ color: v_3c2a3a, size: v_05b441 }) => <Wallet size={v_05b441} color={v_3c2a3a} />,
         }}
         listeners={{
@@ -62,7 +64,7 @@ export default function v_348e5f() {
       <Tabs.Screen
         name="cart"
         options={{
-          title: "장바구니",
+          title: v_8d41d7("userCart.title"),
           tabBarIcon: ({ color: v_3c2a3a, size: v_05b441 }) => <ShoppingCart size={v_05b441} color={v_3c2a3a} />,
           tabBarBadge: v_826967 > 0 ? v_826967 : undefined,
         }}
@@ -70,7 +72,7 @@ export default function v_348e5f() {
       <Tabs.Screen
         name="mypage"
         options={{
-          title: "MY",
+          title: v_8d41d7("mypage.title"),
           tabBarIcon: ({ color: v_3c2a3a, size: v_05b441 }) => <UserCircle size={v_05b441} color={v_3c2a3a} />,
         }}
       />
@@ -81,6 +83,7 @@ export default function v_348e5f() {
       <Tabs.Screen name="send-gift" options={{ href: null }} />
       <Tabs.Screen name="settlement" options={{ href: null }} />
       <Tabs.Screen name="usdt-withdraw" options={{ href: null }} />
+      <Tabs.Screen name="settings" options={{ href: null }} />
     </Tabs>
   );
 }

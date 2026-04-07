@@ -1,5 +1,6 @@
 import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
 import { v_6185b9 } from "hqklsidyfbumojabxoewf";
+import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_7ef52a } from "splenmyqnym";
 import { v_6e56f5 } from "mbdlgxnaxny";
 import {
@@ -8,20 +9,25 @@ import {
   type v_ff021d,
 } from "vkhyfothlklikcpovbqirr";
 import { v_cf763b, v_d1d90c } from "rkmroqyctko";
-import v_a3453e, { v_de06a3, v_e662ae, v_5ab095 } from "bapkr";
+import v_a3453e, { v_de06a3, v_df9f57, v_e662ae, v_5ab095 } from "bapkr";
 import { v_39a996, v_9cabcb, v_cf9c33, v_09d0e5, v_122070, v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
-const v_dde291 = [
-  { key: "all", label: "전체" },
-  { key: "food", label: "식품" },
-  { key: "culture", label: "문화" },
-  { key: "convenience", label: "편의점" },
-  { key: "beauty", label: "뷰티" },
-  { key: "etc", label: "기타" },
+const v_ebb8f2 = [
+  { key: "all", labelKey: "userMarketplace.list.tabAll" },
+  { key: "food", labelKey: "userMarketplace.list.catFood" },
+  { key: "culture", labelKey: "userMarketplace.list.catCulture" },
+  { key: "convenience", labelKey: "userMarketplace.list.catConvenience" },
+  { key: "beauty", labelKey: "userMarketplace.list.catBeauty" },
+  { key: "etc", labelKey: "userMarketplace.list.catEtc" },
 ];
 
 export default function v_fab3ac() {
+  const { t: v_8d41d7 } = v_678659();
+  const v_89ee0f = v_df9f57(
+    () => v_ebb8f2.map((v_3ac7e7) => ({ key: v_3ac7e7.key, label: v_8d41d7(v_3ac7e7.labelKey) })),
+    [v_8d41d7],
+  );
   const v_904d46 = v_d1d90c();
   const [v_795bbd, v_c90f4e] = v_5ab095<v_ff021d[]>([]);
   const [v_683210, v_34a50a] = v_5ab095(true);
@@ -94,8 +100,12 @@ export default function v_fab3ac() {
     <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
       <ScreenHeader
         elevated
-        title="중고마켓"
-        search={{ value: v_9875a1, onChangeText: v_2e7fc1 }}
+        title={v_8d41d7("userMarketplace.list.title")}
+        search={{
+          value: v_9875a1,
+          onChangeText: v_2e7fc1,
+          placeholder: v_8d41d7("userMarketplace.list.searchPlaceholder"),
+        }}
         bottom={
           <ScrollView
             horizontal
@@ -103,7 +113,7 @@ export default function v_fab3ac() {
             contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
             className="mb-3"
           >
-            {v_dde291.map((v_11083e) => {
+            {v_89ee0f.map((v_11083e) => {
               const v_26dce6 = v_11083e.key === v_ac1d22;
               return (
                 <Pressable
@@ -142,7 +152,7 @@ export default function v_fab3ac() {
             </View>
           ) : (
             <View className="items-center py-20">
-              <Text className="text-muted-foreground">판매 중인 상품이 없습니다.</Text>
+              <Text className="text-muted-foreground">{v_8d41d7("userMarketplace.list.empty")}</Text>
             </View>
           )
         }

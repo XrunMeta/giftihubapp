@@ -1,5 +1,6 @@
 import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
 import { v_6185b9, type v_dcbdc2 } from "hqklsidyfbumojabxoewf";
+import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_7ef52a } from "splenmyqnym";
 import { v_6e56f5 } from "mbdlgxnaxny";
 import { v_720509, type v_7fb3de, type v_a64e82 } from "pvulvehakmpzwkznlnd";
@@ -16,25 +17,35 @@ function v_48b4c6(v_f63e09, v_a832b3) {
   return `${v_c37780}${v_f63e09.toLocaleString()}`;
 }
 
-const v_1bc355 = [
-  { key: "all", label: "전체" },
-  { key: "active", label: "사용가능" },
-  { key: "listed", label: "판매중" },
-  { key: "used", label: "사용완료" },
-  { key: "expired", label: "기간만료" },
-  { key: "transferred", label: "양도됨" },
+const v_322c3f = [
+  { key: "all", labelKey: "myGifti.list.tabAll" },
+  { key: "active", labelKey: "myGifti.list.tabActive" },
+  { key: "listed", labelKey: "myGifti.list.tabListed" },
+  { key: "used", labelKey: "myGifti.list.tabUsed" },
+  { key: "expired", labelKey: "myGifti.list.tabExpired" },
+  { key: "transferred", labelKey: "myGifti.list.tabTransferred" },
 ];
 
-const STATUS_BADGE: Record<string, { label: string; variant: v_dcbdc2 }> = {
-  active: { label: "사용가능", variant: "default" },
-  listed: { label: "판매중", variant: "info" },
-  used: { label: "사용완료", variant: "secondary" },
-  expired: { label: "만료", variant: "destructive" },
-  transferred: { label: "양도됨", variant: "success" },
+const STATUS_BADGE_META: Record<string, { labelKey: string; variant: v_dcbdc2 }> = {
+  active: { labelKey: "myGifti.list.statusActive", variant: "default" },
+  listed: { labelKey: "myGifti.list.statusListed", variant: "info" },
+  used: { labelKey: "myGifti.list.statusUsed", variant: "secondary" },
+  expired: { labelKey: "myGifti.list.statusExpired", variant: "destructive" },
+  transferred: { labelKey: "myGifti.list.statusTransferred", variant: "success" },
 };
 
+function v_953c3c(v_8d41d7, v_d308b5) {
+  const v_35f85c = v_119921[v_d308b5] ?? v_119921.active;
+  return { label: v_8d41d7(v_35f85c.labelKey), variant: v_35f85c.variant };
+}
+
 export default function v_bf7b5b() {
+  const { t: v_8d41d7 } = v_678659();
   const v_904d46 = v_d1d90c();
+  const v_c6c04c = v_df9f57(
+    () => v_322c3f.map((v_3ac7e7) => ({ key: v_3ac7e7.key, label: v_8d41d7(v_3ac7e7.labelKey) })),
+    [v_8d41d7],
+  );
   const [v_f9fd27, v_3a2126] = v_5ab095<v_7fb3de[]>([]);
   const [v_683210, v_34a50a] = v_5ab095(true);
   const [v_ac1d22, v_02dd63] = v_5ab095("all");
@@ -49,41 +60,48 @@ export default function v_bf7b5b() {
       const v_d308b5 = v_ac1d22 === "all" ? undefined : (v_ac1d22 as v_a64e82);
       const v_8f00b9 = await v_720509(v_d308b5);
       v_3a2126(v_8f00b9.vouchers);
-
       const v_75ae3e = new Set(v_8f00b9.vouchers.filter((v: v_7fb3de) => v_81e2ef.set_id).map((v: v_7fb3de) => v_81e2ef.set_id));
-      v_67d36a(`총 ${v_8f00b9.vouchers.length}건, 세트 ${v_75ae3e.size}개, 개별 ${v_8f00b9.vouchers.filter((v: v_7fb3de) => !v_81e2ef.set_id).length}건`);
+      v_67d36a(
+        v_8d41d7("myGifti.list.debugSummary")
+          .replace("{{vouchers}}", String(v_8f00b9.vouchers.length))
+          .replace("{{sets}}", String(v_75ae3e.size))
+          .replace("{{singles}}", String(v_8f00b9.vouchers.filter((v: v_7fb3de) => !v_81e2ef.set_id).length)),
+      );
     } catch (v_49263d) {
       console.error("Failed to load vouchers:", v_49263d);
-      const v_badeaf = v_49263d.status === 401
-        ? "로그인이 만료되었습니다. 다시 로그인해주세요."
-        : `기프티 목록을 불러올 수 없습니다. (${v_49263d.status || v_49263d.message || "네트워크 오류"})`;
-      v_3a7d09(v_badeaf);
-      v_67d36a(`ERR: status=${v_49263d.status}, msg=${v_49263d.message}`);
+      if (v_49263d.status === 401) {
+        v_3a7d09(v_8d41d7("myGifti.list.errUnauthorized"));
+      } else {
+        const v_3cfdfc = String(v_49263d.status ?? v_49263d.message ?? v_8d41d7("myGifti.list.networkError"));
+        v_3a7d09(`${v_8d41d7("myGifti.list.errLoadPrefix")} ${v_8d41d7("myGifti.list.errLoadDetail").replace("{{detail}}", v_3cfdfc)}`);
+      }
+      v_67d36a(
+        v_8d41d7("myGifti.list.debugErr")
+          .replace("{{status}}", String(v_49263d.status ?? ""))
+          .replace("{{msg}}", String(v_49263d.message ?? "")),
+      );
     } finally {
       v_34a50a(false);
     }
-  }, [v_ac1d22]);
+  }, [v_ac1d22, v_8d41d7]);
 
   const v_04c01a = v_a3453e.useRef(v_cb3615);
   v_04c01a.current = v_cb3615;
   v_cf763b(
     v_de06a3(() => {
       v_04c01a.current();
-    }, [v_ac1d22])
+    }, [v_ac1d22]),
   );
 
   type ListItem = { type: "single"; voucher: v_7fb3de } | { type: "bundle"; setId: string; vouchers: v_7fb3de[] };
 
   const v_4d79ca = v_df9f57<ListItem[]>(() => {
     const v_de9c6f = new Map<string, v_7fb3de[]>();
-    const singles: v_7fb3de[] = [];
     for (const v_81e2ef of v_f9fd27) {
       if (v_81e2ef.set_id) {
         const v_d0c056 = v_de9c6f.get(v_81e2ef.set_id);
         if (v_d0c056) v_d0c056.push(v_81e2ef);
         else v_de9c6f.set(v_81e2ef.set_id, [v_81e2ef]);
-      } else {
-        v_d6adfa.push(v_81e2ef);
       }
     }
     const v_43c42e = [];
@@ -108,9 +126,13 @@ export default function v_bf7b5b() {
 
     const v_6460d1 = new Set(v_8c0b26.vouchers.map((v_81e2ef) => v_81e2ef.status));
     const v_666f24 = v_6460d1.size === 1 ? [...v_6460d1][0]! : "mixed";
-    const v_26fb18 = v_666f24 === "mixed"
-      ? { label: "혼합", variant: "secondary" as const }
-      : v_df823e[v_666f24] ?? { label: v_666f24, variant: "secondary" as const };
+    const v_26fb18 =
+      v_666f24 === "mixed"
+        ? { label: v_8d41d7("myGifti.list.statusMixed"), variant: "secondary" as const }
+        : v_953c3c(v_8d41d7, v_666f24);
+
+    const v_5b2d71 =
+      v_7e0009 > 0 ? ` ${v_8d41d7("myGifti.list.restItems").replace("{{count}}", String(v_7e0009))}` : "";
 
     return (
       <Pressable
@@ -121,12 +143,11 @@ export default function v_bf7b5b() {
           <View className="w-8 h-8 rounded-lg bg-primary/10 items-center justify-center">
             <Package size={18} color="#CE3630" />
           </View>
-          <Text className="text-sm font-semibold text-primary">구성 상품 ({v_8c0b26.vouchers.length}건)</Text>
+          <Text className="text-sm font-semibold text-primary">
+            {v_8d41d7("myGifti.list.bundleTitle").replace("{{count}}", String(v_8c0b26.vouchers.length))}
+          </Text>
           <View className="flex-1" />
-          <Badge
-            variant={v_26fb18.variant}
-            label={v_26fb18.label}
-          />
+          <Badge variant={v_26fb18.variant} label={v_26fb18.label} />
         </View>
         <View className="flex-row">
           {v_74f4a3 ? (
@@ -139,19 +160,16 @@ export default function v_bf7b5b() {
           <View className="flex-1 ml-3">
             <Text className="text-sm text-foreground font-medium" numberOfLines={1}>
               {v_ea719c.brand} · {v_ea719c.name}
-              {v_7e0009 > 0 ? ` 외 ${v_7e0009}건` : ""}
+              {v_5b2d71}
             </Text>
             <View className="flex-row justify-between items-center">
-              <Text className="text-base font-bold text-foreground">
-                {v_48b4c6(v_c83285, v_c3bc75)}
-              </Text>
+              <Text className="text-base font-bold text-foreground">{v_48b4c6(v_c83285, v_c3bc75)}</Text>
               <Text className="text-xs text-muted-foreground">
-                만료: {v_db3cc6(new Date(v_ea719c.expiry_date * 1000), "yyyy.MM.dd")}
+                {v_8d41d7("myGifti.list.expiryPrefix")} {v_db3cc6(new Date(v_ea719c.expiry_date * 1000), "yyyy.MM.dd")}
               </Text>
             </View>
           </View>
         </View>
-        {}
         <View className="mt-2 pt-2 border-t border-border">
           {v_8c0b26.vouchers.slice(0, 4).map((v_81e2ef) => (
             <View key={v_81e2ef.id} className="flex-row justify-between">
@@ -163,7 +181,7 @@ export default function v_bf7b5b() {
           ))}
           {v_8c0b26.vouchers.length > 4 && (
             <Text className="text-xs text-muted-foreground text-center mt-1">
-              +{v_8c0b26.vouchers.length - 4}건 더보기
+              {v_8d41d7("myGifti.list.bundleMore").replace("{{count}}", String(v_8c0b26.vouchers.length - 4))}
             </Text>
           )}
         </View>
@@ -172,7 +190,7 @@ export default function v_bf7b5b() {
   };
 
   const v_f8505d = ({ item: v_8c0b26 }: { item: v_7fb3de }) => {
-    const v_51452d = v_df823e[v_8c0b26.status] || v_df823e.active;
+    const v_51452d = v_953c3c(v_8d41d7, v_8c0b26.status);
     const v_74f4a3 = v_7ef52a(v_8c0b26.thumb_url, v_8c0b26.image_url, v_8c0b26.brand_logo);
     return (
       <Pressable
@@ -201,7 +219,7 @@ export default function v_bf7b5b() {
               {v_48b4c6(v_8c0b26.face_value_base || v_8c0b26.face_value, v_8c0b26.base_currency)}
             </Text>
             <Text className="text-xs text-muted-foreground">
-              만료: {v_db3cc6(new Date(v_8c0b26.expiry_date * 1000), "yyyy.MM.dd")}
+              {v_8d41d7("myGifti.list.expiryPrefix")} {v_db3cc6(new Date(v_8c0b26.expiry_date * 1000), "yyyy.MM.dd")}
             </Text>
           </View>
         </View>
@@ -213,7 +231,7 @@ export default function v_bf7b5b() {
     <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
       <ScreenHeader
         elevated
-        title="내 기프티"
+        title={v_8d41d7("myGifti.list.title")}
         subtitle={
           v_49c6c7 ? (
             <Text className="text-xs text-muted-foreground mt-1" selectable>
@@ -228,17 +246,14 @@ export default function v_bf7b5b() {
             contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
             className="mb-3"
           >
-            {v_1bc355.map((v_11083e) => {
+            {v_c6c04c.map((v_11083e) => {
               const v_26dce6 = v_11083e.key === v_ac1d22;
               return (
                 <Pressable
                   key={v_11083e.key}
                   onPress={() => v_02dd63(v_11083e.key)}
                   style={{ alignSelf: "flex-start" }}
-                  className={v_6e56f5(
-                    "rounded-full px-4 py-2",
-                    v_26dce6 ? "bg-primary" : "bg-secondary",
-                  )}
+                  className={v_6e56f5("rounded-full px-4 py-2", v_26dce6 ? "bg-primary" : "bg-secondary")}
                 >
                   <Text
                     className={v_6e56f5(
@@ -258,13 +273,9 @@ export default function v_bf7b5b() {
         style={{ flex: 1 }}
         data={v_683210 ? [] : v_4d79ca}
         renderItem={({ item: v_8c0b26 }) =>
-          v_8c0b26.type === "bundle"
-            ? v_192662(v_8c0b26)
-            : v_f8505d({ item: v_8c0b26.voucher })
+          v_8c0b26.type === "bundle" ? v_192662(v_8c0b26) : v_f8505d({ item: v_8c0b26.voucher })
         }
-        keyExtractor={(v_8c0b26) =>
-          v_8c0b26.type === "bundle" ? `set-${v_8c0b26.setId}` : v_8c0b26.voucher.id
-        }
+        keyExtractor={(v_8c0b26) => (v_8c0b26.type === "bundle" ? `set-${v_8c0b26.setId}` : v_8c0b26.voucher.id)}
         ListEmptyComponent={
           v_683210 ? (
             <View className="items-center py-20">
@@ -274,12 +285,12 @@ export default function v_bf7b5b() {
             <View className="items-center py-20 px-6">
               <Text className="text-destructive text-center">{v_5e9bfe}</Text>
               <Text className="text-xs text-muted-foreground mt-2" onPress={v_cb3615}>
-                탭하여 다시 시도
+                {v_8d41d7("myGifti.list.tapRetry")}
               </Text>
             </View>
           ) : (
             <View className="items-center py-20">
-              <Text className="text-muted-foreground">기프티가 없습니다.</Text>
+              <Text className="text-muted-foreground">{v_8d41d7("myGifti.list.empty")}</Text>
             </View>
           )
         }

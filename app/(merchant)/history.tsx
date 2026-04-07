@@ -1,4 +1,5 @@
 import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
+import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_bc1b24 } from "tlrvzsbmctdavs";
 import { v_db3cc6 } from "dyunzbus";
 import v_a3453e, { v_de06a3, v_c4deb2, v_5ab095 } from "bapkr";
@@ -26,6 +27,7 @@ type HistoryResponse = {
 const v_b69110 = 20;
 
 export default function v_ca8e36() {
+  const { t: v_8d41d7 } = v_678659();
   const [v_4622b9, v_fa923c] = v_5ab095<HistoryItem[]>([]);
   const [v_683210, v_34a50a] = v_5ab095(true);
   const [v_612e9f, v_575aad] = v_5ab095(false);
@@ -67,9 +69,11 @@ export default function v_ca8e36() {
       <View className="flex-row justify-between items-start">
         <View className="flex-1">
           <Text className="text-xs text-muted-foreground">{v_8c0b26.brand ?? "-"}</Text>
-          <Text className="text-base font-semibold text-foreground">{v_8c0b26.name ?? "알 수 없음"}</Text>
+          <Text className="text-base font-semibold text-foreground">{v_8c0b26.name ?? v_8d41d7("merchant.history.unknownName")}</Text>
           {v_8c0b26.user_name && (
-            <Text className="text-xs text-muted-foreground mt-0.5">사용자: {v_8c0b26.user_name}</Text>
+            <Text className="text-xs text-muted-foreground mt-0.5">
+              {v_8d41d7("merchant.history.userLabel")}: {v_8c0b26.user_name}
+            </Text>
           )}
         </View>
         <View className="items-end">
@@ -92,7 +96,7 @@ export default function v_ca8e36() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
-      <ScreenHeader elevated title="사용 이력" />
+      <ScreenHeader elevated title={v_8d41d7("merchant.history.title")} />
       <FlatList
         style={{ flex: 1 }}
         data={v_4622b9}
@@ -105,7 +109,7 @@ export default function v_ca8e36() {
         contentContainerStyle={{ paddingBottom: 0 }}
         ListEmptyComponent={
           <View className="flex-1 items-center justify-center py-20">
-            <Text className="text-muted-foreground">사용 이력이 없습니다.</Text>
+            <Text className="text-muted-foreground">{v_8d41d7("merchant.history.empty")}</Text>
           </View>
         }
         ListFooterComponent={

@@ -2,6 +2,7 @@ import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_1b353f } from "ymbgtfrroootgjefkrxgp";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
+import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_86db47 } from "vkhyfothlklikcpovbqirr";
 import { v_720509, type v_7fb3de } from "pvulvehakmpzwkznlnd";
 import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
@@ -19,6 +20,7 @@ import {
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 export default function v_3072c9() {
+  const { t: v_8d41d7 } = v_678659();
   const v_904d46 = v_d1d90c();
   const { voucherId: v_ba63f8 } = v_d1a7ac<{ voucherId?: string }>();
   const [v_f9fd27, v_3a2126] = v_5ab095<v_7fb3de[]>([]);
@@ -55,17 +57,17 @@ export default function v_3072c9() {
 
   const v_585b02 = async () => {
     if (!v_119885 || !v_7ae44d) {
-      v_03e392.alert("입력 오류", "상품과 판매가를 입력해주세요.");
+      v_03e392.alert(v_8d41d7("userMarketplace.sell.alertMissingTitle"), v_8d41d7("userMarketplace.sell.alertMissingBody"));
       return;
     }
     v_ee9ec1(true);
     try {
       await v_86db47(v_119885.id, Number(v_7ae44d));
-      v_03e392.alert("등록 완료", "중고마켓에 등록되었습니다.", [
-        { text: "확인", onPress: () => v_904d46.back() },
+      v_03e392.alert(v_8d41d7("userMarketplace.sell.successTitle"), v_8d41d7("userMarketplace.sell.successBody"), [
+        { text: v_8d41d7("userMarketplace.sell.ok"), onPress: () => v_904d46.back() },
       ]);
     } catch (v_49263d) {
-      v_03e392.alert("등록 실패", v_49263d.body?.error || "다시 시도해주세요.");
+      v_03e392.alert(v_8d41d7("userMarketplace.sell.failTitle"), v_49263d.body?.error || v_8d41d7("userMarketplace.sell.failBody"));
     } finally {
       v_ee9ec1(false);
     }
@@ -81,7 +83,7 @@ export default function v_3072c9() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
-      <PageHeader title="판매 등록" />
+      <PageHeader title={v_8d41d7("userMarketplace.sell.title")} />
       <KeyboardAvoidingView
         className="flex-1"
         behavior={v_326be8.OS === "ios" ? "padding" : undefined}
@@ -92,7 +94,7 @@ export default function v_3072c9() {
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={{ paddingTop: 8, paddingBottom: 12 }}
         >
-          <Text className="text-base font-semibold text-foreground mb-2">상품 선택</Text>
+          <Text className="text-base font-semibold text-foreground mb-2">{v_8d41d7("userMarketplace.sell.selectProduct")}</Text>
           <View className="gap-2">
             {v_f9fd27.map((v_81e2ef) => (
               <Pressable
@@ -112,35 +114,35 @@ export default function v_3072c9() {
               </Pressable>
             ))}
             {v_f9fd27.length === 0 && (
-              <Text className="text-muted-foreground text-center py-8">판매할 수 있는 기프티가 없습니다.</Text>
+              <Text className="text-muted-foreground text-center py-8">{v_8d41d7("userMarketplace.sell.emptyVouchers")}</Text>
             )}
           </View>
         </ScrollView>
 
         {v_119885 ? (
           <View className="border-t border-border bg-white px-5 pt-4 pb-2 gap-3">
-            <Text className="text-base font-semibold text-foreground">판매가 (KRW)</Text>
+            <Text className="text-base font-semibold text-foreground">{v_8d41d7("userMarketplace.sell.sellingPrice")}</Text>
             <Input
               keyboardType="numeric"
-              placeholder="판매 금액 입력"
+              placeholder={v_8d41d7("userMarketplace.sell.sellingPricePh")}
               value={v_7ae44d}
               onChangeText={v_27a321}
             />
 
             <View className="bg-card rounded-xl border border-border p-4">
               <View className="flex-row justify-between">
-                <Text className="text-sm text-muted-foreground">수수료 (5%)</Text>
+                <Text className="text-sm text-muted-foreground">{v_8d41d7("userMarketplace.sell.feeLabel")}</Text>
                 <Text className="text-sm text-foreground">₩{v_2d815e.toLocaleString()}</Text>
               </View>
               <Separator className="my-2" />
               <View className="flex-row justify-between">
-                <Text className="text-base font-semibold text-foreground">정산 예정금액</Text>
+                <Text className="text-base font-semibold text-foreground">{v_8d41d7("userMarketplace.sell.payoutLabel")}</Text>
                 <Text className="text-base font-bold text-primary">₩{v_daa996.toLocaleString()}</Text>
               </View>
             </View>
 
             <Button onPress={v_585b02} disabled={v_cb66b4}>
-              {v_cb66b4 ? "등록 중..." : "판매 등록"}
+              {v_cb66b4 ? v_8d41d7("userMarketplace.sell.submitting") : v_8d41d7("userMarketplace.sell.submit")}
             </Button>
           </View>
         ) : null}

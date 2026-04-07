@@ -1,5 +1,6 @@
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_7a943b } from "dxfmfnfvriitbtghyppor";
+import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_331c13 } from "uugztyivrmtvweuio";
 import { v_9f95ab } from "ztkoagfdprzignsbie";
 import { v_338caf, type v_88a3f9 } from "vhkgxwheyyipiczd";
@@ -11,6 +12,7 @@ import { v_39a996, v_03e392, v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 export default function v_14045c() {
+  const { t: v_8d41d7 } = v_678659();
   const { method: v_bfe9b9, currency: v_a832b3 } = v_d1a7ac<{ method: string; currency?: string }>();
   const v_904d46 = v_d1d90c();
   const { items: v_4622b9, packageItems: v_5be600, clearByCurrency: v_e3ba8c, clearCart: v_340590 } = v_7a943b();
@@ -27,7 +29,7 @@ export default function v_14045c() {
 
   const v_af9234 = async () => {
     if (!v_bfe9b9) {
-      v_03e392.alert("결제 오류", "결제 수단이 선택되지 않았습니다.");
+      v_03e392.alert(v_8d41d7("userPaymentProcess.errNoMethodTitle"), v_8d41d7("userPaymentProcess.errNoMethodBody"));
       v_5193f8("failed");
       return;
     }
@@ -53,7 +55,12 @@ export default function v_14045c() {
     }));
 
     if (!v_7d7d61.length && !v_a3d7a5.length) {
-      v_03e392.alert("결제 오류", `해당 통화(${v_6e2788})의 상품이 없습니다.\n장바구니: ${v_4622b9.length}개, flex_currencies: ${v_4622b9.map(v_ebec57 => v_ebec57.product.flexible_currency).join(",")}`);
+      v_03e392.alert(
+        v_8d41d7("userPaymentProcess.errNoMethodTitle"),
+        v_8d41d7("userPaymentProcess.errNoItems")
+          .replace("{{currency}}", v_6e2788)
+          .replace("{{cartCount}}", String(v_4622b9.length)),
+      );
       v_5193f8("failed");
       return;
     }
@@ -63,7 +70,7 @@ export default function v_14045c() {
       for (const v_e42213 of v_7d7d61) {
         const v_247d1d = v_e42213.composition;
         if (!v_247d1d) {
-          v_03e392.alert("결제 오류", "구성 정보가 없습니다.");
+          v_03e392.alert(v_8d41d7("userPaymentProcess.errNoMethodTitle"), v_8d41d7("userPaymentProcess.errNoComposition"));
           v_5193f8("failed");
           return;
         }
@@ -85,7 +92,7 @@ export default function v_14045c() {
 
         const v_0ba044 = await v_64ed55(v_8f00b9.payment_id);
         if (!v_0ba044) {
-          v_03e392.alert("결제 실패", "결제가 완료되지 않았습니다.");
+          v_03e392.alert(v_8d41d7("userPaymentProcess.pollFailTitle"), v_8d41d7("userPaymentProcess.pollFailBody"));
           v_5193f8("failed");
           return;
         }
@@ -106,7 +113,7 @@ export default function v_14045c() {
       v_e3ba8c(v_6e2788);
       v_5193f8("success");
     } catch (v_49263d) {
-      const v_3cfdfc = v_49263d.body?.error || v_49263d.message || "결제를 처리할 수 없습니다.";
+      const v_3cfdfc = v_49263d.body?.error || v_49263d.message || v_8d41d7("userPaymentProcess.failDetailFallback");
       const v_49c6c7 = JSON.stringify(
         { status: v_49263d.status, body: v_49263d.body, message: v_49263d.message },
         null,
@@ -114,7 +121,12 @@ export default function v_14045c() {
       );
       console.error("[payment-process] error:", v_49c6c7);
       v_d9d94d(v_49c6c7);
-      v_03e392.alert("결제 실패", `${v_3cfdfc}\n(status: ${v_49263d.status || "unknown"})`);
+      v_03e392.alert(
+        v_8d41d7("userPaymentProcess.failTitle"),
+        v_8d41d7("userPaymentProcess.failBody")
+          .replace("{{detail}}", v_3cfdfc)
+          .replace("{{status}}", String(v_49263d.status ?? "unknown")),
+      );
       v_5193f8("failed");
     }
   };
@@ -139,9 +151,11 @@ export default function v_14045c() {
       {v_d308b5 === "processing" && (
         <View className="items-center">
           <ActivityIndicator size="large" color="#CE3630" />
-          <Text className="text-lg font-semibold text-foreground mt-4">{v_6e2788} 결제 처리 중...</Text>
+          <Text className="text-lg font-semibold text-foreground mt-4">
+            {v_8d41d7("userPaymentProcess.processing").replace("{{currency}}", v_6e2788)}
+          </Text>
           <Text className="text-sm text-muted-foreground mt-2 text-center">
-            결제가 완료될 때까지 잠시 기다려주세요.
+            {v_8d41d7("userPaymentProcess.processingHint")}
           </Text>
         </View>
       )}
@@ -154,19 +168,21 @@ export default function v_14045c() {
           <View className="items-center">
             <CheckCircle size={64} color="#22c55e" />
             <Text className="text-xl font-bold text-foreground mt-4">
-              {v_6e2788} 결제 완료!
+              {v_8d41d7("userPaymentProcess.successTitle").replace("{{currency}}", v_6e2788)}
             </Text>
             <Text className="text-sm text-muted-foreground mt-2 text-center">
-              기프티가 발급되었습니다.
-              {v_6bbe19 ? `\n다른 통화 상품이 장바구니에 남아있습니다.` : `\n내 기프티에서 확인하세요.`}
+              {v_8d41d7("userPaymentProcess.successIssued")}
+              {v_6bbe19
+                ? `\n${v_8d41d7("userPaymentProcess.successMoreInCart")}`
+                : `\n${v_8d41d7("userPaymentProcess.successCheckMy")}`}
             </Text>
             {v_6bbe19 ? (
               <Button className="mt-6 w-full" onPress={() => v_904d46.replace("/(user)/cart")}>
-                장바구니로 돌아가기
+                {v_8d41d7("userPaymentProcess.backToCart")}
               </Button>
             ) : (
               <Button className="mt-6 w-full" onPress={() => v_904d46.replace("/(user)/oth-path")}>
-                내 기프티 보기
+                {v_8d41d7("userPaymentProcess.viewMyGifti")}
               </Button>
             )}
           </View>
@@ -176,9 +192,9 @@ export default function v_14045c() {
       {v_d308b5 === "failed" && (
         <View className="items-center">
           <XCircle size={64} color="#ef4444" />
-          <Text className="text-xl font-bold text-foreground mt-4">결제 실패</Text>
+          <Text className="text-xl font-bold text-foreground mt-4">{v_8d41d7("userPaymentProcess.failedTitle")}</Text>
           <Text className="text-sm text-muted-foreground mt-2 text-center">
-            결제가 완료되지 않았습니다.{"\n"}다시 시도해주세요.
+            {v_8d41d7("userPaymentProcess.failedBody")}
           </Text>
           {v_f0e6fe ? (
             <Text className="text-xs text-red-400 mt-2 text-left font-mono" selectable>
@@ -186,7 +202,7 @@ export default function v_14045c() {
             </Text>
           ) : null}
           <Button className="mt-6 w-full" onPress={() => v_904d46.back()}>
-            돌아가기
+            {v_8d41d7("userPaymentProcess.goBack")}
           </Button>
         </View>
       )}

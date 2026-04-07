@@ -1,6 +1,7 @@
 import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_7a943b } from "dxfmfnfvriitbtghyppor";
+import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_5e3aed, v_afc1d9, type v_678322 } from "vhkgxwheyyipiczd";
 import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
 import { v_3b9c43, v_a07c02 } from "wjvlskvsbzsrojdbjsl";
@@ -26,6 +27,7 @@ function v_f89181(v_e6d4a6): string {
 }
 
 export default function v_2b70c8() {
+  const { t: v_8d41d7 } = v_678659();
   const { id: v_389afb } = v_d1a7ac<{ id: string }>();
   const v_904d46 = v_d1d90c();
   const { addToCart: v_7bab4b } = v_7a943b();
@@ -43,7 +45,7 @@ export default function v_2b70c8() {
       const v_9390e8 = await v_5e3aed(v_389afb!);
       v_2ea5dd(v_9390e8.product);
     } catch {
-      v_03e392.alert("오류", "상품 정보를 불러올 수 없습니다.");
+      v_03e392.alert(v_8d41d7("userStore.detail.loadErrorTitle"), v_8d41d7("userStore.detail.loadErrorBody"));
       v_904d46.back();
     } finally {
       v_34a50a(false);
@@ -73,8 +75,11 @@ export default function v_2b70c8() {
       const v_74dfb8 = v_43744f;
       if (!v_74dfb8 || v_74dfb8 < (v_01bee9.flexible_min ?? 0) || v_74dfb8 > (v_01bee9.flexible_max ?? 0)) {
         v_03e392.alert(
-          "금액 오류",
-          `${v_c37780}${(v_01bee9.flexible_min ?? 0).toLocaleString()} ~ ${v_c37780}${(v_01bee9.flexible_max ?? 0).toLocaleString()} 범위에서 입력해주세요.`,
+          v_8d41d7("userStore.detail.flexRangeTitle"),
+          v_8d41d7("userStore.detail.flexRangeBody")
+            .replace(/\{\{sym\}\}/g, v_c37780)
+            .replace("{{min}}", (v_01bee9.flexible_min ?? 0).toLocaleString())
+            .replace("{{max}}", (v_01bee9.flexible_max ?? 0).toLocaleString()),
         );
         return;
       }
@@ -85,7 +90,7 @@ export default function v_2b70c8() {
     if (v_e1cba1) {
       v_904d46.push("/(user)/cart");
     } else {
-      v_03e392.alert("장바구니", "장바구니에 추가되었습니다.");
+      v_03e392.alert(v_8d41d7("userStore.detail.cartAddedTitle"), v_8d41d7("userStore.detail.cartAddedBody"));
     }
   };
 
@@ -126,14 +131,16 @@ export default function v_2b70c8() {
             {v_e567dc ? (
               <>
                 <View className="mt-2 bg-secondary/80 rounded-xl py-3">
-                  <Text className="text-sm text-muted-foreground">구매 가능 금액</Text>
+                  <Text className="text-sm text-muted-foreground">{v_8d41d7("userStore.detail.purchasableRange")}</Text>
                   <Text className="text-smd font-semibold text-foreground mt-1">
                     {v_c37780}
                     {(v_01bee9.flexible_min ?? 0).toLocaleString()} ~ {v_c37780}
                     {(v_01bee9.flexible_max ?? 0).toLocaleString()}
                   </Text>
                 </View>
-                <Text className="text-sm font-medium text-foreground mt-2 mb-2">구매 금액 ({v_d6ed0e})</Text>
+                <Text className="text-sm font-medium text-foreground mt-2 mb-2">
+                  {v_8d41d7("userStore.detail.purchaseAmount").replace("{{currency}}", v_d6ed0e)}
+                </Text>
                 <View className="flex-row items-center bg-secondary rounded-xl border border-border px-4 py-3">
                   <Text className="text-base font-bold text-muted-foreground mr-2">{v_c37780}</Text>
                   <TextInput
@@ -142,7 +149,7 @@ export default function v_2b70c8() {
                     placeholderTextColor="#737373"
                     keyboardType="numeric"
                     value={v_f89181(v_e4a1e9)}
-                    onChangeText={(v_8d41d7) => v_72c7ee(v_8d41d7.replace(/\D/g, ""))}
+                    onChangeText={(v_c70495) => v_72c7ee(v_c70495.replace(/\D/g, ""))}
                   />
                 </View>
               </>
@@ -153,7 +160,9 @@ export default function v_2b70c8() {
                     <>
                       <View className="flex-1 min-w-0">
                         <View className="bg-primary/12 self-start rounded-full ">
-                          <Text className="text-sm font-bold text-primary">{v_3ae14a}% 할인</Text>
+                          <Text className="text-sm font-bold text-primary">
+                            {v_8d41d7("userStore.detail.discountFmt").replace("{{pct}}", String(v_3ae14a))}
+                          </Text>
                         </View>
                         <Text className="text-sm text-muted-foreground line-through">
                           {v_6b1440[v_01bee9.display_currency] ?? "₩"}
@@ -173,7 +182,7 @@ export default function v_2b70c8() {
                   )}
                 </View>
 
-                <Text className="text-sm font-medium text-foreground mt-4 mb-1">수량</Text>
+                <Text className="text-sm font-medium text-foreground mt-4 mb-1">{v_8d41d7("userStore.detail.quantity")}</Text>
                 <View className="flex-row items-center self-start bg-secondary rounded-xl border border-border">
                   <Button
                     variant="ghost"
@@ -202,10 +211,10 @@ export default function v_2b70c8() {
 
         <View className="flex-row gap-3 bg-white border-t border-border px-4 py-4">
           <Button variant="outline" className="flex-1 border-border bg-gray-50" onPress={() => v_df7942(false)}>
-            장바구니
+            {v_8d41d7("userStore.detail.addToCart")}
           </Button>
           <Button className="flex-1" onPress={() => v_df7942(true)}>
-            구매하기
+            {v_8d41d7("userStore.detail.buyNow")}
           </Button>
         </View>
       </KeyboardAvoidingView>
