@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
+import { useI18n } from "@/context/I18nContext";
 import { resolveImageUrl } from "@/lib/image";
 import { getBundlePreview, type BundleComposition } from "@/services/bundle";
 import { Package, ShoppingCart } from "lucide-react-native";
@@ -20,6 +21,7 @@ function formatThousandsFromDigits(digits: string): string {
 }
 
 export function BundleComposer() {
+  const { t } = useI18n();
   const { addPackageToCart } = useCart();
   const [amount, setAmount] = useState("");
   const [currency, setCurrency] = useState<string>("KRW");
@@ -29,7 +31,7 @@ export function BundleComposer() {
   const handleCompose = async () => {
     const num = Number(amount);
     if (!num || num <= 0) {
-      Alert.alert("금액 오류", "올바른 금액을 입력해주세요.");
+      Alert.alert(t("userStore.bundle.alertAmountTitle"), t("userStore.bundle.alertAmountBody"));
       return;
     }
     setLoading(true);
@@ -38,7 +40,10 @@ export function BundleComposer() {
       const res = await getBundlePreview(num, currency);
       setComposition(res.composition);
     } catch (err: any) {
-      Alert.alert("구성 실패", err.body?.error || err.message || "상품을 구성할 수 없습니다.");
+      Alert.alert(
+        t("userStore.bundle.composeFailTitle"),
+        err.body?.error || err.message || t("userStore.bundle.composeFailBody"),
+      );
     } finally {
       setLoading(false);
     }
@@ -78,7 +83,7 @@ export function BundleComposer() {
       composition,
     });
 
-    Alert.alert("장바구니 추가", "구성 상품이 장바구니에 담겼습니다.");
+    Alert.alert(t("userStore.bundle.cartAddedTitle"), t("userStore.bundle.cartAddedBody"));
     setComposition(null);
     setAmount("");
   };
@@ -90,12 +95,10 @@ export function BundleComposer() {
       <View className="bg-card rounded-xl border border-border p-4">
         <View className="flex-row items-center gap-2 mb-3">
           <Package size={18} color="#CE3630" />
-          <Text className="text-base font-bold text-foreground">구성 구매</Text>
+          <Text className="text-base font-bold text-foreground">{t("userStore.bundle.title")}</Text>
         </View>
 
-        <Text className="text-sm text-muted-foreground mb-2">
-          금액을 입력하면 최적의 상품 조합을 만들어 드립니다.
-        </Text>
+        <Text className="text-sm text-muted-foreground mb-2">{t("userStore.bundle.hint")}</Text>
 
         {}
         <View className="flex-row gap-2 mb-3">
@@ -139,7 +142,7 @@ export function BundleComposer() {
             {loading ? (
               <ActivityIndicator size="small" color="#fff" />
             ) : (
-              <Text className="text-sm font-semibold text-primary-foreground">구성하기</Text>
+              <Text className="text-sm font-semibold text-primary-foreground">{t("userStore.bundle.compose")}</Text>
             )}
           </Button>
         </View>
@@ -148,9 +151,7 @@ export function BundleComposer() {
       {}
       {composition && (
         <View className="bg-card rounded-xl border border-border p-4 mt-2">
-          <Text className="text-sm font-bold text-foreground mb-3">
-            구성 결과
-          </Text>
+          <Text className="text-sm font-bold text-foreground mb-3">{t("userStore.bundle.resultTitle")}</Text>
 
           {composition.items.map((item, idx) => {
             const imgUri = resolveImageUrl(item.thumb_url, item.image_url);
@@ -183,7 +184,7 @@ export function BundleComposer() {
                 <Text className="text-lg">💳</Text>
               </View>
               <View className="flex-1">
-                <Text className="text-sm text-amber-500">제휴상품권</Text>
+                <Text className="text-sm text-amber-500">{t("userStore.bundle.flexibleVoucher")}</Text>
                 <Text className="text-sm text-foreground">{composition.flexible_item.name}</Text>
               </View>
               <Text className="text-sm font-semibold text-foreground">
@@ -195,7 +196,10 @@ export function BundleComposer() {
           {}
           <View className="flex-row justify-between items-center mt-3 pt-2">
             <Text className="text-sm text-muted-foreground">
-              합계 ({composition.items.length + (composition.flexible_item ? 1 : 0)}종)
+              {t("userStore.bundle.totalKinds").replace(
+                "{{count}}",
+                String(composition.items.length + (composition.flexible_item ? 1 : 0)),
+              )}
             </Text>
             <Text className="text-lg font-bold text-foreground">
               {sym}{composition.total.toLocaleString()}
@@ -204,13 +208,15 @@ export function BundleComposer() {
 
           {composition.overshoot > 0 && (
             <Text className="text-sm text-amber-500 mt-1">
-              목표 대비 +{sym}{composition.overshoot.toLocaleString()} 초과
+              {t("userStore.bundle.overshoot")
+                .replace("{{sym}}", sym)
+                .replace("{{amount}}", composition.overshoot.toLocaleString())}
             </Text>
           )}
 
           <Button className="mt-3 flex-row gap-2" onPress={handleAddToCart}>
             <ShoppingCart size={16} color="#fff" />
-            <Text className="text-sm font-semibold text-primary-foreground">장바구니에 담기</Text>
+            <Text className="text-sm font-semibold text-primary-foreground">{t("userStore.bundle.addToCartBtn")}</Text>
           </Button>
         </View>
       )}

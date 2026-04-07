@@ -1,5 +1,6 @@
 import { ScreenHeader } from "@/components/ScreenHeader";
 import { Badge } from "@/components/ui/badge";
+import { useI18n } from "@/context/I18nContext";
 import { resolveImageUrl } from "@/lib/image";
 import { cn } from "@/lib/utils";
 import {
@@ -12,13 +13,13 @@ import React, { useCallback, useRef, useState } from "react";
 import { ActivityIndicator, FlatList, Image, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const CATEGORY_TABS = [
-  { key: "all", label: "전체" },
-  { key: "set", label: "구성상품" },
-];
-
 export default function MerchantMarketScreen() {
+  const { t } = useI18n();
   const router = useRouter();
+  const CATEGORY_TABS = [
+    { key: "all", label: t("merchant.market.tabAll") },
+    { key: "set", label: t("merchant.market.tabSet") },
+  ];
   const [listings, setListings] = useState<MarketplaceListing[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("all");
@@ -76,7 +77,7 @@ export default function MerchantMarketScreen() {
                 <Text className="text-xs text-muted-foreground">{item.brand}</Text>
                 {isSet && (
                   <View className="bg-primary/10 rounded px-1.5 py-0.5">
-                    <Text className="text-[10px] font-medium text-primary">구성상품</Text>
+                    <Text className="text-[10px] font-medium text-primary">{t("merchant.market.bundleTag")}</Text>
                   </View>
                 )}
               </View>
@@ -108,8 +109,8 @@ export default function MerchantMarketScreen() {
     <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
       <ScreenHeader
         elevated
-        title="중고마켓"
-        search={{ value: search, onChangeText: setSearch }}
+        title={t("merchant.market.title")}
+        search={{ value: search, onChangeText: setSearch, placeholder: t("merchant.market.searchPlaceholder") }}
         bottom={
           <ScrollView
             horizontal
@@ -157,7 +158,7 @@ export default function MerchantMarketScreen() {
             </View>
           ) : (
             <View className="items-center py-20">
-              <Text className="text-muted-foreground">판매 중인 상품이 없습니다.</Text>
+              <Text className="text-muted-foreground">{t("merchant.market.empty")}</Text>
             </View>
           )
         }

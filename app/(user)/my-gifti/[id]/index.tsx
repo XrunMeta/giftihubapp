@@ -3,6 +3,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { useI18n } from "@/context/I18nContext";
 import { useDevMode } from "@/hooks/use-dev-mode";
 import { resolveImageUrl } from "@/lib/image";
 import { getVoucherBarcode, getVoucherDetail, type Voucher } from "@/services/vouchers";
@@ -17,40 +18,44 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const REFRESH_SECONDS = 30;
 
-const STATUS_INFO: Record<string, { label: string; icon: typeof CheckCircle; color: string; description: string }> = {
+const STATUS_META: Record<
+  string,
+  { labelKey: string; descKey: string; icon: typeof CheckCircle; color: string }
+> = {
   used: {
-    label: "사용완료",
+    labelKey: "myGifti.detail.usedLabel",
+    descKey: "myGifti.detail.usedDesc",
     icon: CheckCircle,
     color: "#16a34a",
-    description: "이 기프티는 사용이 완료되었습니다.",
   },
   listed: {
-    label: "판매중",
+    labelKey: "myGifti.detail.listedLabel",
+    descKey: "myGifti.detail.listedDesc",
     icon: ShoppingBag,
     color: "#2563eb",
-    description: "이 기프티는 중고마켓에 등록되어 판매중입니다.",
   },
   expired: {
-    label: "기간만료",
+    labelKey: "myGifti.detail.expiredLabel",
+    descKey: "myGifti.detail.expiredDesc",
     icon: Clock,
     color: "#ef4444",
-    description: "이 기프티의 유효기간이 만료되었습니다.",
   },
   transferred: {
-    label: "양도됨",
+    labelKey: "myGifti.detail.transferredLabel",
+    descKey: "myGifti.detail.transferredDesc",
     icon: ArrowRight,
     color: "#16a34a",
-    description: "이 기프티는 다른 사용자에게 양도되었습니다.",
   },
   refunded: {
-    label: "환불됨",
+    labelKey: "myGifti.detail.refundedLabel",
+    descKey: "myGifti.detail.refundedDesc",
     icon: XCircle,
     color: "#ef4444",
-    description: "이 기프티는 환불 처리되었습니다.",
   },
 };
 
 export default function GiftiDetailScreen() {
+  const { t } = useI18n();
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const isDevMode = useDevMode();
@@ -101,7 +106,7 @@ export default function GiftiDetailScreen() {
             intervalRef.current = setInterval(loadBarcode, 5000);
           }
         } catch {
-          Alert.alert("오류", "기프티 정보를 불러올 수 없습니다.");
+          Alert.alert(t("myGifti.detail.loadErrorTitle"), t("myGifti.detail.loadErrorBody"));
           router.back();
         } finally {
           setLoading(false);
@@ -124,11 +129,19 @@ export default function GiftiDetailScreen() {
   const isActive = voucher.status === "active";
   const barcodeWidth = screenWidth - 80;
   const imgUri = resolveImageUrl(voucher.thumb_url, voucher.image_url, voucher.brand_logo);
-  const statusInfo = STATUS_INFO[voucher.status];
+  const statusMeta = STATUS_META[voucher.status];
+  const statusInfo = statusMeta
+    ? {
+        label: t(statusMeta.labelKey),
+        description: t(statusMeta.descKey),
+        icon: statusMeta.icon,
+        color: statusMeta.color,
+      }
+    : null;
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50">
-      <PageHeader title="기프티 상세" />
+      <PageHeader title={t("myGifti.detail.title")} />
       <ScrollView className="flex-1 px-5">
         {}
         {isActive ? (
@@ -145,11 +158,11 @@ export default function GiftiDetailScreen() {
                       <TouchableOpacity
                         onPress={() => {
                           Clipboard.setStringAsync(barcode!);
-                          Alert.alert("복사됨", barcode!);
+                          Alert.alert(t("myGifti.detail.copyTitle"), barcode!);
                         }}
                         className="ml-2 px-2 py-1 bg-muted rounded"
                       >
-                        <Text className="text-xs text-muted-foreground">복사</Text>
+                        <Text className="text-xs text-muted-foreground">{t("myGifti.detail.copyBtn")}</Text>
                       </TouchableOpacity>
                     )}
                   </View>
@@ -157,12 +170,12 @@ export default function GiftiDetailScreen() {
                   <View className="mt-4 p-3 bg-white rounded-lg">
                     <QRCode value={barcode} size={120} />
                   </View>
-                  <Text className="text-xs text-muted-foreground mt-2">휴대폰 카메라로 스캔</Text>
+                  <Text className="text-xs text-muted-foreground mt-2">{t("myGifti.detail.scanHint")}</Text>
                 </View>
               ) : (
                 <View className="h-16 items-center justify-center">
                   <ActivityIndicator size="small" color="#CE3630" />
-                  <Text className="text-xs text-muted-foreground mt-2">바코드 로딩중...</Text>
+                  <Text className="text-xs text-muted-foreground mt-2">{t("myGifti.detail.barcodeLoading")}</Text>
                 </View>
               )}
             </View>
@@ -183,12 +196,15 @@ export default function GiftiDetailScreen() {
           </View>
         ) : statusInfo ? (
 
+          (() => {
+            const StatusIcon = statusInfo.icon;
+            return (
           <View
             className="rounded-xl border overflow-hidden mb-4"
             style={{ borderColor: statusInfo.color + "40", backgroundColor: statusInfo.color + "08" }}
           >
             <View className="p-5 items-center">
-              <statusInfo.icon size={36} color={statusInfo.color} />
+              <StatusIcon size={36} color={statusInfo.color} />
               <Text className="text-lg font-bold mt-2" style={{ color: statusInfo.color }}>
                 {statusInfo.label}
               </Text>
@@ -202,6 +218,8 @@ export default function GiftiDetailScreen() {
               ) : null}
             </View>
           </View>
+            );
+          })()
         ) : null}
 
         {}
@@ -226,7 +244,7 @@ export default function GiftiDetailScreen() {
                         ? "success"
                         : "secondary"
               }
-              label={statusInfo?.label ?? voucher.status}
+              label={statusInfo?.label ?? (isActive ? t("myGifti.list.statusActive") : voucher.status)}
             />
           </View>
 
@@ -234,13 +252,13 @@ export default function GiftiDetailScreen() {
 
           <View className="gap-2">
             <View className="flex-row justify-between">
-              <Text className="text-sm text-muted-foreground">액면가</Text>
+              <Text className="text-sm text-muted-foreground">{t("myGifti.detail.faceValue")}</Text>
               <Text className="text-sm font-medium text-foreground">
                 ₩{voucher.face_value?.toLocaleString() ?? "0"}
               </Text>
             </View>
             <View className="flex-row justify-between">
-              <Text className="text-sm text-muted-foreground">만료일</Text>
+              <Text className="text-sm text-muted-foreground">{t("myGifti.detail.expiryDate")}</Text>
               <Text className="text-sm font-medium text-foreground">
                 {voucher.expiry_date
                   ? format(new Date(voucher.expiry_date * 1000), "yyyy.MM.dd")
@@ -248,8 +266,10 @@ export default function GiftiDetailScreen() {
               </Text>
             </View>
             <View className="flex-row justify-between">
-              <Text className="text-sm text-muted-foreground">양도 횟수</Text>
-              <Text className="text-sm font-medium text-foreground">{voucher.transfer_count ?? 0}회</Text>
+              <Text className="text-sm text-muted-foreground">{t("myGifti.detail.transferCount")}</Text>
+              <Text className="text-sm font-medium text-foreground">
+                {t("myGifti.detail.transferCountFmt").replace("{{count}}", String(voucher.transfer_count ?? 0))}
+              </Text>
             </View>
           </View>
         </View>
@@ -264,7 +284,7 @@ export default function GiftiDetailScreen() {
                 onPress={() => router.push(`/(user)/oth-path${id}/transfer`)}
               >
                 <Send size={16} color="#0a0a0a" />
-                <Text className="text-sm font-medium text-foreground">양도</Text>
+                <Text className="text-sm font-medium text-foreground">{t("myGifti.detail.actionTransfer")}</Text>
               </Button>
               <Button
                 variant="outline"
@@ -272,7 +292,7 @@ export default function GiftiDetailScreen() {
                 onPress={() => router.push(`/(user)/oth-path${id}/refund`)}
               >
                 <ArrowLeftRight size={16} color="#0a0a0a" />
-                <Text className="text-sm font-medium text-foreground">환불</Text>
+                <Text className="text-sm font-medium text-foreground">{t("myGifti.detail.actionRefund")}</Text>
               </Button>
             </View>
             <Button
@@ -281,7 +301,7 @@ export default function GiftiDetailScreen() {
               onPress={() => router.push({ pathname: "/(user)/oth-path", params: { voucherId: id } })}
             >
               <Store size={16} color="#0a0a0a" />
-              <Text className="text-sm font-medium text-foreground">중고마켓에 판매</Text>
+              <Text className="text-sm font-medium text-foreground">{t("myGifti.detail.sellOnMarketplace")}</Text>
             </Button>
           </View>
         )}

@@ -1,5 +1,6 @@
 import { BundleComposer } from "@/components/BundleComposer";
 import { ScreenHeader } from "@/components/ScreenHeader";
+import { useI18n } from "@/context/I18nContext";
 import { getProductImageUrl, getStoreProducts, type Product } from "@/services/store";
 import { useFocusEffect, useRouter } from "expo-router";
 import React, { useCallback, useState } from "react";
@@ -12,6 +13,7 @@ const LIST_HORIZONTAL_PAD = 12;
 const GRID_COLUMN_GAP = 8;
 
 export default function StoreScreen() {
+  const { t } = useI18n();
   const router = useRouter();
   const { width: windowWidth } = useWindowDimensions();
   const gridItemWidth =
@@ -112,8 +114,12 @@ export default function StoreScreen() {
     <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
       <ScreenHeader
         elevated
-        title="스토어"
-        search={{ value: search, onChangeText: setSearch }}
+        title={t("userStore.list.title")}
+        search={{
+          value: search,
+          onChangeText: setSearch,
+          placeholder: t("userStore.list.searchPlaceholder"),
+        }}
       />
 
       <FlatList
@@ -127,7 +133,7 @@ export default function StoreScreen() {
         ListHeaderComponent={<BundleComposer />}
         ListEmptyComponent={
           <View className="items-center py-20">
-            <Text className="text-muted-foreground">상품이 없습니다.</Text>
+            <Text className="text-muted-foreground">{t("userStore.list.empty")}</Text>
           </View>
         }
       />

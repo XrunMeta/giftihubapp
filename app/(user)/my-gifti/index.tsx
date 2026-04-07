@@ -1,5 +1,6 @@
 import { ScreenHeader } from "@/components/ScreenHeader";
 import { Badge, type BadgeVariant } from "@/components/ui/badge";
+import { useI18n } from "@/context/I18nContext";
 import { resolveImageUrl } from "@/lib/image";
 import { cn } from "@/lib/utils";
 import { getMyVouchers, type Voucher, type VoucherStatus } from "@/services/vouchers";
@@ -16,25 +17,35 @@ function fmtPrice(amount: number, currency?: string) {
   return `${sym}${amount.toLocaleString()}`;
 }
 
-const TABS = [
-  { key: "all", label: "전체" },
-  { key: "active", label: "사용가능" },
-  { key: "listed", label: "판매중" },
-  { key: "used", label: "사용완료" },
-  { key: "expired", label: "기간만료" },
-  { key: "transferred", label: "양도됨" },
+const TAB_KEYS: { key: string; labelKey: string }[] = [
+  { key: "all", labelKey: "myGifti.list.tabAll" },
+  { key: "active", labelKey: "myGifti.list.tabActive" },
+  { key: "listed", labelKey: "myGifti.list.tabListed" },
+  { key: "used", labelKey: "myGifti.list.tabUsed" },
+  { key: "expired", labelKey: "myGifti.list.tabExpired" },
+  { key: "transferred", labelKey: "myGifti.list.tabTransferred" },
 ];
 
-const STATUS_BADGE: Record<string, { label: string; variant: BadgeVariant }> = {
-  active: { label: "사용가능", variant: "default" },
-  listed: { label: "판매중", variant: "info" },
-  used: { label: "사용완료", variant: "secondary" },
-  expired: { label: "만료", variant: "destructive" },
-  transferred: { label: "양도됨", variant: "success" },
+const STATUS_BADGE_META: Record<string, { labelKey: string; variant: BadgeVariant }> = {
+  active: { labelKey: "myGifti.list.statusActive", variant: "default" },
+  listed: { labelKey: "myGifti.list.statusListed", variant: "info" },
+  used: { labelKey: "myGifti.list.statusUsed", variant: "secondary" },
+  expired: { labelKey: "myGifti.list.statusExpired", variant: "destructive" },
+  transferred: { labelKey: "myGifti.list.statusTransferred", variant: "success" },
 };
 
+function statusBadge(t: (path: string) => string, status: string) {
+  const m = STATUS_BADGE_META[status] ?? STATUS_BADGE_META.active;
+  return { label: t(m.labelKey), variant: m.variant };
+}
+
 export default function MyGiftiScreen() {
+  const { t } = useI18n();
   const router = useRouter();
+  const tabs = useMemo(
+    () => TAB_KEYS.map((row) => ({ key: row.key, label: t(row.labelKey) })),
+    [t],
+  );
   const [vouchers, setVouchers] = useState<Voucher[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("all");
@@ -49,41 +60,48 @@ export default function MyGiftiScreen() {
       const status = activeTab === "all" ? undefined : (activeTab as VoucherStatus);
       const res = await getMyVouchers(status);
       setVouchers(res.vouchers);
-
       const sets = new Set(res.vouchers.filter((v: Voucher) => v.set_id).map((v: Voucher) => v.set_id));
-      setDebugInfo(`총 ${res.vouchers.length}건, 세트 ${sets.size}개, 개별 ${res.vouchers.filter((v: Voucher) => !v.set_id).length}건`);
+      setDebugInfo(
+        t("myGifti.list.debugSummary")
+          .replace("{{vouchers}}", String(res.vouchers.length))
+          .replace("{{sets}}", String(sets.size))
+          .replace("{{singles}}", String(res.vouchers.filter((v: Voucher) => !v.set_id).length)),
+      );
     } catch (err: any) {
       console.error("Failed to load vouchers:", err);
-      const msg = err.status === 401
-        ? "로그인이 만료되었습니다. 다시 로그인해주세요."
-        : `기프티 목록을 불러올 수 없습니다. (${err.status || err.message || "네트워크 오류"})`;
-      setError(msg);
-      setDebugInfo(`ERR: status=${err.status}, msg=${err.message}`);
+      if (err.status === 401) {
+        setError(t("myGifti.list.errUnauthorized"));
+      } else {
+        const detail = String(err.status ?? err.message ?? t("myGifti.list.networkError"));
+        setError(`${t("myGifti.list.errLoadPrefix")} ${t("myGifti.list.errLoadDetail").replace("{{detail}}", detail)}`);
+      }
+      setDebugInfo(
+        t("myGifti.list.debugErr")
+          .replace("{{status}}", String(err.status ?? ""))
+          .replace("{{msg}}", String(err.message ?? "")),
+      );
     } finally {
       setLoading(false);
     }
-  }, [activeTab]);
+  }, [activeTab, t]);
 
   const loadRef = React.useRef(loadVouchers);
   loadRef.current = loadVouchers;
   useFocusEffect(
     useCallback(() => {
       loadRef.current();
-    }, [activeTab])
+    }, [activeTab]),
   );
 
   type ListItem = { type: "single"; voucher: Voucher } | { type: "bundle"; setId: string; vouchers: Voucher[] };
 
   const grouped = useMemo<ListItem[]>(() => {
     const setMap = new Map<string, Voucher[]>();
-    const singles: Voucher[] = [];
     for (const v of vouchers) {
       if (v.set_id) {
         const arr = setMap.get(v.set_id);
         if (arr) arr.push(v);
         else setMap.set(v.set_id, [v]);
-      } else {
-        singles.push(v);
       }
     }
     const result: ListItem[] = [];
@@ -108,9 +126,13 @@ export default function MyGiftiScreen() {
 
     const statuses = new Set(item.vouchers.map((v) => v.status));
     const bundleStatus = statuses.size === 1 ? [...statuses][0]! : "mixed";
-    const bundleBadge = bundleStatus === "mixed"
-      ? { label: "혼합", variant: "secondary" as const }
-      : STATUS_BADGE[bundleStatus] ?? { label: bundleStatus, variant: "secondary" as const };
+    const bundleBadge =
+      bundleStatus === "mixed"
+        ? { label: t("myGifti.list.statusMixed"), variant: "secondary" as const }
+        : statusBadge(t, bundleStatus);
+
+    const restPart =
+      restCount > 0 ? ` ${t("myGifti.list.restItems").replace("{{count}}", String(restCount))}` : "";
 
     return (
       <Pressable
@@ -121,12 +143,11 @@ export default function MyGiftiScreen() {
           <View className="w-8 h-8 rounded-lg bg-primary/10 items-center justify-center">
             <Package size={18} color="#CE3630" />
           </View>
-          <Text className="text-sm font-semibold text-primary">구성 상품 ({item.vouchers.length}건)</Text>
+          <Text className="text-sm font-semibold text-primary">
+            {t("myGifti.list.bundleTitle").replace("{{count}}", String(item.vouchers.length))}
+          </Text>
           <View className="flex-1" />
-          <Badge
-            variant={bundleBadge.variant}
-            label={bundleBadge.label}
-          />
+          <Badge variant={bundleBadge.variant} label={bundleBadge.label} />
         </View>
         <View className="flex-row">
           {imgUri ? (
@@ -139,19 +160,16 @@ export default function MyGiftiScreen() {
           <View className="flex-1 ml-3">
             <Text className="text-sm text-foreground font-medium" numberOfLines={1}>
               {first.brand} · {first.name}
-              {restCount > 0 ? ` 외 ${restCount}건` : ""}
+              {restPart}
             </Text>
             <View className="flex-row justify-between items-center">
-              <Text className="text-base font-bold text-foreground">
-                {fmtPrice(total, cur)}
-              </Text>
+              <Text className="text-base font-bold text-foreground">{fmtPrice(total, cur)}</Text>
               <Text className="text-xs text-muted-foreground">
-                만료: {format(new Date(first.expiry_date * 1000), "yyyy.MM.dd")}
+                {t("myGifti.list.expiryPrefix")} {format(new Date(first.expiry_date * 1000), "yyyy.MM.dd")}
               </Text>
             </View>
           </View>
         </View>
-        {}
         <View className="mt-2 pt-2 border-t border-border">
           {item.vouchers.slice(0, 4).map((v) => (
             <View key={v.id} className="flex-row justify-between">
@@ -163,7 +181,7 @@ export default function MyGiftiScreen() {
           ))}
           {item.vouchers.length > 4 && (
             <Text className="text-xs text-muted-foreground text-center mt-1">
-              +{item.vouchers.length - 4}건 더보기
+              {t("myGifti.list.bundleMore").replace("{{count}}", String(item.vouchers.length - 4))}
             </Text>
           )}
         </View>
@@ -172,7 +190,7 @@ export default function MyGiftiScreen() {
   };
 
   const renderVoucher = ({ item }: { item: Voucher }) => {
-    const badge = STATUS_BADGE[item.status] || STATUS_BADGE.active;
+    const badge = statusBadge(t, item.status);
     const imgUri = resolveImageUrl(item.thumb_url, item.image_url, item.brand_logo);
     return (
       <Pressable
@@ -201,7 +219,7 @@ export default function MyGiftiScreen() {
               {fmtPrice(item.face_value_base || item.face_value, item.base_currency)}
             </Text>
             <Text className="text-xs text-muted-foreground">
-              만료: {format(new Date(item.expiry_date * 1000), "yyyy.MM.dd")}
+              {t("myGifti.list.expiryPrefix")} {format(new Date(item.expiry_date * 1000), "yyyy.MM.dd")}
             </Text>
           </View>
         </View>
@@ -213,7 +231,7 @@ export default function MyGiftiScreen() {
     <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
       <ScreenHeader
         elevated
-        title="내 기프티"
+        title={t("myGifti.list.title")}
         subtitle={
           debugInfo ? (
             <Text className="text-xs text-muted-foreground mt-1" selectable>
@@ -228,17 +246,14 @@ export default function MyGiftiScreen() {
             contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
             className="mb-3"
           >
-            {TABS.map((tab) => {
+            {tabs.map((tab) => {
               const isActive = tab.key === activeTab;
               return (
                 <Pressable
                   key={tab.key}
                   onPress={() => setActiveTab(tab.key)}
                   style={{ alignSelf: "flex-start" }}
-                  className={cn(
-                    "rounded-full px-4 py-2",
-                    isActive ? "bg-primary" : "bg-secondary",
-                  )}
+                  className={cn("rounded-full px-4 py-2", isActive ? "bg-primary" : "bg-secondary")}
                 >
                   <Text
                     className={cn(
@@ -258,13 +273,9 @@ export default function MyGiftiScreen() {
         style={{ flex: 1 }}
         data={loading ? [] : grouped}
         renderItem={({ item }) =>
-          item.type === "bundle"
-            ? renderBundleCard(item)
-            : renderVoucher({ item: item.voucher })
+          item.type === "bundle" ? renderBundleCard(item) : renderVoucher({ item: item.voucher })
         }
-        keyExtractor={(item) =>
-          item.type === "bundle" ? `set-${item.setId}` : item.voucher.id
-        }
+        keyExtractor={(item) => (item.type === "bundle" ? `set-${item.setId}` : item.voucher.id)}
         ListEmptyComponent={
           loading ? (
             <View className="items-center py-20">
@@ -274,12 +285,12 @@ export default function MyGiftiScreen() {
             <View className="items-center py-20 px-6">
               <Text className="text-destructive text-center">{error}</Text>
               <Text className="text-xs text-muted-foreground mt-2" onPress={loadVouchers}>
-                탭하여 다시 시도
+                {t("myGifti.list.tapRetry")}
               </Text>
             </View>
           ) : (
             <View className="items-center py-20">
-              <Text className="text-muted-foreground">기프티가 없습니다.</Text>
+              <Text className="text-muted-foreground">{t("myGifti.list.empty")}</Text>
             </View>
           )
         }

@@ -1,8 +1,10 @@
-import { Tabs, useRouter } from "expo-router";
-import { Store, ShoppingBag, Wallet, ShoppingCart, UserCircle } from "lucide-react-native";
 import { useCart } from "@/context/CartContext";
+import { useI18n } from "@/context/I18nContext";
+import { Tabs, useRouter } from "expo-router";
+import { ShoppingBag, ShoppingCart, Store, UserCircle, Wallet } from "lucide-react-native";
 
 export default function UserLayout() {
+  const { t } = useI18n();
   const router = useRouter();
   const { getCartCount } = useCart();
   const cartCount = getCartCount();
@@ -23,7 +25,7 @@ export default function UserLayout() {
       <Tabs.Screen
         name="store"
         options={{
-          title: "스토어",
+          title: t("userStore.list.title"),
           tabBarIcon: ({ color, size }) => <Store size={size} color={color} />,
         }}
         listeners={{
@@ -36,7 +38,7 @@ export default function UserLayout() {
       <Tabs.Screen
         name="marketplace"
         options={{
-          title: "중고마켓",
+          title: t("userMarketplace.list.title"),
           tabBarIcon: ({ color, size }) => <ShoppingBag size={size} color={color} />,
         }}
         listeners={{
@@ -49,7 +51,7 @@ export default function UserLayout() {
       <Tabs.Screen
         name="my-gifti"
         options={{
-          title: "내 기프티",
+          title: t("myGifti.list.title"),
           tabBarIcon: ({ color, size }) => <Wallet size={size} color={color} />,
         }}
         listeners={{
@@ -62,7 +64,7 @@ export default function UserLayout() {
       <Tabs.Screen
         name="cart"
         options={{
-          title: "장바구니",
+          title: t("userCart.title"),
           tabBarIcon: ({ color, size }) => <ShoppingCart size={size} color={color} />,
           tabBarBadge: cartCount > 0 ? cartCount : undefined,
         }}
@@ -70,7 +72,7 @@ export default function UserLayout() {
       <Tabs.Screen
         name="mypage"
         options={{
-          title: "MY",
+          title: t("mypage.title"),
           tabBarIcon: ({ color, size }) => <UserCircle size={size} color={color} />,
         }}
       />
@@ -81,6 +83,7 @@ export default function UserLayout() {
       <Tabs.Screen name="send-gift" options={{ href: null }} />
       <Tabs.Screen name="settlement" options={{ href: null }} />
       <Tabs.Screen name="usdt-withdraw" options={{ href: null }} />
+      <Tabs.Screen name="settings" options={{ href: null }} />
     </Tabs>
   );
 }

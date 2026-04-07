@@ -1,6 +1,7 @@
 import { ScreenHeader } from "@/components/ScreenHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useI18n } from "@/context/I18nContext";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -8,6 +9,7 @@ import { Alert, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MerchantHomeScreen() {
+  const { t } = useI18n();
   const router = useRouter();
   const [permission, requestPermission] = useCameraPermissions();
   const [manualCode, setManualCode] = useState("");
@@ -22,7 +24,7 @@ export default function MerchantHomeScreen() {
 
   const handleManualEntry = () => {
     if (manualCode.length < 8) {
-      Alert.alert("입력 오류", "올바른 바코드를 입력해주세요.");
+      Alert.alert(t("merchant.scan.alertBarcodeTitle"), t("merchant.scan.alertBarcodeBody"));
       return;
     }
     router.push({ pathname: "/(merchant)/process", params: { barcode: manualCode } });
@@ -32,18 +34,18 @@ export default function MerchantHomeScreen() {
   if (!permission?.granted) {
     return (
       <SafeAreaView className="flex-1 bg-gray-50 items-center justify-center px-6" edges={["top"]}>
-        <Text className="text-lg font-semibold text-foreground mb-4">카메라 권한 필요</Text>
+        <Text className="text-lg font-semibold text-foreground mb-4">{t("merchant.scan.cameraTitle")}</Text>
         <Text className="text-sm text-muted-foreground text-center mb-6">
-          바코드 스캔을 위해 카메라 권한이 필요합니다.
+          {t("merchant.scan.cameraBody")}
         </Text>
-        <Button onPress={requestPermission}>권한 허용</Button>
+        <Button onPress={requestPermission}>{t("merchant.scan.allowCamera")}</Button>
       </SafeAreaView>
     );
   }
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
-      <ScreenHeader elevated title="바코드 스캔" />
+      <ScreenHeader elevated title={t("merchant.scan.title")} />
 
       <View className="flex-1 mx-4 rounded-xl overflow-hidden border border-border">
         <CameraView
@@ -54,16 +56,16 @@ export default function MerchantHomeScreen() {
       </View>
 
       <View className="px-4 pt-3 py-4">
-        <Text className="text-sm font-medium text-foreground mb-2">직접 입력</Text>
+        <Text className="text-sm font-medium text-foreground mb-2">{t("merchant.scan.manualEntry")}</Text>
         <View className="flex-row gap-2">
           <Input
             className="flex-1 bg-white"
-            placeholder="바코드 번호 입력"
+            placeholder={t("merchant.scan.barcodePlaceholder")}
             keyboardType="numeric"
             value={manualCode}
             onChangeText={setManualCode}
           />
-          <Button onPress={handleManualEntry}>확인</Button>
+          <Button onPress={handleManualEntry}>{t("merchant.scan.confirm")}</Button>
         </View>
       </View>
     </SafeAreaView>

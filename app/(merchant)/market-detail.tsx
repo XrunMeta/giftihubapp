@@ -2,6 +2,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { useI18n } from "@/context/I18nContext";
 import { resolveImageUrl } from "@/lib/image";
 import { getListingDetail, type MarketplaceListing } from "@/services/marketplace";
 import { format } from "date-fns";
@@ -12,6 +13,7 @@ import { ActivityIndicator, Alert, Image, ScrollView, Text, View } from "react-n
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MerchantMarketDetailScreen() {
+  const { t } = useI18n();
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const [listing, setListing] = useState<MarketplaceListing | null>(null);
@@ -26,7 +28,7 @@ export default function MerchantMarketDetailScreen() {
       const res = await getListingDetail(id!);
       setListing(res.listing);
     } catch {
-      Alert.alert("오류", "상품 정보를 불러올 수 없습니다.");
+      Alert.alert(t("merchant.marketDetail.loadErrorTitle"), t("merchant.marketDetail.loadErrorBody"));
       router.back();
     } finally {
       setLoading(false);
@@ -45,7 +47,7 @@ export default function MerchantMarketDetailScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["top"]}>
-      <PageHeader title="상품 상세" />
+      <PageHeader title={t("merchant.marketDetail.title")} />
       <ScrollView className="flex-1 px-5" contentContainerStyle={{ paddingBottom: 0 }}>
         {(() => {
           const imgUri = resolveImageUrl(listing.image_url, listing.brand_logo);
@@ -64,7 +66,7 @@ export default function MerchantMarketDetailScreen() {
                 <Text className="text-xs text-muted-foreground">{listing.brand}</Text>
                 {isSet && (
                   <View className="bg-primary/10 rounded px-1.5 py-0.5">
-                    <Text className="text-[10px] font-medium text-primary">구성상품</Text>
+                    <Text className="text-[10px] font-medium text-primary">{t("merchant.market.bundleTag")}</Text>
                   </View>
                 )}
               </View>
@@ -79,25 +81,25 @@ export default function MerchantMarketDetailScreen() {
 
           <View className="gap-2.5">
             <View className="flex-row justify-between">
-              <Text className="text-sm text-muted-foreground">원가</Text>
+              <Text className="text-sm text-muted-foreground">{t("merchant.marketDetail.originalPrice")}</Text>
               <Text className="text-sm text-muted-foreground line-through">
                 ₩{listing.original_price.toLocaleString()}
               </Text>
             </View>
             <View className="flex-row justify-between">
-              <Text className="text-base font-semibold text-foreground">판매가</Text>
+              <Text className="text-base font-semibold text-foreground">{t("merchant.marketDetail.salePrice")}</Text>
               <Text className="text-xl font-bold text-primary">
                 ₩{listing.selling_price.toLocaleString()}
               </Text>
             </View>
             <View className="flex-row justify-between">
-              <Text className="text-sm text-muted-foreground">만료일</Text>
+              <Text className="text-sm text-muted-foreground">{t("merchant.marketDetail.expiry")}</Text>
               <Text className="text-sm text-foreground">
                 {format(new Date(listing.expiry_date * 1000), "yyyy.MM.dd")}
               </Text>
             </View>
             <View className="flex-row justify-between">
-              <Text className="text-sm text-muted-foreground">판매자</Text>
+              <Text className="text-sm text-muted-foreground">{t("merchant.marketDetail.seller")}</Text>
               <Text className="text-sm text-foreground">{listing.seller_name}</Text>
             </View>
           </View>
@@ -113,7 +115,7 @@ export default function MerchantMarketDetailScreen() {
             })
           }
         >
-          구매하기
+          {t("merchant.marketDetail.purchase")}
         </Button>
       </View>
     </SafeAreaView>

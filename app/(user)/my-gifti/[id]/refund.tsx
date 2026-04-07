@@ -1,5 +1,6 @@
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
+import { useI18n } from "@/context/I18nContext";
 import { apiFetch } from "@/services/api";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -7,28 +8,29 @@ import { Alert, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RefundScreen() {
+  const { t } = useI18n();
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   const handleRefund = () => {
     Alert.alert(
-      "환불 요청",
-      "환불을 요청하시겠습니까? 관리자 승인 후 원결제 수단으로 환불됩니다.",
+      t("myGifti.refund.confirmTitle"),
+      t("myGifti.refund.confirmBody"),
       [
-        { text: "취소", style: "cancel" },
+        { text: t("myGifti.refund.cancel"), style: "cancel" },
         {
-          text: "환불 요청",
+          text: t("myGifti.refund.request"),
           style: "destructive",
           onPress: async () => {
             setLoading(true);
             try {
               await apiFetch(`/oth-path${id}/refund`, { method: "POST" });
-              Alert.alert("완료", "환불 요청이 접수되었습니다.", [
-                { text: "확인", onPress: () => router.back() },
+              Alert.alert(t("myGifti.refund.doneTitle"), t("myGifti.refund.doneBody"), [
+                { text: t("myGifti.refund.ok"), onPress: () => router.back() },
               ]);
             } catch (err: any) {
-              Alert.alert("실패", err.body?.error || "환불 요청에 실패했습니다.");
+              Alert.alert(t("myGifti.refund.failTitle"), err.body?.error || t("myGifti.refund.failBody"));
             } finally {
               setLoading(false);
             }
@@ -40,14 +42,17 @@ export default function RefundScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <PageHeader title="환불 요청" />
+      <PageHeader title={t("myGifti.refund.title")} />
       <View className="flex-1 px-5 mt-4">
         <View className="bg-card rounded-xl border border-border p-4">
           <Text className="text-sm text-foreground leading-5">
-            • 환불은 관리자 승인 후 처리됩니다.{"\n"}
-            • 원결제 수단으로 환불됩니다.{"\n"}
-            • 환불 처리에는 1~3 영업일이 소요됩니다.{"\n"}
-            • 양도 또는 일부 사용된 기프티는 환불이 불가합니다.
+            {t("myGifti.refund.bullet1")}
+            {"\n"}
+            {t("myGifti.refund.bullet2")}
+            {"\n"}
+            {t("myGifti.refund.bullet3")}
+            {"\n"}
+            {t("myGifti.refund.bullet4")}
           </Text>
         </View>
 
@@ -57,7 +62,7 @@ export default function RefundScreen() {
           disabled={loading}
           className="mt-6"
         >
-          {loading ? "요청 중..." : "환불 요청하기"}
+          {loading ? t("myGifti.refund.loading") : t("myGifti.refund.submit")}
         </Button>
       </View>
     </SafeAreaView>

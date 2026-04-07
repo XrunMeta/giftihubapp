@@ -1,5 +1,6 @@
 import { ScreenHeader } from "@/components/ScreenHeader";
 import { Badge } from "@/components/ui/badge";
+import { useI18n } from "@/context/I18nContext";
 import { resolveImageUrl } from "@/lib/image";
 import { cn } from "@/lib/utils";
 import {
@@ -8,20 +9,25 @@ import {
   type MarketplaceListing,
 } from "@/services/marketplace";
 import { useFocusEffect, useRouter } from "expo-router";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import { ActivityIndicator, FlatList, Image, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const CATEGORY_TABS = [
-  { key: "all", label: "전체" },
-  { key: "food", label: "식품" },
-  { key: "culture", label: "문화" },
-  { key: "convenience", label: "편의점" },
-  { key: "beauty", label: "뷰티" },
-  { key: "etc", label: "기타" },
+const CATEGORY_TAB_KEYS: { key: string; labelKey: string }[] = [
+  { key: "all", labelKey: "userMarketplace.list.tabAll" },
+  { key: "food", labelKey: "userMarketplace.list.catFood" },
+  { key: "culture", labelKey: "userMarketplace.list.catCulture" },
+  { key: "convenience", labelKey: "userMarketplace.list.catConvenience" },
+  { key: "beauty", labelKey: "userMarketplace.list.catBeauty" },
+  { key: "etc", labelKey: "userMarketplace.list.catEtc" },
 ];
 
 export default function MarketplaceScreen() {
+  const { t } = useI18n();
+  const categoryTabs = useMemo(
+    () => CATEGORY_TAB_KEYS.map((row) => ({ key: row.key, label: t(row.labelKey) })),
+    [t],
+  );
   const router = useRouter();
   const [listings, setListings] = useState<MarketplaceListing[]>([]);
   const [loading, setLoading] = useState(true);
@@ -94,8 +100,12 @@ export default function MarketplaceScreen() {
     <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
       <ScreenHeader
         elevated
-        title="중고마켓"
-        search={{ value: search, onChangeText: setSearch }}
+        title={t("userMarketplace.list.title")}
+        search={{
+          value: search,
+          onChangeText: setSearch,
+          placeholder: t("userMarketplace.list.searchPlaceholder"),
+        }}
         bottom={
           <ScrollView
             horizontal
@@ -103,7 +113,7 @@ export default function MarketplaceScreen() {
             contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
             className="mb-3"
           >
-            {CATEGORY_TABS.map((tab) => {
+            {categoryTabs.map((tab) => {
               const isActive = tab.key === activeTab;
               return (
                 <Pressable
@@ -142,7 +152,7 @@ export default function MarketplaceScreen() {
             </View>
           ) : (
             <View className="items-center py-20">
-              <Text className="text-muted-foreground">판매 중인 상품이 없습니다.</Text>
+              <Text className="text-muted-foreground">{t("userMarketplace.list.empty")}</Text>
             </View>
           )
         }

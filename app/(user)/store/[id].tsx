@@ -1,6 +1,7 @@
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
+import { useI18n } from "@/context/I18nContext";
 import { getProductDetail, getProductFullImageUrl, type Product } from "@/services/store";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Minus, Plus } from "lucide-react-native";
@@ -26,6 +27,7 @@ function formatThousandsFromDigits(digits: string): string {
 }
 
 export default function ProductDetailScreen() {
+  const { t } = useI18n();
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { addToCart } = useCart();
@@ -43,7 +45,7 @@ export default function ProductDetailScreen() {
       const data = await getProductDetail(id!);
       setProduct(data.product);
     } catch {
-      Alert.alert("오류", "상품 정보를 불러올 수 없습니다.");
+      Alert.alert(t("userStore.detail.loadErrorTitle"), t("userStore.detail.loadErrorBody"));
       router.back();
     } finally {
       setLoading(false);
@@ -73,8 +75,11 @@ export default function ProductDetailScreen() {
       const amt = flexAmountNum;
       if (!amt || amt < (product.flexible_min ?? 0) || amt > (product.flexible_max ?? 0)) {
         Alert.alert(
-          "금액 오류",
-          `${sym}${(product.flexible_min ?? 0).toLocaleString()} ~ ${sym}${(product.flexible_max ?? 0).toLocaleString()} 범위에서 입력해주세요.`,
+          t("userStore.detail.flexRangeTitle"),
+          t("userStore.detail.flexRangeBody")
+            .replace(/\{\{sym\}\}/g, sym)
+            .replace("{{min}}", (product.flexible_min ?? 0).toLocaleString())
+            .replace("{{max}}", (product.flexible_max ?? 0).toLocaleString()),
         );
         return;
       }
@@ -85,7 +90,7 @@ export default function ProductDetailScreen() {
     if (thenGoCart) {
       router.push("/(user)/cart");
     } else {
-      Alert.alert("장바구니", "장바구니에 추가되었습니다.");
+      Alert.alert(t("userStore.detail.cartAddedTitle"), t("userStore.detail.cartAddedBody"));
     }
   };
 
@@ -126,14 +131,16 @@ export default function ProductDetailScreen() {
             {isFlexible ? (
               <>
                 <View className="mt-2 bg-secondary/80 rounded-xl py-3">
-                  <Text className="text-sm text-muted-foreground">구매 가능 금액</Text>
+                  <Text className="text-sm text-muted-foreground">{t("userStore.detail.purchasableRange")}</Text>
                   <Text className="text-smd font-semibold text-foreground mt-1">
                     {sym}
                     {(product.flexible_min ?? 0).toLocaleString()} ~ {sym}
                     {(product.flexible_max ?? 0).toLocaleString()}
                   </Text>
                 </View>
-                <Text className="text-sm font-medium text-foreground mt-2 mb-2">구매 금액 ({flexCur})</Text>
+                <Text className="text-sm font-medium text-foreground mt-2 mb-2">
+                  {t("userStore.detail.purchaseAmount").replace("{{currency}}", flexCur)}
+                </Text>
                 <View className="flex-row items-center bg-secondary rounded-xl border border-border px-4 py-3">
                   <Text className="text-base font-bold text-muted-foreground mr-2">{sym}</Text>
                   <TextInput
@@ -142,7 +149,7 @@ export default function ProductDetailScreen() {
                     placeholderTextColor="#737373"
                     keyboardType="numeric"
                     value={formatThousandsFromDigits(flexDigits)}
-                    onChangeText={(t) => setFlexDigits(t.replace(/\D/g, ""))}
+                    onChangeText={(txt) => setFlexDigits(txt.replace(/\D/g, ""))}
                   />
                 </View>
               </>
@@ -153,7 +160,9 @@ export default function ProductDetailScreen() {
                     <>
                       <View className="flex-1 min-w-0">
                         <View className="bg-primary/12 self-start rounded-full ">
-                          <Text className="text-sm font-bold text-primary">{discount}% 할인</Text>
+                          <Text className="text-sm font-bold text-primary">
+                            {t("userStore.detail.discountFmt").replace("{{pct}}", String(discount))}
+                          </Text>
                         </View>
                         <Text className="text-sm text-muted-foreground line-through">
                           {CUR_SYM[product.display_currency] ?? "₩"}
@@ -173,7 +182,7 @@ export default function ProductDetailScreen() {
                   )}
                 </View>
 
-                <Text className="text-sm font-medium text-foreground mt-4 mb-1">수량</Text>
+                <Text className="text-sm font-medium text-foreground mt-4 mb-1">{t("userStore.detail.quantity")}</Text>
                 <View className="flex-row items-center self-start bg-secondary rounded-xl border border-border">
                   <Button
                     variant="ghost"
@@ -202,10 +211,10 @@ export default function ProductDetailScreen() {
 
         <View className="flex-row gap-3 bg-white border-t border-border px-4 py-4">
           <Button variant="outline" className="flex-1 border-border bg-gray-50" onPress={() => addCartFlow(false)}>
-            장바구니
+            {t("userStore.detail.addToCart")}
           </Button>
           <Button className="flex-1" onPress={() => addCartFlow(true)}>
-            구매하기
+            {t("userStore.detail.buyNow")}
           </Button>
         </View>
       </KeyboardAvoidingView>

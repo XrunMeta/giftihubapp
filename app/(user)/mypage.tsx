@@ -2,6 +2,7 @@ import { ScreenHeader } from "@/components/ScreenHeader";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/context/AuthContext";
+import { useI18n } from "@/context/I18nContext";
 import { getMe, type MeResponse } from "@/services/account";
 import { useFocusEffect, useRouter } from "expo-router";
 import { ChevronRight, CreditCard, History, LogOut, Settings } from "lucide-react-native";
@@ -11,6 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MyPageScreen() {
   const router = useRouter();
+  const { t } = useI18n();
   const { user, logout } = useAuth();
   const [me, setMe] = useState<MeResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -33,13 +35,14 @@ export default function MyPageScreen() {
   };
 
   const handleLogout = () => {
-    Alert.alert("로그아웃", "정말 로그아웃하시겠습니까?", [
-      { text: "취소", style: "cancel" },
+    Alert.alert(t("mypage.alertLogoutTitle"), t("mypage.alertLogoutBody"), [
+      { text: t("mypage.cancel"), style: "cancel" },
       {
-        text: "로그아웃", onPress: async () => {
+        text: t("mypage.logout"),
+        onPress: async () => {
           await logout();
           router.replace("/(auth)/login");
-        }
+        },
       },
     ]);
   };
@@ -58,7 +61,7 @@ export default function MyPageScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
-      <ScreenHeader elevated title="MY" />
+      <ScreenHeader elevated title={t("mypage.title")} />
       <ScrollView className="flex-1">
         {}
         <View className="mx-4 bg-card rounded-xl border border-border p-5 mb-4">
@@ -72,7 +75,7 @@ export default function MyPageScreen() {
           <View className="flex-row mt-4 gap-6">
             <View>
               <Text className="text-2xl font-bold text-primary">{activeCount}</Text>
-              <Text className="text-xs text-muted-foreground">보유 기프티</Text>
+              <Text className="text-xs text-muted-foreground">{t("mypage.giftCount")}</Text>
             </View>
           </View>
         </View>
@@ -81,27 +84,27 @@ export default function MyPageScreen() {
         <View className="mx-4 bg-card rounded-xl border border-border overflow-hidden">
           <MenuItem
             icon={<History size={20} color="#737373" />}
-            label="구매 이력"
+            label={t("mypage.purchaseHistory")}
             onPress={() => router.push("/(user)/settlement")}
           />
           <Separator />
           <MenuItem
             icon={<CreditCard size={20} color="#737373" />}
-            label="결제 내역"
+            label={t("mypage.paymentHistory")}
             onPress={() => router.push("/(user)/settlement")}
           />
           <Separator />
           <MenuItem
             icon={<Settings size={20} color="#737373" />}
-            label="설정"
-            onPress={() => { }}
+            label={t("mypage.settings")}
+            onPress={() => router.push("/(user)/settings")}
           />
         </View>
 
         <View className="px-4 mt-6 mb-8">
           <Button variant="outline" onPress={handleLogout} className="flex-row gap-2 bg-white">
             <LogOut size={18} color="#ef4444" />
-            <Text className="text-destructive font-medium">로그아웃</Text>
+            <Text className="text-destructive font-medium">{t("mypage.logout")}</Text>
           </Button>
         </View>
       </ScrollView>

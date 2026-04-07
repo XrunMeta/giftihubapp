@@ -1,17 +1,21 @@
 import { PageHeader } from "@/components/PageHeader";
 import { ScrollableTabs } from "@/components/ui/scrollable-tabs";
+import { useI18n } from "@/context/I18nContext";
 import { getPurchases } from "@/services/account";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const TABS = [
-  { key: "all", label: "전체" },
-  { key: "store", label: "스토어" },
-  { key: "marketplace", label: "중고마켓" },
-];
-
 export default function SettlementScreen() {
+  const { t } = useI18n();
+  const tabs = useMemo(
+    () => [
+      { key: "all", label: t("userSettlement.tabAll") },
+      { key: "store", label: t("userSettlement.tabStore") },
+      { key: "marketplace", label: t("userSettlement.tabMarketplace") },
+    ],
+    [t],
+  );
   const [activeTab, setActiveTab] = useState("all");
   const [purchases, setPurchases] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -35,8 +39,8 @@ export default function SettlementScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <PageHeader title="구매 이력" />
-      <ScrollableTabs tabs={TABS} activeTab={activeTab} onTabPress={setActiveTab} className="mb-3" />
+      <PageHeader title={t("userSettlement.title")} />
+      <ScrollableTabs tabs={tabs} activeTab={activeTab} onTabPress={setActiveTab} className="mb-3" />
 
       {loading ? (
         <View className="flex-1 items-center justify-center">
@@ -57,7 +61,7 @@ export default function SettlementScreen() {
           )}
           ListEmptyComponent={
             <View className="items-center py-20">
-              <Text className="text-muted-foreground">구매 이력이 없습니다.</Text>
+              <Text className="text-muted-foreground">{t("userSettlement.empty")}</Text>
             </View>
           }
         />

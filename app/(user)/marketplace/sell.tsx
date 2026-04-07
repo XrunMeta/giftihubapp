@@ -2,6 +2,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { useI18n } from "@/context/I18nContext";
 import { createListing } from "@/services/marketplace";
 import { getMyVouchers, type Voucher } from "@/services/vouchers";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -19,6 +20,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MarketplaceSellScreen() {
+  const { t } = useI18n();
   const router = useRouter();
   const { voucherId } = useLocalSearchParams<{ voucherId?: string }>();
   const [vouchers, setVouchers] = useState<Voucher[]>([]);
@@ -55,17 +57,17 @@ export default function MarketplaceSellScreen() {
 
   const handleSubmit = async () => {
     if (!selectedVoucher || !sellingPrice) {
-      Alert.alert("입력 오류", "상품과 판매가를 입력해주세요.");
+      Alert.alert(t("userMarketplace.sell.alertMissingTitle"), t("userMarketplace.sell.alertMissingBody"));
       return;
     }
     setSubmitting(true);
     try {
       await createListing(selectedVoucher.id, Number(sellingPrice));
-      Alert.alert("등록 완료", "중고마켓에 등록되었습니다.", [
-        { text: "확인", onPress: () => router.back() },
+      Alert.alert(t("userMarketplace.sell.successTitle"), t("userMarketplace.sell.successBody"), [
+        { text: t("userMarketplace.sell.ok"), onPress: () => router.back() },
       ]);
     } catch (err: any) {
-      Alert.alert("등록 실패", err.body?.error || "다시 시도해주세요.");
+      Alert.alert(t("userMarketplace.sell.failTitle"), err.body?.error || t("userMarketplace.sell.failBody"));
     } finally {
       setSubmitting(false);
     }
@@ -81,7 +83,7 @@ export default function MarketplaceSellScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
-      <PageHeader title="판매 등록" />
+      <PageHeader title={t("userMarketplace.sell.title")} />
       <KeyboardAvoidingView
         className="flex-1"
         behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -92,7 +94,7 @@ export default function MarketplaceSellScreen() {
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={{ paddingTop: 8, paddingBottom: 12 }}
         >
-          <Text className="text-base font-semibold text-foreground mb-2">상품 선택</Text>
+          <Text className="text-base font-semibold text-foreground mb-2">{t("userMarketplace.sell.selectProduct")}</Text>
           <View className="gap-2">
             {vouchers.map((v) => (
               <Pressable
@@ -112,35 +114,35 @@ export default function MarketplaceSellScreen() {
               </Pressable>
             ))}
             {vouchers.length === 0 && (
-              <Text className="text-muted-foreground text-center py-8">판매할 수 있는 기프티가 없습니다.</Text>
+              <Text className="text-muted-foreground text-center py-8">{t("userMarketplace.sell.emptyVouchers")}</Text>
             )}
           </View>
         </ScrollView>
 
         {selectedVoucher ? (
           <View className="border-t border-border bg-white px-5 pt-4 pb-2 gap-3">
-            <Text className="text-base font-semibold text-foreground">판매가 (KRW)</Text>
+            <Text className="text-base font-semibold text-foreground">{t("userMarketplace.sell.sellingPrice")}</Text>
             <Input
               keyboardType="numeric"
-              placeholder="판매 금액 입력"
+              placeholder={t("userMarketplace.sell.sellingPricePh")}
               value={sellingPrice}
               onChangeText={setSellingPrice}
             />
 
             <View className="bg-card rounded-xl border border-border p-4">
               <View className="flex-row justify-between">
-                <Text className="text-sm text-muted-foreground">수수료 (5%)</Text>
+                <Text className="text-sm text-muted-foreground">{t("userMarketplace.sell.feeLabel")}</Text>
                 <Text className="text-sm text-foreground">₩{fee.toLocaleString()}</Text>
               </View>
               <Separator className="my-2" />
               <View className="flex-row justify-between">
-                <Text className="text-base font-semibold text-foreground">정산 예정금액</Text>
+                <Text className="text-base font-semibold text-foreground">{t("userMarketplace.sell.payoutLabel")}</Text>
                 <Text className="text-base font-bold text-primary">₩{payout.toLocaleString()}</Text>
               </View>
             </View>
 
             <Button onPress={handleSubmit} disabled={submitting}>
-              {submitting ? "등록 중..." : "판매 등록"}
+              {submitting ? t("userMarketplace.sell.submitting") : t("userMarketplace.sell.submit")}
             </Button>
           </View>
         ) : null}

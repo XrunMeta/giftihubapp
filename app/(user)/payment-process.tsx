@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
+import { useI18n } from "@/context/I18nContext";
 import { purchaseBundle } from "@/services/bundle";
 import { getPaymentStatus } from "@/services/payment";
 import { purchaseProduct, type PaymentMethod } from "@/services/store";
@@ -11,6 +12,7 @@ import { ActivityIndicator, Alert, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function PaymentProcessScreen() {
+  const { t } = useI18n();
   const { method, currency } = useLocalSearchParams<{ method: string; currency?: string }>();
   const router = useRouter();
   const { items, packageItems, clearByCurrency, clearCart } = useCart();
@@ -27,7 +29,7 @@ export default function PaymentProcessScreen() {
 
   const processPayment = async () => {
     if (!method) {
-      Alert.alert("결제 오류", "결제 수단이 선택되지 않았습니다.");
+      Alert.alert(t("userPaymentProcess.errNoMethodTitle"), t("userPaymentProcess.errNoMethodBody"));
       setStatus("failed");
       return;
     }
@@ -53,7 +55,12 @@ export default function PaymentProcessScreen() {
     }));
 
     if (!targetPackages.length && !targetItems.length) {
-      Alert.alert("결제 오류", `해당 통화(${targetCurrency})의 상품이 없습니다.\n장바구니: ${items.length}개, flex_currencies: ${items.map(i => i.product.flexible_currency).join(",")}`);
+      Alert.alert(
+        t("userPaymentProcess.errNoMethodTitle"),
+        t("userPaymentProcess.errNoItems")
+          .replace("{{currency}}", targetCurrency)
+          .replace("{{cartCount}}", String(items.length)),
+      );
       setStatus("failed");
       return;
     }
@@ -63,7 +70,7 @@ export default function PaymentProcessScreen() {
       for (const pkg of targetPackages) {
         const composition = pkg.composition;
         if (!composition) {
-          Alert.alert("결제 오류", "구성 정보가 없습니다.");
+          Alert.alert(t("userPaymentProcess.errNoMethodTitle"), t("userPaymentProcess.errNoComposition"));
           setStatus("failed");
           return;
         }
@@ -85,7 +92,7 @@ export default function PaymentProcessScreen() {
 
         const completed = await pollStatusAsync(res.payment_id);
         if (!completed) {
-          Alert.alert("결제 실패", "결제가 완료되지 않았습니다.");
+          Alert.alert(t("userPaymentProcess.pollFailTitle"), t("userPaymentProcess.pollFailBody"));
           setStatus("failed");
           return;
         }
@@ -106,7 +113,7 @@ export default function PaymentProcessScreen() {
       clearByCurrency(targetCurrency);
       setStatus("success");
     } catch (err: any) {
-      const detail = err.body?.error || err.message || "결제를 처리할 수 없습니다.";
+      const detail = err.body?.error || err.message || t("userPaymentProcess.failDetailFallback");
       const debugInfo = JSON.stringify(
         { status: err.status, body: err.body, message: err.message },
         null,
@@ -114,7 +121,12 @@ export default function PaymentProcessScreen() {
       );
       console.error("[payment-process] error:", debugInfo);
       setDebugError(debugInfo);
-      Alert.alert("결제 실패", `${detail}\n(status: ${err.status || "unknown"})`);
+      Alert.alert(
+        t("userPaymentProcess.failTitle"),
+        t("userPaymentProcess.failBody")
+          .replace("{{detail}}", detail)
+          .replace("{{status}}", String(err.status ?? "unknown")),
+      );
       setStatus("failed");
     }
   };
@@ -139,9 +151,11 @@ export default function PaymentProcessScreen() {
       {status === "processing" && (
         <View className="items-center">
           <ActivityIndicator size="large" color="#CE3630" />
-          <Text className="text-lg font-semibold text-foreground mt-4">{targetCurrency} 결제 처리 중...</Text>
+          <Text className="text-lg font-semibold text-foreground mt-4">
+            {t("userPaymentProcess.processing").replace("{{currency}}", targetCurrency)}
+          </Text>
           <Text className="text-sm text-muted-foreground mt-2 text-center">
-            결제가 완료될 때까지 잠시 기다려주세요.
+            {t("userPaymentProcess.processingHint")}
           </Text>
         </View>
       )}
@@ -154,19 +168,21 @@ export default function PaymentProcessScreen() {
           <View className="items-center">
             <CheckCircle size={64} color="#22c55e" />
             <Text className="text-xl font-bold text-foreground mt-4">
-              {targetCurrency} 결제 완료!
+              {t("userPaymentProcess.successTitle").replace("{{currency}}", targetCurrency)}
             </Text>
             <Text className="text-sm text-muted-foreground mt-2 text-center">
-              기프티가 발급되었습니다.
-              {hasMore ? `\n다른 통화 상품이 장바구니에 남아있습니다.` : `\n내 기프티에서 확인하세요.`}
+              {t("userPaymentProcess.successIssued")}
+              {hasMore
+                ? `\n${t("userPaymentProcess.successMoreInCart")}`
+                : `\n${t("userPaymentProcess.successCheckMy")}`}
             </Text>
             {hasMore ? (
               <Button className="mt-6 w-full" onPress={() => router.replace("/(user)/cart")}>
-                장바구니로 돌아가기
+                {t("userPaymentProcess.backToCart")}
               </Button>
             ) : (
               <Button className="mt-6 w-full" onPress={() => router.replace("/(user)/oth-path")}>
-                내 기프티 보기
+                {t("userPaymentProcess.viewMyGifti")}
               </Button>
             )}
           </View>
@@ -176,9 +192,9 @@ export default function PaymentProcessScreen() {
       {status === "failed" && (
         <View className="items-center">
           <XCircle size={64} color="#ef4444" />
-          <Text className="text-xl font-bold text-foreground mt-4">결제 실패</Text>
+          <Text className="text-xl font-bold text-foreground mt-4">{t("userPaymentProcess.failedTitle")}</Text>
           <Text className="text-sm text-muted-foreground mt-2 text-center">
-            결제가 완료되지 않았습니다.{"\n"}다시 시도해주세요.
+            {t("userPaymentProcess.failedBody")}
           </Text>
           {debugError ? (
             <Text className="text-xs text-red-400 mt-2 text-left font-mono" selectable>
@@ -186,7 +202,7 @@ export default function PaymentProcessScreen() {
             </Text>
           ) : null}
           <Button className="mt-6 w-full" onPress={() => router.back()}>
-            돌아가기
+            {t("userPaymentProcess.goBack")}
           </Button>
         </View>
       )}

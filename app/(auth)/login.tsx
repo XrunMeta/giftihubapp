@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/context/AuthContext";
+import { useI18n } from "@/context/I18nContext";
 import { useDevMode } from "@/hooks/use-dev-mode";
 import { getBaseUrl, getRememberMe, getSavedEmail, getServerMode, removeSavedEmail, setRememberMe, setSavedEmail, setServerMode } from "@/services/api";
 import { loginWithEmail } from "@/services/auth";
@@ -15,6 +16,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function LoginScreen() {
   const router = useRouter();
+  const { t } = useI18n();
   const { login } = useAuth();
   const isDevMode = useDevMode();
   const [email, setEmail] = useState("");
@@ -34,7 +36,7 @@ export default function LoginScreen() {
 
   const handleEmailLogin = async () => {
     if (!email || !password) {
-      Alert.alert("입력 오류", "이메일과 비밀번호를 입력해주세요.");
+      Alert.alert(t("auth.login.alertInputTitle"), t("auth.login.alertInputBody"));
       return;
     }
     setLoading(true);
@@ -50,7 +52,7 @@ export default function LoginScreen() {
       const dest = res.user.role === "merchant" ? "/(merchant)" : "/(user)/store";
       router.replace(dest);
     } catch (err: any) {
-      Alert.alert("로그인 실패", err.body?.error || "이메일 또는 비밀번호를 확인해주세요.");
+      Alert.alert(t("auth.login.alertFailTitle"), err.body?.error || t("auth.login.alertFailBody"));
     } finally {
       setLoading(false);
     }
@@ -75,12 +77,12 @@ export default function LoginScreen() {
             const dest = role === "merchant" ? "/(merchant)" : "/(user)/store";
             router.replace(dest);
           } catch {
-            Alert.alert("오류", "인증 토큰을 처리할 수 없습니다.");
+            Alert.alert(t("auth.login.alertTokenTitle"), t("auth.login.alertTokenBody"));
           }
         }
       }
     } catch {
-      Alert.alert("오류", "Telegram 로그인을 열 수 없습니다.");
+      Alert.alert(t("auth.login.alertTelegramTitle"), t("auth.login.alertTelegramBody"));
     }
   };
 
@@ -100,36 +102,34 @@ export default function LoginScreen() {
               className="w-[140px] h-[60px]"
               resizeMode="contain"
             />
-            <Text className="text-2xl font-bold text-foreground">GiftHub에 오신 것을{"\n"}
-              환영합니다
-            </Text>
-            <Text className="text-sm text-muted-foreground mt-1">디지털 기프티 플랫폼</Text>
+            <Text className="text-2xl font-bold text-foreground">{t("auth.login.welcomeTitle")}</Text>
+            <Text className="text-sm text-muted-foreground mt-1">{t("auth.login.tagline")}</Text>
           </View>
 
           <View >
             <View className="mb-4">
-              <Text className="text-sm font-medium text-foreground mb-1.5">이메일</Text>
+              <Text className="text-sm font-medium text-foreground mb-1.5">{t("auth.login.email")}</Text>
               <Input
                 keyboardType="email-address"
                 autoCapitalize="none"
-                placeholder="email@example.com"
+                placeholder={t("auth.login.emailPh")}
                 value={email}
                 onChangeText={setEmail}
               />
             </View>
 
             <View className="mb-4">
-              <Text className="text-sm font-medium text-foreground mb-1.5">비밀번호</Text>
+              <Text className="text-sm font-medium text-foreground mb-1.5">{t("auth.login.password")}</Text>
               <Input
                 secureTextEntry
-                placeholder="••••••••"
+                placeholder={t("auth.login.passwordPh")}
                 value={password}
                 onChangeText={setPassword}
               />
             </View>
 
             <View className="flex-row items-center justify-between mb-6">
-              <Text className="text-sm text-muted-foreground">로그인 유지</Text>
+              <Text className="text-sm text-muted-foreground">{t("auth.login.rememberMe")}</Text>
               <Switch
                 value={rememberMe}
                 onValueChange={setRememberMeState}
@@ -139,12 +139,12 @@ export default function LoginScreen() {
             </View>
 
             <Button onPress={handleEmailLogin} disabled={loading} className="mb-3">
-              {loading ? "로그인 중..." : "로그인"}
+              {loading ? t("auth.login.loggingIn") : t("auth.login.login")}
             </Button>
 
             <View className="flex-row items-center my-4">
               <Separator className="flex-1" />
-              <Text className="mx-3 text-sm text-muted-foreground">또는</Text>
+              <Text className="mx-3 text-sm text-muted-foreground">{t("auth.login.or")}</Text>
               <Separator className="flex-1" />
             </View>
 
@@ -153,16 +153,16 @@ export default function LoginScreen() {
               onPress={handleTelegramLogin}
               className="mb-6"
             >
-              Telegram으로 로그인
+              {t("auth.login.telegramLogin")}
             </Button>
 
             <View className="flex-row justify-center items-center">
-              <Text className="text-sm text-muted-foreground">계정이 없으신가요? </Text>
+              <Text className="text-sm text-muted-foreground">{t("auth.login.noAccount")}</Text>
               <Text
                 className="text-sm font-medium text-primary"
                 onPress={() => router.push("/(auth)/signup")}
               >
-                회원가입
+                {t("auth.login.signup")}
               </Text>
             </View>
 
@@ -187,21 +187,21 @@ export default function LoginScreen() {
                   {getBaseUrl()}
                 </Text>
 
-                <Text className="text-xs text-muted-foreground text-center mb-2">DEV 빠른 로그인</Text>
+                <Text className="text-xs text-muted-foreground text-center mb-2">{t("auth.login.devQuickLogin")}</Text>
                 <View className="flex-row gap-2">
                   <Button
                     variant="outline"
                     className="flex-1"
                     onPress={() => { setEmail("email@example.com"); setPassword("1234"); }}
                   >
-                    <Text className="text-sm font-medium text-foreground">사용자</Text>
+                    <Text className="text-sm font-medium text-foreground">{t("auth.login.devUser")}</Text>
                   </Button>
                   <Button
                     variant="outline"
                     className="flex-1"
                     onPress={() => { setEmail("oth-test@example.invalid"); setPassword("1234"); }}
                   >
-                    <Text className="text-sm font-medium text-foreground">상점</Text>
+                    <Text className="text-sm font-medium text-foreground">{t("auth.login.devMerchant")}</Text>
                   </Button>
                 </View>
               </View>

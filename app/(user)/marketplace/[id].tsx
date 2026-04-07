@@ -2,6 +2,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { useI18n } from "@/context/I18nContext";
 import { resolveImageUrl } from "@/lib/image";
 import { getListingDetail, type MarketplaceListing } from "@/services/marketplace";
 import { format } from "date-fns";
@@ -11,6 +12,7 @@ import { ActivityIndicator, Alert, Image, ScrollView, Text, View } from "react-n
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MarketplaceDetailScreen() {
+  const { t } = useI18n();
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const [listing, setListing] = useState<MarketplaceListing | null>(null);
@@ -25,7 +27,7 @@ export default function MarketplaceDetailScreen() {
       const res = await getListingDetail(id!);
       setListing(res.listing);
     } catch {
-      Alert.alert("오류", "상품 정보를 불러올 수 없습니다.");
+      Alert.alert(t("userMarketplace.detail.loadErrorTitle"), t("userMarketplace.detail.loadErrorBody"));
       router.back();
     } finally {
       setLoading(false);
@@ -42,7 +44,7 @@ export default function MarketplaceDetailScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
-      <PageHeader title="중고 상세" />
+      <PageHeader title={t("userMarketplace.detail.title")} />
       <ScrollView className="flex-1 px-5" contentContainerStyle={{ paddingBottom: 12 }}>
         {(() => {
           const imgUri = resolveImageUrl(listing.image_url, listing.brand_logo);
@@ -69,25 +71,25 @@ export default function MarketplaceDetailScreen() {
 
           <View className="gap-2.5">
             <View className="flex-row justify-between">
-              <Text className="text-sm text-muted-foreground">원가</Text>
+              <Text className="text-sm text-muted-foreground">{t("userMarketplace.detail.originalPrice")}</Text>
               <Text className="text-sm text-muted-foreground line-through">
                 ₩{listing.original_price.toLocaleString()}
               </Text>
             </View>
             <View className="flex-row justify-between">
-              <Text className="text-base font-semibold text-foreground">판매가</Text>
+              <Text className="text-base font-semibold text-foreground">{t("userMarketplace.detail.salePrice")}</Text>
               <Text className="text-xl font-bold text-primary">
                 ₩{listing.selling_price.toLocaleString()}
               </Text>
             </View>
             <View className="flex-row justify-between">
-              <Text className="text-sm text-muted-foreground">만료일</Text>
+              <Text className="text-sm text-muted-foreground">{t("userMarketplace.detail.expiry")}</Text>
               <Text className="text-sm text-foreground">
                 {format(new Date(listing.expiry_date * 1000), "yyyy.MM.dd")}
               </Text>
             </View>
             <View className="flex-row justify-between">
-              <Text className="text-sm text-muted-foreground">판매자</Text>
+              <Text className="text-sm text-muted-foreground">{t("userMarketplace.detail.seller")}</Text>
               <Text className="text-sm text-foreground">{listing.seller_name}</Text>
             </View>
           </View>
@@ -103,7 +105,7 @@ export default function MarketplaceDetailScreen() {
             })
           }
         >
-          구매하기
+          {t("userMarketplace.detail.purchase")}
         </Button>
       </View>
     </SafeAreaView>
