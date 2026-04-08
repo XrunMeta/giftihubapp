@@ -32,9 +32,14 @@ const STATUS_BADGE_META: Record<string, { labelKey: string; variant: BadgeVarian
   used: { labelKey: "myGifti.list.statusUsed", variant: "secondary" },
   expired: { labelKey: "myGifti.list.statusExpired", variant: "destructive" },
   transferred: { labelKey: "myGifti.list.statusTransferred", variant: "success" },
+  cancel_request_pending: { labelKey: "myGifti.detail.cancelRequestPendingLabel", variant: "warning" },
 };
 
-function statusBadge(t: (path: string) => string, status: string) {
+function statusBadge(t: (path: string) => string, status: string, cancelPending?: boolean) {
+  if (status === "used" && cancelPending) {
+    const m = STATUS_BADGE_META.cancel_request_pending;
+    return { label: t(m.labelKey), variant: m.variant };
+  }
   const m = STATUS_BADGE_META[status] ?? STATUS_BADGE_META.active;
   return { label: t(m.labelKey), variant: m.variant };
 }
@@ -190,7 +195,7 @@ export default function MyGiftiScreen() {
   };
 
   const renderVoucher = ({ item }: { item: Voucher }) => {
-    const badge = statusBadge(t, item.status);
+    const badge = statusBadge(t, item.status, !!item.cancel_request_pending);
     const imgUri = resolveImageUrl(item.thumb_url, item.image_url, item.brand_logo);
     return (
       <Pressable
