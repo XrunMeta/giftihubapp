@@ -12,7 +12,7 @@ import * as v_fba5a0 from "hfxxehldoiokdq";
 import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
 import { v_4e6e5f, v_c1958c, v_24c64e, v_20f6a6, v_8d40c5, v_e4f0c5, v_51bb20, v_dc4a73 } from "wjvlskvsbzsrojdbjsl";
 import v_a3453e, { v_de06a3, v_c4deb2, v_e662ae, v_5ab095 } from "bapkr";
-import { v_39a996, v_03e392, v_a2349e, v_cf9c33, v_122070, v_19b633, v_4623af, v_e45a99, v_3094a2 } from "rcmrninabrnb";
+import { v_39a996, v_03e392, v_a2349e, v_cf9c33, v_09d0e5, v_122070, v_19b633, v_4623af, v_e45a99, v_3094a2 } from "rcmrninabrnb";
 import v_dc0e55 from "bfgjhdhiuhcmlahuvrfzrfn";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
@@ -231,6 +231,18 @@ export default function v_b89029() {
             );
           })()
         ) : null}
+
+        {v_3e4b5d.status === "used" && (
+          <Pressable
+            className="mt-4 flex-row items-center justify-center gap-2 bg-white border border-destructive rounded-xl py-3 px-4"
+            onPress={() => v_904d46.push(`/(user)/oth-path${v_3e4b5d.id}/cancel-request` as any)}
+          >
+            <XCircle size={16} color="#ef4444" />
+            <Text className="text-sm font-medium text-destructive">
+              {v_8d41d7('myGifti.detail.cancelRequest')}
+            </Text>
+          </Pressable>
+        )}
 
         {}
         <View className="bg-card rounded-xl border border-border p-4">

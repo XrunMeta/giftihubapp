@@ -84,6 +84,7 @@ export default function v_348e5f() {
       <Tabs.Screen name="settlement" options={{ href: null }} />
       <Tabs.Screen name="usdt-withdraw" options={{ href: null }} />
       <Tabs.Screen name="settings" options={{ href: null }} />
+      <Tabs.Screen name="notifications" options={{ href: null }} />
     </Tabs>
   );
 }
