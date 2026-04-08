@@ -1,4 +1,10 @@
 import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
+
+const v_928ad6 = { KRW: "₩", USD: "$", IDR: "Rp" };
+function v_2396c3(v_f63e09, v_a832b3) {
+  const v_c37780 = v_928ad6[v_a832b3 ?? "KRW"] ?? "";
+  return `${v_c37780}${v_f63e09?.toLocaleString() ?? 0}`;
+}
 import { v_a3b961 } from "xytbpcyuptfvuyelkypzvyijaumlzur";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_a4ddab } from "eqrxxpgqjbwbqqqhvy";
@@ -54,7 +60,7 @@ export default function v_1a8c84() {
             <View className="mx-4 mb-2 bg-card rounded-lg border border-border p-3">
               <View className="flex-row justify-between">
                 <Text className="text-sm font-medium text-foreground">{v_8c0b26.voucher_name || v_8c0b26.brand}</Text>
-                <Text className="text-sm font-bold text-foreground">₩{v_8c0b26.amount?.toLocaleString()}</Text>
+                <Text className="text-sm font-bold text-foreground">{v_2396c3(v_8c0b26.amount, v_8c0b26.currency || v_8c0b26.base_currency)}</Text>
               </View>
               <Text className="text-xs text-muted-foreground mt-1">{v_8c0b26.payment_method}</Text>
             </View>

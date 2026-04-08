@@ -75,6 +75,9 @@ export default function v_fab3ac() {
               <Text className="text-sm font-semibold text-foreground mt-0.5" numberOfLines={1}>
                 {v_8c0b26.name}
               </Text>
+              {v_8c0b26.set_id && (
+                <Badge variant="secondary" label={v_8d41d7("myGifti.list.bundleTag")} className="mt-1 self-start" />
+              )}
             </View>
             {v_8c0b26.discount > 0 && (
               <Badge variant="destructive" label={`${v_8c0b26.discount}%`} />

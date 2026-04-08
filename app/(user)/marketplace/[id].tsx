@@ -61,6 +61,9 @@ export default function v_9c78c5() {
             <View className="flex-1">
               <Text className="text-xs text-muted-foreground">{v_a8fb42.brand}</Text>
               <Text className="text-xl font-bold text-foreground mt-1">{v_a8fb42.name}</Text>
+              {v_a8fb42.set_id && (
+                <Badge variant="secondary" label={v_8d41d7("myGifti.list.bundleTag")} className="mt-1.5 self-start" />
+              )}
             </View>
             {v_a8fb42.discount > 0 && (
               <Badge variant="destructive" label={`${v_a8fb42.discount}% OFF`} />
