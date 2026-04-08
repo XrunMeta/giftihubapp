@@ -2,7 +2,6 @@ import { ScreenHeader } from "@/components/ScreenHeader";
 import { Separator } from "@/components/ui/separator";
 import { useI18n } from "@/context/I18nContext";
 import { apiFetch } from "@/services/api";
-import { format } from "date-fns";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ActivityIndicator,
@@ -19,23 +18,6 @@ type SettlementResponse = {
   summary: { total_count: number; total_amount: number };
 };
 
-type HistoryItem = {
-  id: string;
-  type: string;
-  amount: number;
-  created_at: number;
-  brand: string | null;
-  name: string | null;
-  face_value: number | null;
-  user_name: string | null;
-};
-type HistoryResponse = {
-  history: HistoryItem[];
-  total: number;
-  page: number;
-  limit: number;
-};
-
 type SettlementRecord = {
   id: string; period_from: string; period_to: string; type: string;
   total_amount: number; fee_amount: number; net_amount: number;
@@ -43,10 +25,8 @@ type SettlementRecord = {
   memo: string | null; item_count: number; created_at: number; settled_at: number | null;
 };
 
-type Tab = "settlement" | "history" | "records";
+type Tab = "settlement" | "records";
 type Period = "7d" | "30d" | "90d";
-
-const LIMIT = 20;
 
 export default function MerchantSettlementScreen() {
   const { t } = useI18n();
@@ -73,12 +53,6 @@ export default function MerchantSettlementScreen() {
   const [settlData, setSettlData] = useState<SettlementResponse | null>(null);
   const [settlLoading, setSettlLoading] = useState(true);
   const [period, setPeriod] = useState<Period>("30d");
-
-  const [histItems, setHistItems] = useState<HistoryItem[]>([]);
-  const [histLoading, setHistLoading] = useState(true);
-  const [histRefreshing, setHistRefreshing] = useState(false);
-  const [histPage, setHistPage] = useState(1);
-  const [histHasMore, setHistHasMore] = useState(true);
 
   const [records, setRecords] = useState<SettlementRecord[]>([]);
   const [recLoading, setRecLoading] = useState(false);
@@ -114,27 +88,6 @@ export default function MerchantSettlementScreen() {
     if (tab === "settlement") fetchSettlement(period);
   }, [period, tab, fetchSettlement]);
 
-  const fetchHistory = useCallback(async (p: number, reset = false) => {
-    try {
-      const res = await apiFetch<HistoryResponse>(`/oth-path?page=${p}&limit=${LIMIT}`);
-      setHistItems((prev) => (reset ? res.history : [...prev, ...res.history]));
-      setHistHasMore(res.history.length === LIMIT);
-      setHistPage(p);
-    } catch {
-
-    } finally {
-      setHistLoading(false);
-      setHistRefreshing(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (tab === "history") {
-      setHistLoading(true);
-      fetchHistory(1, true);
-    }
-  }, [tab, fetchHistory]);
-
   const renderDaily = ({ item }: { item: DailyItem }) => (
     <View className="mx-4 mb-2 bg-card rounded-xl border border-border px-4 py-3">
       <View className="flex-row justify-between items-center">
@@ -148,32 +101,6 @@ export default function MerchantSettlementScreen() {
         <Text className="text-base font-bold text-foreground">
           ₩{item.total_amount?.toLocaleString()}
         </Text>
-      </View>
-    </View>
-  );
-
-  const renderHistory = ({ item }: { item: HistoryItem }) => (
-    <View className="mx-4 mb-2 bg-card rounded-xl border border-border p-4">
-      <View className="flex-row justify-between items-start">
-        <View className="flex-1">
-          <Text className="text-xs text-muted-foreground">{item.brand ?? "-"}</Text>
-          <Text className="text-base font-semibold text-foreground">
-            {item.name ?? t("merchant.settlement.unknownName")}
-          </Text>
-          {item.user_name && (
-            <Text className="text-xs text-muted-foreground mt-0.5">
-              {t("merchant.settlement.userLabel")}: {item.user_name}
-            </Text>
-          )}
-        </View>
-        <View className="items-end">
-          <Text className="text-base font-bold text-primary">
-            ₩{item.amount?.toLocaleString()}
-          </Text>
-          <Text className="text-xs text-muted-foreground mt-1">
-            {format(new Date(item.created_at * 1000), "MM.dd HH:mm")}
-          </Text>
-        </View>
       </View>
     </View>
   );
@@ -232,7 +159,7 @@ export default function MerchantSettlementScreen() {
 
   const TabSelector = () => (
     <View className="flex-row mx-4 mb-3 gap-2">
-      {(["settlement", "history", "records"] as Tab[]).map((subTab) => (
+      {(["settlement", "records"] as Tab[]).map((subTab) => (
         <TouchableOpacity
           key={subTab}
           onPress={() => setTab(subTab)}
@@ -245,9 +172,7 @@ export default function MerchantSettlementScreen() {
           >
             {subTab === "settlement"
               ? t("merchant.settlement.tabSummary")
-              : subTab === "history"
-                ? t("merchant.settlement.tabHistory")
-                : t("merchant.settlement.tabRecords")}
+              : t("merchant.settlement.tabRecords")}
           </Text>
         </TouchableOpacity>
       ))}
@@ -320,39 +245,6 @@ export default function MerchantSettlementScreen() {
             />
           )}
         </>
-      ) : tab === "history" ? (
-        histLoading ? (
-          <View className="flex-1 items-center justify-center">
-            <ActivityIndicator size="large" color="#CE3630" />
-          </View>
-        ) : (
-          <FlatList
-            style={{ flex: 1 }}
-            data={histItems}
-            keyExtractor={(item) => item.id}
-            renderItem={renderHistory}
-            contentContainerStyle={{ paddingBottom: 0 }}
-            onEndReached={() => {
-              if (!histLoading && histHasMore) fetchHistory(histPage + 1);
-            }}
-            onEndReachedThreshold={0.3}
-            onRefresh={() => {
-              setHistRefreshing(true);
-              fetchHistory(1, true);
-            }}
-            refreshing={histRefreshing}
-            ListEmptyComponent={
-              <View className="flex-1 items-center justify-center py-20">
-                <Text className="text-muted-foreground">{t("merchant.settlement.emptyHistory")}</Text>
-              </View>
-            }
-            ListFooterComponent={
-              histHasMore && histItems.length > 0 ? (
-                <ActivityIndicator size="small" color="#CE3630" style={{ paddingVertical: 8 }} />
-              ) : null
-            }
-          />
-        )
       ) : (
         <>
           {}
