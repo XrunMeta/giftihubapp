@@ -1,4 +1,5 @@
 import { PageHeader } from "@/components/PageHeader";
+import { Package } from "lucide-react-native";
 
 const SYM: Record<string, string> = { KRW: "₩", USD: "$", IDR: "Rp" };
 function fmtAmount(amount: number, currency?: string) {
@@ -56,15 +57,41 @@ export default function SettlementScreen() {
         <FlatList
           data={purchases}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View className="mx-4 mb-2 bg-card rounded-lg border border-border p-3">
-              <View className="flex-row justify-between">
-                <Text className="text-sm font-medium text-foreground">{item.voucher_name || item.brand}</Text>
-                <Text className="text-sm font-bold text-foreground">{fmtAmount(item.amount, item.currency || item.base_currency)}</Text>
+          renderItem={({ item }) => {
+            const isBundle = !!item.set_id;
+            const vouchers: any[] = item.set_vouchers ?? [];
+            if (isBundle) {
+              return (
+                <View className="mx-4 mb-2 bg-card rounded-xl border border-primary/30 p-3">
+                  <View className="flex-row items-center gap-2 mb-2">
+                    <View className="w-7 h-7 rounded-lg bg-primary/10 items-center justify-center">
+                      <Package size={15} color="#CE3630" />
+                    </View>
+                    <Text className="text-sm font-semibold text-primary flex-1">
+                      {t("myGifti.list.bundleTitle").replace("{{count}}", String(item.set_count ?? vouchers.length ?? ""))}
+                    </Text>
+                    <Text className="text-sm font-bold text-foreground">{fmtAmount(item.amount, item.currency)}</Text>
+                  </View>
+                  {vouchers.map((v: any, i: number) => (
+                    <View key={i} className="flex-row justify-between py-1 border-t border-border">
+                      <Text className="text-xs text-muted-foreground flex-1" numberOfLines={1}>{v.brand} · {v.name}</Text>
+                      <Text className="text-xs text-muted-foreground">{fmtAmount(v.face_value_base || v.face_value, v.base_currency)}</Text>
+                    </View>
+                  ))}
+                  <Text className="text-xs text-muted-foreground mt-1">{item.payment_method}</Text>
+                </View>
+              );
+            }
+            return (
+              <View className="mx-4 mb-2 bg-card rounded-lg border border-border p-3">
+                <View className="flex-row justify-between">
+                  <Text className="text-sm font-medium text-foreground">{item.voucher_name || item.brand}</Text>
+                  <Text className="text-sm font-bold text-foreground">{fmtAmount(item.amount, item.currency || item.base_currency)}</Text>
+                </View>
+                <Text className="text-xs text-muted-foreground mt-1">{item.payment_method}</Text>
               </View>
-              <Text className="text-xs text-muted-foreground mt-1">{item.payment_method}</Text>
-            </View>
-          )}
+            );
+          }}
           ListEmptyComponent={
             <View className="items-center py-20">
               <Text className="text-muted-foreground">{t("userSettlement.empty")}</Text>
