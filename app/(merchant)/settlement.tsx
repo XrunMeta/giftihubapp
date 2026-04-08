@@ -2,7 +2,6 @@ import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_bc1b24 } from "tlrvzsbmctdavs";
-import { v_db3cc6 } from "dyunzbus";
 import v_a3453e, { v_de06a3, v_c4deb2, v_df9f57, v_5ab095 } from "bapkr";
 import {
   v_39a996,
@@ -19,23 +18,6 @@ type SettlementResponse = {
   summary: { total_count: number; total_amount: number };
 };
 
-type HistoryItem = {
-  id: string;
-  type: string;
-  amount: number;
-  created_at: number;
-  brand: string | null;
-  name: string | null;
-  face_value: number | null;
-  user_name: string | null;
-};
-type HistoryResponse = {
-  history: HistoryItem[];
-  total: number;
-  page: number;
-  limit: number;
-};
-
 type SettlementRecord = {
   id: string; period_from: string; period_to: string; type: string;
   total_amount: number; fee_amount: number; net_amount: number;
@@ -43,10 +25,8 @@ type SettlementRecord = {
   memo: string | null; item_count: number; created_at: number; settled_at: number | null;
 };
 
-type Tab = "settlement" | "history" | "records";
+type Tab = "settlement" | "records";
 type Period = "7d" | "30d" | "90d";
-
-const v_b69110 = 20;
 
 export default function v_0842da() {
   const { t: v_8d41d7 } = v_678659();
@@ -73,12 +53,6 @@ export default function v_0842da() {
   const [v_b595e3, v_6231e1] = v_5ab095<SettlementResponse | null>(null);
   const [v_0636ca, v_cc58f1] = v_5ab095(true);
   const [v_783ad3, v_6fa4d3] = v_5ab095<Period>("30d");
-
-  const [v_09072d, v_c718c3] = v_5ab095<HistoryItem[]>([]);
-  const [v_c2880b, v_68448d] = v_5ab095(true);
-  const [v_854d14, v_3321fd] = v_5ab095(false);
-  const [v_d262dd, v_6ac00b] = v_5ab095(1);
-  const [v_02e02d, v_7ebb88] = v_5ab095(true);
 
   const [v_678155, v_9ed182] = v_5ab095<SettlementRecord[]>([]);
   const [v_49133e, v_018923] = v_5ab095(false);
@@ -114,27 +88,6 @@ export default function v_0842da() {
     if (v_11083e === "settlement") v_77b1a5(v_783ad3);
   }, [v_783ad3, v_11083e, v_77b1a5]);
 
-  const v_337eb3 = v_de06a3(async (v_e2a85c, v_487a25 = false) => {
-    try {
-      const v_8f00b9 = await v_bc1b24<HistoryResponse>(`/oth-path?page=${v_e2a85c}&limit=${v_b69110}`);
-      v_c718c3((v_ba2215) => (v_487a25 ? v_8f00b9.history : [...v_ba2215, ...v_8f00b9.history]));
-      v_7ebb88(v_8f00b9.history.length === v_b69110);
-      v_6ac00b(v_e2a85c);
-    } catch {
-
-    } finally {
-      v_68448d(false);
-      v_3321fd(false);
-    }
-  }, []);
-
-  v_c4deb2(() => {
-    if (v_11083e === "history") {
-      v_68448d(true);
-      v_337eb3(1, true);
-    }
-  }, [v_11083e, v_337eb3]);
-
   const v_e01a2e = ({ item: v_8c0b26 }: { item: DailyItem }) => (
     <View className="mx-4 mb-2 bg-card rounded-xl border border-border px-4 py-3">
       <View className="flex-row justify-between items-center">
@@ -148,32 +101,6 @@ export default function v_0842da() {
         <Text className="text-base font-bold text-foreground">
           ₩{v_8c0b26.total_amount?.toLocaleString()}
         </Text>
-      </View>
-    </View>
-  );
-
-  const v_5e3978 = ({ item: v_8c0b26 }: { item: HistoryItem }) => (
-    <View className="mx-4 mb-2 bg-card rounded-xl border border-border p-4">
-      <View className="flex-row justify-between items-start">
-        <View className="flex-1">
-          <Text className="text-xs text-muted-foreground">{v_8c0b26.brand ?? "-"}</Text>
-          <Text className="text-base font-semibold text-foreground">
-            {v_8c0b26.name ?? v_8d41d7("merchant.settlement.unknownName")}
-          </Text>
-          {v_8c0b26.user_name && (
-            <Text className="text-xs text-muted-foreground mt-0.5">
-              {v_8d41d7("merchant.settlement.userLabel")}: {v_8c0b26.user_name}
-            </Text>
-          )}
-        </View>
-        <View className="items-end">
-          <Text className="text-base font-bold text-primary">
-            ₩{v_8c0b26.amount?.toLocaleString()}
-          </Text>
-          <Text className="text-xs text-muted-foreground mt-1">
-            {v_db3cc6(new Date(v_8c0b26.created_at * 1000), "MM.dd HH:mm")}
-          </Text>
-        </View>
       </View>
     </View>
   );
@@ -232,7 +159,7 @@ export default function v_0842da() {
 
   const v_61f339 = () => (
     <View className="flex-row mx-4 mb-3 gap-2">
-      {(["settlement", "history", "records"] as Tab[]).map((v_4abce2) => (
+      {(["settlement", "records"] as Tab[]).map((v_4abce2) => (
         <TouchableOpacity
           key={v_4abce2}
           onPress={() => v_94ee83(v_4abce2)}
@@ -245,9 +172,7 @@ export default function v_0842da() {
           >
             {v_4abce2 === "settlement"
               ? v_8d41d7("merchant.settlement.tabSummary")
-              : v_4abce2 === "history"
-                ? v_8d41d7("merchant.settlement.tabHistory")
-                : v_8d41d7("merchant.settlement.tabRecords")}
+              : v_8d41d7("merchant.settlement.tabRecords")}
           </Text>
         </TouchableOpacity>
       ))}
@@ -320,39 +245,6 @@ export default function v_0842da() {
             />
           )}
         </>
-      ) : v_11083e === "history" ? (
-        v_c2880b ? (
-          <View className="flex-1 items-center justify-center">
-            <ActivityIndicator size="large" color="#CE3630" />
-          </View>
-        ) : (
-          <FlatList
-            style={{ flex: 1 }}
-            data={v_09072d}
-            keyExtractor={(v_8c0b26) => v_8c0b26.id}
-            renderItem={v_5e3978}
-            contentContainerStyle={{ paddingBottom: 0 }}
-            onEndReached={() => {
-              if (!v_c2880b && v_02e02d) v_337eb3(v_d262dd + 1);
-            }}
-            onEndReachedThreshold={0.3}
-            onRefresh={() => {
-              v_3321fd(true);
-              v_337eb3(1, true);
-            }}
-            refreshing={v_854d14}
-            ListEmptyComponent={
-              <View className="flex-1 items-center justify-center py-20">
-                <Text className="text-muted-foreground">{v_8d41d7("merchant.settlement.emptyHistory")}</Text>
-              </View>
-            }
-            ListFooterComponent={
-              v_02e02d && v_09072d.length > 0 ? (
-                <ActivityIndicator size="small" color="#CE3630" style={{ paddingVertical: 8 }} />
-              ) : null
-            }
-          />
-        )
       ) : (
         <>
           {}
