@@ -407,6 +407,8 @@ export const zhHans: MessageTree = {
       sellOnMarketplace: "在二手市场出售",
       receiptCode: "收据代码",
       cancelRequest: "取消申请",
+      cancelRequestPendingLabel: "取消申请中",
+      cancelRequestPendingDesc: "您的取消申请已提交，正在审核中。",
     },
     cancelRequest: {
       title: "取消申请",
@@ -416,6 +418,7 @@ export const zhHans: MessageTree = {
       submitting: "提交中...",
       successTitle: "申请已提交",
       successBody: "您的取消申请已提交。",
+      receiptLabel: "收据号",
       errorTitle: "错误",
       errorBody: "请输入原因。",
       errorFail: "发生错误。",
@@ -642,5 +645,9 @@ export const zhHans: MessageTree = {
     notice4: "• 最低提现 10 USDT",
     processing: "处理中...",
     requestBtn: "申请提现",
+  },
+  common: {
+    confirm: "确认",
+    cancel: "取消",
   },
 };

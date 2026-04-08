@@ -19,6 +19,7 @@ export interface Voucher {
   brand_logo: string | null;
   set_id: string | null;
   receipt_code?: string;
+  cancel_request_pending?: boolean;
 }
 
 export type VoucherStatus =

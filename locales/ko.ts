@@ -407,6 +407,8 @@ export const ko: MessageTree = {
       sellOnMarketplace: "중고마켓에 판매",
       receiptCode: "영수증 코드",
       cancelRequest: "취소 요청",
+      cancelRequestPendingLabel: "취소요청중",
+      cancelRequestPendingDesc: "취소 요청이 접수되어 검토 중입니다.",
     },
     cancelRequest: {
       title: "취소 요청",
@@ -416,6 +418,7 @@ export const ko: MessageTree = {
       submitting: "제출 중...",
       successTitle: "요청 완료",
       successBody: "취소 요청이 접수되었습니다.",
+      receiptLabel: "영수증 번호",
       errorTitle: "오류",
       errorBody: "취소 사유를 입력해주세요.",
       errorFail: "요청 처리 중 오류가 발생했습니다.",
@@ -642,5 +645,9 @@ export const ko: MessageTree = {
     notice4: "• 최소 출금 금액: 10 USDT",
     processing: "처리 중...",
     requestBtn: "출금 요청",
+  },
+  common: {
+    confirm: "확인",
+    cancel: "취소",
   },
 };

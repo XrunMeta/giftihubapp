@@ -407,6 +407,8 @@ export const id: MessageTree = {
       sellOnMarketplace: "Jual di pasar",
       receiptCode: "Kode Tanda Terima",
       cancelRequest: "Permintaan Pembatalan",
+      cancelRequestPendingLabel: "Pembatalan Diproses",
+      cancelRequestPendingDesc: "Permintaan pembatalan Anda sedang ditinjau.",
     },
     cancelRequest: {
       title: "Permintaan Pembatalan",
@@ -416,6 +418,7 @@ export const id: MessageTree = {
       submitting: "Mengirim...",
       successTitle: "Permintaan Terkirim",
       successBody: "Permintaan pembatalan Anda telah dikirim.",
+      receiptLabel: "No. Tanda Terima",
       errorTitle: "Kesalahan",
       errorBody: "Masukkan alasan.",
       errorFail: "Terjadi kesalahan.",
@@ -642,5 +645,9 @@ export const id: MessageTree = {
     notice4: "• Minimum 10 USDT",
     processing: "Memproses...",
     requestBtn: "Minta penarikan",
+  },
+  common: {
+    confirm: "Konfirmasi",
+    cancel: "Batal",
   },
 };

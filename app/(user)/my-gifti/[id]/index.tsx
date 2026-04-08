@@ -28,6 +28,12 @@ const STATUS_META: Record<
     icon: CheckCircle,
     color: "#16a34a",
   },
+  cancel_request_pending: {
+    labelKey: "myGifti.detail.cancelRequestPendingLabel",
+    descKey: "myGifti.detail.cancelRequestPendingDesc",
+    icon: Clock,
+    color: "#d97706",
+  },
   listed: {
     labelKey: "myGifti.detail.listedLabel",
     descKey: "myGifti.detail.listedDesc",
@@ -129,7 +135,10 @@ export default function GiftiDetailScreen() {
   const isActive = voucher.status === "active";
   const barcodeWidth = screenWidth - 80;
   const imgUri = resolveImageUrl(voucher.thumb_url, voucher.image_url, voucher.brand_logo);
-  const statusMeta = STATUS_META[voucher.status];
+  const displayStatus = voucher.status === "used" && voucher.cancel_request_pending
+    ? "cancel_request_pending"
+    : voucher.status;
+  const statusMeta = STATUS_META[displayStatus];
   const statusInfo = statusMeta
     ? {
         label: t(statusMeta.labelKey),
@@ -232,10 +241,13 @@ export default function GiftiDetailScreen() {
           })()
         ) : null}
 
-        {voucher.status === "used" && (
+        {voucher.status === "used" && !voucher.cancel_request_pending && (
           <Pressable
             className="mt-4 flex-row items-center justify-center gap-2 bg-white border border-destructive rounded-xl py-3 px-4"
-            onPress={() => router.push(`/(user)/oth-path${voucher.id}/cancel-request` as any)}
+            onPress={() => router.push({
+              pathname: `/(user)/oth-path${voucher.id}/cancel-request` as any,
+              params: { receipt_code: voucher.receipt_code ?? '' },
+            })}
           >
             <XCircle size={16} color="#ef4444" />
             <Text className="text-sm font-medium text-destructive">

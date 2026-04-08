@@ -407,6 +407,8 @@ export const ja: MessageTree = {
       sellOnMarketplace: "中古で売る",
       receiptCode: "レシートコード",
       cancelRequest: "キャンセルリクエスト",
+      cancelRequestPendingLabel: "キャンセル申請中",
+      cancelRequestPendingDesc: "キャンセルリクエストを受け付け、審査中です。",
     },
     cancelRequest: {
       title: "キャンセルリクエスト",
@@ -416,6 +418,7 @@ export const ja: MessageTree = {
       submitting: "送信中...",
       successTitle: "リクエスト完了",
       successBody: "キャンセルリクエストを受け付けました。",
+      receiptLabel: "領収書番号",
       errorTitle: "エラー",
       errorBody: "理由を入力してください。",
       errorFail: "エラーが発生しました。",
@@ -642,5 +645,9 @@ export const ja: MessageTree = {
     notice4: "• 最小出金 10 USDT",
     processing: "処理中...",
     requestBtn: "出金リクエスト",
+  },
+  common: {
+    confirm: "確認",
+    cancel: "キャンセル",
   },
 };
