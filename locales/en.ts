@@ -186,6 +186,7 @@ export const en: v_8695c5 = {
       settlementFail: "Settlement request failed.",
       cancelDirect: "Cancel",
       cancelRequest: "Request Cancellation",
+      cancelRequestPending: "Customer cancellation request received (window expired)",
       cancelBtn: "Close",
       cancelReasonTitle: "Select reason",
       reasonCustomer: "Customer request",

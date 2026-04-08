@@ -456,7 +456,7 @@ export default function v_ca8e36() {
                 </View>
 
                 {}
-                {v_6f1aa4.status === "used" && (
+                {(v_6f1aa4.status === "used" || v_6f1aa4.status === "request_pending") && (
                   <View className="mt-5 gap-3">
                     {v_6f1aa4.cancelable ? (
                       <TouchableOpacity
@@ -472,7 +472,7 @@ export default function v_ca8e36() {
                           </Text>
                         )}
                       </TouchableOpacity>
-                    ) : (
+                    ) : v_6f1aa4.status === "used" ? (
                       <TouchableOpacity
                         onPress={() => v_b9c704(v_6f1aa4)}
                         disabled={v_bf3cca}
@@ -486,6 +486,12 @@ export default function v_ca8e36() {
                           </Text>
                         )}
                       </TouchableOpacity>
+                    ) : (
+                      <View className="border border-amber-300 bg-amber-50 rounded-xl py-4 items-center">
+                        <Text className="text-amber-700 font-medium text-sm">
+                          {v_8d41d7("merchant.history.cancelRequestPending")}
+                        </Text>
+                      </View>
                     )}
                   </View>
                 )}
