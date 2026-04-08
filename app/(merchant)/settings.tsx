@@ -1,22 +1,26 @@
 import { ScreenHeader } from "@/components/ScreenHeader";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
-import { useRouter } from "expo-router";
+import { apiFetch } from "@/services/api";
+import { resolveImageUrl } from "@/lib/image";
+import { useFocusEffect, useRouter } from "expo-router";
 import { ChevronRight, Globe, LogOut, Settings2 } from "lucide-react-native";
-import React from "react";
-import { Alert, Pressable, ScrollView, Text, View } from "react-native";
+import React, { useCallback, useState } from "react";
+import { Alert, Image, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+interface Brand { slug: string; name: string; logo_url: string | null }
 
 function MenuItem({ icon, label, onPress }: { icon: React.ReactNode; label: string; onPress: () => void }) {
   return (
-    <Pressable
-      onPress={onPress}
-      className="flex-row items-center px-4 py-4 bg-card active:bg-muted"
-    >
-      <View className="mr-3">{icon}</View>
-      <Text className="flex-1 text-sm text-foreground">{label}</Text>
-      <ChevronRight size={18} color="#9ca3af" />
+    <Pressable className="flex-row items-center justify-between px-4 py-6" onPress={onPress}>
+      <View className="flex-row items-center gap-3">
+        {icon}
+        <Text className="text-base text-foreground">{label}</Text>
+      </View>
+      <ChevronRight size={18} color="#737373" />
     </Pressable>
   );
 }
@@ -25,6 +29,15 @@ export default function MerchantSettingsScreen() {
   const { t } = useI18n();
   const { user, logout } = useAuth();
   const router = useRouter();
+  const [brands, setBrands] = useState<Brand[]>([]);
+
+  useFocusEffect(
+    useCallback(() => {
+      apiFetch<{ brands: Brand[] }>("/oth-path")
+        .then((d) => setBrands(d.brands))
+        .catch(() => {});
+    }, [])
+  );
 
   const handleLogout = () => {
     Alert.alert(t("merchant.mSettings.logoutTitle"), t("merchant.mSettings.logoutBody"), [
@@ -33,7 +46,7 @@ export default function MerchantSettingsScreen() {
         text: t("merchant.mSettings.logout"), onPress: async () => {
           await logout();
           router.replace("/(auth)/login");
-        }
+        },
       },
     ]);
   };
@@ -43,26 +56,58 @@ export default function MerchantSettingsScreen() {
       <ScreenHeader elevated title={t("merchant.mSettings.title")} />
       <ScrollView className="flex-1" contentContainerStyle={{ paddingBottom: 24 }}>
 
-        <View className="mx-4 mt-4 bg-card rounded-xl border border-border p-5 mb-6">
+        {}
+        <View className="mx-4 mt-4 bg-card rounded-xl border border-border p-5 mb-4">
           <Text className="text-lg font-bold text-foreground">{user?.name}</Text>
           {user?.email && <Text className="text-sm text-muted-foreground mt-0.5">{user.email}</Text>}
           <Text className="text-xs text-primary mt-1">{t("merchant.mSettings.merchantAccount")}</Text>
         </View>
 
+        {}
+        {brands.length > 0 && (
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            className="mb-4"
+            contentContainerStyle={{ paddingHorizontal: 16, gap: 12 }}
+          >
+            {brands.map((b) => (
+              <View key={b.slug} className="items-center gap-1.5" style={{ width: 72 }}>
+                <View className="w-14 h-14 rounded-xl bg-white border border-border items-center justify-center overflow-hidden">
+                  {b.logo_url ? (
+                    <Image
+                      source={{ uri: resolveImageUrl(b.logo_url) }}
+                      className="w-full h-full"
+                      resizeMode="contain"
+                    />
+                  ) : (
+                    <Text className="text-xl font-bold text-muted-foreground">
+                      {b.name.slice(0, 1)}
+                    </Text>
+                  )}
+                </View>
+                <Text className="text-xs text-foreground text-center" numberOfLines={2}>{b.name}</Text>
+              </View>
+            ))}
+          </ScrollView>
+        )}
+
+        {}
         <View className="mx-4 bg-card rounded-xl border border-border overflow-hidden mb-4">
           <MenuItem
-            icon={<Settings2 size={18} color="#6b7280" />}
+            icon={<Settings2 size={20} color="#737373" />}
             label={t("merchant.mSettings.settlementPolicy")}
             onPress={() => router.push("/(merchant)/settlement-policy")}
           />
-          <View className="h-px bg-border mx-4" />
+          <Separator />
           <MenuItem
-            icon={<Globe size={18} color="#6b7280" />}
+            icon={<Globe size={20} color="#737373" />}
             label={t("settings.language")}
             onPress={() => router.push("/(merchant)/language-settings")}
           />
         </View>
 
+        {}
         <View className="px-4 mt-2">
           <Button variant="outline" onPress={handleLogout} className="flex-row gap-2 bg-white">
             <LogOut size={18} color="#ef4444" />
