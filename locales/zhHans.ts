@@ -406,6 +406,19 @@ export const zhHans: MessageTree = {
       actionRefund: "退款",
       sellOnMarketplace: "在二手市场出售",
       receiptCode: "收据代码",
+      cancelRequest: "取消申请",
+    },
+    cancelRequest: {
+      title: "取消申请",
+      reasonLabel: "原因",
+      reasonPlaceholder: "请输入取消原因...",
+      submitBtn: "提交申请",
+      submitting: "提交中...",
+      successTitle: "申请已提交",
+      successBody: "您的取消申请已提交。",
+      errorTitle: "错误",
+      errorBody: "请输入原因。",
+      errorFail: "发生错误。",
     },
     setDetail: {
       title: "组合商品详情",
@@ -583,6 +596,12 @@ export const zhHans: MessageTree = {
     notice3: "• 可能收取手续费。",
     sending: "发送中...",
     submit: "发送礼品",
+  },
+  user: {
+    notifications: {
+      title: "通知",
+      empty: "暂无通知",
+    },
   },
   userSettlement: {
     title: "购买记录",

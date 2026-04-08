@@ -406,6 +406,19 @@ export const id: MessageTree = {
       actionRefund: "Refund",
       sellOnMarketplace: "Jual di pasar",
       receiptCode: "Kode Tanda Terima",
+      cancelRequest: "Permintaan Pembatalan",
+    },
+    cancelRequest: {
+      title: "Permintaan Pembatalan",
+      reasonLabel: "Alasan",
+      reasonPlaceholder: "Masukkan alasan pembatalan...",
+      submitBtn: "Kirim Permintaan",
+      submitting: "Mengirim...",
+      successTitle: "Permintaan Terkirim",
+      successBody: "Permintaan pembatalan Anda telah dikirim.",
+      errorTitle: "Kesalahan",
+      errorBody: "Masukkan alasan.",
+      errorFail: "Terjadi kesalahan.",
     },
     setDetail: {
       title: "Detail paket",
@@ -583,6 +596,12 @@ export const id: MessageTree = {
     notice3: "• Biaya mungkin berlaku.",
     sending: "Mengirim...",
     submit: "Kirim hadiah",
+  },
+  user: {
+    notifications: {
+      title: "Notifikasi",
+      empty: "Tidak ada notifikasi",
+    },
   },
   userSettlement: {
     title: "Riwayat pembelian",

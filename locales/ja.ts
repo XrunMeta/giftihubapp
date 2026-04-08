@@ -406,6 +406,19 @@ export const ja: MessageTree = {
       actionRefund: "返金",
       sellOnMarketplace: "中古で売る",
       receiptCode: "レシートコード",
+      cancelRequest: "キャンセルリクエスト",
+    },
+    cancelRequest: {
+      title: "キャンセルリクエスト",
+      reasonLabel: "理由",
+      reasonPlaceholder: "キャンセルの理由を入力してください...",
+      submitBtn: "リクエストを送信",
+      submitting: "送信中...",
+      successTitle: "リクエスト完了",
+      successBody: "キャンセルリクエストを受け付けました。",
+      errorTitle: "エラー",
+      errorBody: "理由を入力してください。",
+      errorFail: "エラーが発生しました。",
     },
     setDetail: {
       title: "セット商品の詳細",
@@ -583,6 +596,12 @@ export const ja: MessageTree = {
     notice3: "• 手数料がかかる場合があります。",
     sending: "送信中...",
     submit: "ギフトを送る",
+  },
+  user: {
+    notifications: {
+      title: "通知",
+      empty: "通知はありません",
+    },
   },
   userSettlement: {
     title: "購入履歴",
