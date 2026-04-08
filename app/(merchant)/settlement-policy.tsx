@@ -1,4 +1,4 @@
-import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
+import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_bc1b24 } from "tlrvzsbmctdavs";
 import { v_d1d90c } from "rkmroqyctko";
@@ -44,7 +44,7 @@ export default function v_117b6e() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
-      <ScreenHeader elevated title={v_8d41d7("merchant.mSettings.settlementPolicy")} />
+      <PageHeader title={v_8d41d7("merchant.mSettings.settlementPolicy")} />
       <ScrollView className="flex-1 px-4 pt-4" contentContainerStyle={{ paddingBottom: 24 }}>
         {v_683210 ? (
           <ActivityIndicator size="small" className="mt-8" />
