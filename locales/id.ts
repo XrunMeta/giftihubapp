@@ -186,6 +186,7 @@ export const id: MessageTree = {
       settlementFail: "Permintaan pembayaran gagal.",
       cancelDirect: "Batalkan",
       cancelRequest: "Minta Pembatalan",
+      cancelRequestPending: "Permintaan pembatalan pelanggan diterima (waktu habis)",
       cancelBtn: "Tutup",
       cancelReasonTitle: "Pilih alasan",
       reasonCustomer: "Permintaan pelanggan",

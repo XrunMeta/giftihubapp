@@ -186,6 +186,7 @@ export const ja: MessageTree = {
       settlementFail: "精算リクエストに失敗しました。",
       cancelDirect: "キャンセル",
       cancelRequest: "キャンセル申請",
+      cancelRequestPending: "顧客のキャンセル申請受付済み（時間超過）",
       cancelBtn: "閉じる",
       cancelReasonTitle: "理由を選択",
       reasonCustomer: "顧客の要望",

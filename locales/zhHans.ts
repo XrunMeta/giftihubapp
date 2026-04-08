@@ -186,6 +186,7 @@ export const zhHans: MessageTree = {
       settlementFail: "结算申请失败。",
       cancelDirect: "取消",
       cancelRequest: "申请取消",
+      cancelRequestPending: "已收到客户取消申请（超时）",
       cancelBtn: "关闭",
       cancelReasonTitle: "选择原因",
       reasonCustomer: "客户要求",

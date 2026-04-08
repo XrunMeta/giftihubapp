@@ -456,7 +456,7 @@ export default function MerchantHistoryScreen() {
                 </View>
 
                 {}
-                {modalItem.status === "used" && (
+                {(modalItem.status === "used" || modalItem.status === "request_pending") && (
                   <View className="mt-5 gap-3">
                     {modalItem.cancelable ? (
                       <TouchableOpacity
@@ -472,7 +472,7 @@ export default function MerchantHistoryScreen() {
                           </Text>
                         )}
                       </TouchableOpacity>
-                    ) : (
+                    ) : modalItem.status === "used" ? (
                       <TouchableOpacity
                         onPress={() => handleCancelRequest(modalItem)}
                         disabled={actionLoading}
@@ -486,6 +486,12 @@ export default function MerchantHistoryScreen() {
                           </Text>
                         )}
                       </TouchableOpacity>
+                    ) : (
+                      <View className="border border-amber-300 bg-amber-50 rounded-xl py-4 items-center">
+                        <Text className="text-amber-700 font-medium text-sm">
+                          {t("merchant.history.cancelRequestPending")}
+                        </Text>
+                      </View>
                     )}
                   </View>
                 )}

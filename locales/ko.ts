@@ -186,6 +186,7 @@ export const ko: MessageTree = {
       settlementFail: "정산 요청에 실패했습니다.",
       cancelDirect: "취소하기",
       cancelRequest: "취소 요청",
+      cancelRequestPending: "고객 취소 요청 접수됨 (취소 시간 초과)",
       cancelBtn: "닫기",
       cancelReasonTitle: "취소 사유 선택",
       reasonCustomer: "고객 요청",

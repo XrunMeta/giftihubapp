@@ -186,6 +186,7 @@ export const en: MessageTree = {
       settlementFail: "Settlement request failed.",
       cancelDirect: "Cancel",
       cancelRequest: "Request Cancellation",
+      cancelRequestPending: "Customer cancellation request received (window expired)",
       cancelBtn: "Close",
       cancelReasonTitle: "Select reason",
       reasonCustomer: "Customer request",
