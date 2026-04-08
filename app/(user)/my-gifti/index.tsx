@@ -32,9 +32,14 @@ const STATUS_BADGE_META: Record<string, { labelKey: string; variant: v_dcbdc2 }>
   used: { labelKey: "myGifti.list.statusUsed", variant: "secondary" },
   expired: { labelKey: "myGifti.list.statusExpired", variant: "destructive" },
   transferred: { labelKey: "myGifti.list.statusTransferred", variant: "success" },
+  cancel_request_pending: { labelKey: "myGifti.detail.cancelRequestPendingLabel", variant: "warning" },
 };
 
-function v_953c3c(v_8d41d7, v_d308b5) {
+function v_953c3c(v_8d41d7, v_d308b5, v_1573c8) {
+  if (v_d308b5 === "used" && v_1573c8) {
+    const v_35f85c = v_119921.cancel_request_pending;
+    return { label: v_8d41d7(v_35f85c.labelKey), variant: v_35f85c.variant };
+  }
   const v_35f85c = v_119921[v_d308b5] ?? v_119921.active;
   return { label: v_8d41d7(v_35f85c.labelKey), variant: v_35f85c.variant };
 }
@@ -190,7 +195,7 @@ export default function v_bf7b5b() {
   };
 
   const v_f8505d = ({ item: v_8c0b26 }: { item: v_7fb3de }) => {
-    const v_51452d = v_953c3c(v_8d41d7, v_8c0b26.status);
+    const v_51452d = v_953c3c(v_8d41d7, v_8c0b26.status, !!v_8c0b26.cancel_request_pending);
     const v_74f4a3 = v_7ef52a(v_8c0b26.thumb_url, v_8c0b26.image_url, v_8c0b26.brand_logo);
     return (
       <Pressable
