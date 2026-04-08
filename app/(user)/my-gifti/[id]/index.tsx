@@ -244,7 +244,7 @@ export default function v_b89029() {
 
         {v_3e4b5d.status === "used" && (
           v_3e4b5d.cancel_request_pending ? (
-            <View className="mt-4 flex-row items-center justify-center gap-2 bg-gray-100 border border-gray-300 rounded-xl py-3 px-4">
+            <View className="mt-4 mb-4 flex-row items-center justify-center gap-2 bg-gray-100 border border-gray-300 rounded-xl py-3 px-4">
               <Clock size={16} color="#d97706" />
               <Text className="text-sm font-medium text-amber-600">
                 {v_8d41d7('myGifti.detail.cancelRequestPendingLabel')}
