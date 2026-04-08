@@ -100,6 +100,7 @@ export const ko: MessageTree = {
   merchant: {
     tabs: {
       qrScan: "QR 스캔",
+      history: "사용이력",
       market: "중고마켓",
       myBundles: "보유상품",
       settlement: "정산",
@@ -166,6 +167,7 @@ export const ko: MessageTree = {
       policyMonthlyDesc: "지난달 내역만 정산",
       policyRequest: "요청 정산",
       policyRequestDesc: "내가 요청한 것만 정산",
+      notifications: "알림",
       logout: "로그아웃",
       logoutTitle: "로그아웃",
       logoutBody: "정말 로그아웃하시겠습니까?",

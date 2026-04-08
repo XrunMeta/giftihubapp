@@ -100,6 +100,7 @@ export const ja: MessageTree = {
   merchant: {
     tabs: {
       qrScan: "QRスキャン",
+      history: "利用履歴",
       market: "中古マーケット",
       myBundles: "保有商品",
       settlement: "精算",
@@ -166,6 +167,7 @@ export const ja: MessageTree = {
       policyMonthlyDesc: "前月分のみ",
       policyRequest: "依頼精算",
       policyRequestDesc: "依頼した分のみ",
+      notifications: "通知",
       logout: "ログアウト",
       logoutTitle: "ログアウト",
       logoutBody: "ログアウトしますか？",

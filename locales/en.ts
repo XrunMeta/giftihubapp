@@ -100,6 +100,7 @@ export const en: MessageTree = {
   merchant: {
     tabs: {
       qrScan: "QR scan",
+      history: "History",
       market: "Marketplace",
       myBundles: "Inventory",
       settlement: "Settlement",
@@ -166,6 +167,7 @@ export const en: MessageTree = {
       policyMonthlyDesc: "Previous month only",
       policyRequest: "On request",
       policyRequestDesc: "Only when you request",
+      notifications: "Notifications",
       logout: "Log out",
       logoutTitle: "Log out",
       logoutBody: "Log out now?",

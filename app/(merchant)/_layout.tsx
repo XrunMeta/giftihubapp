@@ -1,25 +1,9 @@
 import { useI18n } from "@/context/I18nContext";
-import { apiFetch } from "@/services/api";
 import { Tabs } from "expo-router";
-import { Bell, DollarSign, Package, QrCode, Settings, ShoppingBag } from "lucide-react-native";
-import { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { ClipboardList, DollarSign, Package, QrCode, Settings, ShoppingBag } from "lucide-react-native";
 
 export default function MerchantLayout() {
   const { t } = useI18n();
-  const [unreadCount, setUnreadCount] = useState(0);
-
-  useEffect(() => {
-    const fetchUnread = async () => {
-      try {
-        const data = await apiFetch<{ unread_count: number }>("/oth-path");
-        setUnreadCount(data.unread_count ?? 0);
-      } catch {}
-    };
-    fetchUnread();
-    const interval = setInterval(fetchUnread, 30000);
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <Tabs
@@ -38,6 +22,13 @@ export default function MerchantLayout() {
         options={{
           title: t("merchant.tabs.qrScan"),
           tabBarIcon: ({ color, size }) => <QrCode size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="history"
+        options={{
+          title: t("merchant.tabs.history"),
+          tabBarIcon: ({ color, size }) => <ClipboardList size={size} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -68,40 +59,9 @@ export default function MerchantLayout() {
           tabBarIcon: ({ color, size }) => <Settings size={size} color={color} />,
         }}
       />
-      <Tabs.Screen
-        name="notifications"
-        options={{
-          title: t("merchant.tabs.notifications"),
-          tabBarIcon: ({ color, size }) => (
-            <View>
-              <Bell size={size} color={color} />
-              {unreadCount > 0 && (
-                <View
-                  style={{
-                    position: "absolute",
-                    top: -4,
-                    right: -6,
-                    backgroundColor: "#ef4444",
-                    borderRadius: 8,
-                    minWidth: 16,
-                    height: 16,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    paddingHorizontal: 3,
-                  }}
-                >
-                  <Text style={{ color: "#fff", fontSize: 10, fontWeight: "bold" }}>
-                    {unreadCount > 99 ? "99+" : unreadCount}
-                  </Text>
-                </View>
-              )}
-            </View>
-          ),
-        }}
-      />
+      <Tabs.Screen name="notifications" options={{ href: null }} />
       <Tabs.Screen name="settlement-policy" options={{ href: null }} />
       <Tabs.Screen name="language-settings" options={{ href: null }} />
-      <Tabs.Screen name="history" options={{ href: null }} />
       <Tabs.Screen name="process" options={{ href: null }} />
       <Tabs.Screen name="process-complete" options={{ href: null }} />
       <Tabs.Screen name="record-payment" options={{ href: null }} />

@@ -6,7 +6,7 @@ import { useI18n } from "@/context/I18nContext";
 import { apiFetch } from "@/services/api";
 import { resolveImageUrl } from "@/lib/image";
 import { useFocusEffect, useRouter } from "expo-router";
-import { ChevronRight, Globe, LogOut, Settings2 } from "lucide-react-native";
+import { Bell, ChevronRight, Globe, LogOut, Settings2 } from "lucide-react-native";
 import React, { useCallback, useState } from "react";
 import { Alert, Image, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -104,6 +104,12 @@ export default function MerchantSettingsScreen() {
             icon={<Globe size={20} color="#737373" />}
             label={t("settings.language")}
             onPress={() => router.push("/(merchant)/language-settings")}
+          />
+          <Separator />
+          <MenuItem
+            icon={<Bell size={20} color="#737373" />}
+            label={t("merchant.mSettings.notifications")}
+            onPress={() => router.push("/(merchant)/notifications")}
           />
         </View>
 

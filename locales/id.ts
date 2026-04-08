@@ -100,6 +100,7 @@ export const id: MessageTree = {
   merchant: {
     tabs: {
       qrScan: "Pindai QR",
+      history: "Riwayat",
       market: "Pasar bekas",
       myBundles: "Stok",
       settlement: "Settlement",
@@ -166,6 +167,7 @@ export const id: MessageTree = {
       policyMonthlyDesc: "Bulan lalu saja",
       policyRequest: "Permintaan",
       policyRequestDesc: "Hanya saat Anda minta",
+      notifications: "Notifikasi",
       logout: "Keluar",
       logoutTitle: "Keluar",
       logoutBody: "Yakin ingin keluar?",
