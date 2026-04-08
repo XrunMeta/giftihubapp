@@ -99,6 +99,8 @@ export default function MerchantLayout() {
           ),
         }}
       />
+      <Tabs.Screen name="settlement-policy" options={{ href: null }} />
+      <Tabs.Screen name="language-settings" options={{ href: null }} />
       <Tabs.Screen name="history" options={{ href: null }} />
       <Tabs.Screen name="process" options={{ href: null }} />
       <Tabs.Screen name="process-complete" options={{ href: null }} />
