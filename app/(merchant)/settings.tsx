@@ -59,7 +59,7 @@ export default function MerchantSettingsScreen() {
           <MenuItem
             icon={<Globe size={18} color="#6b7280" />}
             label={t("settings.language")}
-            onPress={() => router.push("/(user)/settings")}
+            onPress={() => router.push("/(merchant)/language-settings")}
           />
         </View>
 

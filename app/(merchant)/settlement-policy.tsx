@@ -43,7 +43,7 @@ export default function SettlementPolicyScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
       <PageHeader title={t("merchant.mSettings.settlementPolicy")} />
       <ScrollView className="flex-1 px-4 pt-4" contentContainerStyle={{ paddingBottom: 24 }}>
         {loading ? (
