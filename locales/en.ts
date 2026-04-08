@@ -406,6 +406,19 @@ export const en: MessageTree = {
       actionRefund: "Refund",
       sellOnMarketplace: "Sell on marketplace",
       receiptCode: "Receipt Code",
+      cancelRequest: "Cancel Request",
+    },
+    cancelRequest: {
+      title: "Cancel Request",
+      reasonLabel: "Reason",
+      reasonPlaceholder: "Please enter the reason for cancellation...",
+      submitBtn: "Submit Request",
+      submitting: "Submitting...",
+      successTitle: "Request Submitted",
+      successBody: "Your cancellation request has been submitted.",
+      errorTitle: "Error",
+      errorBody: "Please enter a reason.",
+      errorFail: "An error occurred.",
     },
     setDetail: {
       title: "Bundle detail",
@@ -583,6 +596,12 @@ export const en: MessageTree = {
     notice3: "• A fee may apply.",
     sending: "Sending...",
     submit: "Send gift",
+  },
+  user: {
+    notifications: {
+      title: "Notifications",
+      empty: "No notifications",
+    },
   },
   userSettlement: {
     title: "Purchase history",

@@ -406,6 +406,19 @@ export const ko: MessageTree = {
       actionRefund: "환불",
       sellOnMarketplace: "중고마켓에 판매",
       receiptCode: "영수증 코드",
+      cancelRequest: "취소 요청",
+    },
+    cancelRequest: {
+      title: "취소 요청",
+      reasonLabel: "취소 사유",
+      reasonPlaceholder: "취소를 요청하는 사유를 입력해주세요...",
+      submitBtn: "취소 요청 제출",
+      submitting: "제출 중...",
+      successTitle: "요청 완료",
+      successBody: "취소 요청이 접수되었습니다.",
+      errorTitle: "오류",
+      errorBody: "취소 사유를 입력해주세요.",
+      errorFail: "요청 처리 중 오류가 발생했습니다.",
     },
     setDetail: {
       title: "구성상품 상세",
@@ -583,6 +596,12 @@ export const ko: MessageTree = {
     notice3: "• 수수료가 부과될 수 있습니다.",
     sending: "전송 중...",
     submit: "선물 보내기",
+  },
+  user: {
+    notifications: {
+      title: "알림",
+      empty: "알림이 없습니다",
+    },
   },
   userSettlement: {
     title: "구매 이력",
