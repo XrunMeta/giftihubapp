@@ -1,5 +1,6 @@
 import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
 import { v_6185b9 } from "hqklsidyfbumojabxoewf";
+import { v_c62079 } from "wjvlskvsbzsrojdbjsl";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
@@ -57,13 +58,20 @@ export default function v_9c78c5() {
           );
         })()}
         <View className="bg-card rounded-xl border border-border p-5 mt-3">
+          {v_a8fb42.set_id && (
+            <View className="flex-row items-center mb-3 gap-2 pb-3 border-b border-border">
+              <View className="w-8 h-8 rounded-lg bg-primary/10 items-center justify-center">
+                <Package size={18} color="#CE3630" />
+              </View>
+              <Text className="text-sm font-semibold text-primary flex-1">
+                {v_8d41d7("myGifti.list.bundleTitle").replace("{{count}}", String(v_a8fb42.set_count ?? ""))}
+              </Text>
+            </View>
+          )}
           <View className="flex-row justify-between items-start">
             <View className="flex-1">
               <Text className="text-xs text-muted-foreground">{v_a8fb42.brand}</Text>
               <Text className="text-xl font-bold text-foreground mt-1">{v_a8fb42.name}</Text>
-              {v_a8fb42.set_id && (
-                <Badge variant="secondary" label={v_8d41d7("myGifti.list.bundleTag")} className="mt-1.5 self-start" />
-              )}
             </View>
             {v_a8fb42.discount > 0 && (
               <Badge variant="destructive" label={`${v_a8fb42.discount}% OFF`} />
