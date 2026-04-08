@@ -1,4 +1,4 @@
-import { ScreenHeader } from "@/components/ScreenHeader";
+import { PageHeader } from "@/components/PageHeader";
 import { useI18n } from "@/context/I18nContext";
 import { apiFetch } from "@/services/api";
 import { useRouter } from "expo-router";
@@ -44,7 +44,7 @@ export default function SettlementPolicyScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
-      <ScreenHeader elevated title={t("merchant.mSettings.settlementPolicy")} />
+      <PageHeader title={t("merchant.mSettings.settlementPolicy")} />
       <ScrollView className="flex-1 px-4 pt-4" contentContainerStyle={{ paddingBottom: 24 }}>
         {loading ? (
           <ActivityIndicator size="small" className="mt-8" />
