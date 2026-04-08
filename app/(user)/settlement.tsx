@@ -1,4 +1,5 @@
 import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
+import { v_c62079 } from "wjvlskvsbzsrojdbjsl";
 
 const v_928ad6 = { KRW: "₩", USD: "$", IDR: "Rp" };
 function v_2396c3(v_f63e09, v_a832b3) {
@@ -56,15 +57,41 @@ export default function v_1a8c84() {
         <FlatList
           data={v_a73c06}
           keyExtractor={(v_8c0b26) => v_8c0b26.id}
-          renderItem={({ item: v_8c0b26 }) => (
-            <View className="mx-4 mb-2 bg-card rounded-lg border border-border p-3">
-              <View className="flex-row justify-between">
-                <Text className="text-sm font-medium text-foreground">{v_8c0b26.voucher_name || v_8c0b26.brand}</Text>
-                <Text className="text-sm font-bold text-foreground">{v_2396c3(v_8c0b26.amount, v_8c0b26.currency || v_8c0b26.base_currency)}</Text>
+          renderItem={({ item: v_8c0b26 }) => {
+            const v_ac12e8 = !!v_8c0b26.set_id;
+            const v_f9fd27 = v_8c0b26.set_vouchers ?? [];
+            if (v_ac12e8) {
+              return (
+                <View className="mx-4 mb-2 bg-card rounded-xl border border-primary/30 p-3">
+                  <View className="flex-row items-center gap-2 mb-2">
+                    <View className="w-7 h-7 rounded-lg bg-primary/10 items-center justify-center">
+                      <Package size={15} color="#CE3630" />
+                    </View>
+                    <Text className="text-sm font-semibold text-primary flex-1">
+                      {v_8d41d7("myGifti.list.bundleTitle").replace("{{count}}", String(v_8c0b26.set_count ?? v_f9fd27.length ?? ""))}
+                    </Text>
+                    <Text className="text-sm font-bold text-foreground">{v_2396c3(v_8c0b26.amount, v_8c0b26.currency)}</Text>
+                  </View>
+                  {v_f9fd27.map((v_81e2ef, v_ebec57) => (
+                    <View key={v_ebec57} className="flex-row justify-between py-1 border-t border-border">
+                      <Text className="text-xs text-muted-foreground flex-1" numberOfLines={1}>{v_81e2ef.brand} · {v_81e2ef.name}</Text>
+                      <Text className="text-xs text-muted-foreground">{v_2396c3(v_81e2ef.face_value_base || v_81e2ef.face_value, v_81e2ef.base_currency)}</Text>
+                    </View>
+                  ))}
+                  <Text className="text-xs text-muted-foreground mt-1">{v_8c0b26.payment_method}</Text>
+                </View>
+              );
+            }
+            return (
+              <View className="mx-4 mb-2 bg-card rounded-lg border border-border p-3">
+                <View className="flex-row justify-between">
+                  <Text className="text-sm font-medium text-foreground">{v_8c0b26.voucher_name || v_8c0b26.brand}</Text>
+                  <Text className="text-sm font-bold text-foreground">{v_2396c3(v_8c0b26.amount, v_8c0b26.currency || v_8c0b26.base_currency)}</Text>
+                </View>
+                <Text className="text-xs text-muted-foreground mt-1">{v_8c0b26.payment_method}</Text>
               </View>
-              <Text className="text-xs text-muted-foreground mt-1">{v_8c0b26.payment_method}</Text>
-            </View>
-          )}
+            );
+          }}
           ListEmptyComponent={
             <View className="items-center py-20">
               <Text className="text-muted-foreground">{v_8d41d7("userSettlement.empty")}</Text>
