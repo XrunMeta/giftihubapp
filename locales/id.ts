@@ -221,6 +221,7 @@ export const id: MessageTree = {
       expiry: "Kadaluarsa",
       seller: "Penjual",
       purchase: "Beli",
+      includedItems: "Produk Termasuk",
     },
     marketPurchase: {
       title: "Pembayaran",

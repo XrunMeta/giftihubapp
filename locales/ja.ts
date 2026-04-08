@@ -221,6 +221,7 @@ export const ja: MessageTree = {
       expiry: "有効期限",
       seller: "販売者",
       purchase: "購入する",
+      includedItems: "含まれる商品",
     },
     marketPurchase: {
       title: "決済",

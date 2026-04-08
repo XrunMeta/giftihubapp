@@ -221,6 +221,7 @@ export const en: MessageTree = {
       expiry: "Expires",
       seller: "Seller",
       purchase: "Buy",
+      includedItems: "Included Items",
     },
     marketPurchase: {
       title: "Payment",

@@ -320,6 +320,7 @@ export const ko: MessageTree = {
       expiry: "만료일",
       seller: "판매자",
       purchase: "구매하기",
+      includedItems: "포함 상품",
     },
     purchase: {
       title: "중고 구매 결제",

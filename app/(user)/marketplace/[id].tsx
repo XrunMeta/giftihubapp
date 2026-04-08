@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useI18n } from "@/context/I18nContext";
 import { resolveImageUrl } from "@/lib/image";
-import { getListingDetail, type MarketplaceListing } from "@/services/marketplace";
+import { getListingDetail, type MarketplaceListing, type SetVoucher } from "@/services/marketplace";
 import { format } from "date-fns";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -17,6 +17,7 @@ export default function MarketplaceDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const [listing, setListing] = useState<MarketplaceListing | null>(null);
+  const [setVouchers, setSetVouchers] = useState<SetVoucher[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -27,6 +28,7 @@ export default function MarketplaceDetailScreen() {
     try {
       const res = await getListingDetail(id!);
       setListing(res.listing);
+      setSetVouchers(res.set_vouchers ?? []);
     } catch {
       Alert.alert(t("userMarketplace.detail.loadErrorTitle"), t("userMarketplace.detail.loadErrorBody"));
       router.back();
@@ -105,6 +107,27 @@ export default function MarketplaceDetailScreen() {
             </View>
           </View>
         </View>
+
+        {setVouchers.length > 0 && (
+          <View className="bg-card rounded-xl border border-border p-4 mt-3">
+            <Text className="text-sm font-semibold text-foreground mb-2">
+              {t("userMarketplace.detail.includedItems")}
+            </Text>
+            {setVouchers.map((v, i) => {
+              const sym = { KRW: "₩", USD: "$", IDR: "Rp" }[v.base_currency] ?? "₩";
+              const price = v.face_value_base || v.face_value;
+              return (
+                <View key={i} className="flex-row justify-between items-center py-1.5 border-b border-border last:border-b-0">
+                  <View className="flex-1 mr-2">
+                    <Text className="text-xs text-muted-foreground">{v.brand}</Text>
+                    <Text className="text-sm text-foreground" numberOfLines={1}>{v.name}</Text>
+                  </View>
+                  <Text className="text-sm font-medium text-foreground">{sym}{price.toLocaleString()}</Text>
+                </View>
+              );
+            })}
+          </View>
+        )}
       </ScrollView>
 
       <View className="px-5 py-3 border-t border-border bg-white">
