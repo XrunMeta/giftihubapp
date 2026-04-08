@@ -216,6 +216,16 @@ export default function v_b89029() {
                   {v_db3cc6(new Date(v_3e4b5d.updated_at * 1000), "yyyy.MM.dd HH:mm")}
                 </Text>
               ) : null}
+              {v_3e4b5d.status === "used" && v_3e4b5d.receipt_code && (
+                <View className="mt-3 p-3 bg-white rounded-lg border border-border">
+                  <Text className="text-xs text-muted-foreground mb-1">
+                    {v_8d41d7("myGifti.detail.receiptCode")}
+                  </Text>
+                  <Text className="text-base font-mono tracking-wider text-foreground">
+                    {v_3e4b5d.receipt_code}
+                  </Text>
+                </View>
+              )}
             </View>
           </View>
             );

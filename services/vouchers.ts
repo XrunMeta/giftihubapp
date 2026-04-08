@@ -18,6 +18,7 @@ export interface Voucher {
   thumb_url: string | null;
   brand_logo: string | null;
   set_id: string | null;
+  receipt_code?: string;
 }
 
 export type VoucherStatus =
