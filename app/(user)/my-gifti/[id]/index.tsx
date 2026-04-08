@@ -28,6 +28,12 @@ const STATUS_META: Record<
     icon: v_24c64e,
     color: "#16a34a",
   },
+  cancel_request_pending: {
+    labelKey: "myGifti.detail.cancelRequestPendingLabel",
+    descKey: "myGifti.detail.cancelRequestPendingDesc",
+    icon: v_20f6a6,
+    color: "#d97706",
+  },
   listed: {
     labelKey: "myGifti.detail.listedLabel",
     descKey: "myGifti.detail.listedDesc",
@@ -129,7 +135,10 @@ export default function v_b89029() {
   const v_26dce6 = v_3e4b5d.status === "active";
   const v_2d5007 = v_bcfa24 - 80;
   const v_74f4a3 = v_7ef52a(v_3e4b5d.thumb_url, v_3e4b5d.image_url, v_3e4b5d.brand_logo);
-  const v_7a8d0e = v_265f62[v_3e4b5d.status];
+  const v_a71fdc = v_3e4b5d.status === "used" && v_3e4b5d.cancel_request_pending
+    ? "cancel_request_pending"
+    : v_3e4b5d.status;
+  const v_7a8d0e = v_265f62[v_a71fdc];
   const v_866c46 = v_7a8d0e
     ? {
         label: v_8d41d7(v_7a8d0e.labelKey),
@@ -232,10 +241,13 @@ export default function v_b89029() {
           })()
         ) : null}
 
-        {v_3e4b5d.status === "used" && (
+        {v_3e4b5d.status === "used" && !v_3e4b5d.cancel_request_pending && (
           <Pressable
             className="mt-4 flex-row items-center justify-center gap-2 bg-white border border-destructive rounded-xl py-3 px-4"
-            onPress={() => v_904d46.push(`/(user)/oth-path${v_3e4b5d.id}/cancel-request` as any)}
+            onPress={() => v_904d46.push({
+              pathname: `/(user)/oth-path${v_3e4b5d.id}/cancel-request` as any,
+              params: { receipt_code: v_3e4b5d.receipt_code ?? '' },
+            })}
           >
             <XCircle size={16} color="#ef4444" />
             <Text className="text-sm font-medium text-destructive">
