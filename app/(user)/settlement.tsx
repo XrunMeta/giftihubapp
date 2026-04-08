@@ -1,4 +1,10 @@
 import { PageHeader } from "@/components/PageHeader";
+
+const SYM: Record<string, string> = { KRW: "₩", USD: "$", IDR: "Rp" };
+function fmtAmount(amount: number, currency?: string) {
+  const sym = SYM[currency ?? "KRW"] ?? "";
+  return `${sym}${amount?.toLocaleString() ?? 0}`;
+}
 import { ScrollableTabs } from "@/components/ui/scrollable-tabs";
 import { useI18n } from "@/context/I18nContext";
 import { getPurchases } from "@/services/account";
@@ -54,7 +60,7 @@ export default function SettlementScreen() {
             <View className="mx-4 mb-2 bg-card rounded-lg border border-border p-3">
               <View className="flex-row justify-between">
                 <Text className="text-sm font-medium text-foreground">{item.voucher_name || item.brand}</Text>
-                <Text className="text-sm font-bold text-foreground">₩{item.amount?.toLocaleString()}</Text>
+                <Text className="text-sm font-bold text-foreground">{fmtAmount(item.amount, item.currency || item.base_currency)}</Text>
               </View>
               <Text className="text-xs text-muted-foreground mt-1">{item.payment_method}</Text>
             </View>

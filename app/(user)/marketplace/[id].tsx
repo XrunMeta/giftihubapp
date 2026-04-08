@@ -61,6 +61,9 @@ export default function MarketplaceDetailScreen() {
             <View className="flex-1">
               <Text className="text-xs text-muted-foreground">{listing.brand}</Text>
               <Text className="text-xl font-bold text-foreground mt-1">{listing.name}</Text>
+              {listing.set_id && (
+                <Badge variant="secondary" label={t("myGifti.list.bundleTag")} className="mt-1.5 self-start" />
+              )}
             </View>
             {listing.discount > 0 && (
               <Badge variant="destructive" label={`${listing.discount}% OFF`} />
