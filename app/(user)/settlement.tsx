@@ -35,10 +35,12 @@ export default function SettlementScreen() {
     setLoading(true);
     try {
       const source = activeTab === "all" ? undefined : activeTab;
+      console.log("[settlement] loading, source=", source);
       const res = await getPurchases({ source: source as any });
+      console.log("[settlement] res=", JSON.stringify(res));
       setPurchases((res as any).purchases || []);
-    } catch {
-
+    } catch (e) {
+      console.error("[settlement] error:", e);
     } finally {
       setLoading(false);
     }
@@ -70,7 +72,7 @@ export default function SettlementScreen() {
                     <Text className="text-sm font-semibold text-primary flex-1">
                       {t("myGifti.list.bundleTitle").replace("{{count}}", String(item.set_count ?? vouchers.length ?? ""))}
                     </Text>
-                    <Text className="text-sm font-bold text-foreground">{fmtAmount(item.amount, item.currency)}</Text>
+                    <Text className="text-sm font-bold text-foreground">{fmtAmount(item.set_total_amount ?? item.amount, item.set_currency || item.currency || item.base_currency)}</Text>
                   </View>
                   {vouchers.map((v: any, i: number) => (
                     <View key={i} className="flex-row justify-between py-1 border-t border-border">
