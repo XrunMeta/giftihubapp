@@ -1,5 +1,6 @@
 import { PageHeader } from "@/components/PageHeader";
 import { Badge } from "@/components/ui/badge";
+import { Package } from "lucide-react-native";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useI18n } from "@/context/I18nContext";
@@ -57,13 +58,20 @@ export default function MarketplaceDetailScreen() {
           );
         })()}
         <View className="bg-card rounded-xl border border-border p-5 mt-3">
+          {listing.set_id && (
+            <View className="flex-row items-center mb-3 gap-2 pb-3 border-b border-border">
+              <View className="w-8 h-8 rounded-lg bg-primary/10 items-center justify-center">
+                <Package size={18} color="#CE3630" />
+              </View>
+              <Text className="text-sm font-semibold text-primary flex-1">
+                {t("myGifti.list.bundleTitle").replace("{{count}}", String(listing.set_count ?? ""))}
+              </Text>
+            </View>
+          )}
           <View className="flex-row justify-between items-start">
             <View className="flex-1">
               <Text className="text-xs text-muted-foreground">{listing.brand}</Text>
               <Text className="text-xl font-bold text-foreground mt-1">{listing.name}</Text>
-              {listing.set_id && (
-                <Badge variant="secondary" label={t("myGifti.list.bundleTag")} className="mt-1.5 self-start" />
-              )}
             </View>
             {listing.discount > 0 && (
               <Badge variant="destructive" label={`${listing.discount}% OFF`} />
