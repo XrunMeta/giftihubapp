@@ -100,6 +100,7 @@ export const en: v_8695c5 = {
   merchant: {
     tabs: {
       qrScan: "QR scan",
+      history: "History",
       market: "Marketplace",
       myBundles: "Inventory",
       settlement: "Settlement",
@@ -166,6 +167,7 @@ export const en: v_8695c5 = {
       policyMonthlyDesc: "Previous month only",
       policyRequest: "On request",
       policyRequestDesc: "Only when you request",
+      notifications: "Notifications",
       logout: "Log out",
       logoutTitle: "Log out",
       logoutBody: "Log out now?",

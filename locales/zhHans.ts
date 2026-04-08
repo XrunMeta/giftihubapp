@@ -100,6 +100,7 @@ export const zhHans: v_8695c5 = {
   merchant: {
     tabs: {
       qrScan: "扫码",
+      history: "使用记录",
       market: "二手市场",
       myBundles: "持有商品",
       settlement: "结算",
@@ -166,6 +167,7 @@ export const zhHans: v_8695c5 = {
       policyMonthlyDesc: "仅上月账单",
       policyRequest: "申请结算",
       policyRequestDesc: "仅处理您的申请",
+      notifications: "通知",
       logout: "退出登录",
       logoutTitle: "退出登录",
       logoutBody: "确定要退出吗？",

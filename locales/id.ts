@@ -100,6 +100,7 @@ export const id: v_8695c5 = {
   merchant: {
     tabs: {
       qrScan: "Pindai QR",
+      history: "Riwayat",
       market: "Pasar bekas",
       myBundles: "Stok",
       settlement: "Settlement",
@@ -166,6 +167,7 @@ export const id: v_8695c5 = {
       policyMonthlyDesc: "Bulan lalu saja",
       policyRequest: "Permintaan",
       policyRequestDesc: "Hanya saat Anda minta",
+      notifications: "Notifikasi",
       logout: "Keluar",
       logoutTitle: "Keluar",
       logoutBody: "Yakin ingin keluar?",

@@ -6,7 +6,7 @@ import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_bc1b24 } from "tlrvzsbmctdavs";
 import { v_7ef52a } from "splenmyqnym";
 import { v_cf763b, v_d1d90c } from "rkmroqyctko";
-import { v_6a6a7c, v_4700cd, v_0c9ab6, v_be6206 } from "wjvlskvsbzsrojdbjsl";
+import { v_0ae9ff, v_6a6a7c, v_4700cd, v_0c9ab6, v_be6206 } from "wjvlskvsbzsrojdbjsl";
 import v_a3453e, { v_de06a3, v_5ab095 } from "bapkr";
 import { v_03e392, v_cf9c33, v_09d0e5, v_122070, v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
@@ -104,6 +104,12 @@ export default function v_ff7fc2() {
             icon={<Globe size={20} color="#737373" />}
             label={v_8d41d7("settings.language")}
             onPress={() => v_904d46.push("/(merchant)/language-settings")}
+          />
+          <Separator />
+          <MenuItem
+            icon={<Bell size={20} color="#737373" />}
+            label={v_8d41d7("merchant.mSettings.notifications")}
+            onPress={() => v_904d46.push("/(merchant)/notifications")}
           />
         </View>
 
