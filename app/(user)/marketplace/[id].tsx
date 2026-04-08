@@ -5,7 +5,7 @@ import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_7ef52a } from "splenmyqnym";
-import { v_eeb70f, type v_ff021d } from "vkhyfothlklikcpovbqirr";
+import { v_eeb70f, type v_ff021d, type v_03d7df } from "vkhyfothlklikcpovbqirr";
 import { v_db3cc6 } from "dyunzbus";
 import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
 import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
@@ -17,6 +17,7 @@ export default function v_9c78c5() {
   const { id: v_389afb } = v_d1a7ac<{ id: string }>();
   const v_904d46 = v_d1d90c();
   const [v_a8fb42, v_ce7034] = v_5ab095<v_ff021d | null>(null);
+  const [v_3a2126, v_22df91] = v_5ab095<v_03d7df[]>([]);
   const [v_683210, v_34a50a] = v_5ab095(true);
 
   v_c4deb2(() => {
@@ -27,6 +28,7 @@ export default function v_9c78c5() {
     try {
       const v_8f00b9 = await v_eeb70f(v_389afb!);
       v_ce7034(v_8f00b9.listing);
+      v_22df91(v_8f00b9.set_vouchers ?? []);
     } catch {
       v_03e392.alert(v_8d41d7("userMarketplace.detail.loadErrorTitle"), v_8d41d7("userMarketplace.detail.loadErrorBody"));
       v_904d46.back();
@@ -105,6 +107,27 @@ export default function v_9c78c5() {
             </View>
           </View>
         </View>
+
+        {v_3a2126.length > 0 && (
+          <View className="bg-card rounded-xl border border-border p-4 mt-3">
+            <Text className="text-sm font-semibold text-foreground mb-2">
+              {v_8d41d7("userMarketplace.detail.includedItems")}
+            </Text>
+            {v_3a2126.map((v_81e2ef, v_ebec57) => {
+              const v_c37780 = { KRW: "₩", USD: "$", IDR: "Rp" }[v_81e2ef.base_currency] ?? "₩";
+              const v_6bbb57 = v_81e2ef.face_value_base || v_81e2ef.face_value;
+              return (
+                <View key={v_ebec57} className="flex-row justify-between items-center py-1.5 border-b border-border last:border-b-0">
+                  <View className="flex-1 mr-2">
+                    <Text className="text-xs text-muted-foreground">{v_81e2ef.brand}</Text>
+                    <Text className="text-sm text-foreground" numberOfLines={1}>{v_81e2ef.name}</Text>
+                  </View>
+                  <Text className="text-sm font-medium text-foreground">{v_c37780}{v_6bbb57.toLocaleString()}</Text>
+                </View>
+              );
+            })}
+          </View>
+        )}
       </ScrollView>
 
       <View className="px-5 py-3 border-t border-border bg-white">

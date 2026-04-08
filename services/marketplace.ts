@@ -47,9 +47,17 @@ export async function v_113fd3(
   });
 }
 
+export interface SetVoucher {
+  brand: string;
+  name: string;
+  face_value: number;
+  face_value_base: number;
+  base_currency: string;
+}
+
 export async function v_eeb70f(
   v_389afb,
-): Promise<{ listing: MarketplaceListing }> {
+): Promise<{ listing: MarketplaceListing; set_vouchers: SetVoucher[] }> {
   return v_bc1b24(`/oth-path${v_389afb}`, { skipAuth: true });
 }
 

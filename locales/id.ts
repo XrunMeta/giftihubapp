@@ -221,6 +221,7 @@ export const id: v_8695c5 = {
       expiry: "Kadaluarsa",
       seller: "Penjual",
       purchase: "Beli",
+      includedItems: "Produk Termasuk",
     },
     marketPurchase: {
       title: "Pembayaran",

@@ -221,6 +221,7 @@ export const zhHans: v_8695c5 = {
       expiry: "到期日",
       seller: "卖家",
       purchase: "购买",
+      includedItems: "包含商品",
     },
     marketPurchase: {
       title: "支付",

@@ -221,6 +221,7 @@ export const en: v_8695c5 = {
       expiry: "Expires",
       seller: "Seller",
       purchase: "Buy",
+      includedItems: "Included Items",
     },
     marketPurchase: {
       title: "Payment",
