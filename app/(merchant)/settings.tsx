@@ -59,7 +59,7 @@ export default function v_ff7fc2() {
           <MenuItem
             icon={<Globe size={18} color="#6b7280" />}
             label={v_8d41d7("settings.language")}
-            onPress={() => v_904d46.push("/(user)/settings")}
+            onPress={() => v_904d46.push("/(merchant)/language-settings")}
           />
         </View>
 

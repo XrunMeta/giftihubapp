@@ -43,7 +43,7 @@ export default function v_117b6e() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50" edges={[]}>
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
       <PageHeader title={v_8d41d7("merchant.mSettings.settlementPolicy")} />
       <ScrollView className="flex-1 px-4 pt-4" contentContainerStyle={{ paddingBottom: 24 }}>
         {v_683210 ? (
