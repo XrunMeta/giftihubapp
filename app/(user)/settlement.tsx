@@ -35,10 +35,12 @@ export default function v_1a8c84() {
     v_34a50a(true);
     try {
       const v_04e790 = v_ac1d22 === "all" ? undefined : v_ac1d22;
+      console.log("[settlement] loading, source=", v_04e790);
       const v_8f00b9 = await v_a4ddab({ source: v_04e790 as any });
+      console.log("[settlement] res=", JSON.stringify(v_8f00b9));
       v_592b07((v_8f00b9 as any).purchases || []);
-    } catch {
-
+    } catch (v_9e86fd) {
+      console.error("[settlement] error:", v_9e86fd);
     } finally {
       v_34a50a(false);
     }
@@ -70,7 +72,7 @@ export default function v_1a8c84() {
                     <Text className="text-sm font-semibold text-primary flex-1">
                       {v_8d41d7("myGifti.list.bundleTitle").replace("{{count}}", String(v_8c0b26.set_count ?? v_f9fd27.length ?? ""))}
                     </Text>
-                    <Text className="text-sm font-bold text-foreground">{v_2396c3(v_8c0b26.amount, v_8c0b26.currency)}</Text>
+                    <Text className="text-sm font-bold text-foreground">{v_2396c3(v_8c0b26.set_total_amount ?? v_8c0b26.amount, v_8c0b26.set_currency || v_8c0b26.currency || v_8c0b26.base_currency)}</Text>
                   </View>
                   {v_f9fd27.map((v_81e2ef, v_ebec57) => (
                     <View key={v_ebec57} className="flex-row justify-between py-1 border-t border-border">
