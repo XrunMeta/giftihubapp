@@ -187,6 +187,7 @@ export const zhHans: MessageTree = {
       cancelDirect: "取消",
       cancelRequest: "申请取消",
       cancelRequestPending: "已收到客户取消申请（超时）",
+      cancelMemoPlaceholder: "备注（可选）",
       cancelBtn: "关闭",
       cancelReasonTitle: "选择原因",
       reasonCustomer: "客户要求",

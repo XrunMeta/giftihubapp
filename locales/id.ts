@@ -187,6 +187,7 @@ export const id: MessageTree = {
       cancelDirect: "Batalkan",
       cancelRequest: "Minta Pembatalan",
       cancelRequestPending: "Permintaan pembatalan pelanggan diterima (waktu habis)",
+      cancelMemoPlaceholder: "Memo (opsional)",
       cancelBtn: "Tutup",
       cancelReasonTitle: "Pilih alasan",
       reasonCustomer: "Permintaan pelanggan",
