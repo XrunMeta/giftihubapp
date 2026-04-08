@@ -187,6 +187,7 @@ export const ja: v_8695c5 = {
       cancelDirect: "キャンセル",
       cancelRequest: "キャンセル申請",
       cancelRequestPending: "顧客のキャンセル申請受付済み（時間超過）",
+      cancelMemoPlaceholder: "メモ（任意）",
       cancelBtn: "閉じる",
       cancelReasonTitle: "理由を選択",
       reasonCustomer: "顧客の要望",

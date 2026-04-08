@@ -187,6 +187,7 @@ export const ko: v_8695c5 = {
       cancelDirect: "취소하기",
       cancelRequest: "취소 요청",
       cancelRequestPending: "고객 취소 요청 접수됨 (취소 시간 초과)",
+      cancelMemoPlaceholder: "메모 (선택사항)",
       cancelBtn: "닫기",
       cancelReasonTitle: "취소 사유 선택",
       reasonCustomer: "고객 요청",

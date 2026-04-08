@@ -187,6 +187,7 @@ export const en: v_8695c5 = {
       cancelDirect: "Cancel",
       cancelRequest: "Request Cancellation",
       cancelRequestPending: "Customer cancellation request received (window expired)",
+      cancelMemoPlaceholder: "Memo (optional)",
       cancelBtn: "Close",
       cancelReasonTitle: "Select reason",
       reasonCustomer: "Customer request",

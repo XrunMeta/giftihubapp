@@ -187,6 +187,7 @@ export const id: v_8695c5 = {
       cancelDirect: "Batalkan",
       cancelRequest: "Minta Pembatalan",
       cancelRequestPending: "Permintaan pembatalan pelanggan diterima (waktu habis)",
+      cancelMemoPlaceholder: "Memo (opsional)",
       cancelBtn: "Tutup",
       cancelReasonTitle: "Pilih alasan",
       reasonCustomer: "Permintaan pelanggan",
