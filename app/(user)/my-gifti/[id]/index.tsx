@@ -216,6 +216,16 @@ export default function GiftiDetailScreen() {
                   {format(new Date(voucher.updated_at * 1000), "yyyy.MM.dd HH:mm")}
                 </Text>
               ) : null}
+              {voucher.status === "used" && voucher.receipt_code && (
+                <View className="mt-3 p-3 bg-white rounded-lg border border-border">
+                  <Text className="text-xs text-muted-foreground mb-1">
+                    {t("myGifti.detail.receiptCode")}
+                  </Text>
+                  <Text className="text-base font-mono tracking-wider text-foreground">
+                    {voucher.receipt_code}
+                  </Text>
+                </View>
+              )}
             </View>
           </View>
             );
