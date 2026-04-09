@@ -54,3 +54,13 @@
         --ring: #E8504A;
     }
 }
+
+@layer utilities {
+    .bg-card {
+        background-color: #ffffff;
+    }
+
+    .dark .bg-card {
+        background-color: #171717;
+    }
+}

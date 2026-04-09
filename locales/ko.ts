@@ -261,6 +261,7 @@ export const ko: MessageTree = {
       voucherUsed: "사용완료",
       voucherExpired: "만료",
       voucherListed: "판매중",
+      requestedAt: "요청일시",
       purchasePrice: "구매가",
       fee: "수수료",
       payout: "지급액",

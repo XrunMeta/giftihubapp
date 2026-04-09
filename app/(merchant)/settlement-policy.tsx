@@ -24,7 +24,7 @@ export default function SettlementPolicyScreen() {
   useEffect(() => {
     apiFetch<{ settlement_policy: string }>("/oth-path")
       .then((data) => setPolicy(data.settlement_policy as SettlementPolicy))
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setLoading(false));
   }, []);
 
@@ -36,7 +36,7 @@ export default function SettlementPolicyScreen() {
         method: "PATCH",
         body: JSON.stringify({ settlement_policy: p }),
       });
-      router.back();
+      router.navigate("/(merchant)/settings");
     } catch {
       setPolicy(prev);
     }
@@ -44,7 +44,10 @@ export default function SettlementPolicyScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
-      <PageHeader title={t("merchant.mSettings.settlementPolicy")} />
+      <PageHeader
+        title={t("merchant.mSettings.settlementPolicy")}
+        onBackPress={() => router.navigate("/(merchant)/settings")}
+      />
       <ScrollView className="flex-1 px-4 pt-4" contentContainerStyle={{ paddingBottom: 24 }}>
         {loading ? (
           <ActivityIndicator size="small" className="mt-8" />
@@ -60,10 +63,10 @@ export default function SettlementPolicyScreen() {
                     onPress={() => changePolicy(opt.key)}
                   >
                     <View className="flex-1 mr-3">
-                      <Text className={`text-sm font-medium ${selected ? "text-primary" : "text-foreground"}`}>
+                      <Text className={`text-md font-medium ${selected ? "text-primary" : "text-foreground"}`}>
                         {t(opt.labelKey)}
                       </Text>
-                      <Text className="text-xs text-muted-foreground mt-0.5">{t(opt.descKey)}</Text>
+                      <Text className="text-sm text-muted-foreground mt-0.5">{t(opt.descKey)}</Text>
                     </View>
                     {selected ? <Check size={20} color="#CE3630" /> : null}
                   </Pressable>

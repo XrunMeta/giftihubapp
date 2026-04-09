@@ -1,4 +1,7 @@
 import { ScreenHeader } from "@/components/ScreenHeader";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
 import { useI18n } from "@/context/I18nContext";
 import { apiFetch } from "@/services/api";
 import { format } from "date-fns";
@@ -9,7 +12,6 @@ import {
   FlatList,
   Modal,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -245,17 +247,10 @@ export default function MerchantHistoryScreen() {
       >
         <View className="flex-row items-center gap-3">
           {}
-          <TouchableOpacity
+          <Checkbox
+            checked={isChecked}
             onPress={() => toggleSelect(item.transaction_id)}
-            className={`w-5 h-5 rounded border-2 items-center justify-center ${
-              isChecked ? "bg-primary border-primary" : "border-border bg-white"
-            }`}
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-          >
-            {isChecked && (
-              <Text className="text-white text-xs font-bold">✓</Text>
-            )}
-          </TouchableOpacity>
+          />
 
           <View className="flex-1">
             <View className="flex-row justify-between items-start">
@@ -301,9 +296,9 @@ export default function MerchantHistoryScreen() {
       <ScreenHeader elevated title={t("merchant.history.title")} />
 
       {}
-      <View className="flex-row mx-4 mt-3 mb-2 gap-2">
-        <TextInput
-          className="flex-1 bg-card border border-border rounded-lg px-3 py-2.5 text-sm text-foreground"
+      <View className="flex-row mx-4 mb-2 gap-2">
+        <Input
+          className="flex-1 bg-card"
           placeholder={t("merchant.history.codeSuffixPlaceholder")}
           placeholderTextColor="#a1a1aa"
           value={codeSuffix}
@@ -312,32 +307,21 @@ export default function MerchantHistoryScreen() {
           returnKeyType="search"
           autoCapitalize="characters"
         />
-        <TouchableOpacity
-          onPress={handleSearch}
-          className="bg-primary px-4 rounded-lg items-center justify-center"
-        >
-          <Text className="text-primary-foreground text-sm font-medium">
-            {t("merchant.history.search")}
-          </Text>
-        </TouchableOpacity>
+        <Button onPress={handleSearch} className="shrink-0 px-4">
+          {t("merchant.history.search")}
+        </Button>
       </View>
 
       {}
       {items.length > 0 && (
         <TouchableOpacity
           onPress={toggleAll}
-          className="flex-row items-center mx-4 mb-2 gap-2"
+          className="mx-4 mb-2 flex-row items-center gap-3 rounded-lg py-1 active:opacity-70"
+          accessibilityRole="checkbox"
+          accessibilityState={{ checked: allSelected }}
         >
-          <View
-            className={`w-5 h-5 rounded border-2 items-center justify-center ${
-              allSelected ? "bg-primary border-primary" : "border-border bg-white"
-            }`}
-          >
-            {allSelected && (
-              <Text className="text-white text-xs font-bold">✓</Text>
-            )}
-          </View>
-          <Text className="text-sm text-muted-foreground">
+          <Checkbox checked={allSelected} />
+          <Text className="text-sm font-medium text-foreground">
             {t("merchant.history.selectAll")}
           </Text>
         </TouchableOpacity>

@@ -261,6 +261,7 @@ export const en: MessageTree = {
       voucherUsed: "Used",
       voucherExpired: "Expired",
       voucherListed: "Listed",
+      requestedAt: "Requested",
       purchasePrice: "Purchase",
       fee: "Fee",
       payout: "Payout",
