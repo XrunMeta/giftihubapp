@@ -186,6 +186,8 @@ export const zhHans: MessageTree = {
       settlementFail: "结算申请失败。",
       cancelDirect: "取消",
       cancelRequest: "申请取消",
+      cancelRequestPending: "已收到客户取消申请（超时）",
+      cancelMemoPlaceholder: "备注（可选）",
       cancelBtn: "关闭",
       cancelReasonTitle: "选择原因",
       reasonCustomer: "客户要求",
@@ -219,6 +221,7 @@ export const zhHans: MessageTree = {
       expiry: "到期日",
       seller: "卖家",
       purchase: "购买",
+      includedItems: "包含商品",
     },
     marketPurchase: {
       title: "支付",
@@ -408,6 +411,8 @@ export const zhHans: MessageTree = {
       sellOnMarketplace: "在二手市场出售",
       receiptCode: "收据代码",
       cancelRequest: "取消申请",
+      cancelRequestPendingLabel: "取消申请中",
+      cancelRequestPendingDesc: "您的取消申请已提交，正在审核中。",
     },
     cancelRequest: {
       title: "取消申请",
@@ -417,6 +422,7 @@ export const zhHans: MessageTree = {
       submitting: "提交中...",
       successTitle: "申请已提交",
       successBody: "您的取消申请已提交。",
+      receiptLabel: "收据号",
       errorTitle: "错误",
       errorBody: "请输入原因。",
       errorFail: "发生错误。",
@@ -643,5 +649,9 @@ export const zhHans: MessageTree = {
     notice4: "• 最低提现 10 USDT",
     processing: "处理中...",
     requestBtn: "申请提现",
+  },
+  common: {
+    confirm: "确认",
+    cancel: "取消",
   },
 };

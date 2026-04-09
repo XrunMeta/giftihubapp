@@ -9,7 +9,7 @@ import { resolveImageUrl } from "@/lib/image";
 import { getVoucherBarcode, getVoucherDetail, type Voucher } from "@/services/vouchers";
 import { format } from "date-fns";
 import * as Clipboard from "expo-clipboard";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import { ArrowLeftRight, ArrowRight, CheckCircle, Clock, Send, ShoppingBag, Store, XCircle } from "lucide-react-native";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Alert, Animated, Image, Pressable, ScrollView, Text, TouchableOpacity, useWindowDimensions, View } from "react-native";
@@ -27,6 +27,12 @@ const STATUS_META: Record<
     descKey: "myGifti.detail.usedDesc",
     icon: CheckCircle,
     color: "#16a34a",
+  },
+  cancel_request_pending: {
+    labelKey: "myGifti.detail.cancelRequestPendingLabel",
+    descKey: "myGifti.detail.cancelRequestPendingDesc",
+    icon: Clock,
+    color: "#d97706",
   },
   listed: {
     labelKey: "myGifti.detail.listedLabel",
@@ -93,7 +99,8 @@ export default function GiftiDetailScreen() {
     }
   }, [id, syncProgressBar]);
 
-  useEffect(() => {
+  useFocusEffect(
+   useCallback(() => {
     if (id) {
       (async () => {
         try {
@@ -116,7 +123,7 @@ export default function GiftiDetailScreen() {
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [id]);
+  }, [id, loadBarcode, t]));
 
   if (loading || !voucher) {
     return (
@@ -129,7 +136,10 @@ export default function GiftiDetailScreen() {
   const isActive = voucher.status === "active";
   const barcodeWidth = screenWidth - 80;
   const imgUri = resolveImageUrl(voucher.thumb_url, voucher.image_url, voucher.brand_logo);
-  const statusMeta = STATUS_META[voucher.status];
+  const displayStatus = voucher.status === "used" && voucher.cancel_request_pending
+    ? "cancel_request_pending"
+    : voucher.status;
+  const statusMeta = STATUS_META[displayStatus];
   const statusInfo = statusMeta
     ? {
         label: t(statusMeta.labelKey),
@@ -233,15 +243,27 @@ export default function GiftiDetailScreen() {
         ) : null}
 
         {voucher.status === "used" && (
-          <Pressable
-            className="mt-4 flex-row items-center justify-center gap-2 bg-white border border-destructive rounded-xl py-3 px-4"
-            onPress={() => router.push(`/(user)/oth-path${voucher.id}/cancel-request` as any)}
-          >
-            <XCircle size={16} color="#ef4444" />
-            <Text className="text-sm font-medium text-destructive">
-              {t('myGifti.detail.cancelRequest')}
-            </Text>
-          </Pressable>
+          voucher.cancel_request_pending ? (
+            <View className="mt-4 mb-4 flex-row items-center justify-center gap-2 bg-gray-100 border border-gray-300 rounded-xl py-3 px-4">
+              <Clock size={16} color="#d97706" />
+              <Text className="text-sm font-medium text-amber-600">
+                {t('myGifti.detail.cancelRequestPendingLabel')}
+              </Text>
+            </View>
+          ) : (
+            <Pressable
+              className="mt-4 flex-row items-center justify-center gap-2 bg-white border border-destructive rounded-xl py-3 px-4"
+              onPress={() => router.push({
+                pathname: `/(user)/oth-path${voucher.id}/cancel-request` as any,
+                params: { receipt_code: voucher.receipt_code ?? '' },
+              })}
+            >
+              <XCircle size={16} color="#ef4444" />
+              <Text className="text-sm font-medium text-destructive">
+                {t('myGifti.detail.cancelRequest')}
+              </Text>
+            </Pressable>
+          )
         )}
 
         {}

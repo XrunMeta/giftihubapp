@@ -16,6 +16,8 @@ export interface MarketplaceListing {
   image_url: string | null;
   thumb_url: string | null;
   brand_logo: string | null;
+  set_id?: string | null;
+  set_count?: number | null;
 }
 
 export type MarketplaceCategory =
@@ -45,9 +47,17 @@ export async function getMarketplaceListings(
   });
 }
 
+export interface SetVoucher {
+  brand: string;
+  name: string;
+  face_value: number;
+  face_value_base: number;
+  base_currency: string;
+}
+
 export async function getListingDetail(
   id: string,
-): Promise<{ listing: MarketplaceListing }> {
+): Promise<{ listing: MarketplaceListing; set_vouchers: SetVoucher[] }> {
   return apiFetch(`/oth-path${id}`, { skipAuth: true });
 }
 

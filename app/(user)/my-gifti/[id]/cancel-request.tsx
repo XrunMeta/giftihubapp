@@ -8,7 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function CancelRequestScreen() {
   const { t } = useI18n()
-  const { id } = useLocalSearchParams<{ id: string }>()
+  const { id, receipt_code } = useLocalSearchParams<{ id: string; receipt_code?: string }>()
   const router = useRouter()
   const [reasonText, setReasonText] = useState('')
   const [loading, setLoading] = useState(false)
@@ -24,9 +24,12 @@ export default function CancelRequestScreen() {
         method: 'POST',
         body: JSON.stringify({ reason_text: reasonText }),
       })
+      const bodyMsg = receipt_code
+        ? `${t('myGifti.cancelRequest.successBody')}\n\n${t('myGifti.cancelRequest.receiptLabel')}: ${receipt_code}`
+        : t('myGifti.cancelRequest.successBody')
       Alert.alert(
         t('myGifti.cancelRequest.successTitle'),
-        t('myGifti.cancelRequest.successBody'),
+        bodyMsg,
         [{ text: t('common.confirm'), onPress: () => router.back() }],
       )
     } catch (err: any) {

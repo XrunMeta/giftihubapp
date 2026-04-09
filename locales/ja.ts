@@ -186,6 +186,8 @@ export const ja: MessageTree = {
       settlementFail: "精算リクエストに失敗しました。",
       cancelDirect: "キャンセル",
       cancelRequest: "キャンセル申請",
+      cancelRequestPending: "顧客のキャンセル申請受付済み（時間超過）",
+      cancelMemoPlaceholder: "メモ（任意）",
       cancelBtn: "閉じる",
       cancelReasonTitle: "理由を選択",
       reasonCustomer: "顧客の要望",
@@ -219,6 +221,7 @@ export const ja: MessageTree = {
       expiry: "有効期限",
       seller: "販売者",
       purchase: "購入する",
+      includedItems: "含まれる商品",
     },
     marketPurchase: {
       title: "決済",
@@ -408,6 +411,8 @@ export const ja: MessageTree = {
       sellOnMarketplace: "中古で売る",
       receiptCode: "レシートコード",
       cancelRequest: "キャンセルリクエスト",
+      cancelRequestPendingLabel: "キャンセル申請中",
+      cancelRequestPendingDesc: "キャンセルリクエストを受け付け、審査中です。",
     },
     cancelRequest: {
       title: "キャンセルリクエスト",
@@ -417,6 +422,7 @@ export const ja: MessageTree = {
       submitting: "送信中...",
       successTitle: "リクエスト完了",
       successBody: "キャンセルリクエストを受け付けました。",
+      receiptLabel: "領収書番号",
       errorTitle: "エラー",
       errorBody: "理由を入力してください。",
       errorFail: "エラーが発生しました。",
@@ -643,5 +649,9 @@ export const ja: MessageTree = {
     notice4: "• 最小出金 10 USDT",
     processing: "処理中...",
     requestBtn: "出金リクエスト",
+  },
+  common: {
+    confirm: "確認",
+    cancel: "キャンセル",
   },
 };

@@ -43,7 +43,7 @@ const LIMIT = 20;
 
 const REASON_CODES = [
   "customer_request",
-  "merchant_error",
+  "system_error",
   "other",
 ] as const;
 type ReasonCode = (typeof REASON_CODES)[number];
@@ -66,6 +66,7 @@ export default function MerchantHistoryScreen() {
 
   const [modalItem, setModalItem] = useState<UsedVoucherItem | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
+  const [cancelMemo, setCancelMemo] = useState("");
 
   const fetchItems = useCallback(
     async (p: number, reset = false, query = searchQuery) => {
@@ -167,7 +168,7 @@ export default function MerchantHistoryScreen() {
           },
           {
             text: t("merchant.history.reasonMerchant"),
-            onPress: () => resolve("merchant_error"),
+            onPress: () => resolve("system_error"),
           },
           {
             text: t("merchant.history.reasonOther"),
@@ -191,9 +192,10 @@ export default function MerchantHistoryScreen() {
         `/oth-path${item.voucher_id}/cancel`,
         {
           method: "POST",
-          body: JSON.stringify({ reason_code: reason }),
+          body: JSON.stringify({ reason_code: reason, ...(cancelMemo.trim() ? { reason_text: cancelMemo.trim() } : {}) }),
         },
       );
+      setCancelMemo("");
       setModalItem(null);
       fetchItems(1, true, codeSuffix);
     } catch {
@@ -375,7 +377,7 @@ export default function MerchantHistoryScreen() {
         visible={!!modalItem}
         transparent
         animationType="slide"
-        onRequestClose={() => setModalItem(null)}
+        onRequestClose={() => { setModalItem(null); setCancelMemo(""); }}
       >
         <View className="flex-1 justify-end bg-black/40">
           <View className="bg-card rounded-t-2xl px-5 pt-5 pb-8">
@@ -385,7 +387,7 @@ export default function MerchantHistoryScreen() {
                   <Text className="text-lg font-bold text-foreground">
                     {modalItem.name}
                   </Text>
-                  <TouchableOpacity onPress={() => setModalItem(null)}>
+                  <TouchableOpacity onPress={() => { setModalItem(null); setCancelMemo(""); }}>
                     <Text className="text-muted-foreground text-base">✕</Text>
                   </TouchableOpacity>
                 </View>
@@ -440,8 +442,20 @@ export default function MerchantHistoryScreen() {
                 </View>
 
                 {}
-                {modalItem.status === "used" && (
+                {(modalItem.status === "used" || modalItem.status === "request_pending") && (
                   <View className="mt-5 gap-3">
+                    {modalItem.cancelable && (
+                      <TextInput
+                        className="border border-border rounded-xl px-4 py-3 text-sm text-foreground bg-white"
+                        placeholder={t("merchant.history.cancelMemoPlaceholder")}
+                        placeholderTextColor="#a1a1aa"
+                        value={cancelMemo}
+                        onChangeText={setCancelMemo}
+                        multiline
+                        numberOfLines={2}
+                        maxLength={200}
+                      />
+                    )}
                     {modalItem.cancelable ? (
                       <TouchableOpacity
                         onPress={() => handleCancelDirect(modalItem)}
@@ -456,7 +470,7 @@ export default function MerchantHistoryScreen() {
                           </Text>
                         )}
                       </TouchableOpacity>
-                    ) : (
+                    ) : modalItem.status === "used" ? (
                       <TouchableOpacity
                         onPress={() => handleCancelRequest(modalItem)}
                         disabled={actionLoading}
@@ -470,6 +484,12 @@ export default function MerchantHistoryScreen() {
                           </Text>
                         )}
                       </TouchableOpacity>
+                    ) : (
+                      <View className="border border-amber-300 bg-amber-50 rounded-xl py-4 items-center">
+                        <Text className="text-amber-700 font-medium text-sm">
+                          {t("merchant.history.cancelRequestPending")}
+                        </Text>
+                      </View>
                     )}
                   </View>
                 )}

@@ -186,6 +186,8 @@ export const en: MessageTree = {
       settlementFail: "Settlement request failed.",
       cancelDirect: "Cancel",
       cancelRequest: "Request Cancellation",
+      cancelRequestPending: "Customer cancellation request received (window expired)",
+      cancelMemoPlaceholder: "Memo (optional)",
       cancelBtn: "Close",
       cancelReasonTitle: "Select reason",
       reasonCustomer: "Customer request",
@@ -219,6 +221,7 @@ export const en: MessageTree = {
       expiry: "Expires",
       seller: "Seller",
       purchase: "Buy",
+      includedItems: "Included Items",
     },
     marketPurchase: {
       title: "Payment",
@@ -408,6 +411,8 @@ export const en: MessageTree = {
       sellOnMarketplace: "Sell on marketplace",
       receiptCode: "Receipt Code",
       cancelRequest: "Cancel Request",
+      cancelRequestPendingLabel: "Cancellation Pending",
+      cancelRequestPendingDesc: "Your cancellation request has been received and is under review.",
     },
     cancelRequest: {
       title: "Cancel Request",
@@ -417,6 +422,7 @@ export const en: MessageTree = {
       submitting: "Submitting...",
       successTitle: "Request Submitted",
       successBody: "Your cancellation request has been submitted.",
+      receiptLabel: "Receipt No.",
       errorTitle: "Error",
       errorBody: "Please enter a reason.",
       errorFail: "An error occurred.",
@@ -643,5 +649,9 @@ export const en: MessageTree = {
     notice4: "• Minimum withdrawal: 10 USDT",
     processing: "Processing...",
     requestBtn: "Request withdrawal",
+  },
+  common: {
+    confirm: "Confirm",
+    cancel: "Cancel",
   },
 };

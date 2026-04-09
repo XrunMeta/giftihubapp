@@ -9,6 +9,7 @@ import {
   type MarketplaceListing,
 } from "@/services/marketplace";
 import { useFocusEffect, useRouter } from "expo-router";
+import { Package } from "lucide-react-native";
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { ActivityIndicator, FlatList, Image, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -56,6 +57,55 @@ export default function MarketplaceScreen() {
 
   const renderListing = ({ item }: { item: MarketplaceListing }) => {
     const imgUri = resolveImageUrl(item.thumb_url, item.image_url, item.brand_logo);
+    const isBundle = !!item.set_id;
+
+    if (isBundle) {
+      return (
+        <Pressable
+          className="mx-4 mb-3 bg-card rounded-xl border border-primary/30 p-3"
+          onPress={() => router.push(`/(user)/oth-path${item.id}`)}
+        >
+          <View className="flex-row items-center mb-2 gap-2">
+            <View className="w-7 h-7 rounded-lg bg-primary/10 items-center justify-center">
+              <Package size={16} color="#CE3630" />
+            </View>
+            <Text className="text-sm font-semibold text-primary flex-1">
+              {t("myGifti.list.bundleTitle").replace("{{count}}", String(item.set_count ?? ""))}
+            </Text>
+            {item.discount > 0 && (
+              <Badge variant="destructive" label={`${item.discount}%`} />
+            )}
+          </View>
+          <View className="flex-row">
+            {imgUri ? (
+              <Image source={{ uri: imgUri }} className="w-14 h-14 rounded-lg" resizeMode="contain" />
+            ) : (
+              <View className="w-14 h-14 rounded-lg bg-muted items-center justify-center">
+                <Text className="text-xl">🎁</Text>
+              </View>
+            )}
+            <View className="flex-1 ml-3">
+              <Text className="text-xs text-muted-foreground">{item.brand}</Text>
+              <Text className="text-sm font-semibold text-foreground mt-0.5" numberOfLines={1}>
+                {item.name}
+              </Text>
+              <View className="flex-row justify-between items-center mt-1">
+                <View className="flex-row items-baseline gap-1">
+                  <Text className="text-base font-bold text-foreground">
+                    ₩{item.selling_price.toLocaleString()}
+                  </Text>
+                  <Text className="text-xs text-muted-foreground line-through">
+                    ₩{item.original_price.toLocaleString()}
+                  </Text>
+                </View>
+                <Text className="text-xs text-muted-foreground">{item.seller_name}</Text>
+              </View>
+            </View>
+          </View>
+        </Pressable>
+      );
+    }
+
     return (
       <Pressable
         className="mx-4 mb-3 bg-card rounded-xl border border-border p-3 flex-row"
