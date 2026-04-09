@@ -390,14 +390,6 @@ export default function v_b89029() {
                 <Send size={16} color="#0a0a0a" />
                 <Text className="text-sm font-medium text-foreground">{v_8d41d7("myGifti.detail.actionTransfer")}</Text>
               </Button>
-              <Button
-                variant="outline"
-                className="flex-1 flex-row gap-2 bg-white"
-                onPress={() => v_904d46.push(`/(user)/oth-path${v_389afb}/refund`)}
-              >
-                <ArrowLeftRight size={16} color="#0a0a0a" />
-                <Text className="text-sm font-medium text-foreground">{v_8d41d7("myGifti.detail.actionRefund")}</Text>
-              </Button>
             </View>
             <Button
               variant="outline"
