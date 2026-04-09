@@ -24,7 +24,7 @@ export default function v_117b6e() {
   v_c4deb2(() => {
     v_bc1b24<{ settlement_policy: string }>("/oth-path")
       .then((v_9390e8) => v_f040e1(v_9390e8.settlement_policy as SettlementPolicy))
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => v_34a50a(false));
   }, []);
 
@@ -36,7 +36,7 @@ export default function v_117b6e() {
         method: "PATCH",
         body: JSON.stringify({ settlement_policy: v_e2a85c }),
       });
-      v_904d46.back();
+      v_904d46.navigate("/(merchant)/settings");
     } catch {
       v_f040e1(v_ba2215);
     }
@@ -44,7 +44,10 @@ export default function v_117b6e() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
-      <PageHeader title={v_8d41d7("merchant.mSettings.settlementPolicy")} />
+      <PageHeader
+        title={v_8d41d7("merchant.mSettings.settlementPolicy")}
+        onBackPress={() => v_904d46.navigate("/(merchant)/settings")}
+      />
       <ScrollView className="flex-1 px-4 pt-4" contentContainerStyle={{ paddingBottom: 24 }}>
         {v_683210 ? (
           <ActivityIndicator size="small" className="mt-8" />
@@ -60,10 +63,10 @@ export default function v_117b6e() {
                     onPress={() => v_392585(v_68b2be.key)}
                   >
                     <View className="flex-1 mr-3">
-                      <Text className={`text-sm font-medium ${v_587413 ? "text-primary" : "text-foreground"}`}>
+                      <Text className={`text-md font-medium ${v_587413 ? "text-primary" : "text-foreground"}`}>
                         {v_8d41d7(v_68b2be.labelKey)}
                       </Text>
-                      <Text className="text-xs text-muted-foreground mt-0.5">{v_8d41d7(v_68b2be.descKey)}</Text>
+                      <Text className="text-sm text-muted-foreground mt-0.5">{v_8d41d7(v_68b2be.descKey)}</Text>
                     </View>
                     {v_587413 ? <Check size={20} color="#CE3630" /> : null}
                   </Pressable>

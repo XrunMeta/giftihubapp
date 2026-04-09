@@ -18,9 +18,9 @@ function v_37c1d6({ icon: v_9ddfab, label: v_2869c1, onPress: v_719eed }: { icon
     <Pressable className="flex-row items-center justify-between px-4 py-6" onPress={v_719eed}>
       <View className="flex-row items-center gap-3">
         {v_9ddfab}
-        <Text className="text-base text-foreground">{v_2869c1}</Text>
+        <Text className="text-lg text-foreground">{v_2869c1}</Text>
       </View>
-      <ChevronRight size={18} color="#737373" />
+      <ChevronRight size={20} color="#737373" />
     </Pressable>
   );
 }
@@ -58,9 +58,9 @@ export default function v_ff7fc2() {
 
         {}
         <View className="mx-4 mt-4 bg-card rounded-xl border border-border p-5 mb-4">
-          <Text className="text-lg font-bold text-foreground">{v_625c74?.name}</Text>
-          {v_625c74?.email && <Text className="text-sm text-muted-foreground mt-0.5">{v_625c74.email}</Text>}
-          <Text className="text-xs text-primary mt-1">{v_8d41d7("merchant.mSettings.merchantAccount")}</Text>
+          <Text className="text-xl font-bold text-foreground">{v_625c74?.name}</Text>
+          {v_625c74?.email && <Text className="text-base text-muted-foreground mt-1">{v_625c74.email}</Text>}
+          <Text className="text-sm text-primary mt-1.5">{v_8d41d7("merchant.mSettings.merchantAccount")}</Text>
         </View>
 
         {}
@@ -71,12 +71,14 @@ export default function v_ff7fc2() {
             className="mb-4"
             contentContainerStyle={{ paddingHorizontal: 16, gap: 12 }}
           >
-            {v_eb1591.map((v_148ff6) => (
+            {v_eb1591.map((v_148ff6) => {
+              const v_20882c = v_148ff6.logo_url ? v_7ef52a(v_148ff6.logo_url) : null;
+              return (
               <View key={v_148ff6.slug} className="items-center gap-1.5" style={{ width: 72 }}>
                 <View className="w-14 h-14 rounded-xl bg-white border border-border items-center justify-center overflow-hidden">
-                  {v_148ff6.logo_url ? (
+                  {v_20882c ? (
                     <Image
-                      source={{ uri: v_7ef52a(v_148ff6.logo_url) }}
+                      source={{ uri: v_20882c }}
                       className="w-full h-full"
                       resizeMode="contain"
                     />
@@ -86,16 +88,17 @@ export default function v_ff7fc2() {
                     </Text>
                   )}
                 </View>
-                <Text className="text-xs text-foreground text-center" numberOfLines={2}>{v_148ff6.name}</Text>
+                <Text className="text-sm text-foreground text-center" numberOfLines={2}>{v_148ff6.name}</Text>
               </View>
-            ))}
+              );
+            })}
           </ScrollView>
         )}
 
         {}
         <View className="mx-4 bg-card rounded-xl border border-border overflow-hidden mb-4">
           <MenuItem
-            icon={<Settings2 size={20} color="#737373" />}
+            icon={<Settings2 size={22} color="#737373" />}
             label={v_8d41d7("merchant.mSettings.settlementPolicy")}
             onPress={() => v_904d46.push("/(merchant)/settlement-policy")}
           />

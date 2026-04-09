@@ -47,7 +47,10 @@ export default function v_9c78c5() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
-      <PageHeader title={v_8d41d7("userMarketplace.detail.title")} />
+      <PageHeader
+        title={v_8d41d7("userMarketplace.detail.title")}
+        onBackPress={() => v_904d46.navigate("/(user)/oth-path")}
+      />
       <ScrollView className="flex-1 px-5" contentContainerStyle={{ paddingBottom: 12 }}>
         {(() => {
           const v_74f4a3 = v_7ef52a(v_a8fb42.image_url, v_a8fb42.brand_logo);
