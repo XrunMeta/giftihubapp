@@ -92,6 +92,32 @@ export async function cancelListing(
   return apiFetch(`/oth-path${id}`, { method: "DELETE" });
 }
 
+export interface MyListing {
+  id: string;
+  voucher_id: string | null;
+  set_id: string | null;
+  status: string;
+  selling_price: number;
+}
+
+export async function getMyListings(): Promise<{ listings: MyListing[] }> {
+  return apiFetch(`/oth-path`);
+}
+
+export async function findActiveListing(opts: {
+  voucherId?: string;
+  setId?: string;
+}): Promise<MyListing | null> {
+  const { listings } = await getMyListings();
+  const hit = listings.find(
+    (l) =>
+      l.status === "active" &&
+      ((opts.voucherId && l.voucher_id === opts.voucherId) ||
+        (opts.setId && l.set_id === opts.setId)),
+  );
+  return hit ?? null;
+}
+
 export async function createSetListing(
   setId: string,
   sellingPrice: number,

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useI18n } from "@/context/I18nContext";
 import { resolveImageUrl } from "@/lib/image";
-import { createSetListing } from "@/services/marketplace";
+import { cancelListing, createSetListing, findActiveListing, type MyListing } from "@/services/marketplace";
 import { getSetDetail, type SetDetail, type Voucher } from "@/services/vouchers";
 import { format } from "date-fns";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -30,20 +30,34 @@ export default function SetDetailScreen() {
   const [showSellForm, setShowSellForm] = useState(false);
   const [sellingPrice, setSellingPrice] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [activeListing, setActiveListing] = useState<MyListing | null>(null);
+  const [cancellingListing, setCancellingListing] = useState(false);
+
+  const load = async () => {
+    if (!setId) return;
+    try {
+      const res = await getSetDetail(setId);
+      setData(res);
+      const isListed = res.vouchers.some((v: Voucher) => v.status === "listed") || (res.set as any).status === "listed";
+      if (isListed) {
+        try {
+          const hit = await findActiveListing({ setId });
+          setActiveListing(hit);
+        } catch {  }
+      } else {
+        setActiveListing(null);
+      }
+    } catch {
+      Alert.alert(t("myGifti.setDetail.loadErrorTitle"), t("myGifti.setDetail.loadErrorBody"));
+      router.back();
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    if (!setId) return;
-    (async () => {
-      try {
-        const res = await getSetDetail(setId);
-        setData(res);
-      } catch {
-        Alert.alert(t("myGifti.setDetail.loadErrorTitle"), t("myGifti.setDetail.loadErrorBody"));
-        router.back();
-      } finally {
-        setLoading(false);
-      }
-    })();
+    load();
+
   }, [setId]);
 
   if (loading || !data) {
@@ -148,6 +162,51 @@ export default function SetDetailScreen() {
           </Text>
         </View>
       </View>
+
+      {}
+      {activeListing && (
+        <View className="mx-4 mb-4">
+          <Button
+            variant="destructive"
+            disabled={cancellingListing}
+            onPress={() => {
+              Alert.alert(
+                t("userMarketplace.detail.cancelConfirmTitle"),
+                t("userMarketplace.detail.cancelConfirmBody"),
+                [
+                  { text: t("userMarketplace.detail.cancelNo"), style: "cancel" },
+                  {
+                    text: t("userMarketplace.detail.cancelYes"),
+                    style: "destructive",
+                    onPress: async () => {
+                      setCancellingListing(true);
+                      try {
+                        await cancelListing(activeListing.id);
+                        Alert.alert(
+                          t("userMarketplace.detail.cancelDoneTitle"),
+                          t("userMarketplace.detail.cancelDoneBody"),
+                        );
+                        await load();
+                      } catch (err: any) {
+                        Alert.alert(
+                          t("userMarketplace.detail.cancelFailTitle"),
+                          String(err?.message ?? err),
+                        );
+                      } finally {
+                        setCancellingListing(false);
+                      }
+                    },
+                  },
+                ],
+              );
+            }}
+          >
+            {cancellingListing
+              ? t("userMarketplace.detail.cancelling")
+              : t("userMarketplace.detail.cancelListing")}
+          </Button>
+        </View>
+      )}
 
       {}
       {canSell && !showSellForm && (

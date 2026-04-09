@@ -6,6 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { useI18n } from "@/context/I18nContext";
 import { useDevMode } from "@/hooks/use-dev-mode";
 import { resolveImageUrl } from "@/lib/image";
+import { cancelListing, findActiveListing, type MyListing } from "@/services/marketplace";
 import { getVoucherBarcode, getVoucherDetail, type Voucher } from "@/services/vouchers";
 import { format } from "date-fns";
 import * as Clipboard from "expo-clipboard";
@@ -69,6 +70,8 @@ export default function GiftiDetailScreen() {
   const [voucher, setVoucher] = useState<Voucher | null>(null);
   const [barcode, setBarcode] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [activeListing, setActiveListing] = useState<MyListing | null>(null);
+  const [cancellingListing, setCancellingListing] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const progressAnim = useRef(new Animated.Value(1)).current;
 
@@ -111,6 +114,15 @@ export default function GiftiDetailScreen() {
           if (v.status === "active") {
             loadBarcode();
             intervalRef.current = setInterval(loadBarcode, 5000);
+          }
+
+          if (v.status === "listed") {
+            try {
+              const hit = await findActiveListing({ voucherId: v.id, setId: v.set_id ?? undefined });
+              setActiveListing(hit);
+            } catch {  }
+          } else {
+            setActiveListing(null);
           }
         } catch {
           Alert.alert(t("myGifti.detail.loadErrorTitle"), t("myGifti.detail.loadErrorBody"));
@@ -241,6 +253,54 @@ export default function GiftiDetailScreen() {
             );
           })()
         ) : null}
+
+        {voucher.status === "listed" && activeListing && (
+          <Pressable
+            disabled={cancellingListing}
+            className="mt-4 flex-row items-center justify-center gap-2 bg-white border border-destructive rounded-xl py-3 px-4"
+            onPress={() => {
+              Alert.alert(
+                t("userMarketplace.detail.cancelConfirmTitle"),
+                t("userMarketplace.detail.cancelConfirmBody"),
+                [
+                  { text: t("userMarketplace.detail.cancelNo"), style: "cancel" },
+                  {
+                    text: t("userMarketplace.detail.cancelYes"),
+                    style: "destructive",
+                    onPress: async () => {
+                      setCancellingListing(true);
+                      try {
+                        await cancelListing(activeListing.id);
+                        Alert.alert(
+                          t("userMarketplace.detail.cancelDoneTitle"),
+                          t("userMarketplace.detail.cancelDoneBody"),
+                        );
+
+                        const res = await getVoucherDetail(id!);
+                        setVoucher(res.voucher);
+                        setActiveListing(null);
+                      } catch (err: any) {
+                        Alert.alert(
+                          t("userMarketplace.detail.cancelFailTitle"),
+                          String(err?.message ?? err),
+                        );
+                      } finally {
+                        setCancellingListing(false);
+                      }
+                    },
+                  },
+                ],
+              );
+            }}
+          >
+            <XCircle size={16} color="#ef4444" />
+            <Text className="text-sm font-medium text-destructive">
+              {cancellingListing
+                ? t("userMarketplace.detail.cancelling")
+                : t("userMarketplace.detail.cancelListing")}
+            </Text>
+          </Pressable>
+        )}
 
         {voucher.status === "used" && (
           voucher.cancel_request_pending ? (
