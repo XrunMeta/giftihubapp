@@ -186,6 +186,8 @@ export const id: MessageTree = {
       settlementFail: "Permintaan pembayaran gagal.",
       cancelDirect: "Batalkan",
       cancelRequest: "Minta Pembatalan",
+      cancelRequestPending: "Permintaan pembatalan pelanggan diterima (waktu habis)",
+      cancelMemoPlaceholder: "Memo (opsional)",
       cancelBtn: "Tutup",
       cancelReasonTitle: "Pilih alasan",
       reasonCustomer: "Permintaan pelanggan",
@@ -219,6 +221,7 @@ export const id: MessageTree = {
       expiry: "Kadaluarsa",
       seller: "Penjual",
       purchase: "Beli",
+      includedItems: "Produk Termasuk",
     },
     marketPurchase: {
       title: "Pembayaran",
@@ -407,6 +410,8 @@ export const id: MessageTree = {
       sellOnMarketplace: "Jual di pasar",
       receiptCode: "Kode Tanda Terima",
       cancelRequest: "Permintaan Pembatalan",
+      cancelRequestPendingLabel: "Pembatalan Diproses",
+      cancelRequestPendingDesc: "Permintaan pembatalan Anda sedang ditinjau.",
     },
     cancelRequest: {
       title: "Permintaan Pembatalan",
@@ -416,6 +421,7 @@ export const id: MessageTree = {
       submitting: "Mengirim...",
       successTitle: "Permintaan Terkirim",
       successBody: "Permintaan pembatalan Anda telah dikirim.",
+      receiptLabel: "No. Tanda Terima",
       errorTitle: "Kesalahan",
       errorBody: "Masukkan alasan.",
       errorFail: "Terjadi kesalahan.",
@@ -642,5 +648,9 @@ export const id: MessageTree = {
     notice4: "• Minimum 10 USDT",
     processing: "Memproses...",
     requestBtn: "Minta penarikan",
+  },
+  common: {
+    confirm: "Konfirmasi",
+    cancel: "Batal",
   },
 };
