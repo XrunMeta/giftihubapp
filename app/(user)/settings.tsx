@@ -1,5 +1,6 @@
 import { PageHeader } from "@/components/PageHeader";
 import { LOCALE_OPTIONS, useI18n } from "@/context/I18nContext";
+import { useRouter } from "expo-router";
 import { Check } from "lucide-react-native";
 import React from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
@@ -7,10 +8,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function UserSettingsScreen() {
   const { locale, setLocale, t } = useI18n();
+  const router = useRouter();
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
-      <PageHeader title={t("settings.title")} />
+      <PageHeader
+        title={t("settings.title")}
+        onBackPress={() => router.navigate("/(user)/mypage")}
+      />
       <ScrollView className="flex-1 px-4 pt-4" contentContainerStyle={{ paddingBottom: 24 }}>
         <Text className="text-base font-semibold text-foreground mb-1">{t("settings.language")}</Text>
         <Text className="text-sm text-muted-foreground mb-4">{t("settings.languageHint")}</Text>
