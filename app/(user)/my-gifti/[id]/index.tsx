@@ -390,14 +390,6 @@ export default function GiftiDetailScreen() {
                 <Send size={16} color="#0a0a0a" />
                 <Text className="text-sm font-medium text-foreground">{t("myGifti.detail.actionTransfer")}</Text>
               </Button>
-              <Button
-                variant="outline"
-                className="flex-1 flex-row gap-2 bg-white"
-                onPress={() => router.push(`/(user)/oth-path${id}/refund`)}
-              >
-                <ArrowLeftRight size={16} color="#0a0a0a" />
-                <Text className="text-sm font-medium text-foreground">{t("myGifti.detail.actionRefund")}</Text>
-              </Button>
             </View>
             <Button
               variant="outline"
