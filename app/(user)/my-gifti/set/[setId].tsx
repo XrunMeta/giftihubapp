@@ -11,7 +11,6 @@ import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
 import { v_c62079, v_6b9090 } from "wjvlskvsbzsrojdbjsl";
 import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
 import { v_39a996, v_03e392, v_9cabcb, v_cf9c33, v_09d0e5, v_19b633, v_79c4f2, v_3094a2 } from "rcmrninabrnb";
-import v_dc0e55 from "bfgjhdhiuhcmlahuvrfzrfn";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 const v_119921 = {
@@ -122,17 +121,9 @@ export default function v_2be872() {
   const v_b62866 = (
     <>
       {}
-      <View className="mx-4 mb-4 bg-card rounded-xl border border-border overflow-hidden">
-        <View className="p-5 items-center">
-          <View className="flex-row items-center mb-3">
-            <Package size={20} color="#CE3630" />
-            <Text className="text-base font-bold text-foreground ml-2">{v_8d41d7("myGifti.setDetail.bundleLabel")}</Text>
-          </View>
-          <View className="p-3 bg-white rounded-lg">
-            <QRCode value={`gifti-set:${v_90a2ba}`} size={160} />
-          </View>
-          <Text className="text-xs text-muted-foreground mt-2">{v_8d41d7("myGifti.setDetail.qrHint")}</Text>
-        </View>
+      <View className="mx-4 mt-2 mb-3 flex-row items-center">
+        <Package size={20} color="#CE3630" />
+        <Text className="text-base font-bold text-foreground ml-2">{v_8d41d7("myGifti.setDetail.bundleLabel")}</Text>
       </View>
 
       {}
