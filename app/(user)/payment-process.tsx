@@ -15,7 +15,7 @@ export default function PaymentProcessScreen() {
   const { t } = useI18n();
   const { method, currency, nonce } = useLocalSearchParams<{ method: string; currency?: string; nonce?: string }>();
   const router = useRouter();
-  const { items, packageItems, clearByCurrency, clearCart } = useCart();
+  const { items, packageItems, clearByCurrency, clearCart, selectedItemIds, selectedPackageIds, removeFromCart, removePackage } = useCart();
   const [status, setStatus] = useState<"processing" | "success" | "failed">("processing");
   const [debugError, setDebugError] = useState<string>("");
   const processedNonceRef = useRef<string | null>(null);
@@ -42,8 +42,12 @@ export default function PaymentProcessScreen() {
       return;
     }
 
-    const targetPackages = packageItems.filter((p) => p.currency === targetCurrency);
-    const targetItems = items.filter((i) => getItemCurrency(i) === targetCurrency);
+    const targetPackages = packageItems.filter(
+      (p) => p.currency === targetCurrency && p.id && selectedPackageIds.has(p.id),
+    );
+    const targetItems = items.filter(
+      (i) => getItemCurrency(i) === targetCurrency && i.cartId && selectedItemIds.has(i.cartId),
+    );
 
     console.log("[payment-process] debug:", JSON.stringify({
       targetCurrency,
@@ -134,9 +138,15 @@ export default function PaymentProcessScreen() {
         }
       }
 
-      console.log(`[pay] LOOP DONE — clearing cur=${targetCurrency}, setting success`);
+      console.log(`[pay] LOOP DONE — removing purchased items only, setting success`);
 
-      clearByCurrency(targetCurrency);
+      for (const it of targetItems) {
+        if (it.cartId) removeFromCart(it.cartId);
+      }
+      for (const pkg of targetPackages) {
+        const idx = packageItems.findIndex((p) => p.id === pkg.id);
+        if (idx >= 0) removePackage(idx);
+      }
       setStatus("success");
     } catch (err: any) {
       const detail = err.body?.error || err.message || t("userPaymentProcess.failDetailFallback");

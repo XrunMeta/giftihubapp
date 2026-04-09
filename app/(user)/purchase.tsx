@@ -25,7 +25,7 @@ export default function PurchaseScreen() {
   const { t } = useI18n();
   const router = useRouter();
   const { currency } = useLocalSearchParams<{ currency?: string }>();
-  const { items, packageItems } = useCart();
+  const { items, packageItems, selectedItemIds, selectedPackageIds } = useCart();
   const [selected, setSelected] = useState<PaymentMethod | null>(null);
   const [devMode, setDevMode] = useState(false);
 
@@ -37,10 +37,12 @@ export default function PurchaseScreen() {
 
   const targetCurrency = currency || "KRW";
   const pkgTotal = packageItems
-    .filter((p) => p.currency === targetCurrency)
+    .filter((p) => p.currency === targetCurrency && p.id && selectedPackageIds.has(p.id))
     .reduce((s, p) => s + p.totalBudget, 0);
 
-  const targetItems = items.filter((i) => getItemCurrency(i) === targetCurrency);
+  const targetItems = items.filter((i) =>
+    getItemCurrency(i) === targetCurrency && i.cartId && selectedItemIds.has(i.cartId),
+  );
   const itemTotal = targetItems.reduce((s, i) => {
     if (i.flexibleAmount) return s + i.flexibleAmount;
     return s + i.product.price * i.quantity;
