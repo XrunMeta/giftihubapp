@@ -95,10 +95,30 @@ export async function apiFetch<T = unknown>(
     }
   }
 
-  const response = await fetch(`${_baseUrl}${path}`, {
-    ...fetchOptions,
-    headers,
-  });
+  const fullUrl = `${_baseUrl}${path}`;
+  const method = fetchOptions.method ?? "GET";
+  console.log(`[apiFetch] ${method} ${fullUrl} auth=${!!headers["Authorization"]}`);
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => {
+    console.error(`[apiFetch] TIMEOUT(15s) ${method} ${fullUrl}`);
+    controller.abort();
+  }, 15000);
+
+  let response: Response;
+  try {
+    response = await fetch(fullUrl, {
+      ...fetchOptions,
+      headers,
+      signal: controller.signal,
+    });
+  } catch (err: any) {
+    clearTimeout(timeoutId);
+    console.error(`[apiFetch] FETCH ERROR ${method} ${fullUrl} name=${err?.name} msg=${err?.message}`);
+    throw err;
+  }
+  clearTimeout(timeoutId);
+  console.log(`[apiFetch] ← ${response.status} ${fullUrl}`);
 
   if (!response.ok) {
     const body = await response.json().catch(() => null);

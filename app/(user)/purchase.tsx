@@ -1,7 +1,7 @@
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { useCart } from "@/context/CartContext";
+import { getItemCurrency, useCart } from "@/context/CartContext";
 import { useI18n } from "@/context/I18nContext";
 import type { PaymentMethod } from "@/services/store";
 import { getDevMode } from "@/services/system";
@@ -40,10 +40,7 @@ export default function PurchaseScreen() {
     .filter((p) => p.currency === targetCurrency)
     .reduce((s, p) => s + p.totalBudget, 0);
 
-  const targetItems = items.filter((i) => {
-    if (i.flexibleAmount) return (i.product.flexible_currency ?? "KRW") === targetCurrency;
-    return targetCurrency === "KRW";
-  });
+  const targetItems = items.filter((i) => getItemCurrency(i) === targetCurrency);
   const itemTotal = targetItems.reduce((s, i) => {
     if (i.flexibleAmount) return s + i.flexibleAmount;
     return s + i.product.price * i.quantity;
@@ -59,7 +56,7 @@ export default function PurchaseScreen() {
     }
     router.push({
       pathname: "/(user)/payment-process",
-      params: { method: selected, currency: targetCurrency },
+      params: { method: selected, currency: targetCurrency, nonce: String(Date.now()) },
     });
   };
 

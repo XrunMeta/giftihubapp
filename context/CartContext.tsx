@@ -8,6 +8,16 @@ export interface CartItem {
   flexibleAmount?: number;
 }
 
+export function getItemCurrency(i: CartItem): string {
+  if (i.flexibleAmount) return i.product.flexible_currency ?? "KRW";
+  return i.product.display_currency ?? "KRW";
+}
+
+export function getItemUnitPrice(i: CartItem): number {
+  if (i.flexibleAmount) return i.flexibleAmount;
+  return i.product.price;
+}
+
 export interface PackageItem {
   items: CartItem[];
   totalBudget: number;
@@ -87,11 +97,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const clearByCurrency = useCallback((currency: string) => {
     setPackageItems((prev) => prev.filter((p) => p.currency !== currency));
-
-    setItems((prev) => prev.filter((i) => {
-      if (i.flexibleAmount) return (i.product.flexible_currency ?? "KRW") !== currency;
-      return currency !== "KRW"; 
-    }));
+    setItems((prev) => prev.filter((i) => getItemCurrency(i) !== currency));
   }, []);
 
   const getCartCount = useCallback(() => {

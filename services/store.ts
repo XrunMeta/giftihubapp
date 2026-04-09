@@ -69,11 +69,17 @@ export async function purchaseProduct(
   paymentMethod: PaymentMethod,
   flexibleAmount?: number,
 ): Promise<PurchaseResponse> {
-  return apiFetch<PurchaseResponse>(`/oth-path${id}/purchase`, {
-    method: "POST",
-    body: JSON.stringify({
-      payment_method: paymentMethod,
-      flexible_amount: flexibleAmount,
-    }),
-  });
+  const payload = { payment_method: paymentMethod, flexible_amount: flexibleAmount };
+  console.log(`[store.purchaseProduct] REQ id=${id}`, JSON.stringify(payload));
+  try {
+    const res = await apiFetch<PurchaseResponse>(`/oth-path${id}/purchase`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+    console.log(`[store.purchaseProduct] RES id=${id}`, JSON.stringify(res));
+    return res;
+  } catch (err: any) {
+    console.error(`[store.purchaseProduct] ERR id=${id}`, JSON.stringify({ status: err?.status, body: err?.body, message: err?.message }));
+    throw err;
+  }
 }

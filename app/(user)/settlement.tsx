@@ -35,9 +35,7 @@ export default function SettlementScreen() {
     setLoading(true);
     try {
       const source = activeTab === "all" ? undefined : activeTab;
-      console.log("[settlement] loading, source=", source);
       const res = await getPurchases({ source: source as any });
-      console.log("[settlement] res=", JSON.stringify(res));
       setPurchases((res as any).purchases || []);
     } catch (e) {
       console.error("[settlement] error:", e);
@@ -59,6 +57,7 @@ export default function SettlementScreen() {
         <FlatList
           data={purchases}
           keyExtractor={(item) => item.id}
+          contentContainerStyle={purchases.length === 0 ? { flexGrow: 1, justifyContent: "center" } : { paddingTop: 8 }}
           renderItem={({ item }) => {
             const isBundle = !!item.set_id;
             const vouchers: any[] = item.set_vouchers ?? [];

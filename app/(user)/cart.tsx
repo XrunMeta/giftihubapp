@@ -1,6 +1,6 @@
 import { ScreenHeader } from "@/components/ScreenHeader";
 import { Button } from "@/components/ui/button";
-import { useCart, type CartItem } from "@/context/CartContext";
+import { getItemCurrency, getItemUnitPrice, useCart, type CartItem } from "@/context/CartContext";
 import { useI18n } from "@/context/I18nContext";
 import { getProductImageUrl } from "@/services/store";
 import { useRouter } from "expo-router";
@@ -136,9 +136,10 @@ export default function CartScreen() {
             )}
             <View className="flex-row items-center gap-3">
               <Text className="text-md font-bold text-foreground">
-                {item.flexibleAmount
-                  ? formatPrice(item.flexibleAmount, item.product.flexible_currency ?? "KRW")
-                  : `₩${(item.product.price * item.quantity).toLocaleString()}`}
+                {formatPrice(
+                  getItemUnitPrice(item) * (item.flexibleAmount ? 1 : item.quantity),
+                  getItemCurrency(item),
+                )}
               </Text>
               <Pressable onPress={() => removeFromCart(item.cartId!)}>
                 <Trash2 size={16} color="#ef4444" />
@@ -176,12 +177,9 @@ export default function CartScreen() {
           currTotals[pkg.currency] = (currTotals[pkg.currency] ?? 0) + pkg.totalBudget;
         }
         for (const item of items) {
-          if (item.flexibleAmount) {
-            const fc = item.product.flexible_currency ?? "KRW";
-            currTotals[fc] = (currTotals[fc] ?? 0) + item.flexibleAmount;
-          } else {
-            currTotals["KRW"] = (currTotals["KRW"] ?? 0) + item.product.price * item.quantity;
-          }
+          const cur = getItemCurrency(item);
+          const amt = item.flexibleAmount ? item.flexibleAmount : item.product.price * item.quantity;
+          currTotals[cur] = (currTotals[cur] ?? 0) + amt;
         }
 
         const currencies = Object.keys(currTotals).sort((a, b) => {
