@@ -8,7 +8,7 @@ import { v_acfdec } from 'vvfgtwbmdpbnvhtfbtbgudicfmpscw'
 
 export default function v_d3556a() {
   const { t: v_8d41d7 } = v_678659()
-  const { id: v_389afb } = v_d1a7ac<{ id: string }>()
+  const { id: v_389afb, receipt_code: v_7e01b9 } = v_d1a7ac<{ id: string; receipt_code?: string }>()
   const v_904d46 = v_d1d90c()
   const [v_dd6d25, v_663b06] = v_5ab095('')
   const [v_683210, v_34a50a] = v_5ab095(false)
@@ -24,9 +24,12 @@ export default function v_d3556a() {
         method: 'POST',
         body: JSON.stringify({ reason_text: v_dd6d25 }),
       })
+      const v_16d81c = v_7e01b9
+        ? `${v_8d41d7('myGifti.cancelRequest.successBody')}\n\n${v_8d41d7('myGifti.cancelRequest.receiptLabel')}: ${v_7e01b9}`
+        : v_8d41d7('myGifti.cancelRequest.successBody')
       v_03e392.alert(
         v_8d41d7('myGifti.cancelRequest.successTitle'),
-        v_8d41d7('myGifti.cancelRequest.successBody'),
+        v_16d81c,
         [{ text: v_8d41d7('common.confirm'), onPress: () => v_904d46.back() }],
       )
     } catch (v_49263d) {

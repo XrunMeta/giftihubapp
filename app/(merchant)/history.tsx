@@ -43,7 +43,7 @@ const v_b69110 = 20;
 
 const v_a3c4f5 = [
   "customer_request",
-  "merchant_error",
+  "system_error",
   "other",
 ] as const;
 type ReasonCode = (typeof v_a3c4f5)[number];
@@ -66,6 +66,7 @@ export default function v_ca8e36() {
 
   const [v_6f1aa4, v_1a6aaa] = v_5ab095<UsedVoucherItem | null>(null);
   const [v_bf3cca, v_47aa89] = v_5ab095(false);
+  const [v_fd53ad, v_38ca03] = v_5ab095("");
 
   const v_d3789a = v_de06a3(
     async (v_e2a85c, v_487a25 = false, v_7c5791 = v_5d756f) => {
@@ -167,7 +168,7 @@ export default function v_ca8e36() {
           },
           {
             text: v_8d41d7("merchant.history.reasonMerchant"),
-            onPress: () => v_6f7712("merchant_error"),
+            onPress: () => v_6f7712("system_error"),
           },
           {
             text: v_8d41d7("merchant.history.reasonOther"),
@@ -191,9 +192,10 @@ export default function v_ca8e36() {
         `/oth-path${v_8c0b26.voucher_id}/cancel`,
         {
           method: "POST",
-          body: JSON.stringify({ reason_code: v_58ca36 }),
+          body: JSON.stringify({ reason_code: v_58ca36, ...(v_fd53ad.trim() ? { reason_text: v_fd53ad.trim() } : {}) }),
         },
       );
+      v_38ca03("");
       v_1a6aaa(null);
       v_d3789a(1, true, v_1e43c9);
     } catch {
@@ -375,7 +377,7 @@ export default function v_ca8e36() {
         visible={!!v_6f1aa4}
         transparent
         animationType="slide"
-        onRequestClose={() => v_1a6aaa(null)}
+        onRequestClose={() => { v_1a6aaa(null); v_38ca03(""); }}
       >
         <View className="flex-1 justify-end bg-black/40">
           <View className="bg-card rounded-t-2xl px-5 pt-5 pb-8">
@@ -385,7 +387,7 @@ export default function v_ca8e36() {
                   <Text className="text-lg font-bold text-foreground">
                     {v_6f1aa4.name}
                   </Text>
-                  <TouchableOpacity onPress={() => v_1a6aaa(null)}>
+                  <TouchableOpacity onPress={() => { v_1a6aaa(null); v_38ca03(""); }}>
                     <Text className="text-muted-foreground text-base">✕</Text>
                   </TouchableOpacity>
                 </View>
@@ -440,8 +442,20 @@ export default function v_ca8e36() {
                 </View>
 
                 {}
-                {v_6f1aa4.status === "used" && (
+                {(v_6f1aa4.status === "used" || v_6f1aa4.status === "request_pending") && (
                   <View className="mt-5 gap-3">
+                    {v_6f1aa4.cancelable && (
+                      <TextInput
+                        className="border border-border rounded-xl px-4 py-3 text-sm text-foreground bg-white"
+                        placeholder={v_8d41d7("merchant.history.cancelMemoPlaceholder")}
+                        placeholderTextColor="#a1a1aa"
+                        value={v_fd53ad}
+                        onChangeText={v_38ca03}
+                        multiline
+                        numberOfLines={2}
+                        maxLength={200}
+                      />
+                    )}
                     {v_6f1aa4.cancelable ? (
                       <TouchableOpacity
                         onPress={() => v_9589d4(v_6f1aa4)}
@@ -456,7 +470,7 @@ export default function v_ca8e36() {
                           </Text>
                         )}
                       </TouchableOpacity>
-                    ) : (
+                    ) : v_6f1aa4.status === "used" ? (
                       <TouchableOpacity
                         onPress={() => v_b9c704(v_6f1aa4)}
                         disabled={v_bf3cca}
@@ -470,6 +484,12 @@ export default function v_ca8e36() {
                           </Text>
                         )}
                       </TouchableOpacity>
+                    ) : (
+                      <View className="border border-amber-300 bg-amber-50 rounded-xl py-4 items-center">
+                        <Text className="text-amber-700 font-medium text-sm">
+                          {v_8d41d7("merchant.history.cancelRequestPending")}
+                        </Text>
+                      </View>
                     )}
                   </View>
                 )}

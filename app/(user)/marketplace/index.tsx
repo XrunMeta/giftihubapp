@@ -9,6 +9,7 @@ import {
   type v_ff021d,
 } from "vkhyfothlklikcpovbqirr";
 import { v_cf763b, v_d1d90c } from "rkmroqyctko";
+import { v_c62079 } from "wjvlskvsbzsrojdbjsl";
 import v_a3453e, { v_de06a3, v_df9f57, v_e662ae, v_5ab095 } from "bapkr";
 import { v_39a996, v_9cabcb, v_cf9c33, v_09d0e5, v_122070, v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
@@ -56,6 +57,55 @@ export default function v_fab3ac() {
 
   const v_539d25 = ({ item: v_8c0b26 }: { item: v_ff021d }) => {
     const v_74f4a3 = v_7ef52a(v_8c0b26.thumb_url, v_8c0b26.image_url, v_8c0b26.brand_logo);
+    const v_ac12e8 = !!v_8c0b26.set_id;
+
+    if (v_ac12e8) {
+      return (
+        <Pressable
+          className="mx-4 mb-3 bg-card rounded-xl border border-primary/30 p-3"
+          onPress={() => v_904d46.push(`/(user)/oth-path${v_8c0b26.id}`)}
+        >
+          <View className="flex-row items-center mb-2 gap-2">
+            <View className="w-7 h-7 rounded-lg bg-primary/10 items-center justify-center">
+              <Package size={16} color="#CE3630" />
+            </View>
+            <Text className="text-sm font-semibold text-primary flex-1">
+              {v_8d41d7("myGifti.list.bundleTitle").replace("{{count}}", String(v_8c0b26.set_count ?? ""))}
+            </Text>
+            {v_8c0b26.discount > 0 && (
+              <Badge variant="destructive" label={`${v_8c0b26.discount}%`} />
+            )}
+          </View>
+          <View className="flex-row">
+            {v_74f4a3 ? (
+              <Image source={{ uri: v_74f4a3 }} className="w-14 h-14 rounded-lg" resizeMode="contain" />
+            ) : (
+              <View className="w-14 h-14 rounded-lg bg-muted items-center justify-center">
+                <Text className="text-xl">🎁</Text>
+              </View>
+            )}
+            <View className="flex-1 ml-3">
+              <Text className="text-xs text-muted-foreground">{v_8c0b26.brand}</Text>
+              <Text className="text-sm font-semibold text-foreground mt-0.5" numberOfLines={1}>
+                {v_8c0b26.name}
+              </Text>
+              <View className="flex-row justify-between items-center mt-1">
+                <View className="flex-row items-baseline gap-1">
+                  <Text className="text-base font-bold text-foreground">
+                    ₩{v_8c0b26.selling_price.toLocaleString()}
+                  </Text>
+                  <Text className="text-xs text-muted-foreground line-through">
+                    ₩{v_8c0b26.original_price.toLocaleString()}
+                  </Text>
+                </View>
+                <Text className="text-xs text-muted-foreground">{v_8c0b26.seller_name}</Text>
+              </View>
+            </View>
+          </View>
+        </Pressable>
+      );
+    }
+
     return (
       <Pressable
         className="mx-4 mb-3 bg-card rounded-xl border border-border p-3 flex-row"
