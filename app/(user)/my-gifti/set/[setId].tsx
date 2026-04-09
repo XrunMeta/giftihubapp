@@ -11,7 +11,6 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { Package, ShoppingCart } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, FlatList, Image, Pressable, Text, TextInput, View } from "react-native";
-import QRCode from "react-native-qrcode-svg";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const STATUS_BADGE_META: Record<string, { labelKey: string; variant: "default" | "secondary" | "destructive" }> = {
@@ -122,17 +121,9 @@ export default function SetDetailScreen() {
   const listHeader = (
     <>
       {}
-      <View className="mx-4 mb-4 bg-card rounded-xl border border-border overflow-hidden">
-        <View className="p-5 items-center">
-          <View className="flex-row items-center mb-3">
-            <Package size={20} color="#CE3630" />
-            <Text className="text-base font-bold text-foreground ml-2">{t("myGifti.setDetail.bundleLabel")}</Text>
-          </View>
-          <View className="p-3 bg-white rounded-lg">
-            <QRCode value={`gifti-set:${setId}`} size={160} />
-          </View>
-          <Text className="text-xs text-muted-foreground mt-2">{t("myGifti.setDetail.qrHint")}</Text>
-        </View>
+      <View className="mx-4 mt-2 mb-3 flex-row items-center">
+        <Package size={20} color="#CE3630" />
+        <Text className="text-base font-bold text-foreground ml-2">{t("myGifti.setDetail.bundleLabel")}</Text>
       </View>
 
       {}
