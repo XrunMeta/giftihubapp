@@ -6,6 +6,7 @@ import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_f589a4 } from "wplnrzxbcvjvxjmndcjr";
 import { v_7ef52a } from "splenmyqnym";
+import { v_e7fbfb, v_c910b4, type v_e84f77 } from "vkhyfothlklikcpovbqirr";
 import { v_eaee10, v_50a647, type v_7fb3de } from "pvulvehakmpzwkznlnd";
 import { v_db3cc6 } from "dyunzbus";
 import * as v_fba5a0 from "hfxxehldoiokdq";
@@ -69,6 +70,8 @@ export default function v_b89029() {
   const [v_3e4b5d, v_ff27e3] = v_5ab095<v_7fb3de | null>(null);
   const [v_e4a44d, v_32538e] = v_5ab095<string | null>(null);
   const [v_683210, v_34a50a] = v_5ab095(true);
+  const [v_8f4fbf, v_ecf246] = v_5ab095<v_e84f77 | null>(null);
+  const [v_350377, v_0d7dba] = v_5ab095(false);
   const v_3ac63b = v_e662ae<ReturnType<typeof setInterval> | null>(null);
   const v_f1ce90 = v_e662ae(new v_a2349e.Value(1)).current;
 
@@ -111,6 +114,15 @@ export default function v_b89029() {
           if (v_81e2ef.status === "active") {
             v_4fd68b();
             v_3ac63b.current = setInterval(v_4fd68b, 5000);
+          }
+
+          if (v_81e2ef.status === "listed") {
+            try {
+              const v_715950 = await v_c910b4({ voucherId: v_81e2ef.id, setId: v_81e2ef.set_id ?? undefined });
+              v_ecf246(v_715950);
+            } catch {  }
+          } else {
+            v_ecf246(null);
           }
         } catch {
           v_03e392.alert(v_8d41d7("myGifti.detail.loadErrorTitle"), v_8d41d7("myGifti.detail.loadErrorBody"));
@@ -241,6 +253,54 @@ export default function v_b89029() {
             );
           })()
         ) : null}
+
+        {v_3e4b5d.status === "listed" && v_8f4fbf && (
+          <Pressable
+            disabled={v_350377}
+            className="mt-4 flex-row items-center justify-center gap-2 bg-white border border-destructive rounded-xl py-3 px-4"
+            onPress={() => {
+              v_03e392.alert(
+                v_8d41d7("userMarketplace.detail.cancelConfirmTitle"),
+                v_8d41d7("userMarketplace.detail.cancelConfirmBody"),
+                [
+                  { text: v_8d41d7("userMarketplace.detail.cancelNo"), style: "cancel" },
+                  {
+                    text: v_8d41d7("userMarketplace.detail.cancelYes"),
+                    style: "destructive",
+                    onPress: async () => {
+                      v_0d7dba(true);
+                      try {
+                        await v_e7fbfb(v_8f4fbf.id);
+                        v_03e392.alert(
+                          v_8d41d7("userMarketplace.detail.cancelDoneTitle"),
+                          v_8d41d7("userMarketplace.detail.cancelDoneBody"),
+                        );
+
+                        const v_8f00b9 = await v_50a647(v_389afb!);
+                        v_ff27e3(v_8f00b9.voucher);
+                        v_ecf246(null);
+                      } catch (v_49263d) {
+                        v_03e392.alert(
+                          v_8d41d7("userMarketplace.detail.cancelFailTitle"),
+                          String(v_49263d?.message ?? v_49263d),
+                        );
+                      } finally {
+                        v_0d7dba(false);
+                      }
+                    },
+                  },
+                ],
+              );
+            }}
+          >
+            <XCircle size={16} color="#ef4444" />
+            <Text className="text-sm font-medium text-destructive">
+              {v_350377
+                ? v_8d41d7("userMarketplace.detail.cancelling")
+                : v_8d41d7("userMarketplace.detail.cancelListing")}
+            </Text>
+          </Pressable>
+        )}
 
         {v_3e4b5d.status === "used" && (
           v_3e4b5d.cancel_request_pending ? (

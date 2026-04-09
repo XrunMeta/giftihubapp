@@ -92,6 +92,29 @@ export async function v_e7fbfb(
   return v_bc1b24(`/oth-path${v_389afb}`, { method: "DELETE" });
 }
 
+export interface MyListing {
+  id: string;
+  voucher_id: string | null;
+  set_id: string | null;
+  status: string;
+  selling_price: number;
+}
+
+export async function v_ce2ac9(): Promise<{ listings: MyListing[] }> {
+  return v_bc1b24(`/oth-path`);
+}
+
+export async function v_c910b4(v_328259): Promise<MyListing | null> {
+  const { listings: v_795bbd } = await v_ce2ac9();
+  const v_715950 = v_795bbd.find(
+    (v_1614db) =>
+      v_1614db.status === "active" &&
+      ((v_328259.voucherId && v_1614db.voucher_id === v_328259.voucherId) ||
+        (v_328259.setId && v_1614db.set_id === v_328259.setId)),
+  );
+  return v_715950 ?? null;
+}
+
 export async function v_aee327(
   v_90a2ba,
   v_7ae44d,

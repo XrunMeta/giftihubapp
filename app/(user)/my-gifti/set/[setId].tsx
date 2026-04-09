@@ -4,7 +4,7 @@ import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_7ef52a } from "splenmyqnym";
-import { v_aee327 } from "vkhyfothlklikcpovbqirr";
+import { v_e7fbfb, v_aee327, v_c910b4, type v_e84f77 } from "vkhyfothlklikcpovbqirr";
 import { v_67877b, type v_f122c9, type v_7fb3de } from "pvulvehakmpzwkznlnd";
 import { v_db3cc6 } from "dyunzbus";
 import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
@@ -30,20 +30,34 @@ export default function v_2be872() {
   const [v_8584c0, v_31dffa] = v_5ab095(false);
   const [v_7ae44d, v_27a321] = v_5ab095("");
   const [v_cb66b4, v_ee9ec1] = v_5ab095(false);
+  const [v_8f4fbf, v_ecf246] = v_5ab095<v_e84f77 | null>(null);
+  const [v_350377, v_0d7dba] = v_5ab095(false);
+
+  const v_f6f5de = async () => {
+    if (!v_90a2ba) return;
+    try {
+      const v_8f00b9 = await v_67877b(v_90a2ba);
+      v_d57c80(v_8f00b9);
+      const v_97a43b = v_8f00b9.vouchers.some((v: v_7fb3de) => v_81e2ef.status === "listed") || (v_8f00b9.set as any).status === "listed";
+      if (v_97a43b) {
+        try {
+          const v_715950 = await v_c910b4({ setId: v_90a2ba });
+          v_ecf246(v_715950);
+        } catch {  }
+      } else {
+        v_ecf246(null);
+      }
+    } catch {
+      v_03e392.alert(v_8d41d7("myGifti.setDetail.loadErrorTitle"), v_8d41d7("myGifti.setDetail.loadErrorBody"));
+      v_904d46.back();
+    } finally {
+      v_34a50a(false);
+    }
+  };
 
   v_c4deb2(() => {
-    if (!v_90a2ba) return;
-    (async () => {
-      try {
-        const v_8f00b9 = await v_67877b(v_90a2ba);
-        v_d57c80(v_8f00b9);
-      } catch {
-        v_03e392.alert(v_8d41d7("myGifti.setDetail.loadErrorTitle"), v_8d41d7("myGifti.setDetail.loadErrorBody"));
-        v_904d46.back();
-      } finally {
-        v_34a50a(false);
-      }
-    })();
+    v_f6f5de();
+
   }, [v_90a2ba]);
 
   if (v_683210 || !v_9390e8) {
@@ -148,6 +162,51 @@ export default function v_2be872() {
           </Text>
         </View>
       </View>
+
+      {}
+      {v_8f4fbf && (
+        <View className="mx-4 mb-4">
+          <Button
+            variant="destructive"
+            disabled={v_350377}
+            onPress={() => {
+              v_03e392.alert(
+                v_8d41d7("userMarketplace.detail.cancelConfirmTitle"),
+                v_8d41d7("userMarketplace.detail.cancelConfirmBody"),
+                [
+                  { text: v_8d41d7("userMarketplace.detail.cancelNo"), style: "cancel" },
+                  {
+                    text: v_8d41d7("userMarketplace.detail.cancelYes"),
+                    style: "destructive",
+                    onPress: async () => {
+                      v_0d7dba(true);
+                      try {
+                        await v_e7fbfb(v_8f4fbf.id);
+                        v_03e392.alert(
+                          v_8d41d7("userMarketplace.detail.cancelDoneTitle"),
+                          v_8d41d7("userMarketplace.detail.cancelDoneBody"),
+                        );
+                        await v_f6f5de();
+                      } catch (v_49263d) {
+                        v_03e392.alert(
+                          v_8d41d7("userMarketplace.detail.cancelFailTitle"),
+                          String(v_49263d?.message ?? v_49263d),
+                        );
+                      } finally {
+                        v_0d7dba(false);
+                      }
+                    },
+                  },
+                ],
+              );
+            }}
+          >
+            {v_350377
+              ? v_8d41d7("userMarketplace.detail.cancelling")
+              : v_8d41d7("userMarketplace.detail.cancelListing")}
+          </Button>
+        </View>
+      )}
 
       {}
       {v_8a2259 && !v_8584c0 && (
