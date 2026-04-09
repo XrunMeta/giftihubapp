@@ -158,7 +158,7 @@ export default function v_2be872() {
         <View className="flex-row justify-between">
           <Text className="text-sm font-semibold text-foreground">{v_8d41d7("myGifti.setDetail.totalFace")}</Text>
           <Text className="text-base font-bold text-foreground">
-            ₩{v_b9f2b7.total_value?.toLocaleString()}
+            {({KRW:"₩",USD:"$",IDR:"Rp"} as Record<string,string>)[v_bb8024.currency] ?? ""}{v_b9f2b7.total_value?.toLocaleString()}
           </Text>
         </View>
       </View>
@@ -239,7 +239,7 @@ export default function v_2be872() {
           <View className="mt-3">
             <View className="flex-row justify-between mb-1">
               <Text className="text-xs text-muted-foreground">{v_8d41d7("myGifti.setDetail.totalFace")}</Text>
-              <Text className="text-xs text-foreground">₩{v_b9f2b7.total_value?.toLocaleString()}</Text>
+              <Text className="text-xs text-foreground">{({KRW:"₩",USD:"$",IDR:"Rp"} as Record<string,string>)[v_bb8024.currency] ?? ""}{v_b9f2b7.total_value?.toLocaleString()}</Text>
             </View>
             <View className="flex-row justify-between mb-1">
               <Text className="text-xs text-muted-foreground">{v_8d41d7("myGifti.setDetail.feeLabel")}</Text>

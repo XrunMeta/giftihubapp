@@ -1,5 +1,6 @@
 import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
 import { v_6185b9 } from "hqklsidyfbumojabxoewf";
+import { v_5d2c47 } from "jbfshypwcrklpetczcsca";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_7ef52a } from "splenmyqnym";
 import { v_6e56f5 } from "mbdlgxnaxny";
@@ -30,6 +31,7 @@ export default function v_fab3ac() {
     [v_8d41d7],
   );
   const v_904d46 = v_d1d90c();
+  const { user: v_625c74 } = v_5d2c47();
   const [v_795bbd, v_c90f4e] = v_5ab095<v_ff021d[]>([]);
   const [v_683210, v_34a50a] = v_5ab095(true);
   const [v_ac1d22, v_02dd63] = v_5ab095("all");
@@ -41,13 +43,15 @@ export default function v_fab3ac() {
     try {
       const v_8b9cd4 = v_ac1d22 === "all" ? undefined : (v_ac1d22 as v_add689);
       const v_8f00b9 = await v_113fd3({ category: v_8b9cd4, q: v_9875a1 || undefined });
-      v_c90f4e(v_8f00b9.listings);
+
+      const v_e4cf17 = v_625c74 ? v_8f00b9.listings.filter((v_1614db) => v_1614db.seller_id !== v_625c74.id) : v_8f00b9.listings;
+      v_c90f4e(v_e4cf17);
     } catch {
       console.error("Failed to load marketplace listings");
     } finally {
       v_34a50a(false);
     }
-  }, [v_ac1d22, v_9875a1]);
+  }, [v_ac1d22, v_9875a1, v_625c74]);
 
   v_cf763b(
     v_de06a3(() => {
