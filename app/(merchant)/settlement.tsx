@@ -1,7 +1,9 @@
 import { ScreenHeader } from "@/components/ScreenHeader";
+import { SegmentedControl } from "@/components/ui/segmented-control";
 import { Separator } from "@/components/ui/separator";
 import { useI18n } from "@/context/I18nContext";
 import { apiFetch } from "@/services/api";
+import { Calendar, ReceiptText } from "lucide-react-native";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ActivityIndicator,
@@ -89,16 +91,23 @@ export default function MerchantSettlementScreen() {
   }, [period, tab, fetchSettlement]);
 
   const renderDaily = ({ item }: { item: DailyItem }) => (
-    <View className="mx-4 mb-2 bg-card rounded-xl border border-border px-4 py-3">
-      <View className="flex-row justify-between items-center">
-        <View>
-          <Text className="text-sm font-medium text-foreground">{item.date}</Text>
-          <Text className="text-xs text-muted-foreground mt-0.5">
-            {item.count}
-            {t("merchant.settlement.countSuffix")}
-          </Text>
+    <View className="mx-4 mb-3 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+      <View className="flex-row items-center justify-between px-4 py-4">
+        <View className="min-w-0 flex-1 flex-row items-center gap-3">
+          <View className="h-11 w-11 shrink-0 items-center justify-center rounded-full bg-muted">
+            <Calendar size={20} color="#737373" strokeWidth={2} />
+          </View>
+          <View className="min-w-0 flex-1">
+            <Text className="text-base font-bold text-foreground" numberOfLines={1}>
+              {item.date}
+            </Text>
+            <Text className="mt-1 text-sm text-muted-foreground">
+              {item.count}
+              {t("merchant.settlement.countSuffix")}
+            </Text>
+          </View>
         </View>
-        <Text className="text-base font-bold text-foreground">
+        <Text className="ml-2 shrink-0 text-lg font-bold text-primary">
           ₩{item.total_amount?.toLocaleString()}
         </Text>
       </View>
@@ -120,39 +129,57 @@ export default function MerchantSettlementScreen() {
     } as Record<string, string>)[s] ?? s;
 
   const renderRecord = ({ item }: { item: SettlementRecord }) => (
-    <View className="mx-4 mb-2 bg-card rounded-xl border border-border p-4">
-      <View className="flex-row justify-between items-start mb-2">
-        <View className="flex-1">
-          <Text className="text-xs text-muted-foreground">
-            {item.period_from} ~ {item.period_to}
-          </Text>
-          <Text className="text-sm font-semibold text-foreground mt-0.5">
-            {item.type === "bundle" ? t("merchant.settlement.typeBundle") : t("merchant.settlement.typeNormal")} · {item.item_count}
-            {t("merchant.settlement.countSuffix")}
-          </Text>
+    <View className="mx-4 mb-3 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+      <View className="flex-row items-start justify-between gap-3 border-b border-border bg-muted/30 px-4 py-3">
+        <View className="min-w-0 flex-1 flex-row items-start gap-3">
+          <View className="mt-0.5 h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white">
+            <ReceiptText size={18} color="#737373" strokeWidth={2} />
+          </View>
+          <View className="min-w-0 flex-1">
+            <Text className="text-sm font-medium leading-5 text-muted-foreground">
+              {item.period_from} ~ {item.period_to}
+            </Text>
+            <Text className="mt-1.5 text-base font-bold text-foreground">
+              {item.type === "bundle" ? t("merchant.settlement.typeBundle") : t("merchant.settlement.typeNormal")} ·{" "}
+              {item.item_count}
+              {t("merchant.settlement.countSuffix")}
+            </Text>
+          </View>
         </View>
-        <View className="px-2 py-1 rounded-full" style={{ backgroundColor: (STATUS_COLORS[item.status] ?? "#737373") + "20" }}>
-          <Text className="text-xs font-medium" style={{ color: STATUS_COLORS[item.status] ?? "#737373" }}>
+        <View
+          className="shrink-0 rounded-full px-2.5 py-1.5"
+          style={{ backgroundColor: (STATUS_COLORS[item.status] ?? "#737373") + "22" }}
+        >
+          <Text className="text-sm font-semibold" style={{ color: STATUS_COLORS[item.status] ?? "#737373" }}>
             {recordStatusLabel(item.status)}
           </Text>
         </View>
       </View>
-      <View className="flex-row justify-between mt-1">
-        <Text className="text-xs text-muted-foreground">{t("merchant.settlement.totalLabel")}</Text>
-        <Text className="text-xs text-foreground font-medium">₩{item.total_amount?.toLocaleString()}</Text>
+
+      <View className="gap-2.5 px-4 py-3">
+        <View className="flex-row items-center justify-between">
+          <Text className="text-sm text-muted-foreground">{t("merchant.settlement.totalLabel")}</Text>
+          <Text className="text-sm font-semibold text-foreground">₩{item.total_amount?.toLocaleString()}</Text>
+        </View>
+        <View className="flex-row items-center justify-between">
+          <Text className="text-sm text-muted-foreground">{t("merchant.settlement.feeLabel")}</Text>
+          <Text className="text-sm font-semibold text-red-600">−₩{item.fee_amount?.toLocaleString()}</Text>
+        </View>
+        <View className="h-px bg-border" />
+        <View className="flex-row items-center justify-between">
+          <Text className="text-sm font-medium text-foreground">{t("merchant.settlement.netLabel")}</Text>
+          <Text className="text-lg font-bold text-primary">₩{item.net_amount?.toLocaleString()}</Text>
+        </View>
       </View>
-      <View className="flex-row justify-between mt-0.5">
-        <Text className="text-xs text-muted-foreground">{t("merchant.settlement.feeLabel")}</Text>
-        <Text className="text-xs text-muted-foreground">-₩{item.fee_amount?.toLocaleString()}</Text>
-      </View>
-      <View className="flex-row justify-between mt-0.5">
-        <Text className="text-xs text-muted-foreground">{t("merchant.settlement.netLabel")}</Text>
-        <Text className="text-sm font-bold text-primary">₩{item.net_amount?.toLocaleString()}</Text>
-      </View>
+
       {(item.tx_hash || item.bank_ref) && (
-        <Text className="text-xs text-muted-foreground mt-2" numberOfLines={1}>
-          {item.tx_hash ? `${t("merchant.settlement.txPrefix")}${item.tx_hash}` : `${t("merchant.settlement.bankPrefix")}${item.bank_ref}`}
-        </Text>
+        <View className="border-t border-border bg-muted/20 px-4 py-2.5">
+          <Text className="text-xs leading-5 text-muted-foreground" numberOfLines={2}>
+            {item.tx_hash
+              ? `${t("merchant.settlement.txPrefix")}${item.tx_hash}`
+              : `${t("merchant.settlement.bankPrefix")}${item.bank_ref}`}
+          </Text>
+        </View>
       )}
     </View>
   );
@@ -167,7 +194,7 @@ export default function MerchantSettlementScreen() {
             }`}
         >
           <Text
-            className={`text-center text-sm font-medium ${tab === subTab ? "text-primary-foreground" : "text-foreground"
+            className={`text-center font-medium ${tab === subTab ? "text-primary-foreground" : "text-foreground"
               }`}
           >
             {subTab === "settlement"
@@ -186,39 +213,32 @@ export default function MerchantSettlementScreen() {
       {tab === "settlement" ? (
         <>
           {}
-          <View className="flex-row mx-4 mb-3 gap-2">
-            {periods.map((p) => (
-              <TouchableOpacity
-                key={p.key}
-                onPress={() => setPeriod(p.key)}
-                className={`flex-1 py-3 rounded-lg border ${period === p.key ? "bg-primary border-primary" : "bg-card border-border"
-                  }`}
-              >
-                <Text
-                  className={`text-center text-sm font-medium ${period === p.key ? "text-primary-foreground" : "text-foreground"
-                    }`}
-                >
-                  {p.label}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
+          <SegmentedControl<Period>
+            className="mx-4 mb-3"
+            value={period}
+            onChange={setPeriod}
+            options={periods.map((p) => ({ value: p.key, label: p.label }))}
+          />
 
           {}
           {settlData && !settlLoading && (
-            <View className="mx-4 mb-3 bg-card rounded-xl border border-border p-4">
+            <View className="mx-4 mb-3 overflow-hidden rounded-2xl border border-border bg-card shadow-sm p-5">
               <View className="flex-row justify-between">
-                <View className="items-center flex-1">
-                  <Text className="text-xs text-muted-foreground">{t("merchant.settlement.totalCountLabel")}</Text>
-                  <Text className="text-xl font-bold text-foreground mt-1">
+                <View className="flex-1 items-center">
+                  <Text className="text-sm font-medium text-muted-foreground">
+                    {t("merchant.settlement.totalCountLabel")}
+                  </Text>
+                  <Text className="mt-2 text-2xl font-bold text-foreground">
                     {settlData.summary.total_count}
                     {t("merchant.settlement.countSuffix")}
                   </Text>
                 </View>
                 <Separator orientation="vertical" />
-                <View className="items-center flex-1">
-                  <Text className="text-xs text-muted-foreground">{t("merchant.settlement.totalAmountLabel")}</Text>
-                  <Text className="text-xl font-bold text-primary mt-1">
+                <View className="flex-1 items-center">
+                  <Text className="text-sm font-medium text-muted-foreground">
+                    {t("merchant.settlement.totalAmountLabel")}
+                  </Text>
+                  <Text className="mt-2 text-2xl font-bold text-primary">
                     ₩{settlData.summary.total_amount?.toLocaleString()}
                   </Text>
                 </View>
@@ -236,10 +256,10 @@ export default function MerchantSettlementScreen() {
               data={settlData?.daily ?? []}
               keyExtractor={(item) => item.date}
               renderItem={renderDaily}
-              contentContainerStyle={{ paddingBottom: 0 }}
+              contentContainerStyle={{ paddingBottom: 20 }}
               ListEmptyComponent={
                 <View className="flex-1 items-center justify-center py-20">
-                  <Text className="text-muted-foreground">{t("merchant.settlement.emptyDaily")}</Text>
+                  <Text className="text-base text-muted-foreground">{t("merchant.settlement.emptyDaily")}</Text>
                 </View>
               }
             />
@@ -256,7 +276,7 @@ export default function MerchantSettlementScreen() {
                 className={`px-3 py-1.5 rounded-full border ${recFilter === f.key ? "bg-primary border-primary" : "bg-card border-border"
                   }`}
               >
-                <Text className={`text-xs font-medium ${recFilter === f.key ? "text-primary-foreground" : "text-foreground"}`}>
+                <Text className={`text-sm font-medium ${recFilter === f.key ? "text-primary-foreground" : "text-foreground"}`}>
                   {f.label}
                 </Text>
               </TouchableOpacity>
@@ -272,10 +292,10 @@ export default function MerchantSettlementScreen() {
               data={records}
               keyExtractor={(item) => item.id}
               renderItem={renderRecord}
-              contentContainerStyle={{ paddingBottom: 0 }}
+              contentContainerStyle={{ paddingBottom: 20 }}
               ListEmptyComponent={
                 <View className="flex-1 items-center justify-center py-20">
-                  <Text className="text-muted-foreground">{t("merchant.settlement.emptyRecords")}</Text>
+                  <Text className="text-base text-muted-foreground">{t("merchant.settlement.emptyRecords")}</Text>
                 </View>
               }
             />

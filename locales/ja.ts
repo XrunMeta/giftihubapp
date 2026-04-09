@@ -264,6 +264,7 @@ export const ja: MessageTree = {
       voucherUsed: "使用済",
       voucherExpired: "期限切れ",
       voucherListed: "出品中",
+      requestedAt: "申請日時",
       purchasePrice: "購入額",
       fee: "手数料",
       payout: "支払額",

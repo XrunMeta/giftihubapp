@@ -99,7 +99,7 @@ export default function LoginScreen() {
           <View className="items-start mb-8 flex-grow-1">
             <Image
               source={images.logo}
-              className="w-[140px] h-[60px]"
+              className="w-[60px] h-[60px] mb-2"
               resizeMode="contain"
             />
             <Text className="text-2xl font-bold text-foreground">{t("auth.login.welcomeTitle")}</Text>
@@ -133,7 +133,7 @@ export default function LoginScreen() {
               <Switch
                 value={rememberMe}
                 onValueChange={setRememberMeState}
-                trackColor={{ false: "#d4d4d4", true: "#CE3630" }}
+                trackColor={{ false: "#d4d4d4", true: "#D33932" }}
                 thumbColor="#ffffff"
               />
             </View>

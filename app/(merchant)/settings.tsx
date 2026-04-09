@@ -18,9 +18,9 @@ function MenuItem({ icon, label, onPress }: { icon: React.ReactNode; label: stri
     <Pressable className="flex-row items-center justify-between px-4 py-6" onPress={onPress}>
       <View className="flex-row items-center gap-3">
         {icon}
-        <Text className="text-base text-foreground">{label}</Text>
+        <Text className="text-lg text-foreground">{label}</Text>
       </View>
-      <ChevronRight size={18} color="#737373" />
+      <ChevronRight size={20} color="#737373" />
     </Pressable>
   );
 }
@@ -58,9 +58,9 @@ export default function MerchantSettingsScreen() {
 
         {}
         <View className="mx-4 mt-4 bg-card rounded-xl border border-border p-5 mb-4">
-          <Text className="text-lg font-bold text-foreground">{user?.name}</Text>
-          {user?.email && <Text className="text-sm text-muted-foreground mt-0.5">{user.email}</Text>}
-          <Text className="text-xs text-primary mt-1">{t("merchant.mSettings.merchantAccount")}</Text>
+          <Text className="text-xl font-bold text-foreground">{user?.name}</Text>
+          {user?.email && <Text className="text-base text-muted-foreground mt-1">{user.email}</Text>}
+          <Text className="text-sm text-primary mt-1.5">{t("merchant.mSettings.merchantAccount")}</Text>
         </View>
 
         {}
@@ -71,12 +71,14 @@ export default function MerchantSettingsScreen() {
             className="mb-4"
             contentContainerStyle={{ paddingHorizontal: 16, gap: 12 }}
           >
-            {brands.map((b) => (
+            {brands.map((b) => {
+              const logoUri = b.logo_url ? resolveImageUrl(b.logo_url) : null;
+              return (
               <View key={b.slug} className="items-center gap-1.5" style={{ width: 72 }}>
                 <View className="w-14 h-14 rounded-xl bg-white border border-border items-center justify-center overflow-hidden">
-                  {b.logo_url ? (
+                  {logoUri ? (
                     <Image
-                      source={{ uri: resolveImageUrl(b.logo_url) }}
+                      source={{ uri: logoUri }}
                       className="w-full h-full"
                       resizeMode="contain"
                     />
@@ -86,16 +88,17 @@ export default function MerchantSettingsScreen() {
                     </Text>
                   )}
                 </View>
-                <Text className="text-xs text-foreground text-center" numberOfLines={2}>{b.name}</Text>
+                <Text className="text-sm text-foreground text-center" numberOfLines={2}>{b.name}</Text>
               </View>
-            ))}
+              );
+            })}
           </ScrollView>
         )}
 
         {}
         <View className="mx-4 bg-card rounded-xl border border-border overflow-hidden mb-4">
           <MenuItem
-            icon={<Settings2 size={20} color="#737373" />}
+            icon={<Settings2 size={22} color="#737373" />}
             label={t("merchant.mSettings.settlementPolicy")}
             onPress={() => router.push("/(merchant)/settlement-policy")}
           />

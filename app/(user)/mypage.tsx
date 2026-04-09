@@ -5,7 +5,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
 import { getMe, type MeResponse } from "@/services/account";
 import { useFocusEffect, useRouter } from "expo-router";
-import { ChevronRight, CreditCard, History, LogOut, Settings } from "lucide-react-native";
+import { ChevronRight, CreditCard, Gift, History, LogOut, Settings, UserCircle } from "lucide-react-native";
 import React, { useCallback, useState } from "react";
 import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -65,17 +65,27 @@ export default function MyPageScreen() {
       <ScrollView className="flex-1">
         {}
         <View className="mx-4 bg-card rounded-xl border border-border p-5 mb-4">
-          <Text className="text-lg font-bold text-foreground">{profile?.name}</Text>
-          {profile?.email && (
-            <Text className="text-sm text-muted-foreground mt-0.5">{profile.email}</Text>
-          )}
-          {profile?.telegram_username && (
-            <Text className="text-sm text-muted-foreground">@{profile.telegram_username}</Text>
-          )}
-          <View className="flex-row mt-4 gap-6">
+          <View className="flex-row gap-3">
+            <View className="h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+              <UserCircle size={22} color="#CE3630" strokeWidth={2} />
+            </View>
+            <View className="min-w-0 flex-1">
+              <Text className="text-lg font-bold text-foreground">{profile?.name}</Text>
+              {profile?.email && (
+                <Text className="mt-0.5 text-sm text-muted-foreground">{profile.email}</Text>
+              )}
+              {profile?.telegram_username && (
+                <Text className="text-sm text-muted-foreground">@{profile.telegram_username}</Text>
+              )}
+            </View>
+          </View>
+          <View className="mt-4 flex-row items-center gap-3">
+            <View className="h-11 w-11 items-center justify-center rounded-xl bg-primary/10">
+              <Gift size={22} color="#CE3630" strokeWidth={2} />
+            </View>
             <View>
               <Text className="text-2xl font-bold text-primary">{activeCount}</Text>
-              <Text className="text-xs text-muted-foreground">{t("mypage.giftCount")}</Text>
+              <Text className="text-sm text-muted-foreground">{t("mypage.giftCount")}</Text>
             </View>
           </View>
         </View>

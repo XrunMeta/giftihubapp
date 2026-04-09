@@ -14,7 +14,7 @@
         --card-foreground: #0a0a0a;
         --popover: #ffffff;
         --popover-foreground: #0a0a0a;
-        --primary: #CE3630;
+        --primary: #D33932;
         --primary-foreground: #ffffff;
         --secondary: #f5f5f5;
         --secondary-foreground: #0a0a0a;
@@ -27,7 +27,7 @@
         --border: #e5e5e5;
         --input: transparent;
         --input-background: #fafafa;
-        --ring: #CE3630;
+        --ring: #D33932;
         --radius: 0.75rem;
     }
 
@@ -52,5 +52,15 @@
         --input: transparent;
         --input-background: #262626;
         --ring: #E8504A;
+    }
+}
+
+@layer utilities {
+    .bg-card {
+        background-color: #ffffff;
+    }
+
+    .dark .bg-card {
+        background-color: #171717;
     }
 }
