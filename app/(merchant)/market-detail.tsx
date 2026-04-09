@@ -46,8 +46,11 @@ export default function v_271810() {
   const v_46383f = !!(v_a8fb42 as any).set_id;
 
   return (
-    <SafeAreaView className="flex-1 bg-white" edges={["top"]}>
-      <PageHeader title={v_8d41d7("merchant.marketDetail.title")} />
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
+      <PageHeader
+        title={v_8d41d7("merchant.marketDetail.title")}
+        onBackPress={() => v_904d46.navigate("/(merchant)/market")}
+      />
       <ScrollView className="flex-1 px-5" contentContainerStyle={{ paddingBottom: 0 }}>
         {(() => {
           const v_74f4a3 = v_7ef52a(v_a8fb42.image_url, v_a8fb42.brand_logo);
@@ -59,7 +62,7 @@ export default function v_271810() {
             </View>
           );
         })()}
-        <View className="bg-card rounded-xl border border-border p-5 mt-3">
+        <View className="bg-card rounded-xl border border-border p-5 mt-3 ">
           <View className="flex-row justify-between items-start">
             <View className="flex-1">
               <View className="flex-row items-center gap-2">
@@ -106,7 +109,7 @@ export default function v_271810() {
         </View>
       </ScrollView>
 
-      <View className="px-5 pt-3 pb-2 border-t border-border">
+      <View className="px-5 pt-3 pb-2 border-t border-border bg-white">
         <Button
           onPress={() =>
             v_904d46.push({

@@ -261,6 +261,7 @@ export const en: v_8695c5 = {
       voucherUsed: "Used",
       voucherExpired: "Expired",
       voucherListed: "Listed",
+      requestedAt: "Requested",
       purchasePrice: "Purchase",
       fee: "Fee",
       payout: "Payout",
