@@ -3,9 +3,10 @@ import { v_6185b9 } from "hqklsidyfbumojabxoewf";
 import { v_c62079 } from "wjvlskvsbzsrojdbjsl";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
+import { v_5d2c47 } from "jbfshypwcrklpetczcsca";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_7ef52a } from "splenmyqnym";
-import { v_eeb70f, type v_ff021d, type v_03d7df } from "vkhyfothlklikcpovbqirr";
+import { v_e7fbfb, v_eeb70f, type v_ff021d, type v_03d7df } from "vkhyfothlklikcpovbqirr";
 import { v_db3cc6 } from "dyunzbus";
 import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
 import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
@@ -16,9 +17,40 @@ export default function v_9c78c5() {
   const { t: v_8d41d7 } = v_678659();
   const { id: v_389afb } = v_d1a7ac<{ id: string }>();
   const v_904d46 = v_d1d90c();
+  const { user: v_625c74 } = v_5d2c47();
   const [v_a8fb42, v_ce7034] = v_5ab095<v_ff021d | null>(null);
   const [v_3a2126, v_22df91] = v_5ab095<v_03d7df[]>([]);
   const [v_683210, v_34a50a] = v_5ab095(true);
+  const [v_24fba7, v_1a6f59] = v_5ab095(false);
+
+  const v_2aec08 = !!(v_625c74 && v_a8fb42 && v_a8fb42.seller_id === v_625c74.id);
+
+  const v_5ca23e = () => {
+    if (!v_a8fb42) return;
+    v_03e392.alert(
+      v_8d41d7("userMarketplace.detail.cancelConfirmTitle"),
+      v_8d41d7("userMarketplace.detail.cancelConfirmBody"),
+      [
+        { text: v_8d41d7("userMarketplace.detail.cancelNo"), style: "cancel" },
+        {
+          text: v_8d41d7("userMarketplace.detail.cancelYes"),
+          style: "destructive",
+          onPress: async () => {
+            v_1a6f59(true);
+            try {
+              await v_e7fbfb(v_a8fb42.id);
+              v_03e392.alert(v_8d41d7("userMarketplace.detail.cancelDoneTitle"), v_8d41d7("userMarketplace.detail.cancelDoneBody"));
+              v_904d46.back();
+            } catch (v_49263d) {
+              v_03e392.alert(v_8d41d7("userMarketplace.detail.cancelFailTitle"), String(v_49263d?.message ?? v_49263d));
+            } finally {
+              v_1a6f59(false);
+            }
+          },
+        },
+      ],
+    );
+  };
 
   v_c4deb2(() => {
     if (v_389afb) v_58b8a9();
@@ -131,16 +163,22 @@ export default function v_9c78c5() {
       </ScrollView>
 
       <View className="px-5 py-3 border-t border-border bg-white">
-        <Button
-          onPress={() =>
-            v_904d46.push({
-              pathname: "/(user)/oth-path",
-              params: { listingId: v_a8fb42.id },
-            })
-          }
-        >
-          {v_8d41d7("userMarketplace.detail.purchase")}
-        </Button>
+        {v_2aec08 ? (
+          <Button variant="destructive" disabled={v_24fba7} onPress={v_5ca23e}>
+            {v_24fba7 ? v_8d41d7("userMarketplace.detail.cancelling") : v_8d41d7("userMarketplace.detail.cancelListing")}
+          </Button>
+        ) : (
+          <Button
+            onPress={() =>
+              v_904d46.push({
+                pathname: "/(user)/oth-path",
+                params: { listingId: v_a8fb42.id },
+              })
+            }
+          >
+            {v_8d41d7("userMarketplace.detail.purchase")}
+          </Button>
+        )}
       </View>
     </SafeAreaView>
   );

@@ -4,7 +4,7 @@ import { v_15e817, v_e300c4, v_7a943b, type v_42580b } from "dxfmfnfvriitbtghypp
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_e81ec9 } from "vhkgxwheyyipiczd";
 import { v_d1d90c } from "rkmroqyctko";
-import { v_3b9c43, v_c62079, v_a07c02, v_1290fc, v_d55cb2 } from "wjvlskvsbzsrojdbjsl";
+import { v_3ebb07, v_3b9c43, v_c62079, v_a07c02, v_1290fc, v_d55cb2 } from "wjvlskvsbzsrojdbjsl";
 import v_a3453e from "bapkr";
 import { v_03e392, v_9cabcb, v_cf9c33, v_09d0e5, v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
@@ -23,6 +23,9 @@ export default function v_d218af() {
     items: v_4622b9, packageItems: v_5be600,
     updateQuantity: v_3fe605, removeFromCart: v_af112b, removePackage: v_dbcdf7,
     getTotalPrice: v_e60156, getCartCount: v_63e412,
+    selectedItemIds: v_6e7be8, selectedPackageIds: v_942cd6,
+    toggleItemSelected: v_445291, togglePackageSelected: v_13681b, setAllSelected: v_171edc,
+    isItemSelected: v_096296, isPackageSelected: v_686526,
   } = v_7a943b();
 
   const v_4ccc1a = v_4622b9.length > 0 || v_5be600.length > 0;
@@ -38,9 +41,16 @@ export default function v_d218af() {
             ? `${v_6839b8.product.name}${v_7e0009 > 0 ? ` ${v_8d41d7("myGifti.list.restItems").replace("{{count}}", String(v_7e0009))}` : ""}`
             : v_8d41d7("userCart.fallbackName");
 
+          const v_1e0a1e = v_e42213.id ? v_686526(v_e42213.id) : false;
           return (
             <View key={`pkg-${v_e86ad8}`} className="bg-card rounded-xl border border-border p-3 mx-4 mb-3">
               <View className="flex-row items-center justify-between">
+                <Pressable
+                  onPress={() => v_e42213.id && v_13681b(v_e42213.id)}
+                  className={`w-6 h-6 rounded-md border items-center justify-center mr-2 ${v_1e0a1e ? "bg-primary border-primary" : "border-border"}`}
+                >
+                  {v_1e0a1e && <Check size={14} color="#fff" />}
+                </Pressable>
                 <View className="flex-row items-center gap-2 flex-1">
                   <View className="w-10 h-10 rounded-lg bg-primary/10 items-center justify-center">
                     <Package size={20} color="#CE3630" />
@@ -92,8 +102,15 @@ export default function v_d218af() {
 
   const v_fcf6ec = ({ item: v_8c0b26 }: { item: v_42580b }) => {
     const v_74f4a3 = v_e81ec9(v_8c0b26.product);
+    const v_587413 = v_8c0b26.cartId ? v_096296(v_8c0b26.cartId) : false;
     return (
-      <View className="flex-row bg-card rounded-xl border border-border p-3 mx-4 mb-3">
+      <View className="flex-row items-center bg-card rounded-xl border border-border p-3 mx-4 mb-3">
+        <Pressable
+          onPress={() => v_8c0b26.cartId && v_445291(v_8c0b26.cartId)}
+          className={`w-6 h-6 rounded-md border items-center justify-center mr-2 ${v_587413 ? "bg-primary border-primary" : "border-border"}`}
+        >
+          {v_587413 && <Check size={14} color="#fff" />}
+        </Pressable>
         {v_74f4a3 ? (
           <Image
             source={{ uri: v_74f4a3 }}
@@ -174,13 +191,16 @@ export default function v_d218af() {
 
         const v_d1b52c = {};
         for (const v_e42213 of v_5be600) {
+          if (!v_e42213.id || !v_942cd6.has(v_e42213.id)) continue;
           v_d1b52c[v_e42213.currency] = (v_d1b52c[v_e42213.currency] ?? 0) + v_e42213.totalBudget;
         }
         for (const v_8c0b26 of v_4622b9) {
+          if (!v_8c0b26.cartId || !v_6e7be8.has(v_8c0b26.cartId)) continue;
           const v_c3bc75 = v_15e817(v_8c0b26);
           const v_74dfb8 = v_8c0b26.flexibleAmount ? v_8c0b26.flexibleAmount : v_8c0b26.product.price * v_8c0b26.quantity;
           v_d1b52c[v_c3bc75] = (v_d1b52c[v_c3bc75] ?? 0) + v_74dfb8;
         }
+        const v_a75897 = v_6e7be8.size + v_942cd6.size;
 
         const v_1c3e83 = Object.keys(v_d1b52c).sort((v_779914, v_148ff6) => {
           const v_5e4f30 = ["USD", "KRW", "IDR"];
@@ -189,6 +209,10 @@ export default function v_d218af() {
         const v_3aa565 = v_1c3e83.length > 1;
 
         const v_de7a9a = () => {
+          if (v_a75897 === 0) {
+            v_03e392.alert(v_8d41d7("userCart.pickCurrencyTitle"), v_8d41d7("userCart.empty"));
+            return;
+          }
           if (v_3aa565) {
             const v_3d694a = v_1c3e83.map((v_3f4e2e) => ({
               text: `${v_3f4e2e} ${v_928ad6[v_3f4e2e]}${v_d1b52c[v_3f4e2e].toLocaleString()}`,

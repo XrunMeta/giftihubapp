@@ -15,7 +15,7 @@ export default function v_14045c() {
   const { t: v_8d41d7 } = v_678659();
   const { method: v_bfe9b9, currency: v_a832b3, nonce: v_0b0bec } = v_d1a7ac<{ method: string; currency?: string; nonce?: string }>();
   const v_904d46 = v_d1d90c();
-  const { items: v_4622b9, packageItems: v_5be600, clearByCurrency: v_e3ba8c, clearCart: v_340590 } = v_7a943b();
+  const { items: v_4622b9, packageItems: v_5be600, clearByCurrency: v_e3ba8c, clearCart: v_340590, selectedItemIds: v_6e7be8, selectedPackageIds: v_942cd6, removeFromCart: v_af112b, removePackage: v_dbcdf7 } = v_7a943b();
   const [v_d308b5, v_5193f8] = v_5ab095<"processing" | "success" | "failed">("processing");
   const [v_f0e6fe, v_d9d94d] = v_5ab095<string>("");
   const v_fab846 = v_e662ae<string | null>(null);
@@ -42,8 +42,12 @@ export default function v_14045c() {
       return;
     }
 
-    const v_7d7d61 = v_5be600.filter((v_e2a85c) => v_e2a85c.currency === v_6e2788);
-    const v_a3d7a5 = v_4622b9.filter((v_ebec57) => v_15e817(v_ebec57) === v_6e2788);
+    const v_7d7d61 = v_5be600.filter(
+      (v_e2a85c) => v_e2a85c.currency === v_6e2788 && v_e2a85c.id && v_942cd6.has(v_e2a85c.id),
+    );
+    const v_a3d7a5 = v_4622b9.filter(
+      (v_ebec57) => v_15e817(v_ebec57) === v_6e2788 && v_ebec57.cartId && v_6e7be8.has(v_ebec57.cartId),
+    );
 
     console.log("[payment-process] debug:", JSON.stringify({
       targetCurrency: v_6e2788,
@@ -134,9 +138,15 @@ export default function v_14045c() {
         }
       }
 
-      console.log(`[pay] LOOP DONE — clearing cur=${v_6e2788}, setting success`);
+      console.log(`[pay] LOOP DONE — removing purchased items only, setting success`);
 
-      v_e3ba8c(v_6e2788);
+      for (const v_23805a of v_a3d7a5) {
+        if (v_23805a.cartId) v_af112b(v_23805a.cartId);
+      }
+      for (const v_e42213 of v_7d7d61) {
+        const v_e86ad8 = v_5be600.findIndex((v_e2a85c) => v_e2a85c.id === v_e42213.id);
+        if (v_e86ad8 >= 0) v_dbcdf7(v_e86ad8);
+      }
       v_5193f8("success");
     } catch (v_49263d) {
       const v_3cfdfc = v_49263d.body?.error || v_49263d.message || v_8d41d7("userPaymentProcess.failDetailFallback");

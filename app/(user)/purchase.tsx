@@ -25,7 +25,7 @@ export default function v_0035e1() {
   const { t: v_8d41d7 } = v_678659();
   const v_904d46 = v_d1d90c();
   const { currency: v_a832b3 } = v_d1a7ac<{ currency?: string }>();
-  const { items: v_4622b9, packageItems: v_5be600 } = v_7a943b();
+  const { items: v_4622b9, packageItems: v_5be600, selectedItemIds: v_6e7be8, selectedPackageIds: v_942cd6 } = v_7a943b();
   const [v_587413, v_2122dd] = v_5ab095<v_88a3f9 | null>(null);
   const [v_36b75f, v_f99445] = v_5ab095(false);
 
@@ -37,10 +37,12 @@ export default function v_0035e1() {
 
   const v_6e2788 = v_a832b3 || "KRW";
   const v_40812c = v_5be600
-    .filter((v_e2a85c) => v_e2a85c.currency === v_6e2788)
+    .filter((v_e2a85c) => v_e2a85c.currency === v_6e2788 && v_e2a85c.id && v_942cd6.has(v_e2a85c.id))
     .reduce((v_fd5f43, v_e2a85c) => v_fd5f43 + v_e2a85c.totalBudget, 0);
 
-  const v_a3d7a5 = v_4622b9.filter((v_ebec57) => v_15e817(v_ebec57) === v_6e2788);
+  const v_a3d7a5 = v_4622b9.filter((v_ebec57) =>
+    v_15e817(v_ebec57) === v_6e2788 && v_ebec57.cartId && v_6e7be8.has(v_ebec57.cartId),
+  );
   const v_0f1165 = v_a3d7a5.reduce((v_fd5f43, v_ebec57) => {
     if (v_ebec57.flexibleAmount) return v_fd5f43 + v_ebec57.flexibleAmount;
     return v_fd5f43 + v_ebec57.product.price * v_ebec57.quantity;
