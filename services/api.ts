@@ -95,10 +95,30 @@ export async function v_bc1b24<T = unknown>(
     }
   }
 
-  const v_3393e3 = await fetch(`${v_c15f15}${v_9fe22d}`, {
-    ...v_a611c4,
-    headers: v_3f4675,
-  });
+  const v_b958f2 = `${v_c15f15}${v_9fe22d}`;
+  const v_bfe9b9 = v_a611c4.method ?? "GET";
+  console.log(`[apiFetch] ${v_bfe9b9} ${v_b958f2} auth=${!!v_3f4675["Authorization"]}`);
+
+  const v_4fc7c7 = new AbortController();
+  const v_3894d5 = setTimeout(() => {
+    console.error(`[apiFetch] TIMEOUT(15s) ${v_bfe9b9} ${v_b958f2}`);
+    v_4fc7c7.abort();
+  }, 15000);
+
+  let v_3393e3;
+  try {
+    v_3393e3 = await fetch(v_b958f2, {
+      ...v_a611c4,
+      headers: v_3f4675,
+      signal: v_4fc7c7.signal,
+    });
+  } catch (v_49263d) {
+    clearTimeout(v_3894d5);
+    console.error(`[apiFetch] FETCH ERROR ${v_bfe9b9} ${v_b958f2} name=${v_49263d?.name} msg=${v_49263d?.message}`);
+    throw v_49263d;
+  }
+  clearTimeout(v_3894d5);
+  console.log(`[apiFetch] ← ${v_3393e3.status} ${v_b958f2}`);
 
   if (!v_3393e3.ok) {
     const v_4d33b2 = await v_3393e3.json().catch(() => null);

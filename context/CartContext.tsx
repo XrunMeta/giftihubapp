@@ -8,6 +8,16 @@ export interface CartItem {
   flexibleAmount?: number;
 }
 
+export function v_15e817(v_ebec57): string {
+  if (v_ebec57.flexibleAmount) return v_ebec57.product.flexible_currency ?? "KRW";
+  return v_ebec57.product.display_currency ?? "KRW";
+}
+
+export function v_e300c4(v_ebec57): number {
+  if (v_ebec57.flexibleAmount) return v_ebec57.flexibleAmount;
+  return v_ebec57.product.price;
+}
+
 export interface PackageItem {
   items: CartItem[];
   totalBudget: number;
@@ -87,11 +97,7 @@ export function v_f931fd({ children: v_21f619 }: { children: v_a3453e.ReactNode 
 
   const v_e3ba8c = v_de06a3((v_a832b3) => {
     v_6bc833((v_ba2215) => v_ba2215.filter((v_e2a85c) => v_e2a85c.currency !== v_a832b3));
-
-    v_fa923c((v_ba2215) => v_ba2215.filter((v_ebec57) => {
-      if (v_ebec57.flexibleAmount) return (v_ebec57.product.flexible_currency ?? "KRW") !== v_a832b3;
-      return v_a832b3 !== "KRW"; 
-    }));
+    v_fa923c((v_ba2215) => v_ba2215.filter((v_ebec57) => v_15e817(v_ebec57) !== v_a832b3));
   }, []);
 
   const v_63e412 = v_de06a3(() => {

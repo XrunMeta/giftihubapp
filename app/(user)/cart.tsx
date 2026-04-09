@@ -1,6 +1,6 @@
 import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
-import { v_7a943b, type v_42580b } from "dxfmfnfvriitbtghyppor";
+import { v_15e817, v_e300c4, v_7a943b, type v_42580b } from "dxfmfnfvriitbtghyppor";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_e81ec9 } from "vhkgxwheyyipiczd";
 import { v_d1d90c } from "rkmroqyctko";
@@ -136,9 +136,10 @@ export default function v_d218af() {
             )}
             <View className="flex-row items-center gap-3">
               <Text className="text-md font-bold text-foreground">
-                {v_8c0b26.flexibleAmount
-                  ? v_be1e41(v_8c0b26.flexibleAmount, v_8c0b26.product.flexible_currency ?? "KRW")
-                  : `₩${(v_8c0b26.product.price * v_8c0b26.quantity).toLocaleString()}`}
+                {v_be1e41(
+                  v_e300c4(v_8c0b26) * (v_8c0b26.flexibleAmount ? 1 : v_8c0b26.quantity),
+                  v_15e817(v_8c0b26),
+                )}
               </Text>
               <Pressable onPress={() => v_af112b(v_8c0b26.cartId!)}>
                 <Trash2 size={16} color="#ef4444" />
@@ -176,12 +177,9 @@ export default function v_d218af() {
           v_d1b52c[v_e42213.currency] = (v_d1b52c[v_e42213.currency] ?? 0) + v_e42213.totalBudget;
         }
         for (const v_8c0b26 of v_4622b9) {
-          if (v_8c0b26.flexibleAmount) {
-            const v_3b170c = v_8c0b26.product.flexible_currency ?? "KRW";
-            v_d1b52c[v_3b170c] = (v_d1b52c[v_3b170c] ?? 0) + v_8c0b26.flexibleAmount;
-          } else {
-            v_d1b52c["KRW"] = (v_d1b52c["KRW"] ?? 0) + v_8c0b26.product.price * v_8c0b26.quantity;
-          }
+          const v_c3bc75 = v_15e817(v_8c0b26);
+          const v_74dfb8 = v_8c0b26.flexibleAmount ? v_8c0b26.flexibleAmount : v_8c0b26.product.price * v_8c0b26.quantity;
+          v_d1b52c[v_c3bc75] = (v_d1b52c[v_c3bc75] ?? 0) + v_74dfb8;
         }
 
         const v_1c3e83 = Object.keys(v_d1b52c).sort((v_779914, v_148ff6) => {

@@ -1,7 +1,7 @@
 import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
-import { v_7a943b } from "dxfmfnfvriitbtghyppor";
+import { v_15e817, v_7a943b } from "dxfmfnfvriitbtghyppor";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import type { v_88a3f9 } from "vhkgxwheyyipiczd";
 import { v_8d53e7 } from "tdwgovnkpylnjynsp";
@@ -40,10 +40,7 @@ export default function v_0035e1() {
     .filter((v_e2a85c) => v_e2a85c.currency === v_6e2788)
     .reduce((v_fd5f43, v_e2a85c) => v_fd5f43 + v_e2a85c.totalBudget, 0);
 
-  const v_a3d7a5 = v_4622b9.filter((v_ebec57) => {
-    if (v_ebec57.flexibleAmount) return (v_ebec57.product.flexible_currency ?? "KRW") === v_6e2788;
-    return v_6e2788 === "KRW";
-  });
+  const v_a3d7a5 = v_4622b9.filter((v_ebec57) => v_15e817(v_ebec57) === v_6e2788);
   const v_0f1165 = v_a3d7a5.reduce((v_fd5f43, v_ebec57) => {
     if (v_ebec57.flexibleAmount) return v_fd5f43 + v_ebec57.flexibleAmount;
     return v_fd5f43 + v_ebec57.product.price * v_ebec57.quantity;
@@ -59,7 +56,7 @@ export default function v_0035e1() {
     }
     v_904d46.push({
       pathname: "/(user)/payment-process",
-      params: { method: v_587413, currency: v_6e2788 },
+      params: { method: v_587413, currency: v_6e2788, nonce: String(Date.now()) },
     });
   };
 

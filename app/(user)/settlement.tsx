@@ -35,9 +35,7 @@ export default function v_1a8c84() {
     v_34a50a(true);
     try {
       const v_04e790 = v_ac1d22 === "all" ? undefined : v_ac1d22;
-      console.log("[settlement] loading, source=", v_04e790);
       const v_8f00b9 = await v_a4ddab({ source: v_04e790 as any });
-      console.log("[settlement] res=", JSON.stringify(v_8f00b9));
       v_592b07((v_8f00b9 as any).purchases || []);
     } catch (v_9e86fd) {
       console.error("[settlement] error:", v_9e86fd);
@@ -59,6 +57,7 @@ export default function v_1a8c84() {
         <FlatList
           data={v_a73c06}
           keyExtractor={(v_8c0b26) => v_8c0b26.id}
+          contentContainerStyle={v_a73c06.length === 0 ? { flexGrow: 1, justifyContent: "center" } : { paddingTop: 8 }}
           renderItem={({ item: v_8c0b26 }) => {
             const v_ac12e8 = !!v_8c0b26.set_id;
             const v_f9fd27 = v_8c0b26.set_vouchers ?? [];
