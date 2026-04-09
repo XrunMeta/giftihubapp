@@ -1,5 +1,6 @@
 import { ScreenHeader } from "@/components/ScreenHeader";
 import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
 import { resolveImageUrl } from "@/lib/image";
 import { cn } from "@/lib/utils";
@@ -30,6 +31,7 @@ export default function MarketplaceScreen() {
     [t],
   );
   const router = useRouter();
+  const { user } = useAuth();
   const [listings, setListings] = useState<MarketplaceListing[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("all");
@@ -41,13 +43,15 @@ export default function MarketplaceScreen() {
     try {
       const category = activeTab === "all" ? undefined : (activeTab as MarketplaceCategory);
       const res = await getMarketplaceListings({ category, q: search || undefined });
-      setListings(res.listings);
+
+      const filtered = user ? res.listings.filter((l) => l.seller_id !== user.id) : res.listings;
+      setListings(filtered);
     } catch {
       console.error("Failed to load marketplace listings");
     } finally {
       setLoading(false);
     }
-  }, [activeTab, search]);
+  }, [activeTab, search, user]);
 
   useFocusEffect(
     useCallback(() => {

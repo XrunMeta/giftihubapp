@@ -158,7 +158,7 @@ export default function SetDetailScreen() {
         <View className="flex-row justify-between">
           <Text className="text-sm font-semibold text-foreground">{t("myGifti.setDetail.totalFace")}</Text>
           <Text className="text-base font-bold text-foreground">
-            ₩{summary.total_value?.toLocaleString()}
+            {({KRW:"₩",USD:"$",IDR:"Rp"} as Record<string,string>)[set.currency] ?? ""}{summary.total_value?.toLocaleString()}
           </Text>
         </View>
       </View>
@@ -239,7 +239,7 @@ export default function SetDetailScreen() {
           <View className="mt-3">
             <View className="flex-row justify-between mb-1">
               <Text className="text-xs text-muted-foreground">{t("myGifti.setDetail.totalFace")}</Text>
-              <Text className="text-xs text-foreground">₩{summary.total_value?.toLocaleString()}</Text>
+              <Text className="text-xs text-foreground">{({KRW:"₩",USD:"$",IDR:"Rp"} as Record<string,string>)[set.currency] ?? ""}{summary.total_value?.toLocaleString()}</Text>
             </View>
             <View className="flex-row justify-between mb-1">
               <Text className="text-xs text-muted-foreground">{t("myGifti.setDetail.feeLabel")}</Text>
