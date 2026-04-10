@@ -27,7 +27,8 @@ export type VoucherStatus =
   | "used"
   | "expired"
   | "transferred"
-  | "listed";
+  | "listed"
+  | "gifted";
 
 export async function v_720509(
   v_d308b5,

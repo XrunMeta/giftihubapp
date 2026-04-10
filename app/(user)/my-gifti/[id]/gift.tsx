@@ -12,7 +12,7 @@ import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
 
-const v_89b34f = "https://giftihub.com/gift";
+const v_89b34f = "https://oth-path-8f7f45.example.invalid/page/gift";
 
 export default function v_006fbd() {
   const { t: v_8d41d7 } = v_678659();
