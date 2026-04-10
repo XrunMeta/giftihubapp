@@ -5,7 +5,7 @@ import { v_5d2c47 } from "jbfshypwcrklpetczcsca";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_7ef860, type v_44083e } from "eqrxxpgqjbwbqqqhvy";
 import { v_cf763b, v_d1d90c } from "rkmroqyctko";
-import { v_6a6a7c, v_d84748, v_1c7574, v_0c9ab6, v_5dcc4b } from "wjvlskvsbzsrojdbjsl";
+import { v_6a6a7c, v_d84748, v_4700cd, v_1c7574, v_6e3ddd, v_0c9ab6, v_5dcc4b, v_de1ad2 } from "wjvlskvsbzsrojdbjsl";
 import v_a3453e, { v_de06a3, v_5ab095 } from "bapkr";
 import { v_39a996, v_09d0e5, v_122070, v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
@@ -83,6 +83,26 @@ export default function v_840f8f() {
         </View>
 
         {}
+        <View className="mx-4 bg-card rounded-xl border border-border overflow-hidden mb-4">
+          <MenuItem
+            icon={<UserPen size={20} color="#737373" />}
+            label={v_8d41d7("mypage.editProfile")}
+            onPress={() => v_904d46.push("/(user)/edit-profile")}
+          />
+          <Separator />
+          <MenuItem
+            icon={<KeyRound size={20} color="#737373" />}
+            label={v_8d41d7("mypage.changePassword")}
+            onPress={() => v_904d46.push("/(user)/change-password")}
+          />
+          <Separator />
+          <MenuItem
+            icon={<Globe size={20} color="#737373" />}
+            label={v_8d41d7("settings.language")}
+            onPress={() => v_904d46.push("/(user)/language-settings")}
+          />
+        </View>
+
         <View className="mx-4 bg-card rounded-xl border border-border overflow-hidden">
           <MenuItem
             icon={<History size={20} color="#737373" />}
@@ -94,12 +114,6 @@ export default function v_840f8f() {
             icon={<CreditCard size={20} color="#737373" />}
             label={v_8d41d7("mypage.paymentHistory")}
             onPress={() => v_904d46.push("/(user)/settlement")}
-          />
-          <Separator />
-          <MenuItem
-            icon={<Settings size={20} color="#737373" />}
-            label={v_8d41d7("mypage.settings")}
-            onPress={() => v_904d46.push("/(user)/settings")}
           />
         </View>
 
