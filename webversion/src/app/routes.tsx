@@ -23,6 +23,11 @@ import { GiftiTransferConfirm } from "./pages/user/GiftiTransferConfirm";
 import { GiftiTransferComplete } from "./pages/user/GiftiTransferComplete";
 import { GiftiRefund } from "./pages/user/GiftiRefund";
 
+import { ProductsMenu } from "./pages/admin/ProductsMenu";
+import { MembersMenu } from "./pages/admin/MembersMenu";
+import { TransactionsMenu } from "./pages/admin/TransactionsMenu";
+import { SettlementsMenu } from "./pages/admin/SettlementsMenu";
+import { SystemMenu } from "./pages/admin/SystemMenu";
 import { Keywords } from "./pages/admin/Keywords";
 import { BrandKeywords } from "./pages/admin/BrandKeywords";
 
@@ -85,8 +90,18 @@ export const router = createBrowserRouter([
   {
     path: "/oth-path",
     children: [
-      { path: "keywords", Component: Keywords },
-      { path: "brands", Component: BrandKeywords },
+
+      { path: "products", Component: ProductsMenu },
+      { path: "products/keywords", Component: Keywords },
+      { path: "products/brand-keywords", Component: BrandKeywords },
+
+      { path: "members", Component: MembersMenu },
+
+      { path: "transactions", Component: TransactionsMenu },
+
+      { path: "settlements", Component: SettlementsMenu },
+
+      { path: "system", Component: SystemMenu },
     ],
   },
 ]);

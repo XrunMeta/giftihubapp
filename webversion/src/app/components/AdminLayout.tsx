@@ -1,13 +1,15 @@
 import { Link, useLocation } from "react-router";
-import { Tag, Store, Settings } from "lucide-react";
+import { Package, Users, ArrowLeftRight, Calculator, Settings } from "lucide-react";
 
 export function AdminLayout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
 
   const tabs = [
-    { path: "/oth-path", icon: Tag, label: "키워드" },
-    { path: "/oth-path", icon: Store, label: "브랜드" },
-    { path: "/oth-path", icon: Settings, label: "설정" },
+    { path: "/oth-path", icon: Package, label: "상품" },
+    { path: "/oth-path", icon: Users, label: "회원" },
+    { path: "/oth-path", icon: ArrowLeftRight, label: "거래" },
+    { path: "/oth-path", icon: Calculator, label: "정산" },
+    { path: "/oth-path", icon: Settings, label: "시스템" },
   ];
 
   return (
@@ -18,7 +20,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
         <div className="max-w-lg mx-auto flex justify-around">
           {tabs.map((tab) => {
             const Icon = tab.icon;
-            const isActive = location.pathname === tab.path;
+            const isActive = location.pathname.startsWith(tab.path);
             return (
               <Link
                 key={tab.path}
