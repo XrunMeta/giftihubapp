@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
+import { formatPrice, currencySymbol } from "@/lib/currency";
 import { resolveImageUrl } from "@/lib/image";
 import { cancelListing, getListingDetail, type MarketplaceListing, type SetVoucher } from "@/services/marketplace";
 import { format } from "date-fns";
@@ -120,13 +121,13 @@ export default function MarketplaceDetailScreen() {
             <View className="flex-row justify-between">
               <Text className="text-sm text-muted-foreground">{t("userMarketplace.detail.originalPrice")}</Text>
               <Text className="text-sm text-muted-foreground line-through">
-                ₩{listing.original_price.toLocaleString()}
+                {formatPrice(listing.original_price, listing.currency)}
               </Text>
             </View>
             <View className="flex-row justify-between">
               <Text className="text-base font-semibold text-foreground">{t("userMarketplace.detail.salePrice")}</Text>
               <Text className="text-xl font-bold text-primary">
-                ₩{listing.selling_price.toLocaleString()}
+                {formatPrice(listing.selling_price, listing.currency)}
               </Text>
             </View>
             <View className="flex-row justify-between">
@@ -148,7 +149,7 @@ export default function MarketplaceDetailScreen() {
               {t("userMarketplace.detail.includedItems")}
             </Text>
             {setVouchers.map((v, i) => {
-              const sym = { KRW: "₩", USD: "$", IDR: "Rp" }[v.base_currency] ?? "₩";
+              const sym = currencySymbol(v.base_currency);
               const price = v.face_value_base || v.face_value;
               return (
                 <View key={i} className="flex-row justify-between items-center py-1.5 border-b border-border last:border-b-0">

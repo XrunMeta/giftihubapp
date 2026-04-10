@@ -13,11 +13,7 @@ import React, { useCallback, useMemo, useState } from "react";
 import { ActivityIndicator, FlatList, Image, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const SYM: Record<string, string> = { KRW: "₩", USD: "$", IDR: "Rp" };
-function fmtPrice(amount: number, currency?: string) {
-  const sym = SYM[currency ?? "KRW"] ?? "₩";
-  return `${sym}${amount.toLocaleString()}`;
-}
+import { formatPrice as fmtPrice } from "@/lib/currency";
 
 function kwLabel(kw: Keyword, locale: Locale): string {
   if (locale === "en" && kw.name_en) return kw.name_en;

@@ -1,4 +1,5 @@
 import Barcode128 from "@/components/Barcode128";
+import { formatPrice } from "@/lib/currency";
 import { PageHeader } from "@/components/PageHeader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -360,7 +361,7 @@ export default function GiftiDetailScreen() {
             <View className="flex-row justify-between">
               <Text className="text-sm text-muted-foreground">{t("myGifti.detail.faceValue")}</Text>
               <Text className="text-sm font-medium text-foreground">
-                ₩{voucher.face_value?.toLocaleString() ?? "0"}
+                {formatPrice(voucher.face_value, voucher.base_currency)}
               </Text>
             </View>
             <View className="flex-row justify-between">

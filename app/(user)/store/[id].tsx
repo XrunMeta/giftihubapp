@@ -19,7 +19,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useAlertShim } from "@/components/ui/alert-shim";
-const CUR_SYM: Record<string, string> = { KRW: "₩", USD: "$", IDR: "Rp" };
+import { currencySymbol } from "@/lib/currency";
 
 function formatThousandsFromDigits(digits: string): string {
   if (!digits) return "";
@@ -63,7 +63,7 @@ export default function ProductDetailScreen() {
 
   const isFlexible = product.product_type === "flexible";
   const flexCur = product.flexible_currency ?? "KRW";
-  const sym = CUR_SYM[flexCur] ?? "₩";
+  const sym = currencySymbol(flexCur);
   const discount =
     !isFlexible && product.price > 0 && product.face_value > 0 && product.price < product.face_value
       ? Math.round((1 - product.price / product.face_value) * 100)
@@ -166,18 +166,18 @@ export default function ProductDetailScreen() {
                           </Text>
                         </View>
                         <Text className="text-sm text-muted-foreground line-through">
-                          {CUR_SYM[product.display_currency] ?? "₩"}
+                          {currencySymbol(product.display_currency)}
                           {(product.face_value ?? 0).toLocaleString()}
                         </Text>
                       </View>
                       <Text className="text-2xl font-bold text-foreground shrink-0">
-                        {CUR_SYM[product.display_currency] ?? "₩"}
+                        {currencySymbol(product.display_currency)}
                         {(product.price ?? 0).toLocaleString()}
                       </Text>
                     </>
                   ) : (
                     <Text className="text-2xl font-bold text-foreground">
-                      {CUR_SYM[product.display_currency] ?? "₩"}
+                      {currencySymbol(product.display_currency)}
                       {(product.price ?? 0).toLocaleString()}
                     </Text>
                   )}

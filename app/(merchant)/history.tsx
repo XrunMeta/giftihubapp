@@ -1,5 +1,6 @@
 import { ScreenHeader } from "@/components/ScreenHeader";
 import { useI18n } from "@/context/I18nContext";
+import { formatPrice } from "@/lib/currency";
 import { apiFetch } from "@/services/api";
 import { format } from "date-fns";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -309,7 +310,7 @@ export default function MerchantHistoryScreen() {
               </View>
               <View className="items-end ml-2">
                 <Text className="text-base font-bold text-primary">
-                  ₩{item.amount?.toLocaleString()}
+                  {formatPrice(item.amount)}
                 </Text>
                 <Text className="text-xs text-muted-foreground mt-0.5">
                   {format(new Date(item.used_at * 1000), "MM.dd HH:mm")}
@@ -453,13 +454,13 @@ export default function MerchantHistoryScreen() {
                   <View className="flex-row justify-between">
                     <Text className="text-sm text-muted-foreground">금액</Text>
                     <Text className="text-sm font-medium text-foreground">
-                      ₩{modalItem.amount?.toLocaleString()}
+                      {formatPrice(modalItem.amount)}
                     </Text>
                   </View>
                   <View className="flex-row justify-between">
                     <Text className="text-sm text-muted-foreground">액면가</Text>
                     <Text className="text-sm font-medium text-foreground">
-                      ₩{modalItem.face_value?.toLocaleString()}
+                      {formatPrice(modalItem.face_value)}
                     </Text>
                   </View>
                   <View className="flex-row justify-between">

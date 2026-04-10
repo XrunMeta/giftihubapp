@@ -8,8 +8,8 @@ import React, { useState } from "react";
 import { ActivityIndicator, Image, Pressable, Text, TextInput, View } from "react-native";
 
 import { useAlertShim } from "@/components/ui/alert-shim";
+import { currencySymbol } from "@/lib/currency";
 const CURRENCIES = ["KRW", "USD", "IDR"] as const;
-const CURRENCY_SYMBOLS: Record<string, string> = { KRW: "₩", USD: "$", IDR: "Rp" };
 const CURRENCY_PLACEHOLDER: Record<string, string> = {
   KRW: "50000",
   USD: "50",
@@ -90,7 +90,7 @@ export function BundleComposer() {
     setAmount("");
   };
 
-  const sym = CURRENCY_SYMBOLS[currency] ?? "";
+  const sym = currencySymbol(currency);
 
   return (
     <View className="mx-1.5 mb-4">

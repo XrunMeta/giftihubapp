@@ -1,6 +1,7 @@
 import { ScreenHeader } from "@/components/ScreenHeader";
 import { Separator } from "@/components/ui/separator";
 import { useI18n } from "@/context/I18nContext";
+import { formatPrice } from "@/lib/currency";
 import { apiFetch } from "@/services/api";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
@@ -99,7 +100,7 @@ export default function MerchantSettlementScreen() {
           </Text>
         </View>
         <Text className="text-base font-bold text-foreground">
-          ₩{item.total_amount?.toLocaleString()}
+          {formatPrice(item.total_amount)}
         </Text>
       </View>
     </View>
@@ -139,15 +140,15 @@ export default function MerchantSettlementScreen() {
       </View>
       <View className="flex-row justify-between mt-1">
         <Text className="text-xs text-muted-foreground">{t("merchant.settlement.totalLabel")}</Text>
-        <Text className="text-xs text-foreground font-medium">₩{item.total_amount?.toLocaleString()}</Text>
+        <Text className="text-xs text-foreground font-medium">{formatPrice(item.total_amount)}</Text>
       </View>
       <View className="flex-row justify-between mt-0.5">
         <Text className="text-xs text-muted-foreground">{t("merchant.settlement.feeLabel")}</Text>
-        <Text className="text-xs text-muted-foreground">-₩{item.fee_amount?.toLocaleString()}</Text>
+        <Text className="text-xs text-muted-foreground">-{formatPrice(item.fee_amount)}</Text>
       </View>
       <View className="flex-row justify-between mt-0.5">
         <Text className="text-xs text-muted-foreground">{t("merchant.settlement.netLabel")}</Text>
-        <Text className="text-sm font-bold text-primary">₩{item.net_amount?.toLocaleString()}</Text>
+        <Text className="text-sm font-bold text-primary">{formatPrice(item.net_amount)}</Text>
       </View>
       {(item.tx_hash || item.bank_ref) && (
         <Text className="text-xs text-muted-foreground mt-2" numberOfLines={1}>
@@ -219,7 +220,7 @@ export default function MerchantSettlementScreen() {
                 <View className="items-center flex-1">
                   <Text className="text-xs text-muted-foreground">{t("merchant.settlement.totalAmountLabel")}</Text>
                   <Text className="text-xl font-bold text-primary mt-1">
-                    ₩{settlData.summary.total_amount?.toLocaleString()}
+                    {formatPrice(settlData.summary.total_amount)}
                   </Text>
                 </View>
               </View>

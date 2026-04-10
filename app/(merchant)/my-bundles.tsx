@@ -2,6 +2,7 @@ import { ScreenHeader } from "@/components/ScreenHeader";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useI18n } from "@/context/I18nContext";
+import { formatPrice } from "@/lib/currency";
 import { resolveImageUrl } from "@/lib/image";
 import {
   getBundleSettlementRequests,
@@ -44,6 +45,7 @@ type SingleItem = {
   brand: string;
   name: string;
   face_value: number;
+  base_currency?: string;
   status: string;
   expiry_date: number;
   image_url: string | null;
@@ -95,7 +97,7 @@ export default function MyBundlesScreen() {
   const handleRequestSettlement = (bundle: MerchantBundle) => {
     alert(
       t("merchant.bundles.settlementTitle"),
-      `${bundle.set_name}\n${t("merchant.bundles.totalFace")}: ₩${bundle.total_face_value.toLocaleString()}\n${bundle.voucher_count}${t("merchant.bundles.voucherUnit")}\n\n${t("merchant.bundles.askSettlement")}`,
+      `${bundle.set_name}\n${t("merchant.bundles.totalFace")}: ${formatPrice(bundle.total_face_value, bundle.currency)}\n${bundle.voucher_count}${t("merchant.bundles.voucherUnit")}\n\n${t("merchant.bundles.askSettlement")}`,
       [
         { text: t("merchant.bundles.cancel"), style: "cancel" },
         {
@@ -105,7 +107,7 @@ export default function MyBundlesScreen() {
               const res = await requestBundleSettlement(bundle.set_id);
               alert(
                 t("merchant.bundles.requestDoneTitle"),
-                `${t("merchant.bundles.feeLine")}: ₩${res.fee_amount.toLocaleString()} (${(res.fee_rate * 100).toFixed(1)}%)\n${t("merchant.bundles.netLine")}: ₩${res.net_amount.toLocaleString()}`,
+                `${t("merchant.bundles.feeLine")}: ${formatPrice(res.fee_amount)} (${(res.fee_rate * 100).toFixed(1)}%)\n${t("merchant.bundles.netLine")}: ${formatPrice(res.net_amount)}`,
               );
               fetchData();
             } catch (e) {
@@ -143,7 +145,7 @@ export default function MyBundlesScreen() {
               </Text>
             </View>
             <Text className="text-base font-bold text-foreground">
-              ₩{b.total_face_value.toLocaleString()}
+              {formatPrice(b.total_face_value, b.currency)}
             </Text>
           </View>
           <TouchableOpacity
@@ -178,7 +180,7 @@ export default function MyBundlesScreen() {
             <Badge variant={badge.variant} label={badge.label} />
           </View>
           <Text className="text-sm font-bold text-foreground mt-1">
-            ₩{s.face_value.toLocaleString()}
+            {formatPrice(s.face_value, s.base_currency)}
           </Text>
         </View>
       </View>
@@ -204,19 +206,19 @@ export default function MyBundlesScreen() {
           <View>
             <Text className="text-xs text-muted-foreground">{t("merchant.bundles.purchasePrice")}</Text>
             <Text className="text-sm font-medium text-foreground">
-              ₩{item.purchase_price.toLocaleString()}
+              {formatPrice(item.purchase_price)}
             </Text>
           </View>
           <View className="items-center">
             <Text className="text-xs text-muted-foreground">{t("merchant.bundles.fee")}</Text>
             <Text className="text-sm font-medium text-red-500">
-              -₩{item.fee_amount.toLocaleString()}
+              -{formatPrice(item.fee_amount)}
             </Text>
           </View>
           <View className="items-end">
             <Text className="text-xs text-muted-foreground">{t("merchant.bundles.payout")}</Text>
             <Text className="text-sm font-bold text-primary">
-              ₩{item.net_amount.toLocaleString()}
+              {formatPrice(item.net_amount)}
             </Text>
           </View>
         </View>

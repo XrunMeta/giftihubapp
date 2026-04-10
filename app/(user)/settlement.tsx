@@ -1,11 +1,7 @@
 import { PageHeader } from "@/components/PageHeader";
 import { Package } from "lucide-react-native";
 
-const SYM: Record<string, string> = { KRW: "₩", USD: "$", IDR: "Rp" };
-function fmtAmount(amount: number, currency?: string) {
-  const sym = SYM[currency ?? "KRW"] ?? "";
-  return `${sym}${amount?.toLocaleString() ?? 0}`;
-}
+import { formatPrice as fmtAmount } from "@/lib/currency";
 import { ScrollableTabs } from "@/components/ui/scrollable-tabs";
 import { useI18n } from "@/context/I18nContext";
 import { getPurchases } from "@/services/account";

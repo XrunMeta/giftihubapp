@@ -10,12 +10,7 @@ import { FlatList, Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useAlertShim } from "@/components/ui/alert-shim";
-const SYM: Record<string, string> = { KRW: "₩", USD: "$", IDR: "Rp" };
-
-function formatPrice(amount: number, currency?: string) {
-  const sym = SYM[currency ?? "KRW"] ?? "₩";
-  return `${sym}${amount.toLocaleString()}`;
-}
+import { formatPrice, currencySymbol } from "@/lib/currency";
 
 export default function CartScreen() {
   const { t } = useI18n();
@@ -217,7 +212,7 @@ export default function CartScreen() {
           }
           if (multiCurrency) {
             const buttons = currencies.map((c) => ({
-              text: `${c} ${SYM[c]}${currTotals[c].toLocaleString()}`,
+              text: `${c} ${currencySymbol(c)}${currTotals[c].toLocaleString()}`,
               onPress: () => router.push({ pathname: "/(user)/purchase", params: { currency: c } }),
             }));
             buttons.push({ text: t("userCart.cancel"), onPress: () => { } });
@@ -238,7 +233,7 @@ export default function CartScreen() {
                   <View key={c} className="flex-row justify-between py-0.5">
                     <Text className="text-sm text-foreground">{c}</Text>
                     <Text className="text-sm font-bold text-foreground">
-                      {SYM[c] ?? ""}{currTotals[c].toLocaleString()}
+                      {currencySymbol(c) ?? ""}{currTotals[c].toLocaleString()}
                     </Text>
                   </View>
                 ))}
@@ -249,7 +244,7 @@ export default function CartScreen() {
                   {t("userCart.totalLine").replace("{{count}}", String(getCartCount()))}
                 </Text>
                 <Text className="text-xl font-bold text-foreground">
-                  {SYM[currencies[0]] ?? "₩"}{(currTotals[currencies[0]] ?? 0).toLocaleString()}
+                  {currencySymbol(currencies[0])}{(currTotals[currencies[0]] ?? 0).toLocaleString()}
                 </Text>
               </View>
             )}

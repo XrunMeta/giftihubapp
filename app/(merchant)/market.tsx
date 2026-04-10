@@ -1,6 +1,7 @@
 import { ScreenHeader } from "@/components/ScreenHeader";
 import { Badge } from "@/components/ui/badge";
 import { useI18n } from "@/context/I18nContext";
+import { formatPrice } from "@/lib/currency";
 import { resolveImageUrl } from "@/lib/image";
 import { cn } from "@/lib/utils";
 import {
@@ -92,10 +93,10 @@ export default function MerchantMarketScreen() {
           <View className="flex-row justify-between items-center mt-2">
             <View className="flex-row items-baseline gap-2">
               <Text className="text-base font-bold text-foreground">
-                ₩{item.selling_price.toLocaleString()}
+                {formatPrice(item.selling_price, item.currency)}
               </Text>
               <Text className="text-xs text-muted-foreground line-through">
-                ₩{item.original_price.toLocaleString()}
+                {formatPrice(item.original_price, item.currency)}
               </Text>
             </View>
             <Text className="text-xs text-muted-foreground">{item.seller_name}</Text>

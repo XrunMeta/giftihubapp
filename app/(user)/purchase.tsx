@@ -20,7 +20,7 @@ const BASE_PAYMENT_METHODS: { key: PaymentMethod; labelKey?: string; label?: str
   { key: "usdt_trc20", label: "USDT (TRC-20)", icon: <Coins size={20} color="#0a0a0a" /> },
 ];
 
-const SYM: Record<string, string> = { KRW: "₩", USD: "$", IDR: "Rp" };
+import { currencySymbol } from "@/lib/currency";
 
 export default function PurchaseScreen() {
   const { t } = useI18n();
@@ -79,7 +79,7 @@ export default function PurchaseScreen() {
           <View className="flex-row justify-between">
             <Text className="text-base font-semibold text-foreground">{t("userPurchase.payAmount")}</Text>
             <Text className="text-xl font-bold text-primary">
-              {SYM[targetCurrency] ?? ""}{totalPrice.toLocaleString()}
+              {currencySymbol(targetCurrency)}{totalPrice.toLocaleString()}
             </Text>
           </View>
         </View>

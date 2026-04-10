@@ -122,6 +122,10 @@ export async function apiFetch<T = unknown>(
 
   if (!response.ok) {
     const body = await response.json().catch(() => null);
+    if (response.status === 401) {
+      await removeToken();
+      console.warn("[apiFetch] 401 — token cleared, login required");
+    }
     throw new ApiError(response.status, body);
   }
 

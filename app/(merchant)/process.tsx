@@ -1,6 +1,7 @@
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/context/I18nContext";
+import { formatPrice } from "@/lib/currency";
 import { apiFetch } from "@/services/api";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { CheckCircle, XCircle } from "lucide-react-native";
@@ -73,7 +74,7 @@ export default function ProcessScreen() {
               <Text className="text-sm text-muted-foreground">{voucherInfo.brand}</Text>
               <Text className="text-base font-semibold text-foreground">{voucherInfo.name}</Text>
               <Text className="text-lg font-bold text-primary mt-2">
-                ₩{voucherInfo.face_value?.toLocaleString()}
+                {formatPrice(voucherInfo.face_value)}
               </Text>
             </View>
             <Button className="w-full mt-6" onPress={handleUse}>

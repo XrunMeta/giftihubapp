@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useI18n } from "@/context/I18nContext";
+import { formatPrice, currencySymbol } from "@/lib/currency";
 import { resolveImageUrl } from "@/lib/image";
 import { cancelListing, createSetListing, findActiveListing, type MyListing } from "@/services/marketplace";
 import { getSetDetail, type SetDetail, type Voucher } from "@/services/vouchers";
@@ -123,7 +124,7 @@ export default function SetDetailScreen() {
           </View>
           <View className="flex-row justify-between items-center mt-1">
             <Text className="text-sm font-bold text-foreground">
-              ₩{item.face_value?.toLocaleString()}
+              {formatPrice(item.face_value, item.base_currency)}
             </Text>
             <Text className="text-xs text-muted-foreground">
               {item.expiry_date ? format(new Date(item.expiry_date * 1000), "yyyy.MM.dd") : "-"}
@@ -160,7 +161,7 @@ export default function SetDetailScreen() {
         <View className="flex-row justify-between">
           <Text className="text-sm font-semibold text-foreground">{t("myGifti.setDetail.totalFace")}</Text>
           <Text className="text-base font-bold text-foreground">
-            {({KRW:"₩",USD:"$",IDR:"Rp"} as Record<string,string>)[set.currency] ?? ""}{summary.total_value?.toLocaleString()}
+            {formatPrice(summary.total_value, set.currency)}
           </Text>
         </View>
       </View>
@@ -241,16 +242,16 @@ export default function SetDetailScreen() {
           <View className="mt-3">
             <View className="flex-row justify-between mb-1">
               <Text className="text-xs text-muted-foreground">{t("myGifti.setDetail.totalFace")}</Text>
-              <Text className="text-xs text-foreground">{({KRW:"₩",USD:"$",IDR:"Rp"} as Record<string,string>)[set.currency] ?? ""}{summary.total_value?.toLocaleString()}</Text>
+              <Text className="text-xs text-foreground">{formatPrice(summary.total_value, set.currency)}</Text>
             </View>
             <View className="flex-row justify-between mb-1">
               <Text className="text-xs text-muted-foreground">{t("myGifti.setDetail.feeLabel")}</Text>
-              <Text className="text-xs text-foreground">₩{fee.toLocaleString()}</Text>
+              <Text className="text-xs text-foreground">{formatPrice(fee, set.currency)}</Text>
             </View>
             <Separator className="my-1.5" />
             <View className="flex-row justify-between">
               <Text className="text-sm font-semibold text-foreground">{t("myGifti.setDetail.payoutLabel")}</Text>
-              <Text className="text-sm font-bold text-primary">₩{payout.toLocaleString()}</Text>
+              <Text className="text-sm font-bold text-primary">{formatPrice(payout, set.currency)}</Text>
             </View>
           </View>
           <View className="flex-row gap-2 mt-3">
