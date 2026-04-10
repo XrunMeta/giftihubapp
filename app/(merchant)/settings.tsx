@@ -78,7 +78,7 @@ export default function v_ff7fc2() {
                 <View className="w-14 h-14 rounded-xl bg-white border border-border items-center justify-center overflow-hidden">
                   {v_148ff6.logo_url ? (
                     <Image
-                      source={{ uri: v_7ef52a(v_148ff6.logo_url) }}
+                      source={{ uri: v_7ef52a(v_148ff6.logo_url) ?? undefined }}
                       className="w-full h-full"
                       resizeMode="contain"
                     />
