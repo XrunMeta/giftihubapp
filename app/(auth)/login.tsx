@@ -130,6 +130,10 @@ export default function v_f4f851() {
               />
             </View>
 
+            <Pressable onPress={() => v_904d46.push("/(auth)/forgot-password")} className="mb-2">
+              <Text className="text-sm text-primary">{v_8d41d7("auth.forgotPassword")}</Text>
+            </Pressable>
+
             <View className="flex-row items-center justify-between mb-6">
               <Text className="text-sm text-muted-foreground">{v_8d41d7("auth.login.rememberMe")}</Text>
               <Switch
