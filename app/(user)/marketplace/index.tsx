@@ -10,14 +10,21 @@ import {
   type Keyword,
   type MarketplaceListing,
 } from "@/services/marketplace";
+import type { Locale } from "@/locales/types";
 import { useFocusEffect, useRouter } from "expo-router";
 import { Package } from "lucide-react-native";
 import React, { useCallback, useRef, useState } from "react";
 import { ActivityIndicator, FlatList, Image, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+function kwLabel(kw: Keyword, locale: Locale): string {
+  if (locale === "en" && kw.name_en) return kw.name_en;
+  if (locale === "id" && kw.name_id) return kw.name_id;
+  return kw.name;
+}
+
 export default function MarketplaceScreen() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const router = useRouter();
   const { user } = useAuth();
   const [listings, setListings] = useState<MarketplaceListing[]>([]);
@@ -201,7 +208,7 @@ export default function MarketplaceScreen() {
                         isActive ? "text-primary-foreground" : "text-muted-foreground",
                       )}
                     >
-                      {kw.name}
+                      {kwLabel(kw, locale)}
                     </Text>
                   </Pressable>
                 );

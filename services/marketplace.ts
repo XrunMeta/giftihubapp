@@ -38,6 +38,8 @@ interface ListingsParams {
 export interface Keyword {
   id: number;
   name: string;
+  name_en: string | null;
+  name_id: string | null;
   display_order: number;
 }
 

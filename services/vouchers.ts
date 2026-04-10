@@ -31,9 +31,13 @@ export type VoucherStatus =
 
 export async function getMyVouchers(
   status?: VoucherStatus,
+  keyword?: number,
 ): Promise<{ vouchers: Voucher[] }> {
-  const query = status ? `?status=${status}` : "";
-  return apiFetch<{ vouchers: Voucher[] }>(`/oth-path${query}`);
+  const params = new URLSearchParams();
+  if (status) params.set("status", status);
+  if (keyword) params.set("keyword", String(keyword));
+  const query = params.toString();
+  return apiFetch<{ vouchers: Voucher[] }>(`/oth-path${query ? `?${query}` : ""}`);
 }
 
 export async function getVoucherDetail(
