@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { useRouter } from "expo-router";
+import { router as globalRouter, useRouter } from "expo-router";
 import { ChevronLeft } from "lucide-react-native";
 import React from "react";
 import { Pressable, Text, View } from "react-native";
@@ -9,16 +9,40 @@ interface PageHeaderProps {
   showBack?: boolean;
   rightAction?: React.ReactNode;
   className?: string;
+
+  onBack?: () => void;
+
+  fallbackHref?: string;
 }
 
-export function PageHeader({ title, showBack = true, rightAction, className }: PageHeaderProps) {
+export function PageHeader({
+  title,
+  showBack = true,
+  rightAction,
+  className,
+  onBack,
+  fallbackHref = "/(user)",
+}: PageHeaderProps) {
   const router = useRouter();
+
+  const handleBack = () => {
+    if (onBack) {
+      onBack();
+      return;
+    }
+
+    if (globalRouter.canGoBack?.()) {
+      router.back();
+    } else {
+      router.replace(fallbackHref as never);
+    }
+  };
 
   return (
     <View className={cn("flex-row items-center justify-between px-4 py-3", className)}>
       <View className="flex-row items-center flex-1">
         {showBack && (
-          <Pressable onPress={() => router.back()} className="mr-2 p-1">
+          <Pressable onPress={handleBack} className="mr-2 p-1">
             <ChevronLeft size={24} color="#0a0a0a" />
           </Pressable>
         )}
