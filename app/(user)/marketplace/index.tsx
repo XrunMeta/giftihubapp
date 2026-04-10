@@ -5,45 +5,43 @@ import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_7ef52a } from "splenmyqnym";
 import { v_6e56f5 } from "mbdlgxnaxny";
 import {
+  v_cf7450,
   v_113fd3,
-  type v_add689,
+  type v_b6525e,
   type v_ff021d,
 } from "vkhyfothlklikcpovbqirr";
 import { v_cf763b, v_d1d90c } from "rkmroqyctko";
 import { v_c62079 } from "wjvlskvsbzsrojdbjsl";
-import v_a3453e, { v_de06a3, v_df9f57, v_e662ae, v_5ab095 } from "bapkr";
+import v_a3453e, { v_de06a3, v_e662ae, v_5ab095 } from "bapkr";
 import { v_39a996, v_9cabcb, v_cf9c33, v_09d0e5, v_122070, v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
-const v_ebb8f2 = [
-  { key: "all", labelKey: "userMarketplace.list.tabAll" },
-  { key: "food", labelKey: "userMarketplace.list.catFood" },
-  { key: "culture", labelKey: "userMarketplace.list.catCulture" },
-  { key: "convenience", labelKey: "userMarketplace.list.catConvenience" },
-  { key: "beauty", labelKey: "userMarketplace.list.catBeauty" },
-  { key: "etc", labelKey: "userMarketplace.list.catEtc" },
-];
-
 export default function v_fab3ac() {
   const { t: v_8d41d7 } = v_678659();
-  const v_89ee0f = v_df9f57(
-    () => v_ebb8f2.map((v_3ac7e7) => ({ key: v_3ac7e7.key, label: v_8d41d7(v_3ac7e7.labelKey) })),
-    [v_8d41d7],
-  );
   const v_904d46 = v_d1d90c();
   const { user: v_625c74 } = v_5d2c47();
   const [v_795bbd, v_c90f4e] = v_5ab095<v_ff021d[]>([]);
+  const [v_7a80c2, v_0198e2] = v_5ab095<v_b6525e[]>([]);
   const [v_683210, v_34a50a] = v_5ab095(true);
-  const [v_ac1d22, v_02dd63] = v_5ab095("all");
+  const [v_241688, v_791812] = v_5ab095<number | null>(null);
   const [v_9875a1, v_2e7fc1] = v_5ab095("");
   const v_881dda = v_e662ae<v_9cabcb>(null);
+
+  v_cf763b(
+    v_de06a3(() => {
+      v_cf7450()
+        .then((v_8f00b9) => v_0198e2(v_8f00b9.keywords))
+        .catch(() => {});
+    }, []),
+  );
 
   const v_85477e = v_de06a3(async () => {
     v_34a50a(true);
     try {
-      const v_8b9cd4 = v_ac1d22 === "all" ? undefined : (v_ac1d22 as v_add689);
-      const v_8f00b9 = await v_113fd3({ category: v_8b9cd4, q: v_9875a1 || undefined });
-
+      const v_8f00b9 = await v_113fd3({
+        keyword: v_241688 ?? undefined,
+        q: v_9875a1 || undefined,
+      });
       const v_e4cf17 = v_625c74 ? v_8f00b9.listings.filter((v_1614db) => v_1614db.seller_id !== v_625c74.id) : v_8f00b9.listings;
       v_c90f4e(v_e4cf17);
     } catch {
@@ -51,7 +49,7 @@ export default function v_fab3ac() {
     } finally {
       v_34a50a(false);
     }
-  }, [v_ac1d22, v_9875a1, v_625c74]);
+  }, [v_241688, v_9875a1, v_625c74]);
 
   v_cf763b(
     v_de06a3(() => {
@@ -161,36 +159,55 @@ export default function v_fab3ac() {
           placeholder: v_8d41d7("userMarketplace.list.searchPlaceholder"),
         }}
         bottom={
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
-            className="mb-3"
-          >
-            {v_89ee0f.map((v_11083e) => {
-              const v_26dce6 = v_11083e.key === v_ac1d22;
-              return (
-                <Pressable
-                  key={v_11083e.key}
-                  onPress={() => v_02dd63(v_11083e.key)}
-                  style={{ alignSelf: "flex-start" }}
+          v_7a80c2.length > 0 ? (
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
+              className="mb-3"
+            >
+              <Pressable
+                onPress={() => v_791812(null)}
+                style={{ alignSelf: "flex-start" }}
+                className={v_6e56f5(
+                  "rounded-full px-4 py-2",
+                  v_241688 === null ? "bg-primary" : "bg-secondary",
+                )}
+              >
+                <Text
                   className={v_6e56f5(
-                    "rounded-full px-4 py-2",
-                    v_26dce6 ? "bg-primary" : "bg-secondary",
+                    "text-sm font-medium",
+                    v_241688 === null ? "text-primary-foreground" : "text-muted-foreground",
                   )}
                 >
-                  <Text
+                  {v_8d41d7("userMarketplace.list.tabAll")}
+                </Text>
+              </Pressable>
+              {v_7a80c2.map((v_0dcbd9) => {
+                const v_26dce6 = v_241688 === v_0dcbd9.id;
+                return (
+                  <Pressable
+                    key={v_0dcbd9.id}
+                    onPress={() => v_791812(v_26dce6 ? null : v_0dcbd9.id)}
+                    style={{ alignSelf: "flex-start" }}
                     className={v_6e56f5(
-                      "text-sm font-medium",
-                      v_26dce6 ? "text-primary-foreground" : "text-muted-foreground",
+                      "rounded-full px-4 py-2",
+                      v_26dce6 ? "bg-primary" : "bg-secondary",
                     )}
                   >
-                    {v_11083e.label}
-                  </Text>
-                </Pressable>
-              );
-            })}
-          </ScrollView>
+                    <Text
+                      className={v_6e56f5(
+                        "text-sm font-medium",
+                        v_26dce6 ? "text-primary-foreground" : "text-muted-foreground",
+                      )}
+                    >
+                      {v_0dcbd9.name}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </ScrollView>
+          ) : undefined
         }
       />
       <FlatList

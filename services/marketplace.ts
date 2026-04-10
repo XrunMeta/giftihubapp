@@ -30,8 +30,19 @@ export type MarketplaceSort = "price_asc" | "price_desc" | "newest";
 
 interface ListingsParams {
   category?: MarketplaceCategory;
+  keyword?: number;
   q?: string;
   sort?: MarketplaceSort;
+}
+
+export interface Keyword {
+  id: number;
+  name: string;
+  display_order: number;
+}
+
+export async function v_cf7450(): Promise<{ keywords: Keyword[] }> {
+  return v_bc1b24("/oth-path", { skipAuth: true });
 }
 
 export async function v_113fd3(
@@ -39,6 +50,7 @@ export async function v_113fd3(
 ): Promise<{ listings: MarketplaceListing[] }> {
   const v_a3f1ae = new URLSearchParams();
   if (v_24baff?.category) v_a3f1ae.set("category", v_24baff.category);
+  if (v_24baff?.keyword) v_a3f1ae.set("keyword", String(v_24baff.keyword));
   if (v_24baff?.q) v_a3f1ae.set("q", v_24baff.q);
   if (v_24baff?.sort) v_a3f1ae.set("sort", v_24baff.sort);
   const v_7c5791 = v_a3f1ae.toString();
