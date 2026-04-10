@@ -31,9 +31,13 @@ export type VoucherStatus =
 
 export async function v_720509(
   v_d308b5,
+  v_c874c0,
 ): Promise<{ vouchers: Voucher[] }> {
-  const v_7c5791 = v_d308b5 ? `?status=${v_d308b5}` : "";
-  return v_bc1b24<{ vouchers: Voucher[] }>(`/oth-path${v_7c5791}`);
+  const v_24baff = new URLSearchParams();
+  if (v_d308b5) v_24baff.set("status", v_d308b5);
+  if (v_c874c0) v_24baff.set("keyword", String(v_c874c0));
+  const v_7c5791 = v_24baff.toString();
+  return v_bc1b24<{ vouchers: Voucher[] }>(`/oth-path${v_7c5791 ? `?${v_7c5791}` : ""}`);
 }
 
 export async function v_50a647(

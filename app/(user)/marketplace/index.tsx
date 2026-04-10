@@ -10,14 +10,21 @@ import {
   type v_b6525e,
   type v_ff021d,
 } from "vkhyfothlklikcpovbqirr";
+import type { v_fe10f7 } from "xqplntxexkdnjkk";
 import { v_cf763b, v_d1d90c } from "rkmroqyctko";
 import { v_c62079 } from "wjvlskvsbzsrojdbjsl";
 import v_a3453e, { v_de06a3, v_e662ae, v_5ab095 } from "bapkr";
 import { v_39a996, v_9cabcb, v_cf9c33, v_09d0e5, v_122070, v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
+function v_fe0e5d(kw: v_b6525e, locale: v_fe10f7): string {
+  if (v_6f298b === "en" && v_0dcbd9.name_en) return v_0dcbd9.name_en;
+  if (v_6f298b === "id" && v_0dcbd9.name_id) return v_0dcbd9.name_id;
+  return v_0dcbd9.name;
+}
+
 export default function v_fab3ac() {
-  const { t: v_8d41d7 } = v_678659();
+  const { t: v_8d41d7, locale: v_6f298b } = v_678659();
   const v_904d46 = v_d1d90c();
   const { user: v_625c74 } = v_5d2c47();
   const [v_795bbd, v_c90f4e] = v_5ab095<v_ff021d[]>([]);
@@ -201,7 +208,7 @@ export default function v_fab3ac() {
                         v_26dce6 ? "text-primary-foreground" : "text-muted-foreground",
                       )}
                     >
-                      {v_0dcbd9.name}
+                      {v_fe0e5d(v_0dcbd9, v_6f298b)}
                     </Text>
                   </Pressable>
                 );
