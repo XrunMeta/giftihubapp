@@ -5,7 +5,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
 import { getMe, type MeResponse } from "@/services/account";
 import { useFocusEffect, useRouter } from "expo-router";
-import { ChevronRight, CreditCard, History, LogOut, Settings } from "lucide-react-native";
+import { ChevronRight, CreditCard, Globe, History, KeyRound, LogOut, Settings, UserPen } from "lucide-react-native";
 import React, { useCallback, useState } from "react";
 import { ActivityIndicator, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -83,6 +83,26 @@ export default function MyPageScreen() {
         </View>
 
         {}
+        <View className="mx-4 bg-card rounded-xl border border-border overflow-hidden mb-4">
+          <MenuItem
+            icon={<UserPen size={20} color="#737373" />}
+            label={t("mypage.editProfile")}
+            onPress={() => router.push("/(user)/edit-profile")}
+          />
+          <Separator />
+          <MenuItem
+            icon={<KeyRound size={20} color="#737373" />}
+            label={t("mypage.changePassword")}
+            onPress={() => router.push("/(user)/change-password")}
+          />
+          <Separator />
+          <MenuItem
+            icon={<Globe size={20} color="#737373" />}
+            label={t("settings.language")}
+            onPress={() => router.push("/(user)/language-settings")}
+          />
+        </View>
+
         <View className="mx-4 bg-card rounded-xl border border-border overflow-hidden">
           <MenuItem
             icon={<History size={20} color="#737373" />}
@@ -94,12 +114,6 @@ export default function MyPageScreen() {
             icon={<CreditCard size={20} color="#737373" />}
             label={t("mypage.paymentHistory")}
             onPress={() => router.push("/(user)/settlement")}
-          />
-          <Separator />
-          <MenuItem
-            icon={<Settings size={20} color="#737373" />}
-            label={t("mypage.settings")}
-            onPress={() => router.push("/(user)/settings")}
           />
         </View>
 
