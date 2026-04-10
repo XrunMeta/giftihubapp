@@ -11,7 +11,7 @@ import { getVoucherBarcode, getVoucherDetail, type Voucher } from "@/services/vo
 import { format } from "date-fns";
 import * as Clipboard from "expo-clipboard";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
-import { ArrowLeftRight, ArrowRight, CheckCircle, Clock, Send, ShoppingBag, Store, XCircle } from "lucide-react-native";
+import { ArrowLeftRight, ArrowRight, CheckCircle, Clock, Gift, Send, ShoppingBag, Store, XCircle } from "lucide-react-native";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Animated, Image, Pressable, ScrollView, Text, TouchableOpacity, useWindowDimensions, View } from "react-native";
 import QRCode from "react-native-qrcode-svg";
@@ -391,6 +391,17 @@ export default function GiftiDetailScreen() {
               >
                 <Send size={16} color="#0a0a0a" />
                 <Text className="text-sm font-medium text-foreground">{t("myGifti.detail.actionTransfer")}</Text>
+              </Button>
+              <Button
+                variant="outline"
+                className="flex-1 flex-row gap-2 bg-white"
+                onPress={() => router.push({
+                  pathname: `/(user)/oth-path${id}/gift` as any,
+                  params: { voucherName: voucher.name },
+                })}
+              >
+                <Gift size={16} color="#CE3630" />
+                <Text className="text-sm font-medium text-primary">{t("myGifti.detail.actionGift")}</Text>
               </Button>
             </View>
             <Button
