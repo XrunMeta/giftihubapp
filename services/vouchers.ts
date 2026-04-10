@@ -79,11 +79,11 @@ export async function v_67877b(v_90a2ba): Promise<SetDetail> {
 
 export async function v_2b01b0(
   v_389afb,
-  v_1af2e1,
+  v_d29c07,
 ): Promise<{ ok: true; transfer_count: number }> {
   return v_bc1b24(`/oth-path${v_389afb}/transfer`, {
     method: "POST",
-    body: JSON.stringify({ recipient_email: v_1af2e1 }),
+    body: JSON.stringify({ recipient_id: v_d29c07 }),
   });
 }
 
@@ -103,4 +103,30 @@ export async function v_4b3c52(
   return v_bc1b24(`/oth-path${v_389afb}/use`, {
     method: "POST",
   });
+}
+
+export interface SearchUser {
+  id: string;
+  name: string;
+  email_masked: string;
+  telegram_username: string | null;
+  telegram_photo: string | null;
+}
+
+export async function v_a41961(v_ab6401): Promise<{ users: SearchUser[] }> {
+  return v_bc1b24<{ users: SearchUser[] }>(`/oth-path?q=${encodeURIComponent(v_ab6401)}`);
+}
+
+export async function v_6465b2(
+  v_389afb,
+  v_a8cd21,
+): Promise<{ gift_code: string; expires_at: number }> {
+  return v_bc1b24(`/oth-path${v_389afb}/gift-link`, {
+    method: "POST",
+    body: JSON.stringify({ message: v_a8cd21 }),
+  });
+}
+
+export async function v_dd6147(v_389afb): Promise<{ ok: true }> {
+  return v_bc1b24(`/oth-path${v_389afb}/gift-link`, { method: "DELETE" });
 }
