@@ -23,6 +23,11 @@ import { v_342981 } from "./pages/user/GiftiTransferConfirm";
 import { v_d0bc80 } from "./pages/user/GiftiTransferComplete";
 import { v_178dee } from "./pages/user/GiftiRefund";
 
+import { v_2e9f31 } from "./pages/admin/ProductsMenu";
+import { v_504973 } from "./pages/admin/MembersMenu";
+import { v_9c07f6 } from "./pages/admin/TransactionsMenu";
+import { v_b64d7d } from "./pages/admin/SettlementsMenu";
+import { v_938e4d } from "./pages/admin/SystemMenu";
 import { v_196648 } from "./pages/admin/Keywords";
 import { v_d2337d } from "./pages/admin/BrandKeywords";
 
@@ -85,8 +90,18 @@ export const v_904d46 = v_58d265([
   {
     path: "/oth-path",
     children: [
-      { path: "keywords", Component: v_196648 },
-      { path: "brands", Component: v_d2337d },
+
+      { path: "products", Component: v_2e9f31 },
+      { path: "products/keywords", Component: v_196648 },
+      { path: "products/brand-keywords", Component: v_d2337d },
+
+      { path: "members", Component: v_504973 },
+
+      { path: "transactions", Component: v_9c07f6 },
+
+      { path: "settlements", Component: v_b64d7d },
+
+      { path: "system", Component: v_938e4d },
     ],
   },
 ]);

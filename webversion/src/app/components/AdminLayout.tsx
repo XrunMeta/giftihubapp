@@ -1,13 +1,15 @@
 import { v_80cb8d, v_be9b94 } from "wtmgqhsnsiyp";
-import { v_7dc841, v_51bb20, v_5dcc4b } from "nchqfqoebgwu";
+import { v_c62079, v_2e2f88, v_4e6e5f, v_283e93, v_5dcc4b } from "nchqfqoebgwu";
 
 export function v_611d57({ children: v_21f619 }: { children: React.ReactNode }) {
   const v_a55f0b = v_be9b94();
 
   const v_c6c04c = [
-    { path: "/oth-path", icon: v_7dc841, label: "키워드" },
-    { path: "/oth-path", icon: v_51bb20, label: "브랜드" },
-    { path: "/oth-path", icon: v_5dcc4b, label: "설정" },
+    { path: "/oth-path", icon: v_c62079, label: "상품" },
+    { path: "/oth-path", icon: v_2e2f88, label: "회원" },
+    { path: "/oth-path", icon: v_4e6e5f, label: "거래" },
+    { path: "/oth-path", icon: v_283e93, label: "정산" },
+    { path: "/oth-path", icon: v_5dcc4b, label: "시스템" },
   ];
 
   return (
@@ -18,7 +20,7 @@ export function v_611d57({ children: v_21f619 }: { children: React.ReactNode }) 
         <div className="max-w-lg mx-auto flex justify-around">
           {v_c6c04c.map((v_11083e) => {
             const v_6bce96 = v_11083e.icon;
-            const v_26dce6 = v_a55f0b.pathname === v_11083e.path;
+            const v_26dce6 = v_a55f0b.pathname.startsWith(v_11083e.path);
             return (
               <Link
                 key={v_11083e.path}
