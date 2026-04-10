@@ -12,7 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useAlertShim } from "@/components/ui/alert-shim";
 
-const GIFT_BASE_URL = "https://giftihub.com/gift";
+const GIFT_BASE_URL = "https://giftihubapi.pages.dev/page/gift";
 
 export default function GiftScreen() {
   const { t } = useI18n();

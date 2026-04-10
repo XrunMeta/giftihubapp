@@ -27,7 +27,8 @@ export type VoucherStatus =
   | "used"
   | "expired"
   | "transferred"
-  | "listed";
+  | "listed"
+  | "gifted";
 
 export async function getMyVouchers(
   status?: VoucherStatus,

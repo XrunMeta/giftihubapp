@@ -28,6 +28,7 @@ function kwLabel(kw: Keyword, locale: Locale): string {
 const TAB_KEYS: { key: string; labelKey: string }[] = [
   { key: "all", labelKey: "myGifti.list.tabAll" },
   { key: "active", labelKey: "myGifti.list.tabActive" },
+  { key: "gifted", labelKey: "myGifti.list.tabGifted" },
   { key: "listed", labelKey: "myGifti.list.tabListed" },
   { key: "used", labelKey: "myGifti.list.tabUsed" },
   { key: "expired", labelKey: "myGifti.list.tabExpired" },
@@ -39,6 +40,7 @@ const STATUS_BADGE_META: Record<string, { labelKey: string; variant: BadgeVarian
   listed: { labelKey: "myGifti.list.statusListed", variant: "info" },
   used: { labelKey: "myGifti.list.statusUsed", variant: "secondary" },
   expired: { labelKey: "myGifti.list.statusExpired", variant: "destructive" },
+  gifted: { labelKey: "myGifti.list.statusGifted", variant: "info" },
   transferred: { labelKey: "myGifti.list.statusTransferred", variant: "success" },
   cancel_request_pending: { labelKey: "myGifti.detail.cancelRequestPendingLabel", variant: "warning" },
 };
@@ -263,66 +265,68 @@ export default function MyGiftiScreen() {
           ) : undefined
         }
         bottom={
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
-            className="mb-3"
-          >
-            {tabs.map((tab) => {
-              const isActive = tab.key === activeTab;
-              return (
-                <Pressable
-                  key={tab.key}
-                  onPress={() => setActiveTab(tab.key)}
-                  style={{ alignSelf: "flex-start" }}
-                  className={cn("rounded-full px-4 py-2", isActive ? "bg-primary" : "bg-secondary")}
-                >
-                  <Text
-                    className={cn(
-                      "text-sm font-medium",
-                      isActive ? "text-primary-foreground" : "text-muted-foreground",
-                    )}
-                  >
-                    {tab.label}
-                  </Text>
-                </Pressable>
-              );
-            })}
-          </ScrollView>
-          {keywords.length > 0 && (
+          <>
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
               className="mb-3"
             >
-              <Pressable
-                onPress={() => setActiveKeyword(null)}
-                style={{ alignSelf: "flex-start" }}
-                className={cn("rounded-full px-3 py-1.5", activeKeyword === null ? "bg-primary" : "bg-secondary")}
-              >
-                <Text className={cn("text-xs font-medium", activeKeyword === null ? "text-primary-foreground" : "text-muted-foreground")}>
-                  {t("myGifti.list.tabAll")}
-                </Text>
-              </Pressable>
-              {keywords.map((kw) => {
-                const isActive = activeKeyword === kw.id;
+              {tabs.map((tab) => {
+                const isActive = tab.key === activeTab;
                 return (
                   <Pressable
-                    key={kw.id}
-                    onPress={() => setActiveKeyword(isActive ? null : kw.id)}
+                    key={tab.key}
+                    onPress={() => setActiveTab(tab.key)}
                     style={{ alignSelf: "flex-start" }}
-                    className={cn("rounded-full px-3 py-1.5", isActive ? "bg-primary" : "bg-secondary")}
+                    className={cn("rounded-full px-4 py-2", isActive ? "bg-primary" : "bg-secondary")}
                   >
-                    <Text className={cn("text-xs font-medium", isActive ? "text-primary-foreground" : "text-muted-foreground")}>
-                      {kwLabel(kw, locale)}
+                    <Text
+                      className={cn(
+                        "text-sm font-medium",
+                        isActive ? "text-primary-foreground" : "text-muted-foreground",
+                      )}
+                    >
+                      {tab.label}
                     </Text>
                   </Pressable>
                 );
               })}
             </ScrollView>
-          )}
+            {keywords.length > 0 && (
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
+                className="mb-3"
+              >
+                <Pressable
+                  onPress={() => setActiveKeyword(null)}
+                  style={{ alignSelf: "flex-start" }}
+                  className={cn("rounded-full px-3 py-1.5", activeKeyword === null ? "bg-primary" : "bg-secondary")}
+                >
+                  <Text className={cn("text-xs font-medium", activeKeyword === null ? "text-primary-foreground" : "text-muted-foreground")}>
+                    {t("myGifti.list.tabAll")}
+                  </Text>
+                </Pressable>
+                {keywords.map((kw) => {
+                  const isActive = activeKeyword === kw.id;
+                  return (
+                    <Pressable
+                      key={kw.id}
+                      onPress={() => setActiveKeyword(isActive ? null : kw.id)}
+                      style={{ alignSelf: "flex-start" }}
+                      className={cn("rounded-full px-3 py-1.5", isActive ? "bg-primary" : "bg-secondary")}
+                    >
+                      <Text className={cn("text-xs font-medium", isActive ? "text-primary-foreground" : "text-muted-foreground")}>
+                        {kwLabel(kw, locale)}
+                      </Text>
+                    </Pressable>
+                  );
+                })}
+              </ScrollView>
+            )}
+          </>
         }
       />
       <FlatList
