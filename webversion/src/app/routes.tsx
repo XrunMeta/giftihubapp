@@ -23,6 +23,9 @@ import { v_342981 } from "./pages/user/GiftiTransferConfirm";
 import { v_d0bc80 } from "./pages/user/GiftiTransferComplete";
 import { v_178dee } from "./pages/user/GiftiRefund";
 
+import { v_196648 } from "./pages/admin/Keywords";
+import { v_d2337d } from "./pages/admin/BrandKeywords";
+
 import { v_e61cfa } from "./pages/merchant/MerchantHome";
 import { v_89dc4e } from "./pages/merchant/ProcessUsage";
 import { v_9f3d85 } from "./pages/merchant/MerchantHistory";
@@ -76,6 +79,14 @@ export const v_904d46 = v_58d265([
       { path: "history", Component: v_9f3d85 },
       { path: "settlement", Component: v_4928ef },
       { path: "settings", Component: v_40d611 },
+    ],
+  },
+
+  {
+    path: "/oth-path",
+    children: [
+      { path: "keywords", Component: v_196648 },
+      { path: "brands", Component: v_d2337d },
     ],
   },
 ]);
