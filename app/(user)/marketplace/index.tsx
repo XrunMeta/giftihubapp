@@ -5,45 +5,43 @@ import { useI18n } from "@/context/I18nContext";
 import { resolveImageUrl } from "@/lib/image";
 import { cn } from "@/lib/utils";
 import {
+  getKeywords,
   getMarketplaceListings,
-  type MarketplaceCategory,
+  type Keyword,
   type MarketplaceListing,
 } from "@/services/marketplace";
 import { useFocusEffect, useRouter } from "expo-router";
 import { Package } from "lucide-react-native";
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { ActivityIndicator, FlatList, Image, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const CATEGORY_TAB_KEYS: { key: string; labelKey: string }[] = [
-  { key: "all", labelKey: "userMarketplace.list.tabAll" },
-  { key: "food", labelKey: "userMarketplace.list.catFood" },
-  { key: "culture", labelKey: "userMarketplace.list.catCulture" },
-  { key: "convenience", labelKey: "userMarketplace.list.catConvenience" },
-  { key: "beauty", labelKey: "userMarketplace.list.catBeauty" },
-  { key: "etc", labelKey: "userMarketplace.list.catEtc" },
-];
-
 export default function MarketplaceScreen() {
   const { t } = useI18n();
-  const categoryTabs = useMemo(
-    () => CATEGORY_TAB_KEYS.map((row) => ({ key: row.key, label: t(row.labelKey) })),
-    [t],
-  );
   const router = useRouter();
   const { user } = useAuth();
   const [listings, setListings] = useState<MarketplaceListing[]>([]);
+  const [keywords, setKeywords] = useState<Keyword[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("all");
+  const [activeKeyword, setActiveKeyword] = useState<number | null>(null);
   const [search, setSearch] = useState("");
   const listRef = useRef<FlatList>(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      getKeywords()
+        .then((res) => setKeywords(res.keywords))
+        .catch(() => {});
+    }, []),
+  );
 
   const loadListings = useCallback(async () => {
     setLoading(true);
     try {
-      const category = activeTab === "all" ? undefined : (activeTab as MarketplaceCategory);
-      const res = await getMarketplaceListings({ category, q: search || undefined });
-
+      const res = await getMarketplaceListings({
+        keyword: activeKeyword ?? undefined,
+        q: search || undefined,
+      });
       const filtered = user ? res.listings.filter((l) => l.seller_id !== user.id) : res.listings;
       setListings(filtered);
     } catch {
@@ -51,7 +49,7 @@ export default function MarketplaceScreen() {
     } finally {
       setLoading(false);
     }
-  }, [activeTab, search, user]);
+  }, [activeKeyword, search, user]);
 
   useFocusEffect(
     useCallback(() => {
@@ -161,36 +159,55 @@ export default function MarketplaceScreen() {
           placeholder: t("userMarketplace.list.searchPlaceholder"),
         }}
         bottom={
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
-            className="mb-3"
-          >
-            {categoryTabs.map((tab) => {
-              const isActive = tab.key === activeTab;
-              return (
-                <Pressable
-                  key={tab.key}
-                  onPress={() => setActiveTab(tab.key)}
-                  style={{ alignSelf: "flex-start" }}
+          keywords.length > 0 ? (
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
+              className="mb-3"
+            >
+              <Pressable
+                onPress={() => setActiveKeyword(null)}
+                style={{ alignSelf: "flex-start" }}
+                className={cn(
+                  "rounded-full px-4 py-2",
+                  activeKeyword === null ? "bg-primary" : "bg-secondary",
+                )}
+              >
+                <Text
                   className={cn(
-                    "rounded-full px-4 py-2",
-                    isActive ? "bg-primary" : "bg-secondary",
+                    "text-sm font-medium",
+                    activeKeyword === null ? "text-primary-foreground" : "text-muted-foreground",
                   )}
                 >
-                  <Text
+                  {t("userMarketplace.list.tabAll")}
+                </Text>
+              </Pressable>
+              {keywords.map((kw) => {
+                const isActive = activeKeyword === kw.id;
+                return (
+                  <Pressable
+                    key={kw.id}
+                    onPress={() => setActiveKeyword(isActive ? null : kw.id)}
+                    style={{ alignSelf: "flex-start" }}
                     className={cn(
-                      "text-sm font-medium",
-                      isActive ? "text-primary-foreground" : "text-muted-foreground",
+                      "rounded-full px-4 py-2",
+                      isActive ? "bg-primary" : "bg-secondary",
                     )}
                   >
-                    {tab.label}
-                  </Text>
-                </Pressable>
-              );
-            })}
-          </ScrollView>
+                    <Text
+                      className={cn(
+                        "text-sm font-medium",
+                        isActive ? "text-primary-foreground" : "text-muted-foreground",
+                      )}
+                    >
+                      {kw.name}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </ScrollView>
+          ) : undefined
         }
       />
       <FlatList

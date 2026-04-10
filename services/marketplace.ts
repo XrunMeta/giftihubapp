@@ -30,8 +30,19 @@ export type MarketplaceSort = "price_asc" | "price_desc" | "newest";
 
 interface ListingsParams {
   category?: MarketplaceCategory;
+  keyword?: number;
   q?: string;
   sort?: MarketplaceSort;
+}
+
+export interface Keyword {
+  id: number;
+  name: string;
+  display_order: number;
+}
+
+export async function getKeywords(): Promise<{ keywords: Keyword[] }> {
+  return apiFetch("/oth-path", { skipAuth: true });
 }
 
 export async function getMarketplaceListings(
@@ -39,6 +50,7 @@ export async function getMarketplaceListings(
 ): Promise<{ listings: MarketplaceListing[] }> {
   const searchParams = new URLSearchParams();
   if (params?.category) searchParams.set("category", params.category);
+  if (params?.keyword) searchParams.set("keyword", String(params.keyword));
   if (params?.q) searchParams.set("q", params.q);
   if (params?.sort) searchParams.set("sort", params.sort);
   const query = searchParams.toString();
