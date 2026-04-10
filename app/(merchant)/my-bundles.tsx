@@ -2,6 +2,7 @@ import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
 import { v_6185b9 } from "hqklsidyfbumojabxoewf";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
+import { v_be1e41 } from "hfombjcvpanldq";
 import { v_7ef52a } from "splenmyqnym";
 import {
   v_54a47e,
@@ -44,6 +45,7 @@ type SingleItem = {
   brand: string;
   name: string;
   face_value: number;
+  base_currency?: string;
   status: string;
   expiry_date: number;
   image_url: string | null;
@@ -95,7 +97,7 @@ export default function v_8f53d1() {
   const v_df5cad = (bundle: v_920170) => {
     v_5c50c0(
       v_8d41d7("merchant.bundles.settlementTitle"),
-      `${v_79521f.set_name}\n${v_8d41d7("merchant.bundles.totalFace")}: ₩${v_79521f.total_face_value.toLocaleString()}\n${v_79521f.voucher_count}${v_8d41d7("merchant.bundles.voucherUnit")}\n\n${v_8d41d7("merchant.bundles.askSettlement")}`,
+      `${v_79521f.set_name}\n${v_8d41d7("merchant.bundles.totalFace")}: ${v_be1e41(v_79521f.total_face_value, v_79521f.currency)}\n${v_79521f.voucher_count}${v_8d41d7("merchant.bundles.voucherUnit")}\n\n${v_8d41d7("merchant.bundles.askSettlement")}`,
       [
         { text: v_8d41d7("merchant.bundles.cancel"), style: "cancel" },
         {
@@ -105,7 +107,7 @@ export default function v_8f53d1() {
               const v_8f00b9 = await v_9607ec(v_79521f.set_id);
               v_5c50c0(
                 v_8d41d7("merchant.bundles.requestDoneTitle"),
-                `${v_8d41d7("merchant.bundles.feeLine")}: ₩${v_8f00b9.fee_amount.toLocaleString()} (${(v_8f00b9.fee_rate * 100).toFixed(1)}%)\n${v_8d41d7("merchant.bundles.netLine")}: ₩${v_8f00b9.net_amount.toLocaleString()}`,
+                `${v_8d41d7("merchant.bundles.feeLine")}: ${v_be1e41(v_8f00b9.fee_amount)} (${(v_8f00b9.fee_rate * 100).toFixed(1)}%)\n${v_8d41d7("merchant.bundles.netLine")}: ${v_be1e41(v_8f00b9.net_amount)}`,
               );
               v_4fa913();
             } catch (v_9e86fd) {
@@ -143,7 +145,7 @@ export default function v_8f53d1() {
               </Text>
             </View>
             <Text className="text-base font-bold text-foreground">
-              ₩{v_148ff6.total_face_value.toLocaleString()}
+              {v_be1e41(v_148ff6.total_face_value, v_148ff6.currency)}
             </Text>
           </View>
           <TouchableOpacity
@@ -178,7 +180,7 @@ export default function v_8f53d1() {
             <Badge variant={v_51452d.variant} label={v_51452d.label} />
           </View>
           <Text className="text-sm font-bold text-foreground mt-1">
-            ₩{v_fd5f43.face_value.toLocaleString()}
+            {v_be1e41(v_fd5f43.face_value, v_fd5f43.base_currency)}
           </Text>
         </View>
       </View>
@@ -204,19 +206,19 @@ export default function v_8f53d1() {
           <View>
             <Text className="text-xs text-muted-foreground">{v_8d41d7("merchant.bundles.purchasePrice")}</Text>
             <Text className="text-sm font-medium text-foreground">
-              ₩{v_8c0b26.purchase_price.toLocaleString()}
+              {v_be1e41(v_8c0b26.purchase_price)}
             </Text>
           </View>
           <View className="items-center">
             <Text className="text-xs text-muted-foreground">{v_8d41d7("merchant.bundles.fee")}</Text>
             <Text className="text-sm font-medium text-red-500">
-              -₩{v_8c0b26.fee_amount.toLocaleString()}
+              -{v_be1e41(v_8c0b26.fee_amount)}
             </Text>
           </View>
           <View className="items-end">
             <Text className="text-xs text-muted-foreground">{v_8d41d7("merchant.bundles.payout")}</Text>
             <Text className="text-sm font-bold text-primary">
-              ₩{v_8c0b26.net_amount.toLocaleString()}
+              {v_be1e41(v_8c0b26.net_amount)}
             </Text>
           </View>
         </View>

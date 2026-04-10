@@ -10,12 +10,7 @@ import { v_9cabcb, v_cf9c33, v_09d0e5, v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
-const v_928ad6 = { KRW: "₩", USD: "$", IDR: "Rp" };
-
-function v_be1e41(v_f63e09, v_a832b3) {
-  const v_c37780 = v_928ad6[v_a832b3 ?? "KRW"] ?? "₩";
-  return `${v_c37780}${v_f63e09.toLocaleString()}`;
-}
+import { v_be1e41, v_581cd0 } from "hfombjcvpanldq";
 
 export default function v_d218af() {
   const { t: v_8d41d7 } = v_678659();
@@ -217,7 +212,7 @@ export default function v_d218af() {
           }
           if (v_3aa565) {
             const v_3d694a = v_1c3e83.map((v_3f4e2e) => ({
-              text: `${v_3f4e2e} ${v_928ad6[v_3f4e2e]}${v_d1b52c[v_3f4e2e].toLocaleString()}`,
+              text: `${v_3f4e2e} ${v_581cd0(v_3f4e2e)}${v_d1b52c[v_3f4e2e].toLocaleString()}`,
               onPress: () => v_904d46.push({ pathname: "/(user)/purchase", params: { currency: v_3f4e2e } }),
             }));
             v_3d694a.push({ text: v_8d41d7("userCart.cancel"), onPress: () => { } });
@@ -238,7 +233,7 @@ export default function v_d218af() {
                   <View key={v_3f4e2e} className="flex-row justify-between py-0.5">
                     <Text className="text-sm text-foreground">{v_3f4e2e}</Text>
                     <Text className="text-sm font-bold text-foreground">
-                      {v_928ad6[v_3f4e2e] ?? ""}{v_d1b52c[v_3f4e2e].toLocaleString()}
+                      {v_581cd0(v_3f4e2e) ?? ""}{v_d1b52c[v_3f4e2e].toLocaleString()}
                     </Text>
                   </View>
                 ))}
@@ -249,7 +244,7 @@ export default function v_d218af() {
                   {v_8d41d7("userCart.totalLine").replace("{{count}}", String(v_63e412()))}
                 </Text>
                 <Text className="text-xl font-bold text-foreground">
-                  {v_928ad6[v_1c3e83[0]] ?? "₩"}{(v_d1b52c[v_1c3e83[0]] ?? 0).toLocaleString()}
+                  {v_581cd0(v_1c3e83[0])}{(v_d1b52c[v_1c3e83[0]] ?? 0).toLocaleString()}
                 </Text>
               </View>
             )}

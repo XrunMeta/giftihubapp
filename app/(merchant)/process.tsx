@@ -1,6 +1,7 @@
 import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
+import { v_be1e41 } from "hfombjcvpanldq";
 import { v_bc1b24 } from "tlrvzsbmctdavs";
 import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
 import { v_24c64e, v_dc4a73 } from "wjvlskvsbzsrojdbjsl";
@@ -73,7 +74,7 @@ export default function v_96d53d() {
               <Text className="text-sm text-muted-foreground">{v_ad1545.brand}</Text>
               <Text className="text-base font-semibold text-foreground">{v_ad1545.name}</Text>
               <Text className="text-lg font-bold text-primary mt-2">
-                ₩{v_ad1545.face_value?.toLocaleString()}
+                {v_be1e41(v_ad1545.face_value)}
               </Text>
             </View>
             <Button className="w-full mt-6" onPress={v_9fd074}>

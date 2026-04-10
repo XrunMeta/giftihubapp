@@ -1,13 +1,12 @@
 import { v_4c40b6 } from "eroshpxpcrjekpsjrhbenwagema";
 import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
+import { v_581cd0 } from "hfombjcvpanldq";
 import { v_e81ec9, v_665284, type v_678322 } from "vhkgxwheyyipiczd";
 import { v_cf763b, v_d1d90c } from "rkmroqyctko";
 import v_a3453e, { v_de06a3, v_5ab095 } from "bapkr";
 import { v_39a996, v_9cabcb, v_cf9c33, v_09d0e5, v_19b633, v_e45a99, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
-
-const v_928ad6 = { KRW: "₩", USD: "$", IDR: "Rp" };
 
 const v_d6d33d = 12;
 const v_656abc = 8;
@@ -83,7 +82,7 @@ export default function v_ec75dd() {
           <View className="flex-row items-center  mt-1 gap-1.5">
             {v_e567dc ? (
               <Text className="text-base font-bold text-foreground">
-                {v_928ad6[v_8c0b26.flexible_currency ?? "KRW"] ?? "₩"}{(v_8c0b26.flexible_min ?? 0).toLocaleString()}~
+                {v_581cd0(v_8c0b26.flexible_currency)}{(v_8c0b26.flexible_min ?? 0).toLocaleString()}~
               </Text>
             ) : (
               <>
@@ -92,7 +91,7 @@ export default function v_ec75dd() {
                   <Text className="text-base font-bold text-red-500">{v_3ae14a}%</Text>
                 )}
                 <Text className="text-base font-bold text-foreground">
-                  {v_928ad6[v_8c0b26.display_currency] ?? "₩"}{(v_8c0b26.price ?? 0).toLocaleString()}
+                  {v_581cd0(v_8c0b26.display_currency)}{(v_8c0b26.price ?? 0).toLocaleString()}
                 </Text>
               </>
             )}

@@ -1,11 +1,7 @@
 import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
 import { v_c62079 } from "wjvlskvsbzsrojdbjsl";
 
-const v_928ad6 = { KRW: "₩", USD: "$", IDR: "Rp" };
-function v_2396c3(v_f63e09, v_a832b3) {
-  const v_c37780 = v_928ad6[v_a832b3 ?? "KRW"] ?? "";
-  return `${v_c37780}${v_f63e09?.toLocaleString() ?? 0}`;
-}
+import { v_be1e41 as v_2396c3 } from "hfombjcvpanldq";
 import { v_a3b961 } from "xytbpcyuptfvuyelkypzvyijaumlzur";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_a4ddab } from "eqrxxpgqjbwbqqqhvy";

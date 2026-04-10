@@ -8,8 +8,8 @@ import v_a3453e, { v_5ab095 } from "bapkr";
 import { v_39a996, v_cf9c33, v_09d0e5, v_19b633, v_79c4f2, v_3094a2 } from "rcmrninabrnb";
 
 import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
+import { v_581cd0 } from "hfombjcvpanldq";
 const v_78e25d = ["KRW", "USD", "IDR"] as const;
-const v_165211 = { KRW: "₩", USD: "$", IDR: "Rp" };
 const v_054e7a = {
   KRW: "50000",
   USD: "50",
@@ -90,7 +90,7 @@ export function v_4c40b6() {
     v_1cbe59("");
   };
 
-  const v_c37780 = v_165211[v_a832b3] ?? "";
+  const v_c37780 = v_581cd0(v_a832b3);
 
   return (
     <View className="mx-1.5 mb-4">

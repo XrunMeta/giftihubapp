@@ -1,6 +1,7 @@
 import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
+import { v_be1e41 } from "hfombjcvpanldq";
 import { v_bc1b24 } from "tlrvzsbmctdavs";
 import v_a3453e, { v_de06a3, v_c4deb2, v_df9f57, v_5ab095 } from "bapkr";
 import {
@@ -99,7 +100,7 @@ export default function v_0842da() {
           </Text>
         </View>
         <Text className="text-base font-bold text-foreground">
-          ₩{v_8c0b26.total_amount?.toLocaleString()}
+          {v_be1e41(v_8c0b26.total_amount)}
         </Text>
       </View>
     </View>
@@ -139,15 +140,15 @@ export default function v_0842da() {
       </View>
       <View className="flex-row justify-between mt-1">
         <Text className="text-xs text-muted-foreground">{v_8d41d7("merchant.settlement.totalLabel")}</Text>
-        <Text className="text-xs text-foreground font-medium">₩{v_8c0b26.total_amount?.toLocaleString()}</Text>
+        <Text className="text-xs text-foreground font-medium">{v_be1e41(v_8c0b26.total_amount)}</Text>
       </View>
       <View className="flex-row justify-between mt-0.5">
         <Text className="text-xs text-muted-foreground">{v_8d41d7("merchant.settlement.feeLabel")}</Text>
-        <Text className="text-xs text-muted-foreground">-₩{v_8c0b26.fee_amount?.toLocaleString()}</Text>
+        <Text className="text-xs text-muted-foreground">-{v_be1e41(v_8c0b26.fee_amount)}</Text>
       </View>
       <View className="flex-row justify-between mt-0.5">
         <Text className="text-xs text-muted-foreground">{v_8d41d7("merchant.settlement.netLabel")}</Text>
-        <Text className="text-sm font-bold text-primary">₩{v_8c0b26.net_amount?.toLocaleString()}</Text>
+        <Text className="text-sm font-bold text-primary">{v_be1e41(v_8c0b26.net_amount)}</Text>
       </View>
       {(v_8c0b26.tx_hash || v_8c0b26.bank_ref) && (
         <Text className="text-xs text-muted-foreground mt-2" numberOfLines={1}>
@@ -219,7 +220,7 @@ export default function v_0842da() {
                 <View className="items-center flex-1">
                   <Text className="text-xs text-muted-foreground">{v_8d41d7("merchant.settlement.totalAmountLabel")}</Text>
                   <Text className="text-xl font-bold text-primary mt-1">
-                    ₩{v_b595e3.summary.total_amount?.toLocaleString()}
+                    {v_be1e41(v_b595e3.summary.total_amount)}
                   </Text>
                 </View>
               </View>

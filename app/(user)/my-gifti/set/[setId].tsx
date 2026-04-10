@@ -3,6 +3,7 @@ import { v_6185b9 } from "hqklsidyfbumojabxoewf";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
+import { v_be1e41, v_581cd0 } from "hfombjcvpanldq";
 import { v_7ef52a } from "splenmyqnym";
 import { v_e7fbfb, v_aee327, v_c910b4, type v_e84f77 } from "vkhyfothlklikcpovbqirr";
 import { v_67877b, type v_f122c9, type v_7fb3de } from "pvulvehakmpzwkznlnd";
@@ -123,7 +124,7 @@ export default function v_2be872() {
           </View>
           <View className="flex-row justify-between items-center mt-1">
             <Text className="text-sm font-bold text-foreground">
-              ₩{v_8c0b26.face_value?.toLocaleString()}
+              {v_be1e41(v_8c0b26.face_value, v_8c0b26.base_currency)}
             </Text>
             <Text className="text-xs text-muted-foreground">
               {v_8c0b26.expiry_date ? v_db3cc6(new Date(v_8c0b26.expiry_date * 1000), "yyyy.MM.dd") : "-"}
@@ -160,7 +161,7 @@ export default function v_2be872() {
         <View className="flex-row justify-between">
           <Text className="text-sm font-semibold text-foreground">{v_8d41d7("myGifti.setDetail.totalFace")}</Text>
           <Text className="text-base font-bold text-foreground">
-            {({KRW:"₩",USD:"$",IDR:"Rp"} as Record<string,string>)[v_bb8024.currency] ?? ""}{v_b9f2b7.total_value?.toLocaleString()}
+            {v_be1e41(v_b9f2b7.total_value, v_bb8024.currency)}
           </Text>
         </View>
       </View>
@@ -241,16 +242,16 @@ export default function v_2be872() {
           <View className="mt-3">
             <View className="flex-row justify-between mb-1">
               <Text className="text-xs text-muted-foreground">{v_8d41d7("myGifti.setDetail.totalFace")}</Text>
-              <Text className="text-xs text-foreground">{({KRW:"₩",USD:"$",IDR:"Rp"} as Record<string,string>)[v_bb8024.currency] ?? ""}{v_b9f2b7.total_value?.toLocaleString()}</Text>
+              <Text className="text-xs text-foreground">{v_be1e41(v_b9f2b7.total_value, v_bb8024.currency)}</Text>
             </View>
             <View className="flex-row justify-between mb-1">
               <Text className="text-xs text-muted-foreground">{v_8d41d7("myGifti.setDetail.feeLabel")}</Text>
-              <Text className="text-xs text-foreground">₩{v_2d815e.toLocaleString()}</Text>
+              <Text className="text-xs text-foreground">{v_be1e41(v_2d815e, v_bb8024.currency)}</Text>
             </View>
             <Separator className="my-1.5" />
             <View className="flex-row justify-between">
               <Text className="text-sm font-semibold text-foreground">{v_8d41d7("myGifti.setDetail.payoutLabel")}</Text>
-              <Text className="text-sm font-bold text-primary">₩{v_daa996.toLocaleString()}</Text>
+              <Text className="text-sm font-bold text-primary">{v_be1e41(v_daa996, v_bb8024.currency)}</Text>
             </View>
           </View>
           <View className="flex-row gap-2 mt-3">

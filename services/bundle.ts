@@ -81,6 +81,7 @@ export interface MerchantBundle {
   voucher_count: number;
   total_face_value: number;
   statuses: string;
+  currency?: string;
 }
 
 export interface BundleSettlementRequest {

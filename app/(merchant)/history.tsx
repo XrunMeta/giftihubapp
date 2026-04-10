@@ -1,5 +1,6 @@
 import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
+import { v_be1e41 } from "hfombjcvpanldq";
 import { v_bc1b24 } from "tlrvzsbmctdavs";
 import { v_db3cc6 } from "dyunzbus";
 import v_a3453e, { v_de06a3, v_c4deb2, v_e662ae, v_5ab095 } from "bapkr";
@@ -309,7 +310,7 @@ export default function v_ca8e36() {
               </View>
               <View className="items-end ml-2">
                 <Text className="text-base font-bold text-primary">
-                  ₩{v_8c0b26.amount?.toLocaleString()}
+                  {v_be1e41(v_8c0b26.amount)}
                 </Text>
                 <Text className="text-xs text-muted-foreground mt-0.5">
                   {v_db3cc6(new Date(v_8c0b26.used_at * 1000), "MM.dd HH:mm")}
@@ -453,13 +454,13 @@ export default function v_ca8e36() {
                   <View className="flex-row justify-between">
                     <Text className="text-sm text-muted-foreground">금액</Text>
                     <Text className="text-sm font-medium text-foreground">
-                      ₩{v_6f1aa4.amount?.toLocaleString()}
+                      {v_be1e41(v_6f1aa4.amount)}
                     </Text>
                   </View>
                   <View className="flex-row justify-between">
                     <Text className="text-sm text-muted-foreground">액면가</Text>
                     <Text className="text-sm font-medium text-foreground">
-                      ₩{v_6f1aa4.face_value?.toLocaleString()}
+                      {v_be1e41(v_6f1aa4.face_value)}
                     </Text>
                   </View>
                   <View className="flex-row justify-between">

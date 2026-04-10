@@ -3,6 +3,7 @@ import { v_6185b9 } from "hqklsidyfbumojabxoewf";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
+import { v_be1e41 } from "hfombjcvpanldq";
 import { v_7ef52a } from "splenmyqnym";
 import { v_eeb70f, type v_ff021d } from "vkhyfothlklikcpovbqirr";
 import { v_db3cc6 } from "dyunzbus";
@@ -85,13 +86,13 @@ export default function v_271810() {
             <View className="flex-row justify-between">
               <Text className="text-sm text-muted-foreground">{v_8d41d7("merchant.marketDetail.originalPrice")}</Text>
               <Text className="text-sm text-muted-foreground line-through">
-                ₩{v_a8fb42.original_price.toLocaleString()}
+                {v_be1e41(v_a8fb42.original_price, v_a8fb42.currency)}
               </Text>
             </View>
             <View className="flex-row justify-between">
               <Text className="text-base font-semibold text-foreground">{v_8d41d7("merchant.marketDetail.salePrice")}</Text>
               <Text className="text-xl font-bold text-primary">
-                ₩{v_a8fb42.selling_price.toLocaleString()}
+                {v_be1e41(v_a8fb42.selling_price, v_a8fb42.currency)}
               </Text>
             </View>
             <View className="flex-row justify-between">

@@ -20,7 +20,7 @@ const BASE_PAYMENT_METHODS: { key: v_88a3f9; labelKey?: string; label?: string; 
   { key: "usdt_trc20", label: "USDT (TRC-20)", icon: <Coins size={20} color="#0a0a0a" /> },
 ];
 
-const v_928ad6 = { KRW: "₩", USD: "$", IDR: "Rp" };
+import { v_581cd0 } from "hfombjcvpanldq";
 
 export default function v_0035e1() {
   const { t: v_8d41d7 } = v_678659();
@@ -79,7 +79,7 @@ export default function v_0035e1() {
           <View className="flex-row justify-between">
             <Text className="text-base font-semibold text-foreground">{v_8d41d7("userPurchase.payAmount")}</Text>
             <Text className="text-xl font-bold text-primary">
-              {v_928ad6[v_6e2788] ?? ""}{v_59c1f2.toLocaleString()}
+              {v_581cd0(v_6e2788)}{v_59c1f2.toLocaleString()}
             </Text>
           </View>
         </View>

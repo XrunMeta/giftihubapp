@@ -19,7 +19,7 @@ import {
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
-const v_6b1440 = { KRW: "₩", USD: "$", IDR: "Rp" };
+import { v_581cd0 } from "hfombjcvpanldq";
 
 function v_f89181(v_e6d4a6): string {
   if (!v_e6d4a6) return "";
@@ -63,7 +63,7 @@ export default function v_2b70c8() {
 
   const v_e567dc = v_01bee9.product_type === "flexible";
   const v_d6ed0e = v_01bee9.flexible_currency ?? "KRW";
-  const v_c37780 = v_6b1440[v_d6ed0e] ?? "₩";
+  const v_c37780 = v_581cd0(v_d6ed0e);
   const v_3ae14a =
     !v_e567dc && v_01bee9.price > 0 && v_01bee9.face_value > 0 && v_01bee9.price < v_01bee9.face_value
       ? Math.round((1 - v_01bee9.price / v_01bee9.face_value) * 100)
@@ -166,18 +166,18 @@ export default function v_2b70c8() {
                           </Text>
                         </View>
                         <Text className="text-sm text-muted-foreground line-through">
-                          {v_6b1440[v_01bee9.display_currency] ?? "₩"}
+                          {v_581cd0(v_01bee9.display_currency)}
                           {(v_01bee9.face_value ?? 0).toLocaleString()}
                         </Text>
                       </View>
                       <Text className="text-2xl font-bold text-foreground shrink-0">
-                        {v_6b1440[v_01bee9.display_currency] ?? "₩"}
+                        {v_581cd0(v_01bee9.display_currency)}
                         {(v_01bee9.price ?? 0).toLocaleString()}
                       </Text>
                     </>
                   ) : (
                     <Text className="text-2xl font-bold text-foreground">
-                      {v_6b1440[v_01bee9.display_currency] ?? "₩"}
+                      {v_581cd0(v_01bee9.display_currency)}
                       {(v_01bee9.price ?? 0).toLocaleString()}
                     </Text>
                   )}

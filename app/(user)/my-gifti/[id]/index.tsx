@@ -1,4 +1,5 @@
 import v_c21f17 from "mxokdmnphhuxdntzxetlxyw";
+import { v_be1e41 } from "hfombjcvpanldq";
 import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
 import { v_6185b9 } from "hqklsidyfbumojabxoewf";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
@@ -360,7 +361,7 @@ export default function v_b89029() {
             <View className="flex-row justify-between">
               <Text className="text-sm text-muted-foreground">{v_8d41d7("myGifti.detail.faceValue")}</Text>
               <Text className="text-sm font-medium text-foreground">
-                ₩{v_3e4b5d.face_value?.toLocaleString() ?? "0"}
+                {v_be1e41(v_3e4b5d.face_value, v_3e4b5d.base_currency)}
               </Text>
             </View>
             <View className="flex-row justify-between">

@@ -5,6 +5,7 @@ import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
 import { v_5d2c47 } from "jbfshypwcrklpetczcsca";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
+import { v_be1e41, v_581cd0 } from "hfombjcvpanldq";
 import { v_7ef52a } from "splenmyqnym";
 import { v_e7fbfb, v_eeb70f, type v_ff021d, type v_03d7df } from "vkhyfothlklikcpovbqirr";
 import { v_db3cc6 } from "dyunzbus";
@@ -120,13 +121,13 @@ export default function v_9c78c5() {
             <View className="flex-row justify-between">
               <Text className="text-sm text-muted-foreground">{v_8d41d7("userMarketplace.detail.originalPrice")}</Text>
               <Text className="text-sm text-muted-foreground line-through">
-                ₩{v_a8fb42.original_price.toLocaleString()}
+                {v_be1e41(v_a8fb42.original_price, v_a8fb42.currency)}
               </Text>
             </View>
             <View className="flex-row justify-between">
               <Text className="text-base font-semibold text-foreground">{v_8d41d7("userMarketplace.detail.salePrice")}</Text>
               <Text className="text-xl font-bold text-primary">
-                ₩{v_a8fb42.selling_price.toLocaleString()}
+                {v_be1e41(v_a8fb42.selling_price, v_a8fb42.currency)}
               </Text>
             </View>
             <View className="flex-row justify-between">
@@ -148,7 +149,7 @@ export default function v_9c78c5() {
               {v_8d41d7("userMarketplace.detail.includedItems")}
             </Text>
             {v_3a2126.map((v_81e2ef, v_ebec57) => {
-              const v_c37780 = { KRW: "₩", USD: "$", IDR: "Rp" }[v_81e2ef.base_currency] ?? "₩";
+              const v_c37780 = v_581cd0(v_81e2ef.base_currency);
               const v_6bbb57 = v_81e2ef.face_value_base || v_81e2ef.face_value;
               return (
                 <View key={v_ebec57} className="flex-row justify-between items-center py-1.5 border-b border-border last:border-b-0">

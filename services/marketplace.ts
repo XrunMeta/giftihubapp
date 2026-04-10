@@ -18,6 +18,7 @@ export interface MarketplaceListing {
   brand_logo: string | null;
   set_id?: string | null;
   set_count?: number | null;
+  currency?: string;
 }
 
 export type MarketplaceCategory =

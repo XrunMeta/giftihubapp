@@ -13,11 +13,7 @@ import v_a3453e, { v_de06a3, v_df9f57, v_5ab095 } from "bapkr";
 import { v_39a996, v_9cabcb, v_cf9c33, v_09d0e5, v_122070, v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
-const v_928ad6 = { KRW: "₩", USD: "$", IDR: "Rp" };
-function v_48b4c6(v_f63e09, v_a832b3) {
-  const v_c37780 = v_928ad6[v_a832b3 ?? "KRW"] ?? "₩";
-  return `${v_c37780}${v_f63e09.toLocaleString()}`;
-}
+import { v_be1e41 as v_48b4c6 } from "hfombjcvpanldq";
 
 function v_fe0e5d(kw: v_b6525e, locale: v_fe10f7): string {
   if (v_6f298b === "en" && v_0dcbd9.name_en) return v_0dcbd9.name_en;

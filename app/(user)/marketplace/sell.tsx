@@ -3,6 +3,7 @@ import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_1b353f } from "ymbgtfrroootgjefkrxgp";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
+import { v_be1e41 } from "hfombjcvpanldq";
 import { v_86db47 } from "vkhyfothlklikcpovbqirr";
 import { v_720509, type v_7fb3de } from "pvulvehakmpzwkznlnd";
 import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
@@ -110,7 +111,7 @@ export default function v_3072c9() {
                 <Text className="text-xs text-muted-foreground">{v_81e2ef.brand}</Text>
                 <Text className="text-sm font-medium text-foreground">{v_81e2ef.name}</Text>
                 <Text className="text-sm font-bold text-foreground mt-1">
-                  ₩{v_81e2ef.face_value.toLocaleString()}
+                  {v_be1e41(v_81e2ef.face_value, v_81e2ef.base_currency)}
                 </Text>
               </Pressable>
             ))}
@@ -133,12 +134,12 @@ export default function v_3072c9() {
             <View className="bg-card rounded-xl border border-border p-4">
               <View className="flex-row justify-between">
                 <Text className="text-sm text-muted-foreground">{v_8d41d7("userMarketplace.sell.feeLabel")}</Text>
-                <Text className="text-sm text-foreground">₩{v_2d815e.toLocaleString()}</Text>
+                <Text className="text-sm text-foreground">{v_be1e41(v_2d815e, v_119885?.base_currency)}</Text>
               </View>
               <Separator className="my-2" />
               <View className="flex-row justify-between">
                 <Text className="text-base font-semibold text-foreground">{v_8d41d7("userMarketplace.sell.payoutLabel")}</Text>
-                <Text className="text-base font-bold text-primary">₩{v_daa996.toLocaleString()}</Text>
+                <Text className="text-base font-bold text-primary">{v_be1e41(v_daa996, v_119885?.base_currency)}</Text>
               </View>
             </View>
 

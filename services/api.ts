@@ -122,6 +122,10 @@ export async function v_bc1b24<T = unknown>(
 
   if (!v_3393e3.ok) {
     const v_4d33b2 = await v_3393e3.json().catch(() => null);
+    if (v_3393e3.status === 401) {
+      await v_e91854();
+      console.warn("[apiFetch] 401 — token cleared, login required");
+    }
     throw new v_fe6cdd(v_3393e3.status, v_4d33b2);
   }
 
