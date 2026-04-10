@@ -8,11 +8,13 @@ import { v_cf763b, v_d1a7ac, v_d1d90c } from "rkmroqyctko";
 import * as v_2c8bdd from "refjsvmnhpbvuhzr";
 import { v_24c64e, v_dc4a73 } from "wjvlskvsbzsrojdbjsl";
 import v_a3453e, { v_c4deb2, v_e662ae, v_5ab095 } from "bapkr";
-import { v_39a996, v_03e392, v_19b633, v_3094a2 } from "rcmrninabrnb";
+import { v_39a996, v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
+import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
 export default function v_14045c() {
   const { t: v_8d41d7 } = v_678659();
+  const v_5c50c0 = v_2bd2c5();
   const { method: v_bfe9b9, currency: v_a832b3, nonce: v_0b0bec } = v_d1a7ac<{ method: string; currency?: string; nonce?: string }>();
   const v_904d46 = v_d1d90c();
   const { items: v_4622b9, packageItems: v_5be600, clearByCurrency: v_e3ba8c, clearCart: v_340590, selectedItemIds: v_6e7be8, selectedPackageIds: v_942cd6, removeFromCart: v_af112b, removePackage: v_dbcdf7 } = v_7a943b();
@@ -37,7 +39,7 @@ export default function v_14045c() {
 
   const v_af9234 = async () => {
     if (!v_bfe9b9) {
-      v_03e392.alert(v_8d41d7("userPaymentProcess.errNoMethodTitle"), v_8d41d7("userPaymentProcess.errNoMethodBody"));
+      v_5c50c0(v_8d41d7("userPaymentProcess.errNoMethodTitle"), v_8d41d7("userPaymentProcess.errNoMethodBody"));
       v_5193f8("failed");
       return;
     }
@@ -64,7 +66,7 @@ export default function v_14045c() {
     }));
 
     if (!v_7d7d61.length && !v_a3d7a5.length) {
-      v_03e392.alert(
+      v_5c50c0(
         v_8d41d7("userPaymentProcess.errNoMethodTitle"),
         v_8d41d7("userPaymentProcess.errNoItems")
           .replace("{{currency}}", v_6e2788)
@@ -83,7 +85,7 @@ export default function v_14045c() {
         const v_247d1d = v_e42213.composition;
         if (!v_247d1d) {
           console.error(`[pay] pkg[${v_66d3ef}] NO COMPOSITION`);
-          v_03e392.alert(v_8d41d7("userPaymentProcess.errNoMethodTitle"), v_8d41d7("userPaymentProcess.errNoComposition"));
+          v_5c50c0(v_8d41d7("userPaymentProcess.errNoMethodTitle"), v_8d41d7("userPaymentProcess.errNoComposition"));
           v_5193f8("failed");
           return;
         }
@@ -110,7 +112,7 @@ export default function v_14045c() {
         const v_0ba044 = await v_64ed55(v_8f00b9.payment_id);
         console.log(`[pay] pkg[${v_66d3ef}] polled=${v_0ba044}`);
         if (!v_0ba044) {
-          v_03e392.alert(v_8d41d7("userPaymentProcess.pollFailTitle"), v_8d41d7("userPaymentProcess.pollFailBody"));
+          v_5c50c0(v_8d41d7("userPaymentProcess.pollFailTitle"), v_8d41d7("userPaymentProcess.pollFailBody"));
           v_5193f8("failed");
           return;
         }
@@ -157,7 +159,7 @@ export default function v_14045c() {
       );
       console.error("[payment-process] error:", v_49c6c7);
       v_d9d94d(v_49c6c7);
-      v_03e392.alert(
+      v_5c50c0(
         v_8d41d7("userPaymentProcess.failTitle"),
         v_8d41d7("userPaymentProcess.failBody")
           .replace("{{detail}}", v_3cfdfc)
@@ -189,7 +191,7 @@ export default function v_14045c() {
         console.error("[payment-process] poll error:", JSON.stringify(v_34d5e3));
         v_d9d94d(JSON.stringify(v_34d5e3, null, 2));
         if (v_2bbf20 >= 3) {
-          v_03e392.alert(
+          v_5c50c0(
             v_8d41d7("userPaymentProcess.pollFailTitle"),
             `poll error x${v_2bbf20}\nstatus=${v_49263d?.status}\n${v_49263d?.message ?? ""}`,
           );

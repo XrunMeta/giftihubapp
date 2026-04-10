@@ -10,9 +10,10 @@ import { v_db3cc6 } from "dyunzbus";
 import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
 import { v_c62079, v_6b9090 } from "wjvlskvsbzsrojdbjsl";
 import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
-import { v_39a996, v_03e392, v_9cabcb, v_cf9c33, v_09d0e5, v_19b633, v_79c4f2, v_3094a2 } from "rcmrninabrnb";
+import { v_39a996, v_9cabcb, v_cf9c33, v_09d0e5, v_19b633, v_79c4f2, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
+import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
 const v_119921 = {
   active: { labelKey: "myGifti.list.statusActive", variant: "default" },
   used: { labelKey: "myGifti.list.statusUsed", variant: "secondary" },
@@ -23,6 +24,7 @@ const v_119921 = {
 
 export default function v_2be872() {
   const { t: v_8d41d7 } = v_678659();
+  const v_5c50c0 = v_2bd2c5();
   const { setId: v_90a2ba } = v_d1a7ac<{ setId: string }>();
   const v_904d46 = v_d1d90c();
   const [v_9390e8, v_d57c80] = v_5ab095<v_f122c9 | null>(null);
@@ -48,7 +50,7 @@ export default function v_2be872() {
         v_ecf246(null);
       }
     } catch {
-      v_03e392.alert(v_8d41d7("myGifti.setDetail.loadErrorTitle"), v_8d41d7("myGifti.setDetail.loadErrorBody"));
+      v_5c50c0(v_8d41d7("myGifti.setDetail.loadErrorTitle"), v_8d41d7("myGifti.setDetail.loadErrorBody"));
       v_904d46.back();
     } finally {
       v_34a50a(false);
@@ -76,17 +78,17 @@ export default function v_2be872() {
 
   const v_333e15 = async () => {
     if (!v_7ae44d || Number(v_7ae44d) <= 0) {
-      v_03e392.alert(v_8d41d7("myGifti.setDetail.alertPriceTitle"), v_8d41d7("myGifti.setDetail.alertPriceBody"));
+      v_5c50c0(v_8d41d7("myGifti.setDetail.alertPriceTitle"), v_8d41d7("myGifti.setDetail.alertPriceBody"));
       return;
     }
     v_ee9ec1(true);
     try {
       await v_aee327(v_90a2ba!, Number(v_7ae44d));
-      v_03e392.alert(v_8d41d7("myGifti.setDetail.successTitle"), v_8d41d7("myGifti.setDetail.successBody"), [
+      v_5c50c0(v_8d41d7("myGifti.setDetail.successTitle"), v_8d41d7("myGifti.setDetail.successBody"), [
         { text: v_8d41d7("myGifti.setDetail.ok"), onPress: () => v_904d46.back() },
       ]);
     } catch (v_49263d) {
-      v_03e392.alert(v_8d41d7("myGifti.setDetail.failTitle"), v_49263d.body?.error || v_8d41d7("myGifti.setDetail.failBody"));
+      v_5c50c0(v_8d41d7("myGifti.setDetail.failTitle"), v_49263d.body?.error || v_8d41d7("myGifti.setDetail.failBody"));
     } finally {
       v_ee9ec1(false);
     }
@@ -170,7 +172,7 @@ export default function v_2be872() {
             variant="destructive"
             disabled={v_350377}
             onPress={() => {
-              v_03e392.alert(
+              v_5c50c0(
                 v_8d41d7("userMarketplace.detail.cancelConfirmTitle"),
                 v_8d41d7("userMarketplace.detail.cancelConfirmBody"),
                 [
@@ -182,13 +184,13 @@ export default function v_2be872() {
                       v_0d7dba(true);
                       try {
                         await v_e7fbfb(v_8f4fbf.id);
-                        v_03e392.alert(
+                        v_5c50c0(
                           v_8d41d7("userMarketplace.detail.cancelDoneTitle"),
                           v_8d41d7("userMarketplace.detail.cancelDoneBody"),
                         );
                         await v_f6f5de();
                       } catch (v_49263d) {
-                        v_03e392.alert(
+                        v_5c50c0(
                           v_8d41d7("userMarketplace.detail.cancelFailTitle"),
                           String(v_49263d?.message ?? v_49263d),
                         );

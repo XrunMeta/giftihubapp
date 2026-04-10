@@ -5,11 +5,13 @@ import { v_bc1b24 } from "tlrvzsbmctdavs";
 import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
 import { v_24c64e, v_dc4a73 } from "wjvlskvsbzsrojdbjsl";
 import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
-import { v_39a996, v_03e392, v_19b633, v_3094a2 } from "rcmrninabrnb";
+import { v_39a996, v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
+import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
 export default function v_96d53d() {
   const { t: v_8d41d7 } = v_678659();
+  const v_5c50c0 = v_2bd2c5();
   const { barcode: v_e4a44d } = v_d1a7ac<{ barcode: string }>();
   const v_904d46 = v_d1d90c();
   const [v_d308b5, v_5193f8] = v_5ab095<"validating" | "valid" | "invalid">("validating");
@@ -48,7 +50,7 @@ export default function v_96d53d() {
       });
       v_904d46.replace("/(merchant)/process-complete");
     } catch (v_49263d) {
-      v_03e392.alert(v_8d41d7("merchant.process.failTitle"), v_49263d.body?.error || v_8d41d7("merchant.process.failBody"));
+      v_5c50c0(v_8d41d7("merchant.process.failTitle"), v_49263d.body?.error || v_8d41d7("merchant.process.failBody"));
     }
   };
 

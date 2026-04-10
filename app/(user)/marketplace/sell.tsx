@@ -9,7 +9,6 @@ import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
 import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
 import {
   v_39a996,
-  v_03e392,
   v_e767d1,
   v_326be8,
   v_09d0e5,
@@ -19,8 +18,10 @@ import {
 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
+import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
 export default function v_3072c9() {
   const { t: v_8d41d7 } = v_678659();
+  const v_5c50c0 = v_2bd2c5();
   const v_904d46 = v_d1d90c();
   const { voucherId: v_ba63f8 } = v_d1a7ac<{ voucherId?: string }>();
   const [v_f9fd27, v_3a2126] = v_5ab095<v_7fb3de[]>([]);
@@ -57,17 +58,17 @@ export default function v_3072c9() {
 
   const v_585b02 = async () => {
     if (!v_119885 || !v_7ae44d) {
-      v_03e392.alert(v_8d41d7("userMarketplace.sell.alertMissingTitle"), v_8d41d7("userMarketplace.sell.alertMissingBody"));
+      v_5c50c0(v_8d41d7("userMarketplace.sell.alertMissingTitle"), v_8d41d7("userMarketplace.sell.alertMissingBody"));
       return;
     }
     v_ee9ec1(true);
     try {
       await v_86db47(v_119885.id, Number(v_7ae44d));
-      v_03e392.alert(v_8d41d7("userMarketplace.sell.successTitle"), v_8d41d7("userMarketplace.sell.successBody"), [
+      v_5c50c0(v_8d41d7("userMarketplace.sell.successTitle"), v_8d41d7("userMarketplace.sell.successBody"), [
         { text: v_8d41d7("userMarketplace.sell.ok"), onPress: () => v_904d46.back() },
       ]);
     } catch (v_49263d) {
-      v_03e392.alert(v_8d41d7("userMarketplace.sell.failTitle"), v_49263d.body?.error || v_8d41d7("userMarketplace.sell.failBody"));
+      v_5c50c0(v_8d41d7("userMarketplace.sell.failTitle"), v_49263d.body?.error || v_8d41d7("userMarketplace.sell.failBody"));
     } finally {
       v_ee9ec1(false);
     }

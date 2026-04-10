@@ -5,9 +5,10 @@ import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_bc1b24 } from "tlrvzsbmctdavs";
 import { v_d1d90c } from "rkmroqyctko";
 import v_a3453e, { v_5ab095 } from "bapkr";
-import { v_03e392, v_122070, v_19b633, v_3094a2 } from "rcmrninabrnb";
+import { v_122070, v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
+import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
 interface WithdrawResponse {
   ok: boolean;
   tx_hash?: string;
@@ -16,6 +17,7 @@ interface WithdrawResponse {
 
 export default function v_df3264() {
   const { t: v_8d41d7 } = v_678659();
+  const v_5c50c0 = v_2bd2c5();
   const v_904d46 = v_d1d90c();
   const [v_64d549, v_5ed714] = v_5ab095("");
   const [v_f63e09, v_1cbe59] = v_5ab095("");
@@ -26,21 +28,21 @@ export default function v_df3264() {
 
   const v_d063db = async () => {
     if (!v_64d549.trim() || !v_f63e09.trim()) {
-      v_03e392.alert(v_8d41d7("userUsdtWithdraw.errFieldsTitle"), v_8d41d7("userUsdtWithdraw.errFieldsBody"));
+      v_5c50c0(v_8d41d7("userUsdtWithdraw.errFieldsTitle"), v_8d41d7("userUsdtWithdraw.errFieldsBody"));
       return;
     }
     if (!v_9bd356(v_64d549)) {
-      v_03e392.alert(v_8d41d7("userUsdtWithdraw.errAddrTitle"), v_8d41d7("userUsdtWithdraw.errAddrBody"));
+      v_5c50c0(v_8d41d7("userUsdtWithdraw.errAddrTitle"), v_8d41d7("userUsdtWithdraw.errAddrBody"));
       return;
     }
     const v_844935 = parseFloat(v_f63e09);
     if (isNaN(v_844935) || v_844935 <= 0) {
-      v_03e392.alert(v_8d41d7("userUsdtWithdraw.errAmountTitle"), v_8d41d7("userUsdtWithdraw.errAmountBody"));
+      v_5c50c0(v_8d41d7("userUsdtWithdraw.errAmountTitle"), v_8d41d7("userUsdtWithdraw.errAmountBody"));
       return;
     }
 
     const v_d73b64 = `${v_64d549.substring(0, 8)}...${v_64d549.substring(v_64d549.length - 6)}`;
-    v_03e392.alert(
+    v_5c50c0(
       v_8d41d7("userUsdtWithdraw.confirmTitle"),
       v_8d41d7("userUsdtWithdraw.confirmBody")
         .replace("{{amount}}", String(v_844935))
@@ -69,11 +71,11 @@ export default function v_df3264() {
                 (v_8f00b9.estimated_time
                   ? v_8d41d7("userUsdtWithdraw.successEta").replace("{{eta}}", v_8f00b9.estimated_time)
                   : `\n${v_8d41d7("userUsdtWithdraw.successPending")}`);
-              v_03e392.alert(v_8d41d7("userUsdtWithdraw.successTitle"), v_a20432, [
+              v_5c50c0(v_8d41d7("userUsdtWithdraw.successTitle"), v_a20432, [
                 { text: v_8d41d7("userUsdtWithdraw.ok"), onPress: () => v_904d46.back() },
               ]);
             } catch (v_49263d) {
-              v_03e392.alert(v_8d41d7("userUsdtWithdraw.failTitle"), v_49263d.body?.error || v_8d41d7("userUsdtWithdraw.failBody"));
+              v_5c50c0(v_8d41d7("userUsdtWithdraw.failTitle"), v_49263d.body?.error || v_8d41d7("userUsdtWithdraw.failBody"));
             } finally {
               v_34a50a(false);
             }

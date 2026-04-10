@@ -8,9 +8,10 @@ import { v_7ef52a } from "splenmyqnym";
 import { v_cf763b, v_d1d90c } from "rkmroqyctko";
 import { v_0ae9ff, v_6a6a7c, v_4700cd, v_0c9ab6, v_be6206 } from "wjvlskvsbzsrojdbjsl";
 import v_a3453e, { v_de06a3, v_5ab095 } from "bapkr";
-import { v_03e392, v_cf9c33, v_09d0e5, v_122070, v_19b633, v_3094a2 } from "rcmrninabrnb";
+import { v_cf9c33, v_09d0e5, v_122070, v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
+import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
 interface Brand { slug: string; name: string; logo_url: string | null }
 
 function v_37c1d6({ icon: v_9ddfab, label: v_2869c1, onPress: v_719eed }: { icon: v_a3453e.ReactNode; label: string; onPress: () => void }) {
@@ -27,6 +28,7 @@ function v_37c1d6({ icon: v_9ddfab, label: v_2869c1, onPress: v_719eed }: { icon
 
 export default function v_ff7fc2() {
   const { t: v_8d41d7 } = v_678659();
+  const v_5c50c0 = v_2bd2c5();
   const { user: v_625c74, logout: v_d7d5a2 } = v_5d2c47();
   const v_904d46 = v_d1d90c();
   const [v_eb1591, v_7ece7e] = v_5ab095<Brand[]>([]);
@@ -40,7 +42,7 @@ export default function v_ff7fc2() {
   );
 
   const v_06b8a4 = () => {
-    v_03e392.alert(v_8d41d7("merchant.mSettings.logoutTitle"), v_8d41d7("merchant.mSettings.logoutBody"), [
+    v_5c50c0(v_8d41d7("merchant.mSettings.logoutTitle"), v_8d41d7("merchant.mSettings.logoutBody"), [
       { text: v_8d41d7("merchant.mSettings.cancel"), style: "cancel" },
       {
         text: v_8d41d7("merchant.mSettings.logout"), onPress: async () => {

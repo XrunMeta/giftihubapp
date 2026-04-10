@@ -14,7 +14,6 @@ import { v_c62079 } from "wjvlskvsbzsrojdbjsl";
 import v_a3453e, { v_de06a3, v_c4deb2, v_5ab095 } from "bapkr";
 import {
   v_39a996,
-  v_03e392,
   v_9cabcb,
   v_cf9c33,
   v_6c4f62,
@@ -24,6 +23,7 @@ import {
 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
+import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
 type Tab = "items" | "requests";
 
 const v_2f8e17 = {
@@ -56,6 +56,7 @@ type ListItem = { type: "set"; data: v_920170 } | { type: "single"; data: Single
 
 export default function v_8f53d1() {
   const { t: v_8d41d7 } = v_678659();
+  const v_5c50c0 = v_2bd2c5();
   const [v_11083e, v_94ee83] = v_5ab095<Tab>("items");
   const [v_4bc205, v_d56994] = v_5ab095<v_920170[]>([]);
   const [v_d6adfa, v_746885] = v_5ab095<SingleItem[]>([]);
@@ -92,7 +93,7 @@ export default function v_8f53d1() {
   };
 
   const v_df5cad = (bundle: v_920170) => {
-    v_03e392.alert(
+    v_5c50c0(
       v_8d41d7("merchant.bundles.settlementTitle"),
       `${v_79521f.set_name}\n${v_8d41d7("merchant.bundles.totalFace")}: ₩${v_79521f.total_face_value.toLocaleString()}\n${v_79521f.voucher_count}${v_8d41d7("merchant.bundles.voucherUnit")}\n\n${v_8d41d7("merchant.bundles.askSettlement")}`,
       [
@@ -102,13 +103,13 @@ export default function v_8f53d1() {
           onPress: async () => {
             try {
               const v_8f00b9 = await v_9607ec(v_79521f.set_id);
-              v_03e392.alert(
+              v_5c50c0(
                 v_8d41d7("merchant.bundles.requestDoneTitle"),
                 `${v_8d41d7("merchant.bundles.feeLine")}: ₩${v_8f00b9.fee_amount.toLocaleString()} (${(v_8f00b9.fee_rate * 100).toFixed(1)}%)\n${v_8d41d7("merchant.bundles.netLine")}: ₩${v_8f00b9.net_amount.toLocaleString()}`,
               );
               v_4fa913();
             } catch (v_9e86fd) {
-              v_03e392.alert(v_8d41d7("merchant.bundles.requestFailTitle"), v_9e86fd instanceof Error ? v_9e86fd.message : v_8d41d7("merchant.bundles.requestFailBody"));
+              v_5c50c0(v_8d41d7("merchant.bundles.requestFailTitle"), v_9e86fd instanceof Error ? v_9e86fd.message : v_8d41d7("merchant.bundles.requestFailBody"));
             }
           },
         },

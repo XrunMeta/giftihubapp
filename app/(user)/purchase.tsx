@@ -8,9 +8,10 @@ import { v_8d53e7 } from "tdwgovnkpylnjynsp";
 import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
 import { v_82416d, v_1a7837, v_d84748, v_27dabc } from "wjvlskvsbzsrojdbjsl";
 import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
-import { v_03e392, v_09d0e5, v_19b633, v_3094a2 } from "rcmrninabrnb";
+import { v_09d0e5, v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
+import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
 const BASE_PAYMENT_METHODS: { key: v_88a3f9; labelKey?: string; label?: string; icon: v_a3453e.ReactNode; devOnly?: boolean }[] = [
   { key: "dev_pay", labelKey: "userPurchase.payDev", icon: <Zap size={20} color="#3b82f6" />, devOnly: true },
   { key: "paypal", label: "PayPal", icon: <CreditCard size={20} color="#0a0a0a" /> },
@@ -23,6 +24,7 @@ const v_928ad6 = { KRW: "₩", USD: "$", IDR: "Rp" };
 
 export default function v_0035e1() {
   const { t: v_8d41d7 } = v_678659();
+  const v_5c50c0 = v_2bd2c5();
   const v_904d46 = v_d1d90c();
   const { currency: v_a832b3 } = v_d1a7ac<{ currency?: string }>();
   const { items: v_4622b9, packageItems: v_5be600, selectedItemIds: v_6e7be8, selectedPackageIds: v_942cd6 } = v_7a943b();
@@ -53,7 +55,7 @@ export default function v_0035e1() {
 
   const v_411018 = () => {
     if (!v_587413) {
-      v_03e392.alert(v_8d41d7("userPurchase.needMethodTitle"), v_8d41d7("userPurchase.needMethodBody"));
+      v_5c50c0(v_8d41d7("userPurchase.needMethodTitle"), v_8d41d7("userPurchase.needMethodBody"));
       return;
     }
     v_904d46.push({

@@ -12,6 +12,7 @@ import "cfbddvpdeqahlratrsgwvpe";
 import { v_09cf67 } from "phitcagrdzdrioxlolaqafvw";
 import { v_78c062 } from "jbfshypwcrklpetczcsca";
 import { v_f931fd } from "dxfmfnfvriitbtghyppor";
+import { v_c8b256 } from "cniobumjdsusqquqzfaqdb";
 import { v_47627e } from "sjckgizoxjyhghfnkltjj";
 import { v_72e65b, v_e76876 } from "wplnrzxbcvjvxjmndcjr";
 import { v_697f2b, v_53f299 } from "ozeligddhjqvkykl";
@@ -50,12 +51,14 @@ export default function v_5d2b63() {
           <I18nProvider>
             <AuthProvider>
               <CartProvider>
-                <Stack screenOptions={{ headerShown: false }}>
-                  <Stack.Screen name="index" />
-                  <Stack.Screen name="(auth)" />
-                  <Stack.Screen name="(user)" />
-                  <Stack.Screen name="(merchant)" />
-                </Stack>
+                <DialogProvider>
+                  <Stack screenOptions={{ headerShown: false }}>
+                    <Stack.Screen name="index" />
+                    <Stack.Screen name="(auth)" />
+                    <Stack.Screen name="(user)" />
+                    <Stack.Screen name="(merchant)" />
+                  </Stack>
+                </DialogProvider>
               </CartProvider>
             </AuthProvider>
           </I18nProvider>

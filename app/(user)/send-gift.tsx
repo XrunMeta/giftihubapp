@@ -5,11 +5,13 @@ import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_0e27e2 } from "pvulvehakmpzwkznlnd";
 import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
 import v_a3453e, { v_5ab095 } from "bapkr";
-import { v_03e392, v_122070, v_19b633, v_3094a2 } from "rcmrninabrnb";
+import { v_122070, v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
+import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
 export default function v_cf96d1() {
   const { t: v_8d41d7 } = v_678659();
+  const v_5c50c0 = v_2bd2c5();
   const v_904d46 = v_d1d90c();
   const { voucherId: v_ba63f8, voucherName: v_ec659d } = v_d1a7ac<{
     voucherId: string;
@@ -20,15 +22,15 @@ export default function v_cf96d1() {
 
   const v_03fe4a = async () => {
     if (!v_980f9f.trim()) {
-      v_03e392.alert(v_8d41d7("userSendGift.errTelegramTitle"), v_8d41d7("userSendGift.errTelegramBody"));
+      v_5c50c0(v_8d41d7("userSendGift.errTelegramTitle"), v_8d41d7("userSendGift.errTelegramBody"));
       return;
     }
     if (!v_ba63f8) {
-      v_03e392.alert(v_8d41d7("userSendGift.errVoucherTitle"), v_8d41d7("userSendGift.errVoucherBody"));
+      v_5c50c0(v_8d41d7("userSendGift.errVoucherTitle"), v_8d41d7("userSendGift.errVoucherBody"));
       return;
     }
 
-    v_03e392.alert(
+    v_5c50c0(
       v_8d41d7("userSendGift.confirmTitle"),
       v_8d41d7("userSendGift.confirmBody")
         .replace("{{name}}", v_ec659d || v_8d41d7("userSendGift.defaultGiftName"))
@@ -41,13 +43,13 @@ export default function v_cf96d1() {
             v_34a50a(true);
             try {
               const v_8f00b9 = await v_0e27e2(v_ba63f8, v_980f9f.trim());
-              v_03e392.alert(
+              v_5c50c0(
                 v_8d41d7("userSendGift.successTitle"),
                 `${v_8d41d7("userSendGift.successBody")}${v_8f00b9.fee > 0 ? v_8d41d7("userSendGift.successFee").replace("{{fee}}", String(v_8f00b9.fee)) : ""}`,
                 [{ text: v_8d41d7("userSendGift.ok"), onPress: () => v_904d46.back() }],
               );
             } catch (v_49263d) {
-              v_03e392.alert(v_8d41d7("userSendGift.failTitle"), v_49263d.body?.error || v_8d41d7("userSendGift.failBody"));
+              v_5c50c0(v_8d41d7("userSendGift.failTitle"), v_49263d.body?.error || v_8d41d7("userSendGift.failBody"));
             } finally {
               v_34a50a(false);
             }

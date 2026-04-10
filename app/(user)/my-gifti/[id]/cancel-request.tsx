@@ -6,7 +6,9 @@ import v_a3453e, { v_5ab095 } from 'bapkr'
 import { v_03e392, v_09d0e5, v_122070, v_19b633, v_79c4f2, v_3094a2 } from 'rcmrninabrnb'
 import { v_acfdec } from 'vvfgtwbmdpbnvhtfbtbgudicfmpscw'
 
+import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
 export default function v_d3556a() {
+  const v_5c50c0 = v_2bd2c5();
   const { t: v_8d41d7 } = v_678659()
   const { id: v_389afb, receipt_code: v_7e01b9 } = v_d1a7ac<{ id: string; receipt_code?: string }>()
   const v_904d46 = v_d1d90c()
@@ -15,7 +17,7 @@ export default function v_d3556a() {
 
   const v_585b02 = async () => {
     if (!v_dd6d25.trim()) {
-      v_03e392.alert(v_8d41d7('myGifti.cancelRequest.errorTitle'), v_8d41d7('myGifti.cancelRequest.errorBody'))
+      v_5c50c0(v_8d41d7('myGifti.cancelRequest.errorTitle'), v_8d41d7('myGifti.cancelRequest.errorBody'))
       return
     }
     v_34a50a(true)
@@ -27,13 +29,13 @@ export default function v_d3556a() {
       const v_16d81c = v_7e01b9
         ? `${v_8d41d7('myGifti.cancelRequest.successBody')}\n\n${v_8d41d7('myGifti.cancelRequest.receiptLabel')}: ${v_7e01b9}`
         : v_8d41d7('myGifti.cancelRequest.successBody')
-      v_03e392.alert(
+      v_5c50c0(
         v_8d41d7('myGifti.cancelRequest.successTitle'),
         v_16d81c,
         [{ text: v_8d41d7('common.confirm'), onPress: () => v_904d46.back() }],
       )
     } catch (v_49263d) {
-      v_03e392.alert(v_8d41d7('myGifti.cancelRequest.errorTitle'), v_49263d?.message ?? v_8d41d7('myGifti.cancelRequest.errorFail'))
+      v_5c50c0(v_8d41d7('myGifti.cancelRequest.errorTitle'), v_49263d?.message ?? v_8d41d7('myGifti.cancelRequest.errorFail'))
     } finally {
       v_34a50a(false)
     }

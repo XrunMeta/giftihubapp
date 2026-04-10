@@ -10,11 +10,13 @@ import { v_e7fbfb, v_eeb70f, type v_ff021d, type v_03d7df } from "vkhyfothlklikc
 import { v_db3cc6 } from "dyunzbus";
 import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
 import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
-import { v_39a996, v_03e392, v_cf9c33, v_122070, v_19b633, v_3094a2 } from "rcmrninabrnb";
+import { v_39a996, v_cf9c33, v_122070, v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
+import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
 export default function v_9c78c5() {
   const { t: v_8d41d7 } = v_678659();
+  const v_5c50c0 = v_2bd2c5();
   const { id: v_389afb } = v_d1a7ac<{ id: string }>();
   const v_904d46 = v_d1d90c();
   const { user: v_625c74 } = v_5d2c47();
@@ -27,7 +29,7 @@ export default function v_9c78c5() {
 
   const v_5ca23e = () => {
     if (!v_a8fb42) return;
-    v_03e392.alert(
+    v_5c50c0(
       v_8d41d7("userMarketplace.detail.cancelConfirmTitle"),
       v_8d41d7("userMarketplace.detail.cancelConfirmBody"),
       [
@@ -39,10 +41,10 @@ export default function v_9c78c5() {
             v_1a6f59(true);
             try {
               await v_e7fbfb(v_a8fb42.id);
-              v_03e392.alert(v_8d41d7("userMarketplace.detail.cancelDoneTitle"), v_8d41d7("userMarketplace.detail.cancelDoneBody"));
+              v_5c50c0(v_8d41d7("userMarketplace.detail.cancelDoneTitle"), v_8d41d7("userMarketplace.detail.cancelDoneBody"));
               v_904d46.back();
             } catch (v_49263d) {
-              v_03e392.alert(v_8d41d7("userMarketplace.detail.cancelFailTitle"), String(v_49263d?.message ?? v_49263d));
+              v_5c50c0(v_8d41d7("userMarketplace.detail.cancelFailTitle"), String(v_49263d?.message ?? v_49263d));
             } finally {
               v_1a6f59(false);
             }
@@ -62,7 +64,7 @@ export default function v_9c78c5() {
       v_ce7034(v_8f00b9.listing);
       v_22df91(v_8f00b9.set_vouchers ?? []);
     } catch {
-      v_03e392.alert(v_8d41d7("userMarketplace.detail.loadErrorTitle"), v_8d41d7("userMarketplace.detail.loadErrorBody"));
+      v_5c50c0(v_8d41d7("userMarketplace.detail.loadErrorTitle"), v_8d41d7("userMarketplace.detail.loadErrorBody"));
       v_904d46.back();
     } finally {
       v_34a50a(false);

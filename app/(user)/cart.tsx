@@ -6,9 +6,10 @@ import { v_e81ec9 } from "vhkgxwheyyipiczd";
 import { v_d1d90c } from "rkmroqyctko";
 import { v_3ebb07, v_3b9c43, v_c62079, v_a07c02, v_1290fc, v_d55cb2 } from "wjvlskvsbzsrojdbjsl";
 import v_a3453e from "bapkr";
-import { v_03e392, v_9cabcb, v_cf9c33, v_09d0e5, v_19b633, v_3094a2 } from "rcmrninabrnb";
+import { v_9cabcb, v_cf9c33, v_09d0e5, v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
+import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
 const v_928ad6 = { KRW: "₩", USD: "$", IDR: "Rp" };
 
 function v_be1e41(v_f63e09, v_a832b3) {
@@ -18,6 +19,7 @@ function v_be1e41(v_f63e09, v_a832b3) {
 
 export default function v_d218af() {
   const { t: v_8d41d7 } = v_678659();
+  const v_5c50c0 = v_2bd2c5();
   const v_904d46 = v_d1d90c();
   const {
     items: v_4622b9, packageItems: v_5be600,
@@ -210,7 +212,7 @@ export default function v_d218af() {
 
         const v_de7a9a = () => {
           if (v_a75897 === 0) {
-            v_03e392.alert(v_8d41d7("userCart.pickCurrencyTitle"), v_8d41d7("userCart.empty"));
+            v_5c50c0(v_8d41d7("userCart.pickCurrencyTitle"), v_8d41d7("userCart.empty"));
             return;
           }
           if (v_3aa565) {
@@ -219,7 +221,7 @@ export default function v_d218af() {
               onPress: () => v_904d46.push({ pathname: "/(user)/purchase", params: { currency: v_3f4e2e } }),
             }));
             v_3d694a.push({ text: v_8d41d7("userCart.cancel"), onPress: () => { } });
-            v_03e392.alert(v_8d41d7("userCart.pickCurrencyTitle"), v_8d41d7("userCart.pickCurrencyBody"), v_3d694a);
+            v_5c50c0(v_8d41d7("userCart.pickCurrencyTitle"), v_8d41d7("userCart.pickCurrencyBody"), v_3d694a);
           } else {
             v_904d46.push({ pathname: "/(user)/purchase", params: { currency: v_1c3e83[0] } });
           }

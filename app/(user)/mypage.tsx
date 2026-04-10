@@ -7,12 +7,14 @@ import { v_7ef860, type v_44083e } from "eqrxxpgqjbwbqqqhvy";
 import { v_cf763b, v_d1d90c } from "rkmroqyctko";
 import { v_6a6a7c, v_d84748, v_1c7574, v_0c9ab6, v_5dcc4b } from "wjvlskvsbzsrojdbjsl";
 import v_a3453e, { v_de06a3, v_5ab095 } from "bapkr";
-import { v_39a996, v_03e392, v_09d0e5, v_122070, v_19b633, v_3094a2 } from "rcmrninabrnb";
+import { v_39a996, v_09d0e5, v_122070, v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
+import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
 export default function v_840f8f() {
   const v_904d46 = v_d1d90c();
   const { t: v_8d41d7 } = v_678659();
+  const v_5c50c0 = v_2bd2c5();
   const { user: v_625c74, logout: v_d7d5a2 } = v_5d2c47();
   const [v_b32680, v_ee70ba] = v_5ab095<v_44083e | null>(null);
   const [v_683210, v_34a50a] = v_5ab095(true);
@@ -35,7 +37,7 @@ export default function v_840f8f() {
   };
 
   const v_06b8a4 = () => {
-    v_03e392.alert(v_8d41d7("mypage.alertLogoutTitle"), v_8d41d7("mypage.alertLogoutBody"), [
+    v_5c50c0(v_8d41d7("mypage.alertLogoutTitle"), v_8d41d7("mypage.alertLogoutBody"), [
       { text: v_8d41d7("mypage.cancel"), style: "cancel" },
       {
         text: v_8d41d7("mypage.logout"),

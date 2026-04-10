@@ -5,11 +5,13 @@ import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_2b01b0 } from "pvulvehakmpzwkznlnd";
 import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
 import v_a3453e, { v_5ab095 } from "bapkr";
-import { v_03e392, v_19b633, v_3094a2 } from "rcmrninabrnb";
+import { v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
+import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
 export default function v_7f792b() {
   const { t: v_8d41d7 } = v_678659();
+  const v_5c50c0 = v_2bd2c5();
   const { id: v_389afb } = v_d1a7ac<{ id: string }>();
   const v_904d46 = v_d1d90c();
   const [v_e0c7e8, v_fedf34] = v_5ab095("");
@@ -17,10 +19,10 @@ export default function v_7f792b() {
 
   const v_eb5366 = async () => {
     if (!v_e0c7e8) {
-      v_03e392.alert(v_8d41d7("myGifti.transfer.alertEmptyTitle"), v_8d41d7("myGifti.transfer.alertEmptyBody"));
+      v_5c50c0(v_8d41d7("myGifti.transfer.alertEmptyTitle"), v_8d41d7("myGifti.transfer.alertEmptyBody"));
       return;
     }
-    v_03e392.alert(
+    v_5c50c0(
       v_8d41d7("myGifti.transfer.confirmTitle"),
       v_8d41d7("myGifti.transfer.confirmBody").replace("{{email}}", v_e0c7e8),
       [
@@ -31,11 +33,11 @@ export default function v_7f792b() {
           v_34a50a(true);
           try {
             await v_2b01b0(v_389afb!, v_e0c7e8);
-            v_03e392.alert(v_8d41d7("myGifti.transfer.doneTitle"), v_8d41d7("myGifti.transfer.doneBody"), [
+            v_5c50c0(v_8d41d7("myGifti.transfer.doneTitle"), v_8d41d7("myGifti.transfer.doneBody"), [
               { text: v_8d41d7("myGifti.transfer.ok"), onPress: () => v_904d46.replace("/(user)/oth-path") },
             ]);
           } catch (v_49263d) {
-            v_03e392.alert(v_8d41d7("myGifti.transfer.failTitle"), v_49263d.body?.error || v_8d41d7("myGifti.transfer.failBody"));
+            v_5c50c0(v_8d41d7("myGifti.transfer.failTitle"), v_49263d.body?.error || v_8d41d7("myGifti.transfer.failBody"));
           } finally {
             v_34a50a(false);
           }
