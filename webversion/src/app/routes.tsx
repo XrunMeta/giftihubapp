@@ -23,6 +23,9 @@ import { GiftiTransferConfirm } from "./pages/user/GiftiTransferConfirm";
 import { GiftiTransferComplete } from "./pages/user/GiftiTransferComplete";
 import { GiftiRefund } from "./pages/user/GiftiRefund";
 
+import { Keywords } from "./pages/admin/Keywords";
+import { BrandKeywords } from "./pages/admin/BrandKeywords";
+
 import { MerchantHome } from "./pages/merchant/MerchantHome";
 import { ProcessUsage } from "./pages/merchant/ProcessUsage";
 import { MerchantHistory } from "./pages/merchant/MerchantHistory";
@@ -76,6 +79,14 @@ export const router = createBrowserRouter([
       { path: "history", Component: MerchantHistory },
       { path: "settlement", Component: Settlement },
       { path: "settings", Component: MerchantSettings },
+    ],
+  },
+
+  {
+    path: "/oth-path",
+    children: [
+      { path: "keywords", Component: Keywords },
+      { path: "brands", Component: BrandKeywords },
     ],
   },
 ]);
