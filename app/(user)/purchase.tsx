@@ -8,9 +8,10 @@ import { getDevMode } from "@/services/system";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Banknote, Coins, CreditCard, Zap } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
-import { Alert, Pressable, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 const BASE_PAYMENT_METHODS: { key: PaymentMethod; labelKey?: string; label?: string; icon: React.ReactNode; devOnly?: boolean }[] = [
   { key: "dev_pay", labelKey: "userPurchase.payDev", icon: <Zap size={20} color="#3b82f6" />, devOnly: true },
   { key: "paypal", label: "PayPal", icon: <CreditCard size={20} color="#0a0a0a" /> },
@@ -23,6 +24,7 @@ const SYM: Record<string, string> = { KRW: "₩", USD: "$", IDR: "Rp" };
 
 export default function PurchaseScreen() {
   const { t } = useI18n();
+  const alert = useAlertShim();
   const router = useRouter();
   const { currency } = useLocalSearchParams<{ currency?: string }>();
   const { items, packageItems, selectedItemIds, selectedPackageIds } = useCart();
@@ -53,7 +55,7 @@ export default function PurchaseScreen() {
 
   const handlePay = () => {
     if (!selected) {
-      Alert.alert(t("userPurchase.needMethodTitle"), t("userPurchase.needMethodBody"));
+      alert(t("userPurchase.needMethodTitle"), t("userPurchase.needMethodBody"));
       return;
     }
     router.push({

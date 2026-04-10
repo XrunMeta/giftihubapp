@@ -7,12 +7,14 @@ import { getMe, type MeResponse } from "@/services/account";
 import { useFocusEffect, useRouter } from "expo-router";
 import { ChevronRight, CreditCard, History, LogOut, Settings } from "lucide-react-native";
 import React, { useCallback, useState } from "react";
-import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from "react-native";
+import { ActivityIndicator, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 export default function MyPageScreen() {
   const router = useRouter();
   const { t } = useI18n();
+  const alert = useAlertShim();
   const { user, logout } = useAuth();
   const [me, setMe] = useState<MeResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -35,7 +37,7 @@ export default function MyPageScreen() {
   };
 
   const handleLogout = () => {
-    Alert.alert(t("mypage.alertLogoutTitle"), t("mypage.alertLogoutBody"), [
+    alert(t("mypage.alertLogoutTitle"), t("mypage.alertLogoutBody"), [
       { text: t("mypage.cancel"), style: "cancel" },
       {
         text: t("mypage.logout"),

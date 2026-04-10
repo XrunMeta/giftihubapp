@@ -9,11 +9,13 @@ import { format } from "date-fns";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Package } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, Image, ScrollView, Text, View } from "react-native";
+import { ActivityIndicator, Image, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 export default function MerchantMarketDetailScreen() {
   const { t } = useI18n();
+  const alert = useAlertShim();
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const [listing, setListing] = useState<MarketplaceListing | null>(null);
@@ -28,7 +30,7 @@ export default function MerchantMarketDetailScreen() {
       const res = await getListingDetail(id!);
       setListing(res.listing);
     } catch {
-      Alert.alert(t("merchant.marketDetail.loadErrorTitle"), t("merchant.marketDetail.loadErrorBody"));
+      alert(t("merchant.marketDetail.loadErrorTitle"), t("merchant.marketDetail.loadErrorBody"));
       router.back();
     } finally {
       setLoading(false);

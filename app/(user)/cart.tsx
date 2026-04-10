@@ -6,9 +6,10 @@ import { getProductImageUrl } from "@/services/store";
 import { useRouter } from "expo-router";
 import { Check, Minus, Package, Plus, Trash2, X } from "lucide-react-native";
 import React from "react";
-import { Alert, FlatList, Image, Pressable, Text, View } from "react-native";
+import { FlatList, Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 const SYM: Record<string, string> = { KRW: "₩", USD: "$", IDR: "Rp" };
 
 function formatPrice(amount: number, currency?: string) {
@@ -18,6 +19,7 @@ function formatPrice(amount: number, currency?: string) {
 
 export default function CartScreen() {
   const { t } = useI18n();
+  const alert = useAlertShim();
   const router = useRouter();
   const {
     items, packageItems,
@@ -210,7 +212,7 @@ export default function CartScreen() {
 
         const handleCheckout = () => {
           if (selectedCount === 0) {
-            Alert.alert(t("userCart.pickCurrencyTitle"), t("userCart.empty"));
+            alert(t("userCart.pickCurrencyTitle"), t("userCart.empty"));
             return;
           }
           if (multiCurrency) {
@@ -219,7 +221,7 @@ export default function CartScreen() {
               onPress: () => router.push({ pathname: "/(user)/purchase", params: { currency: c } }),
             }));
             buttons.push({ text: t("userCart.cancel"), onPress: () => { } });
-            Alert.alert(t("userCart.pickCurrencyTitle"), t("userCart.pickCurrencyBody"), buttons);
+            alert(t("userCart.pickCurrencyTitle"), t("userCart.pickCurrencyBody"), buttons);
           } else {
             router.push({ pathname: "/(user)/purchase", params: { currency: currencies[0] } });
           }

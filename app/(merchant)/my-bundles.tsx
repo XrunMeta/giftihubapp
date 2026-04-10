@@ -14,7 +14,6 @@ import { Package } from "lucide-react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   FlatList,
   Image,
   RefreshControl,
@@ -24,6 +23,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 type Tab = "items" | "requests";
 
 const REQ_STATUS_META: Record<string, { labelKey: string; color: string }> = {
@@ -56,6 +56,7 @@ type ListItem = { type: "set"; data: MerchantBundle } | { type: "single"; data: 
 
 export default function MyBundlesScreen() {
   const { t } = useI18n();
+  const alert = useAlertShim();
   const [tab, setTab] = useState<Tab>("items");
   const [bundles, setBundles] = useState<MerchantBundle[]>([]);
   const [singles, setSingles] = useState<SingleItem[]>([]);
@@ -92,7 +93,7 @@ export default function MyBundlesScreen() {
   };
 
   const handleRequestSettlement = (bundle: MerchantBundle) => {
-    Alert.alert(
+    alert(
       t("merchant.bundles.settlementTitle"),
       `${bundle.set_name}\n${t("merchant.bundles.totalFace")}: ₩${bundle.total_face_value.toLocaleString()}\n${bundle.voucher_count}${t("merchant.bundles.voucherUnit")}\n\n${t("merchant.bundles.askSettlement")}`,
       [
@@ -102,13 +103,13 @@ export default function MyBundlesScreen() {
           onPress: async () => {
             try {
               const res = await requestBundleSettlement(bundle.set_id);
-              Alert.alert(
+              alert(
                 t("merchant.bundles.requestDoneTitle"),
                 `${t("merchant.bundles.feeLine")}: ₩${res.fee_amount.toLocaleString()} (${(res.fee_rate * 100).toFixed(1)}%)\n${t("merchant.bundles.netLine")}: ₩${res.net_amount.toLocaleString()}`,
               );
               fetchData();
             } catch (e) {
-              Alert.alert(t("merchant.bundles.requestFailTitle"), e instanceof Error ? e.message : t("merchant.bundles.requestFailBody"));
+              alert(t("merchant.bundles.requestFailTitle"), e instanceof Error ? e.message : t("merchant.bundles.requestFailBody"));
             }
           },
         },

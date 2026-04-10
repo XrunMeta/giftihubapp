@@ -5,9 +5,10 @@ import { useI18n } from "@/context/I18nContext";
 import { apiFetch } from "@/services/api";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Alert, ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 interface WithdrawResponse {
   ok: boolean;
   tx_hash?: string;
@@ -16,6 +17,7 @@ interface WithdrawResponse {
 
 export default function UsdtWithdrawScreen() {
   const { t } = useI18n();
+  const alert = useAlertShim();
   const router = useRouter();
   const [walletAddress, setWalletAddress] = useState("");
   const [amount, setAmount] = useState("");
@@ -26,21 +28,21 @@ export default function UsdtWithdrawScreen() {
 
   const handleWithdraw = async () => {
     if (!walletAddress.trim() || !amount.trim()) {
-      Alert.alert(t("userUsdtWithdraw.errFieldsTitle"), t("userUsdtWithdraw.errFieldsBody"));
+      alert(t("userUsdtWithdraw.errFieldsTitle"), t("userUsdtWithdraw.errFieldsBody"));
       return;
     }
     if (!isValidTrc20(walletAddress)) {
-      Alert.alert(t("userUsdtWithdraw.errAddrTitle"), t("userUsdtWithdraw.errAddrBody"));
+      alert(t("userUsdtWithdraw.errAddrTitle"), t("userUsdtWithdraw.errAddrBody"));
       return;
     }
     const numAmount = parseFloat(amount);
     if (isNaN(numAmount) || numAmount <= 0) {
-      Alert.alert(t("userUsdtWithdraw.errAmountTitle"), t("userUsdtWithdraw.errAmountBody"));
+      alert(t("userUsdtWithdraw.errAmountTitle"), t("userUsdtWithdraw.errAmountBody"));
       return;
     }
 
     const addrPreview = `${walletAddress.substring(0, 8)}...${walletAddress.substring(walletAddress.length - 6)}`;
-    Alert.alert(
+    alert(
       t("userUsdtWithdraw.confirmTitle"),
       t("userUsdtWithdraw.confirmBody")
         .replace("{{amount}}", String(numAmount))
@@ -69,11 +71,11 @@ export default function UsdtWithdrawScreen() {
                 (res.estimated_time
                   ? t("userUsdtWithdraw.successEta").replace("{{eta}}", res.estimated_time)
                   : `\n${t("userUsdtWithdraw.successPending")}`);
-              Alert.alert(t("userUsdtWithdraw.successTitle"), successMsg, [
+              alert(t("userUsdtWithdraw.successTitle"), successMsg, [
                 { text: t("userUsdtWithdraw.ok"), onPress: () => router.back() },
               ]);
             } catch (err: any) {
-              Alert.alert(t("userUsdtWithdraw.failTitle"), err.body?.error || t("userUsdtWithdraw.failBody"));
+              alert(t("userUsdtWithdraw.failTitle"), err.body?.error || t("userUsdtWithdraw.failBody"));
             } finally {
               setLoading(false);
             }

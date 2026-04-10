@@ -9,7 +9,6 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -19,8 +18,10 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 export default function MarketplaceSellScreen() {
   const { t } = useI18n();
+  const alert = useAlertShim();
   const router = useRouter();
   const { voucherId } = useLocalSearchParams<{ voucherId?: string }>();
   const [vouchers, setVouchers] = useState<Voucher[]>([]);
@@ -57,17 +58,17 @@ export default function MarketplaceSellScreen() {
 
   const handleSubmit = async () => {
     if (!selectedVoucher || !sellingPrice) {
-      Alert.alert(t("userMarketplace.sell.alertMissingTitle"), t("userMarketplace.sell.alertMissingBody"));
+      alert(t("userMarketplace.sell.alertMissingTitle"), t("userMarketplace.sell.alertMissingBody"));
       return;
     }
     setSubmitting(true);
     try {
       await createListing(selectedVoucher.id, Number(sellingPrice));
-      Alert.alert(t("userMarketplace.sell.successTitle"), t("userMarketplace.sell.successBody"), [
+      alert(t("userMarketplace.sell.successTitle"), t("userMarketplace.sell.successBody"), [
         { text: t("userMarketplace.sell.ok"), onPress: () => router.back() },
       ]);
     } catch (err: any) {
-      Alert.alert(t("userMarketplace.sell.failTitle"), err.body?.error || t("userMarketplace.sell.failBody"));
+      alert(t("userMarketplace.sell.failTitle"), err.body?.error || t("userMarketplace.sell.failBody"));
     } finally {
       setSubmitting(false);
     }

@@ -10,9 +10,10 @@ import { format } from "date-fns";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Package, ShoppingCart } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, FlatList, Image, Pressable, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, FlatList, Image, Pressable, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 const STATUS_BADGE_META: Record<string, { labelKey: string; variant: "default" | "secondary" | "destructive" }> = {
   active: { labelKey: "myGifti.list.statusActive", variant: "default" },
   used: { labelKey: "myGifti.list.statusUsed", variant: "secondary" },
@@ -23,6 +24,7 @@ const STATUS_BADGE_META: Record<string, { labelKey: string; variant: "default" |
 
 export default function SetDetailScreen() {
   const { t } = useI18n();
+  const alert = useAlertShim();
   const { setId } = useLocalSearchParams<{ setId: string }>();
   const router = useRouter();
   const [data, setData] = useState<SetDetail | null>(null);
@@ -48,7 +50,7 @@ export default function SetDetailScreen() {
         setActiveListing(null);
       }
     } catch {
-      Alert.alert(t("myGifti.setDetail.loadErrorTitle"), t("myGifti.setDetail.loadErrorBody"));
+      alert(t("myGifti.setDetail.loadErrorTitle"), t("myGifti.setDetail.loadErrorBody"));
       router.back();
     } finally {
       setLoading(false);
@@ -76,17 +78,17 @@ export default function SetDetailScreen() {
 
   const handleSell = async () => {
     if (!sellingPrice || Number(sellingPrice) <= 0) {
-      Alert.alert(t("myGifti.setDetail.alertPriceTitle"), t("myGifti.setDetail.alertPriceBody"));
+      alert(t("myGifti.setDetail.alertPriceTitle"), t("myGifti.setDetail.alertPriceBody"));
       return;
     }
     setSubmitting(true);
     try {
       await createSetListing(setId!, Number(sellingPrice));
-      Alert.alert(t("myGifti.setDetail.successTitle"), t("myGifti.setDetail.successBody"), [
+      alert(t("myGifti.setDetail.successTitle"), t("myGifti.setDetail.successBody"), [
         { text: t("myGifti.setDetail.ok"), onPress: () => router.back() },
       ]);
     } catch (err: any) {
-      Alert.alert(t("myGifti.setDetail.failTitle"), err.body?.error || t("myGifti.setDetail.failBody"));
+      alert(t("myGifti.setDetail.failTitle"), err.body?.error || t("myGifti.setDetail.failBody"));
     } finally {
       setSubmitting(false);
     }
@@ -170,7 +172,7 @@ export default function SetDetailScreen() {
             variant="destructive"
             disabled={cancellingListing}
             onPress={() => {
-              Alert.alert(
+              alert(
                 t("userMarketplace.detail.cancelConfirmTitle"),
                 t("userMarketplace.detail.cancelConfirmBody"),
                 [
@@ -182,13 +184,13 @@ export default function SetDetailScreen() {
                       setCancellingListing(true);
                       try {
                         await cancelListing(activeListing.id);
-                        Alert.alert(
+                        alert(
                           t("userMarketplace.detail.cancelDoneTitle"),
                           t("userMarketplace.detail.cancelDoneBody"),
                         );
                         await load();
                       } catch (err: any) {
-                        Alert.alert(
+                        alert(
                           t("userMarketplace.detail.cancelFailTitle"),
                           String(err?.message ?? err),
                         );

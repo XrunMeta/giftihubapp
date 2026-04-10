@@ -12,6 +12,7 @@ import "react-native-reanimated";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "@/context/CartContext";
+import { DialogProvider } from "@/components/ui/dialog";
 import { I18nProvider } from "@/context/I18nContext";
 import { DevModeContext, useDevModeProvider } from "@/hooks/use-dev-mode";
 import { applyPretendardTextDefaults, pretendardFontMap } from "@/lib/pretendard";
@@ -50,12 +51,14 @@ export default function RootLayout() {
           <I18nProvider>
             <AuthProvider>
               <CartProvider>
-                <Stack screenOptions={{ headerShown: false }}>
-                  <Stack.Screen name="index" />
-                  <Stack.Screen name="(auth)" />
-                  <Stack.Screen name="(user)" />
-                  <Stack.Screen name="(merchant)" />
-                </Stack>
+                <DialogProvider>
+                  <Stack screenOptions={{ headerShown: false }}>
+                    <Stack.Screen name="index" />
+                    <Stack.Screen name="(auth)" />
+                    <Stack.Screen name="(user)" />
+                    <Stack.Screen name="(merchant)" />
+                  </Stack>
+                </DialogProvider>
               </CartProvider>
             </AuthProvider>
           </I18nProvider>

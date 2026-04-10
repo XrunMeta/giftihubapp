@@ -5,8 +5,9 @@ import { resolveImageUrl } from "@/lib/image";
 import { getBundlePreview, type BundleComposition } from "@/services/bundle";
 import { Package, ShoppingCart } from "lucide-react-native";
 import React, { useState } from "react";
-import { ActivityIndicator, Alert, Image, Pressable, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, Image, Pressable, Text, TextInput, View } from "react-native";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 const CURRENCIES = ["KRW", "USD", "IDR"] as const;
 const CURRENCY_SYMBOLS: Record<string, string> = { KRW: "₩", USD: "$", IDR: "Rp" };
 const CURRENCY_PLACEHOLDER: Record<string, string> = {
@@ -22,6 +23,7 @@ function formatThousandsFromDigits(digits: string): string {
 
 export function BundleComposer() {
   const { t } = useI18n();
+  const alert = useAlertShim();
   const { addPackageToCart } = useCart();
   const [amount, setAmount] = useState("");
   const [currency, setCurrency] = useState<string>("KRW");
@@ -31,7 +33,7 @@ export function BundleComposer() {
   const handleCompose = async () => {
     const num = Number(amount);
     if (!num || num <= 0) {
-      Alert.alert(t("userStore.bundle.alertAmountTitle"), t("userStore.bundle.alertAmountBody"));
+      alert(t("userStore.bundle.alertAmountTitle"), t("userStore.bundle.alertAmountBody"));
       return;
     }
     setLoading(true);
@@ -40,7 +42,7 @@ export function BundleComposer() {
       const res = await getBundlePreview(num, currency);
       setComposition(res.composition);
     } catch (err: any) {
-      Alert.alert(
+      alert(
         t("userStore.bundle.composeFailTitle"),
         err.body?.error || err.message || t("userStore.bundle.composeFailBody"),
       );
@@ -83,7 +85,7 @@ export function BundleComposer() {
       composition,
     });
 
-    Alert.alert(t("userStore.bundle.cartAddedTitle"), t("userStore.bundle.cartAddedBody"));
+    alert(t("userStore.bundle.cartAddedTitle"), t("userStore.bundle.cartAddedBody"));
     setComposition(null);
     setAmount("");
   };

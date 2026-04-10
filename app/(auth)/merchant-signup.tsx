@@ -6,12 +6,14 @@ import { useI18n } from "@/context/I18nContext";
 import { register } from "@/services/auth";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Alert, KeyboardAvoidingView, Platform, ScrollView, Text, View } from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 export default function MerchantSignupScreen() {
   const router = useRouter();
   const { t } = useI18n();
+  const alert = useAlertShim();
   const { login } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -21,18 +23,18 @@ export default function MerchantSignupScreen() {
 
   const handleSignup = async () => {
     if (!name || !email || !password || !businessName) {
-      Alert.alert(t("auth.merchantSignup.alertFieldTitle"), t("auth.merchantSignup.alertFieldBody"));
+      alert(t("auth.merchantSignup.alertFieldTitle"), t("auth.merchantSignup.alertFieldBody"));
       return;
     }
     setLoading(true);
     try {
       const res = await register(email, password, `${businessName} (${name})`);
       await login(res.token, res.user);
-      Alert.alert(t("auth.merchantSignup.alertSuccessTitle"), t("auth.merchantSignup.alertSuccessBody"), [
+      alert(t("auth.merchantSignup.alertSuccessTitle"), t("auth.merchantSignup.alertSuccessBody"), [
         { text: t("auth.merchantSignup.ok"), onPress: () => router.replace("/(merchant)") },
       ]);
     } catch (err: any) {
-      Alert.alert(t("auth.merchantSignup.alertFailTitle"), err.body?.error || t("auth.merchantSignup.alertFailBody"));
+      alert(t("auth.merchantSignup.alertFailTitle"), err.body?.error || t("auth.merchantSignup.alertFailBody"));
     } finally {
       setLoading(false);
     }

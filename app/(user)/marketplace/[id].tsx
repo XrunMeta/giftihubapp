@@ -10,11 +10,13 @@ import { cancelListing, getListingDetail, type MarketplaceListing, type SetVouch
 import { format } from "date-fns";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, Image, ScrollView, Text, View } from "react-native";
+import { ActivityIndicator, Image, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 export default function MarketplaceDetailScreen() {
   const { t } = useI18n();
+  const alert = useAlertShim();
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { user } = useAuth();
@@ -27,7 +29,7 @@ export default function MarketplaceDetailScreen() {
 
   const handleCancel = () => {
     if (!listing) return;
-    Alert.alert(
+    alert(
       t("userMarketplace.detail.cancelConfirmTitle"),
       t("userMarketplace.detail.cancelConfirmBody"),
       [
@@ -39,10 +41,10 @@ export default function MarketplaceDetailScreen() {
             setCancelling(true);
             try {
               await cancelListing(listing.id);
-              Alert.alert(t("userMarketplace.detail.cancelDoneTitle"), t("userMarketplace.detail.cancelDoneBody"));
+              alert(t("userMarketplace.detail.cancelDoneTitle"), t("userMarketplace.detail.cancelDoneBody"));
               router.back();
             } catch (err: any) {
-              Alert.alert(t("userMarketplace.detail.cancelFailTitle"), String(err?.message ?? err));
+              alert(t("userMarketplace.detail.cancelFailTitle"), String(err?.message ?? err));
             } finally {
               setCancelling(false);
             }
@@ -62,7 +64,7 @@ export default function MarketplaceDetailScreen() {
       setListing(res.listing);
       setSetVouchers(res.set_vouchers ?? []);
     } catch {
-      Alert.alert(t("userMarketplace.detail.loadErrorTitle"), t("userMarketplace.detail.loadErrorBody"));
+      alert(t("userMarketplace.detail.loadErrorTitle"), t("userMarketplace.detail.loadErrorBody"));
       router.back();
     } finally {
       setLoading(false);

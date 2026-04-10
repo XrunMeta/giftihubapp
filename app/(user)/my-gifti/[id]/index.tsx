@@ -13,10 +13,11 @@ import * as Clipboard from "expo-clipboard";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import { ArrowLeftRight, ArrowRight, CheckCircle, Clock, Send, ShoppingBag, Store, XCircle } from "lucide-react-native";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Alert, Animated, Image, Pressable, ScrollView, Text, TouchableOpacity, useWindowDimensions, View } from "react-native";
+import { ActivityIndicator, Animated, Image, Pressable, ScrollView, Text, TouchableOpacity, useWindowDimensions, View } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 const REFRESH_SECONDS = 30;
 
 const STATUS_META: Record<
@@ -63,6 +64,7 @@ const STATUS_META: Record<
 
 export default function GiftiDetailScreen() {
   const { t } = useI18n();
+  const alert = useAlertShim();
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const isDevMode = useDevMode();
@@ -125,7 +127,7 @@ export default function GiftiDetailScreen() {
             setActiveListing(null);
           }
         } catch {
-          Alert.alert(t("myGifti.detail.loadErrorTitle"), t("myGifti.detail.loadErrorBody"));
+          alert(t("myGifti.detail.loadErrorTitle"), t("myGifti.detail.loadErrorBody"));
           router.back();
         } finally {
           setLoading(false);
@@ -180,7 +182,7 @@ export default function GiftiDetailScreen() {
                       <TouchableOpacity
                         onPress={() => {
                           Clipboard.setStringAsync(barcode!);
-                          Alert.alert(t("myGifti.detail.copyTitle"), barcode!);
+                          alert(t("myGifti.detail.copyTitle"), barcode!);
                         }}
                         className="ml-2 px-2 py-1 bg-muted rounded"
                       >
@@ -259,7 +261,7 @@ export default function GiftiDetailScreen() {
             disabled={cancellingListing}
             className="mt-4 flex-row items-center justify-center gap-2 bg-white border border-destructive rounded-xl py-3 px-4"
             onPress={() => {
-              Alert.alert(
+              alert(
                 t("userMarketplace.detail.cancelConfirmTitle"),
                 t("userMarketplace.detail.cancelConfirmBody"),
                 [
@@ -271,7 +273,7 @@ export default function GiftiDetailScreen() {
                       setCancellingListing(true);
                       try {
                         await cancelListing(activeListing.id);
-                        Alert.alert(
+                        alert(
                           t("userMarketplace.detail.cancelDoneTitle"),
                           t("userMarketplace.detail.cancelDoneBody"),
                         );
@@ -280,7 +282,7 @@ export default function GiftiDetailScreen() {
                         setVoucher(res.voucher);
                         setActiveListing(null);
                       } catch (err: any) {
-                        Alert.alert(
+                        alert(
                           t("userMarketplace.detail.cancelFailTitle"),
                           String(err?.message ?? err),
                         );

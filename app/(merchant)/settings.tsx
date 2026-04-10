@@ -8,9 +8,10 @@ import { resolveImageUrl } from "@/lib/image";
 import { useFocusEffect, useRouter } from "expo-router";
 import { Bell, ChevronRight, Globe, LogOut, Settings2 } from "lucide-react-native";
 import React, { useCallback, useState } from "react";
-import { Alert, Image, Pressable, ScrollView, Text, View } from "react-native";
+import { Image, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 interface Brand { slug: string; name: string; logo_url: string | null }
 
 function MenuItem({ icon, label, onPress }: { icon: React.ReactNode; label: string; onPress: () => void }) {
@@ -27,6 +28,7 @@ function MenuItem({ icon, label, onPress }: { icon: React.ReactNode; label: stri
 
 export default function MerchantSettingsScreen() {
   const { t } = useI18n();
+  const alert = useAlertShim();
   const { user, logout } = useAuth();
   const router = useRouter();
   const [brands, setBrands] = useState<Brand[]>([]);
@@ -40,7 +42,7 @@ export default function MerchantSettingsScreen() {
   );
 
   const handleLogout = () => {
-    Alert.alert(t("merchant.mSettings.logoutTitle"), t("merchant.mSettings.logoutBody"), [
+    alert(t("merchant.mSettings.logoutTitle"), t("merchant.mSettings.logoutBody"), [
       { text: t("merchant.mSettings.cancel"), style: "cancel" },
       {
         text: t("merchant.mSettings.logout"), onPress: async () => {

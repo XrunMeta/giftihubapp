@@ -8,7 +8,6 @@ import { Minus, Plus } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -19,6 +18,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 const CUR_SYM: Record<string, string> = { KRW: "₩", USD: "$", IDR: "Rp" };
 
 function formatThousandsFromDigits(digits: string): string {
@@ -28,6 +28,7 @@ function formatThousandsFromDigits(digits: string): string {
 
 export default function ProductDetailScreen() {
   const { t } = useI18n();
+  const alert = useAlertShim();
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { addToCart } = useCart();
@@ -45,7 +46,7 @@ export default function ProductDetailScreen() {
       const data = await getProductDetail(id!);
       setProduct(data.product);
     } catch {
-      Alert.alert(t("userStore.detail.loadErrorTitle"), t("userStore.detail.loadErrorBody"));
+      alert(t("userStore.detail.loadErrorTitle"), t("userStore.detail.loadErrorBody"));
       router.back();
     } finally {
       setLoading(false);
@@ -74,7 +75,7 @@ export default function ProductDetailScreen() {
     if (isFlexible) {
       const amt = flexAmountNum;
       if (!amt || amt < (product.flexible_min ?? 0) || amt > (product.flexible_max ?? 0)) {
-        Alert.alert(
+        alert(
           t("userStore.detail.flexRangeTitle"),
           t("userStore.detail.flexRangeBody")
             .replace(/\{\{sym\}\}/g, sym)
@@ -90,7 +91,7 @@ export default function ProductDetailScreen() {
     if (thenGoCart) {
       router.push("/(user)/cart");
     } else {
-      Alert.alert(t("userStore.detail.cartAddedTitle"), t("userStore.detail.cartAddedBody"));
+      alert(t("userStore.detail.cartAddedTitle"), t("userStore.detail.cartAddedBody"));
     }
   };
 

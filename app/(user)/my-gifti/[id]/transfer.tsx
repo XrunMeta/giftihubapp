@@ -5,11 +5,13 @@ import { useI18n } from "@/context/I18nContext";
 import { transferVoucher } from "@/services/vouchers";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Alert, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 export default function TransferScreen() {
   const { t } = useI18n();
+  const alert = useAlertShim();
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -17,10 +19,10 @@ export default function TransferScreen() {
 
   const handleTransfer = async () => {
     if (!email) {
-      Alert.alert(t("myGifti.transfer.alertEmptyTitle"), t("myGifti.transfer.alertEmptyBody"));
+      alert(t("myGifti.transfer.alertEmptyTitle"), t("myGifti.transfer.alertEmptyBody"));
       return;
     }
-    Alert.alert(
+    alert(
       t("myGifti.transfer.confirmTitle"),
       t("myGifti.transfer.confirmBody").replace("{{email}}", email),
       [
@@ -31,11 +33,11 @@ export default function TransferScreen() {
           setLoading(true);
           try {
             await transferVoucher(id!, email);
-            Alert.alert(t("myGifti.transfer.doneTitle"), t("myGifti.transfer.doneBody"), [
+            alert(t("myGifti.transfer.doneTitle"), t("myGifti.transfer.doneBody"), [
               { text: t("myGifti.transfer.ok"), onPress: () => router.replace("/(user)/oth-path") },
             ]);
           } catch (err: any) {
-            Alert.alert(t("myGifti.transfer.failTitle"), err.body?.error || t("myGifti.transfer.failBody"));
+            alert(t("myGifti.transfer.failTitle"), err.body?.error || t("myGifti.transfer.failBody"));
           } finally {
             setLoading(false);
           }

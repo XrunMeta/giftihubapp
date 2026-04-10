@@ -5,11 +5,13 @@ import { useI18n } from "@/context/I18nContext";
 import { giftVoucher } from "@/services/vouchers";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Alert, ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 export default function SendGiftScreen() {
   const { t } = useI18n();
+  const alert = useAlertShim();
   const router = useRouter();
   const { voucherId, voucherName } = useLocalSearchParams<{
     voucherId: string;
@@ -20,15 +22,15 @@ export default function SendGiftScreen() {
 
   const handleSendGift = async () => {
     if (!telegramId.trim()) {
-      Alert.alert(t("userSendGift.errTelegramTitle"), t("userSendGift.errTelegramBody"));
+      alert(t("userSendGift.errTelegramTitle"), t("userSendGift.errTelegramBody"));
       return;
     }
     if (!voucherId) {
-      Alert.alert(t("userSendGift.errVoucherTitle"), t("userSendGift.errVoucherBody"));
+      alert(t("userSendGift.errVoucherTitle"), t("userSendGift.errVoucherBody"));
       return;
     }
 
-    Alert.alert(
+    alert(
       t("userSendGift.confirmTitle"),
       t("userSendGift.confirmBody")
         .replace("{{name}}", voucherName || t("userSendGift.defaultGiftName"))
@@ -41,13 +43,13 @@ export default function SendGiftScreen() {
             setLoading(true);
             try {
               const res = await giftVoucher(voucherId, telegramId.trim());
-              Alert.alert(
+              alert(
                 t("userSendGift.successTitle"),
                 `${t("userSendGift.successBody")}${res.fee > 0 ? t("userSendGift.successFee").replace("{{fee}}", String(res.fee)) : ""}`,
                 [{ text: t("userSendGift.ok"), onPress: () => router.back() }],
               );
             } catch (err: any) {
-              Alert.alert(t("userSendGift.failTitle"), err.body?.error || t("userSendGift.failBody"));
+              alert(t("userSendGift.failTitle"), err.body?.error || t("userSendGift.failBody"));
             } finally {
               setLoading(false);
             }

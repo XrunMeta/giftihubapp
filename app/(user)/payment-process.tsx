@@ -8,11 +8,13 @@ import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
 import { CheckCircle, XCircle } from "lucide-react-native";
 import React, { useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Alert, Text, View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 export default function PaymentProcessScreen() {
   const { t } = useI18n();
+  const alert = useAlertShim();
   const { method, currency, nonce } = useLocalSearchParams<{ method: string; currency?: string; nonce?: string }>();
   const router = useRouter();
   const { items, packageItems, clearByCurrency, clearCart, selectedItemIds, selectedPackageIds, removeFromCart, removePackage } = useCart();
@@ -37,7 +39,7 @@ export default function PaymentProcessScreen() {
 
   const processPayment = async () => {
     if (!method) {
-      Alert.alert(t("userPaymentProcess.errNoMethodTitle"), t("userPaymentProcess.errNoMethodBody"));
+      alert(t("userPaymentProcess.errNoMethodTitle"), t("userPaymentProcess.errNoMethodBody"));
       setStatus("failed");
       return;
     }
@@ -64,7 +66,7 @@ export default function PaymentProcessScreen() {
     }));
 
     if (!targetPackages.length && !targetItems.length) {
-      Alert.alert(
+      alert(
         t("userPaymentProcess.errNoMethodTitle"),
         t("userPaymentProcess.errNoItems")
           .replace("{{currency}}", targetCurrency)
@@ -83,7 +85,7 @@ export default function PaymentProcessScreen() {
         const composition = pkg.composition;
         if (!composition) {
           console.error(`[pay] pkg[${pi}] NO COMPOSITION`);
-          Alert.alert(t("userPaymentProcess.errNoMethodTitle"), t("userPaymentProcess.errNoComposition"));
+          alert(t("userPaymentProcess.errNoMethodTitle"), t("userPaymentProcess.errNoComposition"));
           setStatus("failed");
           return;
         }
@@ -110,7 +112,7 @@ export default function PaymentProcessScreen() {
         const completed = await pollStatusAsync(res.payment_id);
         console.log(`[pay] pkg[${pi}] polled=${completed}`);
         if (!completed) {
-          Alert.alert(t("userPaymentProcess.pollFailTitle"), t("userPaymentProcess.pollFailBody"));
+          alert(t("userPaymentProcess.pollFailTitle"), t("userPaymentProcess.pollFailBody"));
           setStatus("failed");
           return;
         }
@@ -157,7 +159,7 @@ export default function PaymentProcessScreen() {
       );
       console.error("[payment-process] error:", debugInfo);
       setDebugError(debugInfo);
-      Alert.alert(
+      alert(
         t("userPaymentProcess.failTitle"),
         t("userPaymentProcess.failBody")
           .replace("{{detail}}", detail)
@@ -189,7 +191,7 @@ export default function PaymentProcessScreen() {
         console.error("[payment-process] poll error:", JSON.stringify(info));
         setDebugError(JSON.stringify(info, null, 2));
         if (consecutiveErrors >= 3) {
-          Alert.alert(
+          alert(
             t("userPaymentProcess.pollFailTitle"),
             `poll error x${consecutiveErrors}\nstatus=${err?.status}\n${err?.message ?? ""}`,
           );

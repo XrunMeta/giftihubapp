@@ -5,11 +5,13 @@ import { useI18n } from "@/context/I18nContext";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Alert, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 export default function MerchantHomeScreen() {
   const { t } = useI18n();
+  const alert = useAlertShim();
   const router = useRouter();
   const [permission, requestPermission] = useCameraPermissions();
   const [manualCode, setManualCode] = useState("");
@@ -24,7 +26,7 @@ export default function MerchantHomeScreen() {
 
   const handleManualEntry = () => {
     if (manualCode.length < 8) {
-      Alert.alert(t("merchant.scan.alertBarcodeTitle"), t("merchant.scan.alertBarcodeBody"));
+      alert(t("merchant.scan.alertBarcodeTitle"), t("merchant.scan.alertBarcodeBody"));
       return;
     }
     router.push({ pathname: "/(merchant)/process", params: { barcode: manualCode } });

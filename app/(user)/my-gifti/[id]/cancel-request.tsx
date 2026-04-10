@@ -6,7 +6,9 @@ import React, { useState } from 'react'
 import { Alert, Pressable, ScrollView, Text, TextInput, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 export default function CancelRequestScreen() {
+  const alert = useAlertShim();
   const { t } = useI18n()
   const { id, receipt_code } = useLocalSearchParams<{ id: string; receipt_code?: string }>()
   const router = useRouter()
@@ -15,7 +17,7 @@ export default function CancelRequestScreen() {
 
   const handleSubmit = async () => {
     if (!reasonText.trim()) {
-      Alert.alert(t('myGifti.cancelRequest.errorTitle'), t('myGifti.cancelRequest.errorBody'))
+      alert(t('myGifti.cancelRequest.errorTitle'), t('myGifti.cancelRequest.errorBody'))
       return
     }
     setLoading(true)
@@ -27,13 +29,13 @@ export default function CancelRequestScreen() {
       const bodyMsg = receipt_code
         ? `${t('myGifti.cancelRequest.successBody')}\n\n${t('myGifti.cancelRequest.receiptLabel')}: ${receipt_code}`
         : t('myGifti.cancelRequest.successBody')
-      Alert.alert(
+      alert(
         t('myGifti.cancelRequest.successTitle'),
         bodyMsg,
         [{ text: t('common.confirm'), onPress: () => router.back() }],
       )
     } catch (err: any) {
-      Alert.alert(t('myGifti.cancelRequest.errorTitle'), err?.message ?? t('myGifti.cancelRequest.errorFail'))
+      alert(t('myGifti.cancelRequest.errorTitle'), err?.message ?? t('myGifti.cancelRequest.errorFail'))
     } finally {
       setLoading(false)
     }
