@@ -130,6 +130,10 @@ export default function LoginScreen() {
               />
             </View>
 
+            <Pressable onPress={() => router.push("/(auth)/forgot-password")} className="mb-2">
+              <Text className="text-sm text-primary">{t("auth.forgotPassword")}</Text>
+            </Pressable>
+
             <View className="flex-row items-center justify-between mb-6">
               <Text className="text-sm text-muted-foreground">{t("auth.login.rememberMe")}</Text>
               <Switch
