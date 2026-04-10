@@ -78,7 +78,7 @@ export default function MerchantSettingsScreen() {
                 <View className="w-14 h-14 rounded-xl bg-white border border-border items-center justify-center overflow-hidden">
                   {b.logo_url ? (
                     <Image
-                      source={{ uri: resolveImageUrl(b.logo_url) }}
+                      source={{ uri: resolveImageUrl(b.logo_url) ?? undefined }}
                       className="w-full h-full"
                       resizeMode="contain"
                     />
