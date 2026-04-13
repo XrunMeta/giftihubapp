@@ -5,7 +5,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
 import { getMe, type MeResponse } from "@/services/account";
 import { useFocusEffect, useRouter } from "expo-router";
-import { ChevronRight, CreditCard, Globe, History, KeyRound, LogOut, Settings, UserPen } from "lucide-react-native";
+import { ChevronRight, CreditCard, Globe, History, KeyRound, LogOut, Settings, Shield, UserPen } from "lucide-react-native";
 import React, { useCallback, useState } from "react";
 import { ActivityIndicator, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -114,6 +114,14 @@ export default function MyPageScreen() {
             icon={<CreditCard size={20} color="#737373" />}
             label={t("mypage.paymentHistory")}
             onPress={() => router.push("/(user)/settlement")}
+          />
+        </View>
+
+        <View className="mx-4 mt-4 bg-card rounded-xl border border-border overflow-hidden">
+          <MenuItem
+            icon={<Shield size={20} color="#737373" />}
+            label="지식재산권 안내"
+            onPress={() => router.push("/(user)/patent-notice")}
           />
         </View>
 
