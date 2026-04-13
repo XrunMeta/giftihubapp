@@ -59,15 +59,19 @@ export async function v_331c13(
   paymentMethod: v_88a3f9,
   v_247d1d,
 ): Promise<v_fba7e7> {
-  return v_bc1b24<v_fba7e7>("/oth-path", {
-    method: "POST",
-    body: JSON.stringify({
-      amount: v_f63e09,
-      currency: v_a832b3,
-      payment_method: v_2891ab,
-      composition: v_247d1d,
-    }),
-  });
+  const v_931bf0 = { amount: v_f63e09, currency: v_a832b3, payment_method: v_2891ab, composition: v_247d1d };
+  console.log(`[bundle.purchaseBundle] REQ`, JSON.stringify({ amount: v_f63e09, currency: v_a832b3, paymentMethod: v_2891ab, compKeys: Object.keys(v_247d1d ?? {}) }));
+  try {
+    const v_8f00b9 = await v_bc1b24<v_fba7e7>("/oth-path", {
+      method: "POST",
+      body: JSON.stringify(v_931bf0),
+    });
+    console.log(`[bundle.purchaseBundle] RES`, JSON.stringify(v_8f00b9));
+    return v_8f00b9;
+  } catch (v_49263d) {
+    console.error(`[bundle.purchaseBundle] ERR`, JSON.stringify({ status: v_49263d?.status, body: v_49263d?.body, message: v_49263d?.message }));
+    throw v_49263d;
+  }
 }
 
 export interface MerchantBundle {
@@ -77,6 +81,7 @@ export interface MerchantBundle {
   voucher_count: number;
   total_face_value: number;
   statuses: string;
+  currency?: string;
 }
 
 export interface BundleSettlementRequest {

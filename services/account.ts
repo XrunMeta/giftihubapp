@@ -10,8 +10,16 @@ export interface MeResponse {
   user: v_1ddb60 & {
     created_at: number;
     updated_at: number;
+    has_password?: boolean;
   };
   voucher_stats: VoucherStat[];
+}
+
+export async function v_5a0760(v_931bf0): Promise<{ ok: true }> {
+  return v_bc1b24<{ ok: true }>("/oth-path", {
+    method: "PATCH",
+    body: JSON.stringify(v_931bf0),
+  });
 }
 
 interface PaginationParams {

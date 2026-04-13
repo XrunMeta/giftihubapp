@@ -3,6 +3,8 @@ import { v_6185b9, type v_dcbdc2 } from "hqklsidyfbumojabxoewf";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_7ef52a } from "splenmyqnym";
 import { v_6e56f5 } from "mbdlgxnaxny";
+import type { v_fe10f7 } from "xqplntxexkdnjkk";
+import { v_cf7450, type v_b6525e } from "vkhyfothlklikcpovbqirr";
 import { v_720509, type v_7fb3de, type v_a64e82 } from "pvulvehakmpzwkznlnd";
 import { v_db3cc6 } from "dyunzbus";
 import { v_cf763b, v_d1d90c } from "rkmroqyctko";
@@ -11,15 +13,18 @@ import v_a3453e, { v_de06a3, v_df9f57, v_5ab095 } from "bapkr";
 import { v_39a996, v_9cabcb, v_cf9c33, v_09d0e5, v_122070, v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
-const v_928ad6 = { KRW: "₩", USD: "$", IDR: "Rp" };
-function v_48b4c6(v_f63e09, v_a832b3) {
-  const v_c37780 = v_928ad6[v_a832b3 ?? "KRW"] ?? "₩";
-  return `${v_c37780}${v_f63e09.toLocaleString()}`;
+import { v_be1e41 as v_48b4c6 } from "hfombjcvpanldq";
+
+function v_fe0e5d(kw: v_b6525e, locale: v_fe10f7): string {
+  if (v_6f298b === "en" && v_0dcbd9.name_en) return v_0dcbd9.name_en;
+  if (v_6f298b === "id" && v_0dcbd9.name_id) return v_0dcbd9.name_id;
+  return v_0dcbd9.name;
 }
 
 const v_322c3f = [
   { key: "all", labelKey: "myGifti.list.tabAll" },
   { key: "active", labelKey: "myGifti.list.tabActive" },
+  { key: "gifted", labelKey: "myGifti.list.tabGifted" },
   { key: "listed", labelKey: "myGifti.list.tabListed" },
   { key: "used", labelKey: "myGifti.list.tabUsed" },
   { key: "expired", labelKey: "myGifti.list.tabExpired" },
@@ -31,6 +36,7 @@ const STATUS_BADGE_META: Record<string, { labelKey: string; variant: v_dcbdc2 }>
   listed: { labelKey: "myGifti.list.statusListed", variant: "info" },
   used: { labelKey: "myGifti.list.statusUsed", variant: "secondary" },
   expired: { labelKey: "myGifti.list.statusExpired", variant: "destructive" },
+  gifted: { labelKey: "myGifti.list.statusGifted", variant: "info" },
   transferred: { labelKey: "myGifti.list.statusTransferred", variant: "success" },
   cancel_request_pending: { labelKey: "myGifti.detail.cancelRequestPendingLabel", variant: "warning" },
 };
@@ -45,7 +51,7 @@ function v_953c3c(v_8d41d7, v_d308b5, v_1573c8) {
 }
 
 export default function v_bf7b5b() {
-  const { t: v_8d41d7 } = v_678659();
+  const { t: v_8d41d7, locale: v_6f298b } = v_678659();
   const v_904d46 = v_d1d90c();
   const v_c6c04c = v_df9f57(
     () => v_322c3f.map((v_3ac7e7) => ({ key: v_3ac7e7.key, label: v_8d41d7(v_3ac7e7.labelKey) })),
@@ -54,16 +60,26 @@ export default function v_bf7b5b() {
   const [v_f9fd27, v_3a2126] = v_5ab095<v_7fb3de[]>([]);
   const [v_683210, v_34a50a] = v_5ab095(true);
   const [v_ac1d22, v_02dd63] = v_5ab095("all");
+  const [v_7a80c2, v_0198e2] = v_5ab095<v_b6525e[]>([]);
+  const [v_241688, v_791812] = v_5ab095<number | null>(null);
 
   const [v_5e9bfe, v_3a7d09] = v_5ab095<string | null>(null);
   const [v_49c6c7, v_67d36a] = v_5ab095<string>("");
+
+  v_cf763b(
+    v_de06a3(() => {
+      v_cf7450()
+        .then((v_8f00b9) => v_0198e2(v_8f00b9.keywords))
+        .catch(() => {});
+    }, []),
+  );
 
   const v_cb3615 = v_de06a3(async () => {
     v_34a50a(true);
     v_3a7d09(null);
     try {
       const v_d308b5 = v_ac1d22 === "all" ? undefined : (v_ac1d22 as v_a64e82);
-      const v_8f00b9 = await v_720509(v_d308b5);
+      const v_8f00b9 = await v_720509(v_d308b5, v_241688 ?? undefined);
       v_3a2126(v_8f00b9.vouchers);
       const v_75ae3e = new Set(v_8f00b9.vouchers.filter((v: v_7fb3de) => v_81e2ef.set_id).map((v: v_7fb3de) => v_81e2ef.set_id));
       v_67d36a(
@@ -88,14 +104,14 @@ export default function v_bf7b5b() {
     } finally {
       v_34a50a(false);
     }
-  }, [v_ac1d22, v_8d41d7]);
+  }, [v_ac1d22, v_241688, v_8d41d7]);
 
   const v_04c01a = v_a3453e.useRef(v_cb3615);
   v_04c01a.current = v_cb3615;
   v_cf763b(
     v_de06a3(() => {
       v_04c01a.current();
-    }, [v_ac1d22]),
+    }, [v_ac1d22, v_241688]),
   );
 
   type ListItem = { type: "single"; voucher: v_7fb3de } | { type: "bundle"; setId: string; vouchers: v_7fb3de[] };
@@ -245,33 +261,68 @@ export default function v_bf7b5b() {
           ) : undefined
         }
         bottom={
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
-            className="mb-3"
-          >
-            {v_c6c04c.map((v_11083e) => {
-              const v_26dce6 = v_11083e.key === v_ac1d22;
-              return (
-                <Pressable
-                  key={v_11083e.key}
-                  onPress={() => v_02dd63(v_11083e.key)}
-                  style={{ alignSelf: "flex-start" }}
-                  className={v_6e56f5("rounded-full px-4 py-2", v_26dce6 ? "bg-primary" : "bg-secondary")}
-                >
-                  <Text
-                    className={v_6e56f5(
-                      "text-sm font-medium",
-                      v_26dce6 ? "text-primary-foreground" : "text-muted-foreground",
-                    )}
+          <>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
+              className="mb-3"
+            >
+              {v_c6c04c.map((v_11083e) => {
+                const v_26dce6 = v_11083e.key === v_ac1d22;
+                return (
+                  <Pressable
+                    key={v_11083e.key}
+                    onPress={() => v_02dd63(v_11083e.key)}
+                    style={{ alignSelf: "flex-start" }}
+                    className={v_6e56f5("rounded-full px-4 py-2", v_26dce6 ? "bg-primary" : "bg-secondary")}
                   >
-                    {v_11083e.label}
+                    <Text
+                      className={v_6e56f5(
+                        "text-sm font-medium",
+                        v_26dce6 ? "text-primary-foreground" : "text-muted-foreground",
+                      )}
+                    >
+                      {v_11083e.label}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </ScrollView>
+            {v_7a80c2.length > 0 && (
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
+                className="mb-3"
+              >
+                <Pressable
+                  onPress={() => v_791812(null)}
+                  style={{ alignSelf: "flex-start" }}
+                  className={v_6e56f5("rounded-full px-3 py-1.5", v_241688 === null ? "bg-primary" : "bg-secondary")}
+                >
+                  <Text className={v_6e56f5("text-xs font-medium", v_241688 === null ? "text-primary-foreground" : "text-muted-foreground")}>
+                    {v_8d41d7("myGifti.list.tabAll")}
                   </Text>
                 </Pressable>
-              );
-            })}
-          </ScrollView>
+                {v_7a80c2.map((v_0dcbd9) => {
+                  const v_26dce6 = v_241688 === v_0dcbd9.id;
+                  return (
+                    <Pressable
+                      key={v_0dcbd9.id}
+                      onPress={() => v_791812(v_26dce6 ? null : v_0dcbd9.id)}
+                      style={{ alignSelf: "flex-start" }}
+                      className={v_6e56f5("rounded-full px-3 py-1.5", v_26dce6 ? "bg-primary" : "bg-secondary")}
+                    >
+                      <Text className={v_6e56f5("text-xs font-medium", v_26dce6 ? "text-primary-foreground" : "text-muted-foreground")}>
+                        {v_fe0e5d(v_0dcbd9, v_6f298b)}
+                      </Text>
+                    </Pressable>
+                  );
+                })}
+              </ScrollView>
+            )}
+          </>
         }
       />
       <FlatList

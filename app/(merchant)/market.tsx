@@ -1,6 +1,7 @@
 import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
 import { v_6185b9 } from "hqklsidyfbumojabxoewf";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
+import { v_be1e41 } from "hfombjcvpanldq";
 import { v_7ef52a } from "splenmyqnym";
 import { v_6e56f5 } from "mbdlgxnaxny";
 import {
@@ -92,10 +93,10 @@ export default function v_0de24e() {
           <View className="flex-row justify-between items-center mt-2">
             <View className="flex-row items-baseline gap-2">
               <Text className="text-base font-bold text-foreground">
-                ₩{v_8c0b26.selling_price.toLocaleString()}
+                {v_be1e41(v_8c0b26.selling_price, v_8c0b26.currency)}
               </Text>
               <Text className="text-xs text-muted-foreground line-through">
-                ₩{v_8c0b26.original_price.toLocaleString()}
+                {v_be1e41(v_8c0b26.original_price, v_8c0b26.currency)}
               </Text>
             </View>
             <Text className="text-xs text-muted-foreground">{v_8c0b26.seller_name}</Text>

@@ -7,6 +7,7 @@ export default function v_963706() {
       <Stack.Screen name="signup" />
       <Stack.Screen name="user-signup" />
       <Stack.Screen name="merchant-signup" />
+      <Stack.Screen name="forgot-password" />
     </Stack>
   );
 }

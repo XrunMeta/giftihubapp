@@ -3,22 +3,57 @@ import { v_6185b9 } from "hqklsidyfbumojabxoewf";
 import { v_c62079 } from "wjvlskvsbzsrojdbjsl";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
+import { v_5d2c47 } from "jbfshypwcrklpetczcsca";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
+import { v_be1e41, v_581cd0 } from "hfombjcvpanldq";
 import { v_7ef52a } from "splenmyqnym";
-import { v_eeb70f, type v_ff021d, type v_03d7df } from "vkhyfothlklikcpovbqirr";
+import { v_e7fbfb, v_eeb70f, type v_ff021d, type v_03d7df } from "vkhyfothlklikcpovbqirr";
 import { v_db3cc6 } from "dyunzbus";
 import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
 import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
-import { v_39a996, v_03e392, v_cf9c33, v_122070, v_19b633, v_3094a2 } from "rcmrninabrnb";
+import { v_39a996, v_cf9c33, v_122070, v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
+import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
 export default function v_9c78c5() {
   const { t: v_8d41d7 } = v_678659();
+  const v_5c50c0 = v_2bd2c5();
   const { id: v_389afb } = v_d1a7ac<{ id: string }>();
   const v_904d46 = v_d1d90c();
+  const { user: v_625c74 } = v_5d2c47();
   const [v_a8fb42, v_ce7034] = v_5ab095<v_ff021d | null>(null);
   const [v_3a2126, v_22df91] = v_5ab095<v_03d7df[]>([]);
   const [v_683210, v_34a50a] = v_5ab095(true);
+  const [v_24fba7, v_1a6f59] = v_5ab095(false);
+
+  const v_2aec08 = !!(v_625c74 && v_a8fb42 && v_a8fb42.seller_id === v_625c74.id);
+
+  const v_5ca23e = () => {
+    if (!v_a8fb42) return;
+    v_5c50c0(
+      v_8d41d7("userMarketplace.detail.cancelConfirmTitle"),
+      v_8d41d7("userMarketplace.detail.cancelConfirmBody"),
+      [
+        { text: v_8d41d7("userMarketplace.detail.cancelNo"), style: "cancel" },
+        {
+          text: v_8d41d7("userMarketplace.detail.cancelYes"),
+          style: "destructive",
+          onPress: async () => {
+            v_1a6f59(true);
+            try {
+              await v_e7fbfb(v_a8fb42.id);
+              v_5c50c0(v_8d41d7("userMarketplace.detail.cancelDoneTitle"), v_8d41d7("userMarketplace.detail.cancelDoneBody"));
+              v_904d46.back();
+            } catch (v_49263d) {
+              v_5c50c0(v_8d41d7("userMarketplace.detail.cancelFailTitle"), String(v_49263d?.message ?? v_49263d));
+            } finally {
+              v_1a6f59(false);
+            }
+          },
+        },
+      ],
+    );
+  };
 
   v_c4deb2(() => {
     if (v_389afb) v_58b8a9();
@@ -30,7 +65,7 @@ export default function v_9c78c5() {
       v_ce7034(v_8f00b9.listing);
       v_22df91(v_8f00b9.set_vouchers ?? []);
     } catch {
-      v_03e392.alert(v_8d41d7("userMarketplace.detail.loadErrorTitle"), v_8d41d7("userMarketplace.detail.loadErrorBody"));
+      v_5c50c0(v_8d41d7("userMarketplace.detail.loadErrorTitle"), v_8d41d7("userMarketplace.detail.loadErrorBody"));
       v_904d46.back();
     } finally {
       v_34a50a(false);
@@ -89,13 +124,13 @@ export default function v_9c78c5() {
             <View className="flex-row justify-between">
               <Text className="text-sm text-muted-foreground">{v_8d41d7("userMarketplace.detail.originalPrice")}</Text>
               <Text className="text-sm text-muted-foreground line-through">
-                ₩{v_a8fb42.original_price.toLocaleString()}
+                {v_be1e41(v_a8fb42.original_price, v_a8fb42.currency)}
               </Text>
             </View>
             <View className="flex-row justify-between">
               <Text className="text-base font-semibold text-foreground">{v_8d41d7("userMarketplace.detail.salePrice")}</Text>
               <Text className="text-xl font-bold text-primary">
-                ₩{v_a8fb42.selling_price.toLocaleString()}
+                {v_be1e41(v_a8fb42.selling_price, v_a8fb42.currency)}
               </Text>
             </View>
             <View className="flex-row justify-between">
@@ -117,7 +152,7 @@ export default function v_9c78c5() {
               {v_8d41d7("userMarketplace.detail.includedItems")}
             </Text>
             {v_3a2126.map((v_81e2ef, v_ebec57) => {
-              const v_c37780 = { KRW: "₩", USD: "$", IDR: "Rp" }[v_81e2ef.base_currency] ?? "₩";
+              const v_c37780 = v_581cd0(v_81e2ef.base_currency);
               const v_6bbb57 = v_81e2ef.face_value_base || v_81e2ef.face_value;
               return (
                 <View key={v_ebec57} className="flex-row justify-between items-center py-1.5 border-b border-border last:border-b-0">
@@ -134,16 +169,22 @@ export default function v_9c78c5() {
       </ScrollView>
 
       <View className="px-5 py-3 border-t border-border bg-white">
-        <Button
-          onPress={() =>
-            v_904d46.push({
-              pathname: "/(user)/oth-path",
-              params: { listingId: v_a8fb42.id },
-            })
-          }
-        >
-          {v_8d41d7("userMarketplace.detail.purchase")}
-        </Button>
+        {v_2aec08 ? (
+          <Button variant="destructive" disabled={v_24fba7} onPress={v_5ca23e}>
+            {v_24fba7 ? v_8d41d7("userMarketplace.detail.cancelling") : v_8d41d7("userMarketplace.detail.cancelListing")}
+          </Button>
+        ) : (
+          <Button
+            onPress={() =>
+              v_904d46.push({
+                pathname: "/(user)/oth-path",
+                params: { listingId: v_a8fb42.id },
+              })
+            }
+          >
+            {v_8d41d7("userMarketplace.detail.purchase")}
+          </Button>
+        )}
       </View>
     </SafeAreaView>
   );

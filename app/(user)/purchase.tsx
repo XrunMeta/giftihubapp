@@ -1,16 +1,17 @@
 import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
-import { v_7a943b } from "dxfmfnfvriitbtghyppor";
+import { v_15e817, v_7a943b } from "dxfmfnfvriitbtghyppor";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import type { v_88a3f9 } from "vhkgxwheyyipiczd";
 import { v_8d53e7 } from "tdwgovnkpylnjynsp";
 import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
 import { v_82416d, v_1a7837, v_d84748, v_27dabc } from "wjvlskvsbzsrojdbjsl";
 import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
-import { v_03e392, v_09d0e5, v_19b633, v_3094a2 } from "rcmrninabrnb";
+import { v_09d0e5, v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
+import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
 const BASE_PAYMENT_METHODS: { key: v_88a3f9; labelKey?: string; label?: string; icon: v_a3453e.ReactNode; devOnly?: boolean }[] = [
   { key: "dev_pay", labelKey: "userPurchase.payDev", icon: <Zap size={20} color="#3b82f6" />, devOnly: true },
   { key: "paypal", label: "PayPal", icon: <CreditCard size={20} color="#0a0a0a" /> },
@@ -19,13 +20,14 @@ const BASE_PAYMENT_METHODS: { key: v_88a3f9; labelKey?: string; label?: string; 
   { key: "usdt_trc20", label: "USDT (TRC-20)", icon: <Coins size={20} color="#0a0a0a" /> },
 ];
 
-const v_928ad6 = { KRW: "₩", USD: "$", IDR: "Rp" };
+import { v_581cd0 } from "hfombjcvpanldq";
 
 export default function v_0035e1() {
   const { t: v_8d41d7 } = v_678659();
+  const v_5c50c0 = v_2bd2c5();
   const v_904d46 = v_d1d90c();
   const { currency: v_a832b3 } = v_d1a7ac<{ currency?: string }>();
-  const { items: v_4622b9, packageItems: v_5be600 } = v_7a943b();
+  const { items: v_4622b9, packageItems: v_5be600, selectedItemIds: v_6e7be8, selectedPackageIds: v_942cd6 } = v_7a943b();
   const [v_587413, v_2122dd] = v_5ab095<v_88a3f9 | null>(null);
   const [v_36b75f, v_f99445] = v_5ab095(false);
 
@@ -37,13 +39,12 @@ export default function v_0035e1() {
 
   const v_6e2788 = v_a832b3 || "KRW";
   const v_40812c = v_5be600
-    .filter((v_e2a85c) => v_e2a85c.currency === v_6e2788)
+    .filter((v_e2a85c) => v_e2a85c.currency === v_6e2788 && v_e2a85c.id && v_942cd6.has(v_e2a85c.id))
     .reduce((v_fd5f43, v_e2a85c) => v_fd5f43 + v_e2a85c.totalBudget, 0);
 
-  const v_a3d7a5 = v_4622b9.filter((v_ebec57) => {
-    if (v_ebec57.flexibleAmount) return (v_ebec57.product.flexible_currency ?? "KRW") === v_6e2788;
-    return v_6e2788 === "KRW";
-  });
+  const v_a3d7a5 = v_4622b9.filter((v_ebec57) =>
+    v_15e817(v_ebec57) === v_6e2788 && v_ebec57.cartId && v_6e7be8.has(v_ebec57.cartId),
+  );
   const v_0f1165 = v_a3d7a5.reduce((v_fd5f43, v_ebec57) => {
     if (v_ebec57.flexibleAmount) return v_fd5f43 + v_ebec57.flexibleAmount;
     return v_fd5f43 + v_ebec57.product.price * v_ebec57.quantity;
@@ -54,12 +55,12 @@ export default function v_0035e1() {
 
   const v_411018 = () => {
     if (!v_587413) {
-      v_03e392.alert(v_8d41d7("userPurchase.needMethodTitle"), v_8d41d7("userPurchase.needMethodBody"));
+      v_5c50c0(v_8d41d7("userPurchase.needMethodTitle"), v_8d41d7("userPurchase.needMethodBody"));
       return;
     }
     v_904d46.push({
       pathname: "/(user)/payment-process",
-      params: { method: v_587413, currency: v_6e2788 },
+      params: { method: v_587413, currency: v_6e2788, nonce: String(Date.now()) },
     });
   };
 
@@ -78,7 +79,7 @@ export default function v_0035e1() {
           <View className="flex-row justify-between">
             <Text className="text-base font-semibold text-foreground">{v_8d41d7("userPurchase.payAmount")}</Text>
             <Text className="text-xl font-bold text-primary">
-              {v_928ad6[v_6e2788] ?? ""}{v_59c1f2.toLocaleString()}
+              {v_581cd0(v_6e2788)}{v_59c1f2.toLocaleString()}
             </Text>
           </View>
         </View>

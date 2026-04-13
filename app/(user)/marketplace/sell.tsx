@@ -3,13 +3,13 @@ import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_1b353f } from "ymbgtfrroootgjefkrxgp";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
+import { v_be1e41 } from "hfombjcvpanldq";
 import { v_86db47 } from "vkhyfothlklikcpovbqirr";
 import { v_720509, type v_7fb3de } from "pvulvehakmpzwkznlnd";
 import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
 import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
 import {
   v_39a996,
-  v_03e392,
   v_e767d1,
   v_326be8,
   v_09d0e5,
@@ -19,8 +19,10 @@ import {
 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
+import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
 export default function v_3072c9() {
   const { t: v_8d41d7 } = v_678659();
+  const v_5c50c0 = v_2bd2c5();
   const v_904d46 = v_d1d90c();
   const { voucherId: v_ba63f8 } = v_d1a7ac<{ voucherId?: string }>();
   const [v_f9fd27, v_3a2126] = v_5ab095<v_7fb3de[]>([]);
@@ -57,17 +59,17 @@ export default function v_3072c9() {
 
   const v_585b02 = async () => {
     if (!v_119885 || !v_7ae44d) {
-      v_03e392.alert(v_8d41d7("userMarketplace.sell.alertMissingTitle"), v_8d41d7("userMarketplace.sell.alertMissingBody"));
+      v_5c50c0(v_8d41d7("userMarketplace.sell.alertMissingTitle"), v_8d41d7("userMarketplace.sell.alertMissingBody"));
       return;
     }
     v_ee9ec1(true);
     try {
       await v_86db47(v_119885.id, Number(v_7ae44d));
-      v_03e392.alert(v_8d41d7("userMarketplace.sell.successTitle"), v_8d41d7("userMarketplace.sell.successBody"), [
+      v_5c50c0(v_8d41d7("userMarketplace.sell.successTitle"), v_8d41d7("userMarketplace.sell.successBody"), [
         { text: v_8d41d7("userMarketplace.sell.ok"), onPress: () => v_904d46.back() },
       ]);
     } catch (v_49263d) {
-      v_03e392.alert(v_8d41d7("userMarketplace.sell.failTitle"), v_49263d.body?.error || v_8d41d7("userMarketplace.sell.failBody"));
+      v_5c50c0(v_8d41d7("userMarketplace.sell.failTitle"), v_49263d.body?.error || v_8d41d7("userMarketplace.sell.failBody"));
     } finally {
       v_ee9ec1(false);
     }
@@ -109,7 +111,7 @@ export default function v_3072c9() {
                 <Text className="text-xs text-muted-foreground">{v_81e2ef.brand}</Text>
                 <Text className="text-sm font-medium text-foreground">{v_81e2ef.name}</Text>
                 <Text className="text-sm font-bold text-foreground mt-1">
-                  ₩{v_81e2ef.face_value.toLocaleString()}
+                  {v_be1e41(v_81e2ef.face_value, v_81e2ef.base_currency)}
                 </Text>
               </Pressable>
             ))}
@@ -132,12 +134,12 @@ export default function v_3072c9() {
             <View className="bg-card rounded-xl border border-border p-4">
               <View className="flex-row justify-between">
                 <Text className="text-sm text-muted-foreground">{v_8d41d7("userMarketplace.sell.feeLabel")}</Text>
-                <Text className="text-sm text-foreground">₩{v_2d815e.toLocaleString()}</Text>
+                <Text className="text-sm text-foreground">{v_be1e41(v_2d815e, v_119885?.base_currency)}</Text>
               </View>
               <Separator className="my-2" />
               <View className="flex-row justify-between">
                 <Text className="text-base font-semibold text-foreground">{v_8d41d7("userMarketplace.sell.payoutLabel")}</Text>
-                <Text className="text-base font-bold text-primary">₩{v_daa996.toLocaleString()}</Text>
+                <Text className="text-base font-bold text-primary">{v_be1e41(v_daa996, v_119885?.base_currency)}</Text>
               </View>
             </View>
 

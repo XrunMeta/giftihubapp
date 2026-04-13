@@ -1,5 +1,5 @@
 import { v_6e56f5 } from "mbdlgxnaxny";
-import { v_d1d90c } from "rkmroqyctko";
+import { v_904d46 as v_1cac93, v_d1d90c } from "rkmroqyctko";
 import { v_c2fb26 } from "wjvlskvsbzsrojdbjsl";
 import v_a3453e from "bapkr";
 import { v_09d0e5, v_19b633, v_3094a2 } from "rcmrninabrnb";
@@ -10,6 +10,10 @@ interface PageHeaderProps {
   onBackPress?: () => void;
   rightAction?: v_a3453e.ReactNode;
   className?: string;
+
+  onBack?: () => void;
+
+  fallbackHref?: string;
 }
 
 export function v_258c1c({ title: v_9f1622, showBack: v_ea6f9c = true, onBackPress: v_f442f6, rightAction: v_4af61b, className: v_7ec75f }: PageHeaderProps) {

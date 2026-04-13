@@ -3,17 +3,18 @@ import { v_6185b9 } from "hqklsidyfbumojabxoewf";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
+import { v_be1e41, v_581cd0 } from "hfombjcvpanldq";
 import { v_7ef52a } from "splenmyqnym";
-import { v_aee327 } from "vkhyfothlklikcpovbqirr";
+import { v_e7fbfb, v_aee327, v_c910b4, type v_e84f77 } from "vkhyfothlklikcpovbqirr";
 import { v_67877b, type v_f122c9, type v_7fb3de } from "pvulvehakmpzwkznlnd";
 import { v_db3cc6 } from "dyunzbus";
 import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
 import { v_c62079, v_6b9090 } from "wjvlskvsbzsrojdbjsl";
 import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
-import { v_39a996, v_03e392, v_9cabcb, v_cf9c33, v_09d0e5, v_19b633, v_79c4f2, v_3094a2 } from "rcmrninabrnb";
-import v_dc0e55 from "bfgjhdhiuhcmlahuvrfzrfn";
+import { v_39a996, v_9cabcb, v_cf9c33, v_09d0e5, v_19b633, v_79c4f2, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
+import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
 const v_119921 = {
   active: { labelKey: "myGifti.list.statusActive", variant: "default" },
   used: { labelKey: "myGifti.list.statusUsed", variant: "secondary" },
@@ -24,6 +25,7 @@ const v_119921 = {
 
 export default function v_2be872() {
   const { t: v_8d41d7 } = v_678659();
+  const v_5c50c0 = v_2bd2c5();
   const { setId: v_90a2ba } = v_d1a7ac<{ setId: string }>();
   const v_904d46 = v_d1d90c();
   const [v_9390e8, v_d57c80] = v_5ab095<v_f122c9 | null>(null);
@@ -31,20 +33,34 @@ export default function v_2be872() {
   const [v_8584c0, v_31dffa] = v_5ab095(false);
   const [v_7ae44d, v_27a321] = v_5ab095("");
   const [v_cb66b4, v_ee9ec1] = v_5ab095(false);
+  const [v_8f4fbf, v_ecf246] = v_5ab095<v_e84f77 | null>(null);
+  const [v_350377, v_0d7dba] = v_5ab095(false);
+
+  const v_f6f5de = async () => {
+    if (!v_90a2ba) return;
+    try {
+      const v_8f00b9 = await v_67877b(v_90a2ba);
+      v_d57c80(v_8f00b9);
+      const v_97a43b = v_8f00b9.vouchers.some((v: v_7fb3de) => v_81e2ef.status === "listed") || (v_8f00b9.set as any).status === "listed";
+      if (v_97a43b) {
+        try {
+          const v_715950 = await v_c910b4({ setId: v_90a2ba });
+          v_ecf246(v_715950);
+        } catch {  }
+      } else {
+        v_ecf246(null);
+      }
+    } catch {
+      v_5c50c0(v_8d41d7("myGifti.setDetail.loadErrorTitle"), v_8d41d7("myGifti.setDetail.loadErrorBody"));
+      v_904d46.back();
+    } finally {
+      v_34a50a(false);
+    }
+  };
 
   v_c4deb2(() => {
-    if (!v_90a2ba) return;
-    (async () => {
-      try {
-        const v_8f00b9 = await v_67877b(v_90a2ba);
-        v_d57c80(v_8f00b9);
-      } catch {
-        v_03e392.alert(v_8d41d7("myGifti.setDetail.loadErrorTitle"), v_8d41d7("myGifti.setDetail.loadErrorBody"));
-        v_904d46.back();
-      } finally {
-        v_34a50a(false);
-      }
-    })();
+    v_f6f5de();
+
   }, [v_90a2ba]);
 
   if (v_683210 || !v_9390e8) {
@@ -63,17 +79,17 @@ export default function v_2be872() {
 
   const v_333e15 = async () => {
     if (!v_7ae44d || Number(v_7ae44d) <= 0) {
-      v_03e392.alert(v_8d41d7("myGifti.setDetail.alertPriceTitle"), v_8d41d7("myGifti.setDetail.alertPriceBody"));
+      v_5c50c0(v_8d41d7("myGifti.setDetail.alertPriceTitle"), v_8d41d7("myGifti.setDetail.alertPriceBody"));
       return;
     }
     v_ee9ec1(true);
     try {
       await v_aee327(v_90a2ba!, Number(v_7ae44d));
-      v_03e392.alert(v_8d41d7("myGifti.setDetail.successTitle"), v_8d41d7("myGifti.setDetail.successBody"), [
+      v_5c50c0(v_8d41d7("myGifti.setDetail.successTitle"), v_8d41d7("myGifti.setDetail.successBody"), [
         { text: v_8d41d7("myGifti.setDetail.ok"), onPress: () => v_904d46.back() },
       ]);
     } catch (v_49263d) {
-      v_03e392.alert(v_8d41d7("myGifti.setDetail.failTitle"), v_49263d.body?.error || v_8d41d7("myGifti.setDetail.failBody"));
+      v_5c50c0(v_8d41d7("myGifti.setDetail.failTitle"), v_49263d.body?.error || v_8d41d7("myGifti.setDetail.failBody"));
     } finally {
       v_ee9ec1(false);
     }
@@ -108,7 +124,7 @@ export default function v_2be872() {
           </View>
           <View className="flex-row justify-between items-center mt-1">
             <Text className="text-sm font-bold text-foreground">
-              ₩{v_8c0b26.face_value?.toLocaleString()}
+              {v_be1e41(v_8c0b26.face_value, v_8c0b26.base_currency)}
             </Text>
             <Text className="text-xs text-muted-foreground">
               {v_8c0b26.expiry_date ? v_db3cc6(new Date(v_8c0b26.expiry_date * 1000), "yyyy.MM.dd") : "-"}
@@ -122,17 +138,9 @@ export default function v_2be872() {
   const v_b62866 = (
     <>
       {}
-      <View className="mx-4 mb-4 bg-card rounded-xl border border-border overflow-hidden">
-        <View className="p-5 items-center">
-          <View className="flex-row items-center mb-3">
-            <Package size={20} color="#CE3630" />
-            <Text className="text-base font-bold text-foreground ml-2">{v_8d41d7("myGifti.setDetail.bundleLabel")}</Text>
-          </View>
-          <View className="p-3 bg-white rounded-lg">
-            <QRCode value={`gifti-set:${v_90a2ba}`} size={160} />
-          </View>
-          <Text className="text-xs text-muted-foreground mt-2">{v_8d41d7("myGifti.setDetail.qrHint")}</Text>
-        </View>
+      <View className="mx-4 mt-2 mb-3 flex-row items-center">
+        <Package size={20} color="#CE3630" />
+        <Text className="text-base font-bold text-foreground ml-2">{v_8d41d7("myGifti.setDetail.bundleLabel")}</Text>
       </View>
 
       {}
@@ -153,10 +161,55 @@ export default function v_2be872() {
         <View className="flex-row justify-between">
           <Text className="text-sm font-semibold text-foreground">{v_8d41d7("myGifti.setDetail.totalFace")}</Text>
           <Text className="text-base font-bold text-foreground">
-            ₩{v_b9f2b7.total_value?.toLocaleString()}
+            {v_be1e41(v_b9f2b7.total_value, v_bb8024.currency)}
           </Text>
         </View>
       </View>
+
+      {}
+      {v_8f4fbf && (
+        <View className="mx-4 mb-4">
+          <Button
+            variant="destructive"
+            disabled={v_350377}
+            onPress={() => {
+              v_5c50c0(
+                v_8d41d7("userMarketplace.detail.cancelConfirmTitle"),
+                v_8d41d7("userMarketplace.detail.cancelConfirmBody"),
+                [
+                  { text: v_8d41d7("userMarketplace.detail.cancelNo"), style: "cancel" },
+                  {
+                    text: v_8d41d7("userMarketplace.detail.cancelYes"),
+                    style: "destructive",
+                    onPress: async () => {
+                      v_0d7dba(true);
+                      try {
+                        await v_e7fbfb(v_8f4fbf.id);
+                        v_5c50c0(
+                          v_8d41d7("userMarketplace.detail.cancelDoneTitle"),
+                          v_8d41d7("userMarketplace.detail.cancelDoneBody"),
+                        );
+                        await v_f6f5de();
+                      } catch (v_49263d) {
+                        v_5c50c0(
+                          v_8d41d7("userMarketplace.detail.cancelFailTitle"),
+                          String(v_49263d?.message ?? v_49263d),
+                        );
+                      } finally {
+                        v_0d7dba(false);
+                      }
+                    },
+                  },
+                ],
+              );
+            }}
+          >
+            {v_350377
+              ? v_8d41d7("userMarketplace.detail.cancelling")
+              : v_8d41d7("userMarketplace.detail.cancelListing")}
+          </Button>
+        </View>
+      )}
 
       {}
       {v_8a2259 && !v_8584c0 && (
@@ -189,16 +242,16 @@ export default function v_2be872() {
           <View className="mt-3">
             <View className="flex-row justify-between mb-1">
               <Text className="text-xs text-muted-foreground">{v_8d41d7("myGifti.setDetail.totalFace")}</Text>
-              <Text className="text-xs text-foreground">₩{v_b9f2b7.total_value?.toLocaleString()}</Text>
+              <Text className="text-xs text-foreground">{v_be1e41(v_b9f2b7.total_value, v_bb8024.currency)}</Text>
             </View>
             <View className="flex-row justify-between mb-1">
               <Text className="text-xs text-muted-foreground">{v_8d41d7("myGifti.setDetail.feeLabel")}</Text>
-              <Text className="text-xs text-foreground">₩{v_2d815e.toLocaleString()}</Text>
+              <Text className="text-xs text-foreground">{v_be1e41(v_2d815e, v_bb8024.currency)}</Text>
             </View>
             <Separator className="my-1.5" />
             <View className="flex-row justify-between">
               <Text className="text-sm font-semibold text-foreground">{v_8d41d7("myGifti.setDetail.payoutLabel")}</Text>
-              <Text className="text-sm font-bold text-primary">₩{v_daa996.toLocaleString()}</Text>
+              <Text className="text-sm font-bold text-primary">{v_be1e41(v_daa996, v_bb8024.currency)}</Text>
             </View>
           </View>
           <View className="flex-row gap-2 mt-3">

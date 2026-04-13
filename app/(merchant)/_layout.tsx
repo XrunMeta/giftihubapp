@@ -67,6 +67,7 @@ export default function v_2e5340() {
       <Tabs.Screen name="record-payment" options={{ href: null }} />
       <Tabs.Screen name="market-detail" options={{ href: null }} />
       <Tabs.Screen name="market-purchase" options={{ href: null }} />
+      <Tabs.Screen name="edit-profile" options={{ href: null }} />
     </Tabs>
   );
 }

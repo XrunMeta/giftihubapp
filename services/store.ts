@@ -69,11 +69,17 @@ export async function v_338caf(
   v_2891ab,
   v_6b7b36,
 ): Promise<PurchaseResponse> {
-  return v_bc1b24<PurchaseResponse>(`/oth-path${v_389afb}/purchase`, {
-    method: "POST",
-    body: JSON.stringify({
-      payment_method: v_2891ab,
-      flexible_amount: v_6b7b36,
-    }),
-  });
+  const v_931bf0 = { payment_method: v_2891ab, flexible_amount: v_6b7b36 };
+  console.log(`[store.purchaseProduct] REQ id=${v_389afb}`, JSON.stringify(v_931bf0));
+  try {
+    const v_8f00b9 = await v_bc1b24<PurchaseResponse>(`/oth-path${v_389afb}/purchase`, {
+      method: "POST",
+      body: JSON.stringify(v_931bf0),
+    });
+    console.log(`[store.purchaseProduct] RES id=${v_389afb}`, JSON.stringify(v_8f00b9));
+    return v_8f00b9;
+  } catch (v_49263d) {
+    console.error(`[store.purchaseProduct] ERR id=${v_389afb}`, JSON.stringify({ status: v_49263d?.status, body: v_49263d?.body, message: v_49263d?.message }));
+    throw v_49263d;
+  }
 }

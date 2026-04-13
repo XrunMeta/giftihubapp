@@ -2,6 +2,7 @@ import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
 import { v_6185b9 } from "hqklsidyfbumojabxoewf";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
+import { v_be1e41 } from "hfombjcvpanldq";
 import { v_7ef52a } from "splenmyqnym";
 import {
   v_54a47e,
@@ -14,7 +15,6 @@ import { v_429ab0, v_c62079 } from "wjvlskvsbzsrojdbjsl";
 import v_a3453e, { v_de06a3, v_c4deb2, v_5ab095 } from "bapkr";
 import {
   v_39a996,
-  v_03e392,
   v_9cabcb,
   v_cf9c33,
   v_6c4f62,
@@ -24,6 +24,7 @@ import {
 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
+import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
 type Tab = "items" | "requests";
 
 const v_2f8e17 = {
@@ -56,6 +57,7 @@ type SingleItem = {
   brand: string;
   name: string;
   face_value: number;
+  base_currency?: string;
   status: string;
   expiry_date: number;
   image_url: string | null;
@@ -75,6 +77,7 @@ function v_62116f(v_479f05): string[] {
 
 export default function v_8f53d1() {
   const { t: v_8d41d7 } = v_678659();
+  const v_5c50c0 = v_2bd2c5();
   const [v_11083e, v_94ee83] = v_5ab095<Tab>("items");
   const [v_4bc205, v_d56994] = v_5ab095<v_920170[]>([]);
   const [v_d6adfa, v_746885] = v_5ab095<SingleItem[]>([]);
@@ -111,9 +114,9 @@ export default function v_8f53d1() {
   };
 
   const v_df5cad = (bundle: v_920170) => {
-    v_03e392.alert(
+    v_5c50c0(
       v_8d41d7("merchant.bundles.settlementTitle"),
-      `${v_79521f.set_name}\n${v_8d41d7("merchant.bundles.totalFace")}: ₩${v_79521f.total_face_value.toLocaleString()}\n${v_79521f.voucher_count}${v_8d41d7("merchant.bundles.voucherUnit")}\n\n${v_8d41d7("merchant.bundles.askSettlement")}`,
+      `${v_79521f.set_name}\n${v_8d41d7("merchant.bundles.totalFace")}: ${v_be1e41(v_79521f.total_face_value, v_79521f.currency)}\n${v_79521f.voucher_count}${v_8d41d7("merchant.bundles.voucherUnit")}\n\n${v_8d41d7("merchant.bundles.askSettlement")}`,
       [
         { text: v_8d41d7("merchant.bundles.cancel"), style: "cancel" },
         {
@@ -121,13 +124,13 @@ export default function v_8f53d1() {
           onPress: async () => {
             try {
               const v_8f00b9 = await v_9607ec(v_79521f.set_id);
-              v_03e392.alert(
+              v_5c50c0(
                 v_8d41d7("merchant.bundles.requestDoneTitle"),
-                `${v_8d41d7("merchant.bundles.feeLine")}: ₩${v_8f00b9.fee_amount.toLocaleString()} (${(v_8f00b9.fee_rate * 100).toFixed(1)}%)\n${v_8d41d7("merchant.bundles.netLine")}: ₩${v_8f00b9.net_amount.toLocaleString()}`,
+                `${v_8d41d7("merchant.bundles.feeLine")}: ${v_be1e41(v_8f00b9.fee_amount)} (${(v_8f00b9.fee_rate * 100).toFixed(1)}%)\n${v_8d41d7("merchant.bundles.netLine")}: ${v_be1e41(v_8f00b9.net_amount)}`,
               );
               v_4fa913();
             } catch (v_9e86fd) {
-              v_03e392.alert(v_8d41d7("merchant.bundles.requestFailTitle"), v_9e86fd instanceof Error ? v_9e86fd.message : v_8d41d7("merchant.bundles.requestFailBody"));
+              v_5c50c0(v_8d41d7("merchant.bundles.requestFailTitle"), v_9e86fd instanceof Error ? v_9e86fd.message : v_8d41d7("merchant.bundles.requestFailBody"));
             }
           },
         },
@@ -213,7 +216,7 @@ export default function v_8f53d1() {
             <Badge variant={v_51452d.variant} label={v_51452d.label} />
           </View>
           <Text className="text-sm font-bold text-foreground mt-1">
-            ₩{v_fd5f43.face_value.toLocaleString()}
+            {v_be1e41(v_fd5f43.face_value, v_fd5f43.base_currency)}
           </Text>
         </View>
       </View>

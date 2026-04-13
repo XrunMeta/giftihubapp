@@ -5,11 +5,13 @@ import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_78ceb7, v_d4f1cc } from "mbgbsytfgyr";
 import { v_d1d90c } from "rkmroqyctko";
 import v_a3453e, { v_5ab095 } from "bapkr";
-import { v_03e392, v_19b633, v_3094a2 } from "rcmrninabrnb";
+import { v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
+import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
 export default function v_b06108() {
   const { t: v_8d41d7 } = v_678659();
+  const v_5c50c0 = v_2bd2c5();
   const v_904d46 = v_d1d90c();
   const [v_d1a6bb, v_1e66f0] = v_d4f1cc();
   const [v_01eca1, v_afa763] = v_5ab095("");
@@ -24,7 +26,7 @@ export default function v_b06108() {
 
   const v_df3976 = () => {
     if (v_01eca1.length < 8) {
-      v_03e392.alert(v_8d41d7("merchant.scan.alertBarcodeTitle"), v_8d41d7("merchant.scan.alertBarcodeBody"));
+      v_5c50c0(v_8d41d7("merchant.scan.alertBarcodeTitle"), v_8d41d7("merchant.scan.alertBarcodeBody"));
       return;
     }
     v_904d46.push({ pathname: "/(merchant)/process", params: { barcode: v_01eca1 } });

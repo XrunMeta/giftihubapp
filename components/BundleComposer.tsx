@@ -5,10 +5,11 @@ import { v_7ef52a } from "splenmyqnym";
 import { v_664ac3, type v_47aa8c } from "uugztyivrmtvweuio";
 import { v_c62079, v_6b9090 } from "wjvlskvsbzsrojdbjsl";
 import v_a3453e, { v_5ab095 } from "bapkr";
-import { v_39a996, v_03e392, v_cf9c33, v_09d0e5, v_19b633, v_79c4f2, v_3094a2 } from "rcmrninabrnb";
+import { v_39a996, v_cf9c33, v_09d0e5, v_19b633, v_79c4f2, v_3094a2 } from "rcmrninabrnb";
 
+import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
+import { v_581cd0 } from "hfombjcvpanldq";
 const v_78e25d = ["KRW", "USD", "IDR"] as const;
-const v_165211 = { KRW: "₩", USD: "$", IDR: "Rp" };
 const v_054e7a = {
   KRW: "50000",
   USD: "50",
@@ -22,6 +23,7 @@ function v_f89181(v_e6d4a6): string {
 
 export function v_4c40b6() {
   const { t: v_8d41d7 } = v_678659();
+  const v_5c50c0 = v_2bd2c5();
   const { addPackageToCart: v_81ab78 } = v_7a943b();
   const [v_f63e09, v_1cbe59] = v_5ab095("");
   const [v_a832b3, v_b84a73] = v_5ab095<string>("KRW");
@@ -31,7 +33,7 @@ export function v_4c40b6() {
   const v_f780c3 = async () => {
     const v_0ad8c5 = Number(v_f63e09);
     if (!v_0ad8c5 || v_0ad8c5 <= 0) {
-      v_03e392.alert(v_8d41d7("userStore.bundle.alertAmountTitle"), v_8d41d7("userStore.bundle.alertAmountBody"));
+      v_5c50c0(v_8d41d7("userStore.bundle.alertAmountTitle"), v_8d41d7("userStore.bundle.alertAmountBody"));
       return;
     }
     v_34a50a(true);
@@ -40,7 +42,7 @@ export function v_4c40b6() {
       const v_8f00b9 = await v_664ac3(v_0ad8c5, v_a832b3);
       v_ee239b(v_8f00b9.composition);
     } catch (v_49263d) {
-      v_03e392.alert(
+      v_5c50c0(
         v_8d41d7("userStore.bundle.composeFailTitle"),
         v_49263d.body?.error || v_49263d.message || v_8d41d7("userStore.bundle.composeFailBody"),
       );
@@ -83,12 +85,12 @@ export function v_4c40b6() {
       composition: v_247d1d,
     });
 
-    v_03e392.alert(v_8d41d7("userStore.bundle.cartAddedTitle"), v_8d41d7("userStore.bundle.cartAddedBody"));
+    v_5c50c0(v_8d41d7("userStore.bundle.cartAddedTitle"), v_8d41d7("userStore.bundle.cartAddedBody"));
     v_ee239b(null);
     v_1cbe59("");
   };
 
-  const v_c37780 = v_165211[v_a832b3] ?? "";
+  const v_c37780 = v_581cd0(v_a832b3);
 
   return (
     <View className="mx-1.5 mb-4">

@@ -1,12 +1,19 @@
 import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
+import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
+import { v_5d2c47 } from "jbfshypwcrklpetczcsca";
 import { v_48dd6f, v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_d1d90c } from "rkmroqyctko";
 import { v_3ebb07 } from "wjvlskvsbzsrojdbjsl";
-import v_a3453e from "bapkr";
-import { v_09d0e5, v_122070, v_19b633, v_3094a2 } from "rcmrninabrnb";
+import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
+import { v_09d0e5, v_122070, v_19b633, v_79c4f2, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
+import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
+
+type PwStep = "idle" | "otpSent" | "otpVerified";
+
 export default function v_b0ed53() {
+  const v_5c50c0 = v_2bd2c5();
   const { locale: v_6f298b, setLocale: v_1e48df, t: v_8d41d7 } = v_678659();
   const v_904d46 = v_d1d90c();
 

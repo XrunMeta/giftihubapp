@@ -8,9 +8,10 @@ import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
 import * as v_2c8bdd from "refjsvmnhpbvuhzr";
 import { v_82416d, v_1a7837, v_d84748, v_27dabc } from "wjvlskvsbzsrojdbjsl";
 import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
-import { v_03e392, v_09d0e5, v_19b633, v_3094a2 } from "rcmrninabrnb";
+import { v_09d0e5, v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
+import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
 const BASE_METHODS: { key: v_88a3f9; labelKey?: string; label?: string; icon: v_a3453e.ReactNode; devOnly?: boolean }[] = [
   { key: "dev_pay", labelKey: "userMarketplace.purchase.payDev", icon: <Zap size={20} color="#3b82f6" />, devOnly: true },
   { key: "paypal", label: "PayPal", icon: <CreditCard size={20} color="#0a0a0a" /> },
@@ -21,6 +22,7 @@ const BASE_METHODS: { key: v_88a3f9; labelKey?: string; label?: string; icon: v_
 
 export default function v_072d7e() {
   const { t: v_8d41d7 } = v_678659();
+  const v_5c50c0 = v_2bd2c5();
   const { listingId: v_4b65e3 } = v_d1a7ac<{ listingId: string }>();
   const v_904d46 = v_d1d90c();
   const [v_587413, v_2122dd] = v_5ab095<v_88a3f9 | null>(null);
@@ -39,7 +41,7 @@ export default function v_072d7e() {
     try {
       const v_8f00b9 = await v_37e5b4(v_4b65e3, v_587413);
       if (v_587413 === "dev_pay" || v_8f00b9.payment_method === "dev_pay") {
-        v_03e392.alert(v_8d41d7("userMarketplace.purchase.successTitle"), v_8d41d7("userMarketplace.purchase.successBodyDev"), [
+        v_5c50c0(v_8d41d7("userMarketplace.purchase.successTitle"), v_8d41d7("userMarketplace.purchase.successBodyDev"), [
           { text: v_8d41d7("userMarketplace.purchase.ok"), onPress: () => v_904d46.replace("/(user)/oth-path") },
         ]);
         return;
@@ -47,11 +49,11 @@ export default function v_072d7e() {
       if (v_8f00b9.redirect_url) {
         await v_2c8bdd.openBrowserAsync(v_8f00b9.redirect_url);
       }
-      v_03e392.alert(v_8d41d7("userMarketplace.purchase.progressTitle"), v_8d41d7("userMarketplace.purchase.progressBody"), [
+      v_5c50c0(v_8d41d7("userMarketplace.purchase.progressTitle"), v_8d41d7("userMarketplace.purchase.progressBody"), [
         { text: v_8d41d7("userMarketplace.purchase.ok"), onPress: () => v_904d46.replace("/(user)/oth-path") },
       ]);
     } catch (v_49263d) {
-      v_03e392.alert(v_8d41d7("userMarketplace.purchase.failTitle"), v_49263d.body?.error || v_8d41d7("userMarketplace.purchase.failBody"));
+      v_5c50c0(v_8d41d7("userMarketplace.purchase.failTitle"), v_49263d.body?.error || v_8d41d7("userMarketplace.purchase.failBody"));
     } finally {
       v_34a50a(false);
     }

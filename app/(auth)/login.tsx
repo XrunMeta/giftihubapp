@@ -11,12 +11,14 @@ import * as v_f2c756 from "rddjsfilumpz";
 import { v_d1d90c } from "rkmroqyctko";
 import * as v_2c8bdd from "refjsvmnhpbvuhzr";
 import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
-import { v_03e392, v_cf9c33, v_e767d1, v_326be8, v_09d0e5, v_122070, v_79139e, v_19b633, v_3094a2 } from "rcmrninabrnb";
+import { v_cf9c33, v_e767d1, v_326be8, v_09d0e5, v_122070, v_79139e, v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
+import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
 export default function v_f4f851() {
   const v_904d46 = v_d1d90c();
   const { t: v_8d41d7 } = v_678659();
+  const v_5c50c0 = v_2bd2c5();
   const { login: v_182fdb } = v_5d2c47();
   const v_1d0b37 = v_f589a4();
   const [v_e0c7e8, v_fedf34] = v_5ab095("");
@@ -36,7 +38,7 @@ export default function v_f4f851() {
 
   const v_c02a62 = async () => {
     if (!v_e0c7e8 || !v_adc076) {
-      v_03e392.alert(v_8d41d7("auth.login.alertInputTitle"), v_8d41d7("auth.login.alertInputBody"));
+      v_5c50c0(v_8d41d7("auth.login.alertInputTitle"), v_8d41d7("auth.login.alertInputBody"));
       return;
     }
     v_34a50a(true);
@@ -52,7 +54,7 @@ export default function v_f4f851() {
       const v_8f5693 = v_8f00b9.user.role === "merchant" ? "/(merchant)" : "/(user)/store";
       v_904d46.replace(v_8f5693);
     } catch (v_49263d) {
-      v_03e392.alert(v_8d41d7("auth.login.alertFailTitle"), v_49263d.body?.error || v_8d41d7("auth.login.alertFailBody"));
+      v_5c50c0(v_8d41d7("auth.login.alertFailTitle"), v_49263d.body?.error || v_8d41d7("auth.login.alertFailBody"));
     } finally {
       v_34a50a(false);
     }
@@ -77,12 +79,12 @@ export default function v_f4f851() {
             const v_8f5693 = v_22da99 === "merchant" ? "/(merchant)" : "/(user)/store";
             v_904d46.replace(v_8f5693);
           } catch {
-            v_03e392.alert(v_8d41d7("auth.login.alertTokenTitle"), v_8d41d7("auth.login.alertTokenBody"));
+            v_5c50c0(v_8d41d7("auth.login.alertTokenTitle"), v_8d41d7("auth.login.alertTokenBody"));
           }
         }
       }
     } catch {
-      v_03e392.alert(v_8d41d7("auth.login.alertTelegramTitle"), v_8d41d7("auth.login.alertTelegramBody"));
+      v_5c50c0(v_8d41d7("auth.login.alertTelegramTitle"), v_8d41d7("auth.login.alertTelegramBody"));
     }
   };
 
@@ -127,6 +129,10 @@ export default function v_f4f851() {
                 onChangeText={v_52b279}
               />
             </View>
+
+            <Pressable onPress={() => v_904d46.push("/(auth)/forgot-password")} className="mb-2">
+              <Text className="text-sm text-primary">{v_8d41d7("auth.forgotPassword")}</Text>
+            </Pressable>
 
             <View className="flex-row items-center justify-between mb-6">
               <Text className="text-sm text-muted-foreground">{v_8d41d7("auth.login.rememberMe")}</Text>

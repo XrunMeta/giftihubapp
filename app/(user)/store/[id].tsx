@@ -8,7 +8,6 @@ import { v_3b9c43, v_a07c02 } from "wjvlskvsbzsrojdbjsl";
 import v_a3453e, { v_c4deb2, v_5ab095 } from "bapkr";
 import {
   v_39a996,
-  v_03e392,
   v_cf9c33,
   v_e767d1,
   v_326be8,
@@ -19,7 +18,8 @@ import {
 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
-const v_6b1440 = { KRW: "₩", USD: "$", IDR: "Rp" };
+import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
+import { v_581cd0 } from "hfombjcvpanldq";
 
 function v_f89181(v_e6d4a6): string {
   if (!v_e6d4a6) return "";
@@ -28,6 +28,7 @@ function v_f89181(v_e6d4a6): string {
 
 export default function v_2b70c8() {
   const { t: v_8d41d7 } = v_678659();
+  const v_5c50c0 = v_2bd2c5();
   const { id: v_389afb } = v_d1a7ac<{ id: string }>();
   const v_904d46 = v_d1d90c();
   const { addToCart: v_7bab4b } = v_7a943b();
@@ -45,7 +46,7 @@ export default function v_2b70c8() {
       const v_9390e8 = await v_5e3aed(v_389afb!);
       v_2ea5dd(v_9390e8.product);
     } catch {
-      v_03e392.alert(v_8d41d7("userStore.detail.loadErrorTitle"), v_8d41d7("userStore.detail.loadErrorBody"));
+      v_5c50c0(v_8d41d7("userStore.detail.loadErrorTitle"), v_8d41d7("userStore.detail.loadErrorBody"));
       v_904d46.back();
     } finally {
       v_34a50a(false);
@@ -62,7 +63,7 @@ export default function v_2b70c8() {
 
   const v_e567dc = v_01bee9.product_type === "flexible";
   const v_d6ed0e = v_01bee9.flexible_currency ?? "KRW";
-  const v_c37780 = v_6b1440[v_d6ed0e] ?? "₩";
+  const v_c37780 = v_581cd0(v_d6ed0e);
   const v_3ae14a =
     !v_e567dc && v_01bee9.price > 0 && v_01bee9.face_value > 0 && v_01bee9.price < v_01bee9.face_value
       ? Math.round((1 - v_01bee9.price / v_01bee9.face_value) * 100)
@@ -74,7 +75,7 @@ export default function v_2b70c8() {
     if (v_e567dc) {
       const v_74dfb8 = v_43744f;
       if (!v_74dfb8 || v_74dfb8 < (v_01bee9.flexible_min ?? 0) || v_74dfb8 > (v_01bee9.flexible_max ?? 0)) {
-        v_03e392.alert(
+        v_5c50c0(
           v_8d41d7("userStore.detail.flexRangeTitle"),
           v_8d41d7("userStore.detail.flexRangeBody")
             .replace(/\{\{sym\}\}/g, v_c37780)
@@ -90,7 +91,7 @@ export default function v_2b70c8() {
     if (v_e1cba1) {
       v_904d46.push("/(user)/cart");
     } else {
-      v_03e392.alert(v_8d41d7("userStore.detail.cartAddedTitle"), v_8d41d7("userStore.detail.cartAddedBody"));
+      v_5c50c0(v_8d41d7("userStore.detail.cartAddedTitle"), v_8d41d7("userStore.detail.cartAddedBody"));
     }
   };
 
@@ -165,18 +166,18 @@ export default function v_2b70c8() {
                           </Text>
                         </View>
                         <Text className="text-sm text-muted-foreground line-through">
-                          {v_6b1440[v_01bee9.display_currency] ?? "₩"}
+                          {v_581cd0(v_01bee9.display_currency)}
                           {(v_01bee9.face_value ?? 0).toLocaleString()}
                         </Text>
                       </View>
                       <Text className="text-2xl font-bold text-foreground shrink-0">
-                        {v_6b1440[v_01bee9.display_currency] ?? "₩"}
+                        {v_581cd0(v_01bee9.display_currency)}
                         {(v_01bee9.price ?? 0).toLocaleString()}
                       </Text>
                     </>
                   ) : (
                     <Text className="text-2xl font-bold text-foreground">
-                      {v_6b1440[v_01bee9.display_currency] ?? "₩"}
+                      {v_581cd0(v_01bee9.display_currency)}
                       {(v_01bee9.price ?? 0).toLocaleString()}
                     </Text>
                   )}

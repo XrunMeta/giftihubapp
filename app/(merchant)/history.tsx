@@ -3,12 +3,12 @@ import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_0ddfa5 } from "pntqqtrakxjzccfwvrxdnuch";
 import { v_1b353f } from "ymbgtfrroootgjefkrxgp";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
+import { v_be1e41 } from "hfombjcvpanldq";
 import { v_bc1b24 } from "tlrvzsbmctdavs";
 import { v_db3cc6 } from "dyunzbus";
 import v_a3453e, { v_de06a3, v_c4deb2, v_e662ae, v_5ab095 } from "bapkr";
 import {
   v_39a996,
-  v_03e392,
   v_9cabcb,
   v_aa7413,
   v_19b633,
@@ -16,6 +16,8 @@ import {
   v_3094a2,
 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
+
+import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
 
 type UsedVoucherItem = {
   transaction_id: string;
@@ -30,6 +32,7 @@ type UsedVoucherItem = {
   cancel_window_remaining_sec: number;
   status: "used" | "cancelled" | "request_pending";
   cancellation_request_id: string | null;
+  requested_by?: "user" | "merchant" | null;
 };
 
 type UsedVouchersResponse = {
@@ -50,6 +53,7 @@ type ReasonCode = (typeof v_a3c4f5)[number];
 
 export default function v_ca8e36() {
   const { t: v_8d41d7 } = v_678659();
+  const v_5c50c0 = v_2bd2c5();
 
   const [v_1e43c9, v_e4a227] = v_5ab095("");
   const [v_5d756f, v_a563de] = v_5ab095("");
@@ -145,20 +149,20 @@ export default function v_ca8e36() {
         method: "POST",
         body: JSON.stringify(v_4d33b2),
       });
-      v_03e392.alert(
+      v_5c50c0(
         v_8d41d7("merchant.history.settlementRequest"),
         v_8d41d7("merchant.history.settlementDone"),
       );
       v_2122dd(new Set());
       v_171edc(false);
     } catch {
-      v_03e392.alert(v_8d41d7("merchant.history.settlementRequest"), v_8d41d7("merchant.history.settlementFail"));
+      v_5c50c0(v_8d41d7("merchant.history.settlementRequest"), v_8d41d7("merchant.history.settlementFail"));
     }
   };
 
   const v_b1c4ed = (): Promise<ReasonCode | null> =>
     new Promise((v_6f7712) => {
-      v_03e392.alert(
+      v_5c50c0(
         v_8d41d7("merchant.history.cancelReasonTitle"),
         undefined,
         [
@@ -199,7 +203,7 @@ export default function v_ca8e36() {
       v_1a6aaa(null);
       v_d3789a(1, true, v_1e43c9);
     } catch {
-      v_03e392.alert(v_8d41d7("merchant.history.cancelDirect"), v_8d41d7("merchant.history.actionFail"));
+      v_5c50c0(v_8d41d7("merchant.history.cancelDirect"), v_8d41d7("merchant.history.actionFail"));
     } finally {
       v_47aa89(false);
     }
@@ -221,10 +225,44 @@ export default function v_ca8e36() {
       v_1a6aaa(null);
       v_d3789a(1, true, v_1e43c9);
     } catch {
-      v_03e392.alert(v_8d41d7("merchant.history.cancelRequest"), v_8d41d7("merchant.history.actionFail"));
+      v_5c50c0(v_8d41d7("merchant.history.cancelRequest"), v_8d41d7("merchant.history.actionFail"));
     } finally {
       v_47aa89(false);
     }
+  };
+
+  const v_dc1c24 = async (v_8c0b26) => {
+    if (!v_8c0b26.cancellation_request_id) return;
+    v_5c50c0(
+      v_8d41d7("merchant.history.rejectUserRequest"),
+      v_8d41d7("merchant.history.rejectConfirmBody"),
+      [
+        { text: v_8d41d7("merchant.history.rejectNo"), style: "cancel" },
+        {
+          text: v_8d41d7("merchant.history.rejectYes"),
+          style: "destructive",
+          onPress: async () => {
+            v_47aa89(true);
+            try {
+              await v_bc1b24(
+                `/oth-path${v_8c0b26.cancellation_request_id}/reject`,
+                {
+                  method: "POST",
+                  body: JSON.stringify({ note: v_fd53ad }),
+                },
+              );
+              v_1a6aaa(null);
+              v_38ca03("");
+              v_d3789a(1, true, v_1e43c9);
+            } catch {
+              v_5c50c0(v_8d41d7("merchant.history.rejectUserRequest"), v_8d41d7("merchant.history.actionFail"));
+            } finally {
+              v_47aa89(false);
+            }
+          },
+        },
+      ],
+    );
   };
 
   const v_c4180e = (v_d308b5) => {
@@ -267,7 +305,7 @@ export default function v_ca8e36() {
               </View>
               <View className="items-end ml-2">
                 <Text className="text-base font-bold text-primary">
-                  ₩{v_8c0b26.amount?.toLocaleString()}
+                  {v_be1e41(v_8c0b26.amount)}
                 </Text>
                 <Text className="text-xs text-muted-foreground mt-0.5">
                   {v_db3cc6(new Date(v_8c0b26.used_at * 1000), "MM.dd HH:mm")}
@@ -400,13 +438,13 @@ export default function v_ca8e36() {
                   <View className="flex-row justify-between">
                     <Text className="text-sm text-muted-foreground">금액</Text>
                     <Text className="text-sm font-medium text-foreground">
-                      ₩{v_6f1aa4.amount?.toLocaleString()}
+                      {v_be1e41(v_6f1aa4.amount)}
                     </Text>
                   </View>
                   <View className="flex-row justify-between">
                     <Text className="text-sm text-muted-foreground">액면가</Text>
                     <Text className="text-sm font-medium text-foreground">
-                      ₩{v_6f1aa4.face_value?.toLocaleString()}
+                      {v_be1e41(v_6f1aa4.face_value)}
                     </Text>
                   </View>
                   <View className="flex-row justify-between">
@@ -484,6 +522,32 @@ export default function v_ca8e36() {
                           </Text>
                         )}
                       </TouchableOpacity>
+                    ) : v_6f1aa4.requested_by === "user" && v_6f1aa4.cancellation_request_id ? (
+                      <>
+                        <TextInput
+                          className="border border-border rounded-xl px-4 py-3 text-sm text-foreground bg-white"
+                          placeholder={v_8d41d7("merchant.history.rejectNotePh")}
+                          placeholderTextColor="#a1a1aa"
+                          value={v_fd53ad}
+                          onChangeText={v_38ca03}
+                          multiline
+                          numberOfLines={2}
+                          maxLength={200}
+                        />
+                        <TouchableOpacity
+                          onPress={() => v_dc1c24(v_6f1aa4)}
+                          disabled={v_bf3cca}
+                          className="bg-destructive rounded-xl py-4 items-center"
+                        >
+                          {v_bf3cca ? (
+                            <ActivityIndicator size="small" color="#fff" />
+                          ) : (
+                            <Text className="text-white font-semibold text-base">
+                              {v_8d41d7("merchant.history.rejectUserRequest")}
+                            </Text>
+                          )}
+                        </TouchableOpacity>
+                      </>
                     ) : (
                       <View className="border border-amber-300 bg-amber-50 rounded-xl py-4 items-center">
                         <Text className="text-amber-700 font-medium text-sm">
