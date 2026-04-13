@@ -5,7 +5,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
 import { getMe, type MeResponse } from "@/services/account";
 import { useFocusEffect, useRouter } from "expo-router";
-import { ChevronRight, CreditCard, Gift, History, LogOut, Settings, Shield, UserCircle } from "lucide-react-native";
+import { ChevronRight, CreditCard, Gift, Globe, History, KeyRound, LogOut, Settings, Shield, UserCircle, UserPen } from "lucide-react-native";
 import React, { useCallback, useState } from "react";
 import { ActivityIndicator, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
