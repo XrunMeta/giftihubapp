@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
-import { getToken, setToken, removeToken, getRememberMe } from "@/services/api";
+import { getToken, setToken, removeToken, getRememberMe, getStoredUser, setStoredUser, apiFetch } from "@/services/api";
 import type { User } from "@/services/auth";
 
 interface AuthState {
@@ -46,12 +46,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const storedToken = await getToken();
       if (storedToken && !isTokenExpired(storedToken) && remember) {
         const payload = decodeJwtPayload(storedToken);
+        const storedUser = await getStoredUser();
+
+        const fallbackUser: User = storedUser
+          ? { id: storedUser.id, name: storedUser.name, role: storedUser.role as "user" | "merchant" }
+          : { id: payload!.sub, name: "", role: payload!.role as "user" | "merchant" };
         setState({
           token: storedToken,
-          user: { id: payload!.sub, name: "", role: payload!.role as "user" | "merchant" },
+          user: fallbackUser,
           isAuthenticated: true,
           isLoading: false,
         });
+
+        try {
+          const res = await apiFetch<{ user: User }>("/oth-path");
+          if (res.user) {
+            const fresh: User = {
+              id: res.user.id,
+              name: res.user.name,
+              email: res.user.email,
+              telegram_id: res.user.telegram_id,
+              telegram_username: res.user.telegram_username,
+              telegram_photo: res.user.telegram_photo,
+              role: res.user.role,
+            };
+            await setStoredUser({ id: fresh.id, name: fresh.name, role: fresh.role });
+            setState((s) => ({ ...s, user: fresh }));
+          }
+        } catch {  }
       } else {
         if (storedToken) await removeToken();
         setState((s) => ({ ...s, isLoading: false }));
@@ -61,6 +83,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = useCallback(async (token: string, user: User) => {
     await setToken(token);
+    await setStoredUser({ id: user.id, name: user.name, role: user.role });
     setState({ token, user, isAuthenticated: true, isLoading: false });
   }, []);
 
@@ -70,6 +93,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const updateUser = useCallback((user: User) => {
+    setStoredUser({ id: user.id, name: user.name, role: user.role });
     setState((s) => ({ ...s, user }));
   }, []);
 

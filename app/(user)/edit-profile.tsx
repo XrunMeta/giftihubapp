@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
 import { getMe, updateProfile } from "@/services/account";
+import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { ScrollView, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -10,6 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useAlertShim } from "@/components/ui/alert-shim";
 
 export default function EditProfileScreen() {
+  const router = useRouter();
   const alert = useAlertShim();
   const { t } = useI18n();
   const { user, updateUser } = useAuth();
@@ -46,7 +48,7 @@ export default function EditProfileScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
-      <PageHeader title={t("settings.profile.title")} showBack />
+      <PageHeader title={t("settings.profile.title")} onBackPress={() => router.navigate("/(user)/mypage")} />
       <ScrollView className="flex-1 px-4 pt-4" contentContainerStyle={{ paddingBottom: 32 }}>
         <View className="bg-white rounded-xl border border-border p-4">
           <Text className="text-sm text-muted-foreground mb-3">{t("settings.profile.hint")}</Text>

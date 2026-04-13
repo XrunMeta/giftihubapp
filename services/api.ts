@@ -28,6 +28,7 @@ export function getServerMode(): "local" | "remote" {
 }
 
 const TOKEN_KEY = "gifti_jwt";
+const USER_KEY = "gifti_user";
 const REMEMBER_KEY = "gifti_remember";
 const SAVED_EMAIL_KEY = "gifti_saved_email";
 
@@ -41,6 +42,17 @@ export async function setToken(token: string): Promise<void> {
 
 export async function removeToken(): Promise<void> {
   await SecureStore.deleteItemAsync(TOKEN_KEY);
+  await AsyncStorage.removeItem(USER_KEY);
+}
+
+export async function getStoredUser(): Promise<{ id: string; name: string; role: string } | null> {
+  const json = await AsyncStorage.getItem(USER_KEY);
+  if (!json) return null;
+  try { return JSON.parse(json); } catch { return null; }
+}
+
+export async function setStoredUser(user: { id: string; name: string; role: string }): Promise<void> {
+  await AsyncStorage.setItem(USER_KEY, JSON.stringify(user));
 }
 
 export async function getRememberMe(): Promise<boolean> {

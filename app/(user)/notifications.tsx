@@ -62,7 +62,7 @@ export default function UserNotificationsScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={['top']}>
-      <PageHeader title={t('user.notifications.title')} />
+      <PageHeader title={t('user.notifications.title')} fallbackHref="/(user)/mypage" />
       {loading ? (
         <ActivityIndicator size="large" color="#CE3630" className="mt-8" />
       ) : (

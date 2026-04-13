@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
 import { apiFetch } from "@/services/api";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { ScrollView, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -12,6 +13,7 @@ import { useAlertShim } from "@/components/ui/alert-shim";
 type PwStep = "idle" | "otpSent" | "otpVerified";
 
 export default function ChangePasswordScreen() {
+  const router = useRouter();
   const alert = useAlertShim();
   const { t } = useI18n();
   const { user } = useAuth();
@@ -99,7 +101,7 @@ export default function ChangePasswordScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
-      <PageHeader title={t("settings.password.title")} showBack />
+      <PageHeader title={t("settings.password.title")} onBackPress={() => router.navigate("/(user)/mypage")} />
       <ScrollView className="flex-1 px-4 pt-4" contentContainerStyle={{ paddingBottom: 32 }}>
         <View className="bg-white rounded-xl border border-border p-4">
           <Text className="text-sm text-muted-foreground mb-4">

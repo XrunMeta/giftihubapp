@@ -87,7 +87,7 @@ export default function UsdtWithdrawScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <PageHeader title={t("userUsdtWithdraw.title")} />
+      <PageHeader title={t("userUsdtWithdraw.title")} fallbackHref="/(user)/mypage" />
       <ScrollView className="flex-1 px-6">
         <View className="bg-card border border-border rounded-xl p-4 mt-4">
           <Text className="text-xs text-muted-foreground">{t("userUsdtWithdraw.networkLabel")}</Text>

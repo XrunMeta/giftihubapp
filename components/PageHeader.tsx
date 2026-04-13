@@ -16,12 +16,19 @@ interface PageHeaderProps {
   fallbackHref?: string;
 }
 
-export function PageHeader({ title, showBack = true, onBackPress, rightAction, className }: PageHeaderProps) {
+export function PageHeader({ title, showBack = true, onBackPress, onBack, rightAction, className, fallbackHref }: PageHeaderProps) {
   const router = useRouter();
 
   const handleBack = () => {
-    if (onBackPress) onBackPress();
-    else router.back();
+    if (onBackPress) {
+      onBackPress();
+    } else if (onBack) {
+      onBack();
+    } else if (router.canGoBack()) {
+      router.back();
+    } else {
+      router.replace((fallbackHref ?? "/(user)") as any);
+    }
   };
 
   return (
