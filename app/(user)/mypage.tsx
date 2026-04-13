@@ -15,7 +15,7 @@ export default function MyPageScreen() {
   const router = useRouter();
   const { t } = useI18n();
   const alert = useAlertShim();
-  const { user, logout } = useAuth();
+  const { user, logout, updateUser } = useAuth();
   const [me, setMe] = useState<MeResponse | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -29,6 +29,9 @@ export default function MyPageScreen() {
     try {
       const data = await getMe();
       setMe(data);
+      if (data.user) {
+        updateUser(data.user);
+      }
     } catch {
 
     } finally {

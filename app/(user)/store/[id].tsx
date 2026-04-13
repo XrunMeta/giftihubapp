@@ -2,6 +2,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
 import { useI18n } from "@/context/I18nContext";
+import { resolveImageUrl } from "@/lib/image";
 import { getProductDetail, getProductFullImageUrl, type Product } from "@/services/store";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Minus, Plus } from "lucide-react-native";
@@ -96,6 +97,7 @@ export default function ProductDetailScreen() {
   };
 
   const imgUri = getProductFullImageUrl(product);
+  const detailImgUri = resolveImageUrl(product.detail_image_url);
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
@@ -110,103 +112,120 @@ export default function ProductDetailScreen() {
           className="flex-1"
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 16, paddingBottom: 16 }}
+          contentContainerStyle={{ paddingBottom: 16 }}
         >
-          <View className="overflow-hidden p-4">
-            {imgUri ? (
-              <Image source={{ uri: imgUri }} className="w-full h-52" resizeMode="contain" />
-            ) : (
-              <View className="w-full h-56 bg-muted/60 items-center justify-center py-10">
-                <Text className="text-5xl">🎁</Text>
-                <Text className="text-sm text-muted-foreground mt-3">{product.brand_name}</Text>
-              </View>
-            )}
-          </View>
+          {imgUri ? (
+            <Image source={{ uri: imgUri }} className="w-full aspect-square" resizeMode="cover" />
+          ) : (
+            <View className="w-full aspect-square bg-muted/60 items-center justify-center">
+              <Text className="text-5xl">🎁</Text>
+              <Text className="text-sm text-muted-foreground mt-3">{product.brand_name}</Text>
+            </View>
+          )}
 
-          <View className="bg-white rounded-2xl border border-border p-5">
-            <Text className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
-              {product.brand_name}
-            </Text>
-            <Text className="text-xl font-bold text-foreground  leading-7">{product.name}</Text>
+          <View className="px-4 mt-4">
+            <View className="bg-white rounded-2xl border border-border p-5">
+              <Text className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
+                {product.brand_name}
+              </Text>
+              <Text className="text-xl font-bold text-foreground leading-7">{product.name}</Text>
 
-            {isFlexible ? (
-              <>
-                <View className="mt-2 bg-secondary/80 rounded-xl py-3">
-                  <Text className="text-sm text-muted-foreground">{t("userStore.detail.purchasableRange")}</Text>
-                  <Text className="text-smd font-semibold text-foreground mt-1">
-                    {sym}
-                    {(product.flexible_min ?? 0).toLocaleString()} ~ {sym}
-                    {(product.flexible_max ?? 0).toLocaleString()}
+              {isFlexible ? (
+                <>
+                  <View className="mt-2 bg-secondary/80 rounded-xl py-3">
+                    <Text className="text-sm text-muted-foreground">{t("userStore.detail.purchasableRange")}</Text>
+                    <Text className="text-smd font-semibold text-foreground mt-1">
+                      {sym}
+                      {(product.flexible_min ?? 0).toLocaleString()} ~ {sym}
+                      {(product.flexible_max ?? 0).toLocaleString()}
+                    </Text>
+                  </View>
+                  <Text className="text-sm font-medium text-foreground mt-2 mb-2">
+                    {t("userStore.detail.purchaseAmount").replace("{{currency}}", flexCur)}
                   </Text>
-                </View>
-                <Text className="text-sm font-medium text-foreground mt-2 mb-2">
-                  {t("userStore.detail.purchaseAmount").replace("{{currency}}", flexCur)}
-                </Text>
-                <View className="flex-row items-center bg-secondary rounded-xl border border-border px-4 py-3">
-                  <Text className="text-base font-bold text-muted-foreground mr-2">{sym}</Text>
-                  <TextInput
-                    className="flex-1 text-lg font-semibold text-foreground py-0.5"
-                    placeholder={formatThousandsFromDigits(String(product.flexible_min ?? 0))}
-                    placeholderTextColor="#737373"
-                    keyboardType="numeric"
-                    value={formatThousandsFromDigits(flexDigits)}
-                    onChangeText={(txt) => setFlexDigits(txt.replace(/\D/g, ""))}
-                  />
-                </View>
-              </>
-            ) : (
-              <>
-                <View className="flex-row items-end justify-between gap-3 mt-4">
-                  {discount > 0 ? (
-                    <>
-                      <View className="flex-1 min-w-0">
-                        <View className="bg-primary/12 self-start rounded-full ">
-                          <Text className="text-sm font-bold text-primary">
-                            {t("userStore.detail.discountFmt").replace("{{pct}}", String(discount))}
+                  <View className="flex-row items-center bg-secondary rounded-xl border border-border px-4 py-3">
+                    <Text className="text-base font-bold text-muted-foreground mr-2">{sym}</Text>
+                    <TextInput
+                      className="flex-1 text-lg font-semibold text-foreground py-0.5"
+                      placeholder={formatThousandsFromDigits(String(product.flexible_min ?? 0))}
+                      placeholderTextColor="#737373"
+                      keyboardType="numeric"
+                      value={formatThousandsFromDigits(flexDigits)}
+                      onChangeText={(txt) => setFlexDigits(txt.replace(/\D/g, ""))}
+                    />
+                  </View>
+                </>
+              ) : (
+                <>
+                  <View className="flex-row items-end justify-between gap-3 mt-4">
+                    {discount > 0 ? (
+                      <>
+                        <View className="flex-1 min-w-0">
+                          <View className="bg-primary/12 self-start rounded-full ">
+                            <Text className="text-sm font-bold text-primary">
+                              {t("userStore.detail.discountFmt").replace("{{pct}}", String(discount))}
+                            </Text>
+                          </View>
+                          <Text className="text-sm text-muted-foreground line-through">
+                            {currencySymbol(product.display_currency)}
+                            {(product.face_value ?? 0).toLocaleString()}
                           </Text>
                         </View>
-                        <Text className="text-sm text-muted-foreground line-through">
+                        <Text className="text-2xl font-bold text-foreground shrink-0">
                           {currencySymbol(product.display_currency)}
-                          {(product.face_value ?? 0).toLocaleString()}
+                          {(product.price ?? 0).toLocaleString()}
                         </Text>
-                      </View>
-                      <Text className="text-2xl font-bold text-foreground shrink-0">
+                      </>
+                    ) : (
+                      <Text className="text-2xl font-bold text-foreground">
                         {currencySymbol(product.display_currency)}
                         {(product.price ?? 0).toLocaleString()}
                       </Text>
-                    </>
-                  ) : (
-                    <Text className="text-2xl font-bold text-foreground">
-                      {currencySymbol(product.display_currency)}
-                      {(product.price ?? 0).toLocaleString()}
-                    </Text>
-                  )}
-                </View>
+                    )}
+                  </View>
 
-                <Text className="text-sm font-medium text-foreground mt-4 mb-1">{t("userStore.detail.quantity")}</Text>
-                <View className="flex-row items-center self-start bg-secondary rounded-xl border border-border">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="rounded-xl rounded-r-none"
-                    onPress={() => setQuantity(Math.max(1, quantity - 1))}
-                  >
-                    <Minus size={18} color="#0a0a0a" />
-                  </Button>
-                  <Text className="text-base font-semibold min-w-[44px] text-center text-foreground">
-                    {quantity}
-                  </Text>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="rounded-xl rounded-l-none"
-                    onPress={() => setQuantity(quantity + 1)}
-                  >
-                    <Plus size={18} color="#0a0a0a" />
-                  </Button>
+                  <Text className="text-sm font-medium text-foreground mt-4 mb-1">{t("userStore.detail.quantity")}</Text>
+                  <View className="flex-row items-center self-start bg-secondary rounded-xl border border-border">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="rounded-xl rounded-r-none"
+                      onPress={() => setQuantity(Math.max(1, quantity - 1))}
+                    >
+                      <Minus size={18} color="#0a0a0a" />
+                    </Button>
+                    <Text className="text-base font-semibold min-w-[44px] text-center text-foreground">
+                      {quantity}
+                    </Text>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="rounded-xl rounded-l-none"
+                      onPress={() => setQuantity(quantity + 1)}
+                    >
+                      <Plus size={18} color="#0a0a0a" />
+                    </Button>
+                  </View>
+                </>
+              )}
+            </View>
+
+            <View className="bg-white rounded-2xl border border-border overflow-hidden mt-3">
+              {detailImgUri ? (
+                <Image source={{ uri: detailImgUri }} className="w-full" style={{ aspectRatio: 1 }} resizeMode="cover" />
+              ) : (
+                <View className="w-full py-10 items-center justify-center bg-muted/30">
+                  <Text className="text-3xl">🖼️</Text>
+                  <Text className="text-xs text-muted-foreground mt-2">{t("userStore.detail.description")}</Text>
                 </View>
-              </>
-            )}
+              )}
+              <View className="p-5">
+                <Text className="text-sm font-semibold text-foreground mb-2">{t("userStore.detail.description")}</Text>
+                <Text className="text-sm text-muted-foreground leading-5">
+                  {product.description || "-"}
+                </Text>
+              </View>
+            </View>
           </View>
         </ScrollView>
 

@@ -234,11 +234,11 @@ export default function PaymentProcessScreen() {
                 : `\n${t("userPaymentProcess.successCheckMy")}`}
             </Text>
             {hasMore ? (
-              <Button className="mt-6 w-full" onPress={() => router.replace("/(user)/cart")}>
+              <Button className="mt-6 w-full" textClassName="w-full text-center" onPress={() => router.replace("/(user)/cart")}>
                 {t("userPaymentProcess.backToCart")}
               </Button>
             ) : (
-              <Button className="mt-6 w-full" onPress={() => router.replace("/(user)/oth-path")}>
+              <Button className="mt-6 w-full" textClassName="w-full text-center" onPress={() => router.replace("/(user)/oth-path")}>
                 {t("userPaymentProcess.viewMyGifti")}
               </Button>
             )}
@@ -258,7 +258,7 @@ export default function PaymentProcessScreen() {
               {debugError}
             </Text>
           ) : null}
-          <Button className="mt-6 w-full" onPress={() => router.back()}>
+          <Button className="mt-6 w-full" textClassName="w-full text-center" onPress={() => router.back()}>
             {t("userPaymentProcess.goBack")}
           </Button>
         </View>

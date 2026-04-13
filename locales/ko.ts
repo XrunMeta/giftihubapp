@@ -624,6 +624,7 @@ export const ko: MessageTree = {
       purchaseAmount: "구매 금액 ({{currency}})",
       discountFmt: "{{pct}}% 할인",
       quantity: "수량",
+      description: "상품 설명",
       addToCart: "장바구니",
       buyNow: "구매하기",
     },

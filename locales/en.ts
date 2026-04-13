@@ -624,6 +624,7 @@ export const en: MessageTree = {
       purchaseAmount: "Amount ({{currency}})",
       discountFmt: "{{pct}}% off",
       quantity: "Quantity",
+      description: "Product Description",
       addToCart: "Add to cart",
       buyNow: "Buy now",
     },
