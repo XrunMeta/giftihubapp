@@ -1,7 +1,7 @@
 
 
 export const images = {
-  logo: require("./logo.png"),
+  logo: require("./symbol.png"),
 
   placeholder: require("./icon.png"),
 } as const;

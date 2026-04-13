@@ -49,8 +49,11 @@ export default function MerchantMarketDetailScreen() {
   const isSet = !!(listing as any).set_id;
 
   return (
-    <SafeAreaView className="flex-1 bg-white" edges={["top"]}>
-      <PageHeader title={t("merchant.marketDetail.title")} />
+    <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
+      <PageHeader
+        title={t("merchant.marketDetail.title")}
+        onBackPress={() => router.navigate("/(merchant)/market")}
+      />
       <ScrollView className="flex-1 px-5" contentContainerStyle={{ paddingBottom: 0 }}>
         {(() => {
           const imgUri = resolveImageUrl(listing.image_url, listing.brand_logo);
@@ -62,7 +65,7 @@ export default function MerchantMarketDetailScreen() {
             </View>
           );
         })()}
-        <View className="bg-card rounded-xl border border-border p-5 mt-3">
+        <View className="bg-card rounded-xl border border-border p-5 mt-3 ">
           <View className="flex-row justify-between items-start">
             <View className="flex-1">
               <View className="flex-row items-center gap-2">
@@ -109,7 +112,7 @@ export default function MerchantMarketDetailScreen() {
         </View>
       </ScrollView>
 
-      <View className="px-5 pt-3 pb-2 border-t border-border">
+      <View className="px-5 pt-3 pb-2 border-t border-border bg-white">
         <Button
           onPress={() =>
             router.push({

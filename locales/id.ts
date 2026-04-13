@@ -342,6 +342,7 @@ export const id: MessageTree = {
       voucherUsed: "Terpakai",
       voucherExpired: "Kedaluwarsa",
       voucherListed: "Dijual",
+      requestedAt: "Diajukan",
       purchasePrice: "Beli",
       fee: "Biaya",
       payout: "Bayar",

@@ -1,0 +1,2010 @@
+╭─── Claude Code v2.1.92 ──────────────────────────────────────────────────────╮
+│                                                    │ Tips for getting        │
+│                Welcome back sungji!                │ started                 │
+│                                                    │ Run /init to create a … │
+│                       ▐▛███▜▌                      │ ─────────────────────── │
+│                      ▝▜█████▛▘                     │ Recent activity         │
+│                        ▘▘ ▝▝                       │ No recent activity      │
+│  Sonnet 4.6 · Claude Pro · oth-user@example.invalid's   │                         │
+│  Organization                                      │                         │
+│              ~/dev/gifticon/gfitihub               │                         │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+❯ 기프티콘 작업 할거야. 이번에 커밋 들어온거도 있으니까 확인해줘                
+
+⏺ Bash(git log --oneline -15 && echo "---" && git status)
+  ⎿  41fca7f 여백수정정
+     2c52766 여백 정리리
+     94f085e 스토어 상세페에지 여백 정리리
+     … +16 lines (ctrl+o to expand)
+
+⏺ 안녕 히즈키! 쿠로팀 대기 완료야 ✨ 기프티콘 프로젝트 최근 커밋 확인했어!
+
+  🐱 쿠로: 최근 작업은 대부분 UI 여백/디자인 다듬기 위주네.
+
+  최근 커밋 흐름:
+  - 41fca7f 여백 수정
+  - 2c52766 여백 정리
+  - 94f085e 스토어 상세페이지 여백 정리
+  - 6ecb96e 스토어 상세페이지 디자인 수정
+  - 261905c 판매등록페이지 배경 회색 변경
+  - adb4e2c 판매등록 페이지 레이아웃 수정
+  - 3ba9a38 구성구매 가격입력 콤마 표시
+  - cf99091 바코드 입력폼 배경 흰색
+  - 03e401b 스크롤 하단 여백 제거
+
+  작업트리는 깨끗해 (main 브랜치). 이번엔 뭐 작업할까? 기획부터 잡을지, 바로
+  코딩 라인(나츠/미코/레이) 붙일지 알려줘!
+
+❯ 메트로 실행하고, 세팅했는데, 에러가 있나봐, 실행자체는 괜찮은데, 웹으로       
+열어보니까 에러네. › Metro waiting on exp://203.0.113.20:8081                   
+› Scan the QR code above with Expo Go (Android) or the Camera app (iOS)         
+
+› Web is waiting on http://localhost:8081 !                                     
+
+Log 1 of 1                                                                      
+Uncaught Error                                                                  
+ExpoSecureStore.default.getValueWithKeyAsync is not a function. (In             
+'ExpoSecureStore.default.getValueWithKeyAsync(key, options)',                   
+'ExpoSecureStore.default.getValueWithKeyAsync' is undefined)                    
+Source                                                                          
+
+ 102 |                                                                          
+
+ 103 |                                                                          
+
+if                                                                              
+ (                                                                              
+!                                                                               
+response                                                                        
+.                                                                               
+ok) {                                                                           
+>                                                                               
+ 104 |                                                                          
+
+const                                                                           
+ body                                                                           
+=                                                                               
+
+await                                                                           
+ response                                                                       
+.                                                                               
+json()                                                                          
+.                                                                               
+catch                                                                           
+(()                                                                             
+=>                                                                              
+
+null                                                                            
+)                                                                               
+;                                                                               
+
+     |                                                                          
+
+^                                                                               
+
+ 105 |                                                                          
+
+throw                                                                           
+
+new                                                                             
+
+ApiError                                                                        
+(response                                                                       
+.                                                                               
+status                                                                          
+,                                                                               
+ body)                                                                          
+;                                                                               
+
+ 106 |                                                                          
+   }                                                                            
+
+ 107 |                                                                          
+Call Stack                                                                      
+apiFetch                                                                        
+services/api.ts:104:57                                                          
+See 3 more frames 일단 확인만 해줘 나중에 고칠께                                
+
+⏺ expo-secure-store는 웹에서 동작 안 해. 네이티브 전용 모듈이라 웹에서 호출하면
+  getValueWithKeyAsync is undefined 에러가 떠.
+
+  원인: 토큰 저장/조회 로직이 SecureStore를 직접 쓰고 있어서 웹 빌드에서 깨지는
+  거야. 보통 Platform.OS === 'web'일 때 localStorage로 폴백하면 해결돼.
+
+  확인만 해두고 나중에 고칠 때 알려줘! 🐱
+
+❯ 그렇군, expo 앱에서 실행하면 안되는 이유는 뭘까?                              
+
+⏺ Expo Go(네이티브 앱)에서는 expo-secure-store가 정상 동작해서 그 에러는 안 떠.
+  만약 Expo Go에서도 안 된다면 다른 원인일 가능성이 커.
+
+  네이티브에서 안 되는 흔한 이유들:
+
+  1. SDK/패키지 버전 불일치 — expo-secure-store가 현재 Expo SDK 버전과 안 맞으면
+   네이티브 모듈 링크가 깨져서 똑같이 undefined 나올 수 있어. (npx expo install 
+  expo-secure-store로 맞춰야 함)
+  2. 개발 빌드 vs Expo Go — 커스텀 네이티브 코드가 들어간 경우 Expo Go로는 못
+  열고 dev client 빌드가 필요해.
+  3. 메트로 캐시 문제 — npx expo start -c로 캐시 날리면 해결되는 경우 있음.
+  4. API 호출 자체 에러 — 스택트레이스가 services/api.ts:104 response.ok 체크
+  부분이라, SecureStore 에러랑 별개로 백엔드 응답이 실패하는 것일 수도 있어.
+  (토큰 못 읽음 → 인증 실패 → 401 → throw)
+
+  웹에서 본 에러는 SecureStore 미지원이 1차 원인이고, 그게 토큰 조회를 막아서
+  API 호출이 연쇄적으로 터진 거로 보여. 네이티브에서 멀쩡하면 진짜 웹 전용
+  이슈인거고, 네이티브도 같이 터지면 버전/캐시 쪽 의심해봐! 🐱
+
+❯ 사용자, 머천트 따로 확인해줄 부분, 구매내역, 결제내역 이 있는데, 중복되니까,  
+구매내역에서 자세히 보기.. > 표시갈은걸로, 해서 상세 내역 보기에서 결제내역     
+보여주기로 하면 좋겠음. 그러면 사용자 앱에서는 결제내역은 메뉴에서              
+삭제되는거야. 상점에서 정산정책은 페이지 만들고 세부 메뉴에서 선택하는걸로      
+해줘. 확인 버튼 만들어서 현재 상황과 바뀌면 저장하는걸로. api 체크 해서 이미    
+만들어진 부분이랑 연결하면 될거야. 혹시 다른 사항 있으면 알려줘.                
+머천트의 정산현황 페이지에서는 회차별로 묶어서 (전체관리자가 정산을 실행하는걸  
+묶음으로 하고 있는지부터 확인) 보여주면 좋겠어. 그리고 사용이력에서 정산 요청을 
+ 할 수 있도록 하는 버튼 만들어줘. 전체, 선택건, 으로 선택할 수 있는 인터페이스  
+필요해                                                                          
+
+⏺ Skill(superpowers:brainstorming)
+  ⎿  Successfully loaded skill
+
+  Searched for 2 patterns, listed 1 directory (ctrl+o to expand)
+
+⏺ 쿠로팀 확인 완료! 구조 파악했어. 관련 파일들:
+  - User: app/(user)/purchase.tsx, payment-process.tsx, settlement.tsx
+  - Merchant: app/(merchant)/history.tsx, settlement.tsx, record-payment.tsx,
+  settings.tsx
+  - Services: payment.ts, account.ts 등
+
+  브레인스토밍 모드로 들어갈게. 작업 범위가 꽤 크니까 한 번에 하나씩 물어볼게
+  (스킬 규칙).
+
+  먼저 큰 그림 확인: 이번 작업을 하나의 스펙으로 묶을지 분리할지 결정하고 싶어.
+  내가 본 요청은 크게 3덩어리야:
+
+  1. (User) 구매내역 통합 — 결제내역 메뉴 제거 + 구매내역 상세에 결제내역 병합
+  2. (Merchant) 정산정책 페이지 — settings 하위 메뉴 + 저장 버튼
+  3. (Merchant) 정산현황 회차별 묶음 + 정산요청 버튼(전체/선택)
+
+  Q1. 이 셋을 어떻게 진행할까?
+
+  - A) 한 스펙·한 PR로 묶어서 진행 (연관성 있으니 일괄)
+  - B) 3개 별도 스펙으로 쪼개서 순차 진행 (각각 리뷰/배포)
+  - C) User쪽(1번) 먼저 끝내고 → Merchant쪽(2,3번) 따로
+
+  어느 쪽으로 갈까? 🐱
+
+❯ 일괄로 하되 각각 부분별로 할수 있지 않아? 아.. C가 그렇구나. 응 진행해보자    
+
+⏺ 좋아 C로 진행! User쪽(구매내역 통합) 먼저 끝내고 Merchant로 넘어갈게.
+
+  ---
+  Phase 1: User 구매내역 통합
+
+  Q2. 현재 app/(user)/purchase.tsx(구매내역)와 payment-process.tsx(결제내역으로
+  추정) 두 화면이 어떻게 연결돼 있는지 확인이 필요해. 우선 구조 의도부터 명확히
+  할게:
+
+  "결제내역"의 정의 — 어느 쪽이야?
+
+  - A) 결제내역 = USDT 충전/출금 같은 지갑 트랜잭션 내역 (구매와는 별개
+  자금흐름)
+  - B) 결제내역 = 구매할 때 발생한 결제 트랜잭션 로그 (구매 1건 = 결제 1건,
+  그래서 중복)
+  - C) 잘 모르겠음 → 내가 두 파일 읽고 파악해서 알려줄게
+
+  답 골라줘! 🐱
+
+❯ B가 되겠지,                                                                   
+
+⏺ 오케이 B로 확정. 구매=결제 1:1이라 중복이지.
+
+  Q3. 구매내역 리스트 → 상세 화면 진입 방식:
+
+  - A) 기존 purchase.tsx 각 행에 > 아이콘 추가하고 탭하면 새 
+  라우트(purchase-detail.tsx)로 push
+  - B) 행을 아코디언으로 펼쳐서 같은 화면에서 결제 상세 표시
+  - C) 모달/바텀시트로 상세 띄우기
+
+  어느 패턴이 좋아? (이 앱 다른 화면들 보면 A 패턴이 일관성 있어 보이는데,
+  히즈키 선호 알려줘) 🐱
+
+❯ 음.. 여러개의 구매가 동시에 일어났다면 어떻게 되야 하지? 장바구니에서 3개 4개 
+ 한번에 구매하면, 구매건을 묶어서 보여주나?                                     
+
+⏺ 좋은 포인트야! 그건 데이터 모델 확인이 먼저야. 잠깐 코드 봐도 될까?
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ 앗 중요한 발견! purchase.tsx는 "구매내역"이 아니라 체크아웃(결제) 화면이야.
+  장바구니에서 통화별로 결제수단 고르는 페이지. 그럼 진짜 "구매내역/결제내역"
+  메뉴는 다른 곳(mypage 등)에 있을 거야. 좀 더 찾아볼게.
+
+  Searched for 2 patterns (ctrl+o to expand)
+⏺ plugin:context-mode:context-mode - ctx_execute (MCP)(language: "shell", code:
+                                                      "cd /Users/weeinhwa/dev/gi
+                                                      fticon/gfitihub && grep -n
+                                                       \"구매\\|결제\\|history\\
+                                                      |purchase\\|payment\"
+                                                      app/\\(user\\)/mypage.tsx
+                                                      | head -50")
+
+⏺ plugin:context-mode:context-mode - ctx_execute (MCP)(language: "shell", code:
+                                                      "cd /Users/weeinhwa/dev/gi
+                                                      fticon/gfitihub && sed -n
+                                                      '75,110p' app/\\(user\\)/m
+                                                      ypage.tsx")
+
+⏺ 찾았어! 재밌는거 발견 — mypage.tsx에서 "구매 이력"과 "결제 내역" 두 메뉴 모두 
+  같은 /(user)/settlement 라우트로 가 있어 ㅋㅋ 이미 중복 그 자체.
+  (mypage.tsx:84-92)
+
+  이제 데이터 모델 확인할게:
+
+⏺ plugin:context-mode:context-mode - ctx_execute (MCP)(language: "shell", code:
+                                                      "cd /Users/weeinhwa/dev/gi
+                                                      fticon/gfitihub && wc -l
+                                                      app/\\(user\\)/settlement.
+                                                      tsx services/payment.ts
+                                                      services/store.ts && echo
+                                                      \"---PAYMENT API---\" &&
+                                                      grep -n
+                                                      \"export\\|function\\|orde
+                                                      r\\|purchase\\|payment\"
+                                                      services/payment.ts | head
+                                                       -40")
+
+⏺ plugin:context-mode:context-mode - ctx_execute (MCP)(language: "shell", code:
+                                                      "cd /Users/weeinhwa/dev/gi
+                                                      fticon/gfitihub && cat app
+                                                      /\\(user\\)/settlement.tsx
+                                                       && echo \"---STORE---\"
+                                                      && grep -n \"export\\|orde
+                                                      r\\|purchase\\|history\\|t
+                                                      ransaction\"
+                                                      services/store.ts")
+
+⏺ plugin:context-mode:context-mode - ctx_execute (MCP)(language: "shell", code:
+                                                      "cd /Users/weeinhwa/dev/gi
+                                                      fticon/gfitihub && grep -n
+                                                       \"getPurchases\\|purchase
+                                                      \\|order\"
+                                                      services/account.ts | head
+                                                       -30")
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ 전체 그림이 잡혔어! 정리해줄게:
+
+  📋 현황 파악
+
+  API는 사실 2개로 분리돼 있어 (account.ts):
+  - GET /oth-path → 구매한 기프티콘 단위 (voucher_name, amount,
+  payment_method)
+  - GET /oth-path → 결제 트랜잭션 단위 (status, method, type)
+
+  현재 UI 상태:
+  - mypage 메뉴 "구매 이력"·"결제 내역" 둘 다 같은 /(user)/settlement로 라우트됨
+   (mypage.tsx:84-92, 그냥 임시연결)
+  - settlement.tsx는 getPurchases만 호출 → 사실상 구매목록만 보여줌
+  - getPayments API는 만들어져 있지만 아무 화면도 안 씀
+
+  💡 히즈키 질문에 대한 답
+
+  ▎ "장바구니에서 3-4개 한꺼번에 구매하면 묶음으로?"
+
+  데이터 모델상 payment(결제) 1건 ↔ purchase(구매) N건 구조일 가능성이 높아. 즉:
+  - 장바구니 4개 결제 = payments 1행 + purchases 4행
+  - 둘을 묶는 키(payment_id 같은 거)가 있어야 함
+
+  근데 현재 getPurchases 응답 타입이 unknown이라 payment_id 필드가 실제로 있는지
+   백엔드 확인 필요해.
+
+  ---
+  Q4. 그래서 UX 방향을 두 가지로 제안할게:
+
+  - A) 결제(payment) 중심 리스트 ⭐ 추천
+    - 메인 리스트 = 결제 1건 = 카드 1개 (예: "2026-04-06 ₩45,000 / 4개 상품")
+    - > 탭 → 상세에서 그 결제에 포함된 기프티콘 4개 + 결제수단/상태 표시
+    - 장바구니 묶음 구매가 자연스럽게 1카드로 보임 ✨
+  - B) 구매(purchase) 중심 리스트 (현재 구조 유지)
+    - 메인 리스트 = 기프티콘 1건 = 카드 1개 (4개 사면 4카드)
+    - > 탭 → 같은 결제에 묶인 형제 기프티콘들 + 결제 상세 표시
+
+  A가 히즈키가 말한 "묶음" 컨셉에 더 맞아 보이는데 어때? 🐱
+
+  (그리고 백엔드에 payment_id가 purchases에 포함돼 있는지 확인 필요한데, 이건
+  세이한테 맡길까 아니면 스펙 작성 후 확인 단계로 넣을까?)
+
+✻ Brewed for 1m 4s
+
+❯ 결제 중심으로 하는게 맞네. 세이한테 알아보라고 해봐                           
+
+⏺ 오케이! 세이(데이터 담당) 출동시킬게. 백엔드 API 스키마 확인 맡길게.
+
+⏺ Explore(Check purchases payment_id schema)
+  ⎿  Done (5 tool uses · 50.4k tokens · 32s)
+  (ctrl+o to expand)
+
+⏺ 🐱 세이 보고 정리
+
+  핵심 발견 (히즈키 의사결정에 영향):
+
+  1. 백엔드는 별도 레포 — /Users/weeinhwa/dev/gifticon/gitihubAPI (Hono + D1)
+  2. 장바구니 묶음 구매 = 현재 백엔드에 없음 ⚠️
+    - 1 아이템 = 1 payment + 1 transaction (1:1 모델)
+    - 카트에서 4개 사면 → payments 4행 + transactions 4행 (각각 별개)
+    - 묶는 키(cart_id, order_id) 자체가 스키마에 없음
+  3. purchases ↔ payments 직접 FK 없음
+    - 연결고리: transactions.payment_tx_id ↔ payments.external_id (문자열 매칭,
+  무결성 약함)
+  4. API 응답 필드는 풍부해 — voucher_name, brand, amount, payment_method,
+  status 등 표시할 데이터는 충분
+
+  ---
+  ⚠️ 중요한 갈림길
+
+  원래 "결제 중심 리스트(A안)"로 가려면 장바구니 묶음 컨셉이 백엔드에 있어야
+  자연스러운데, 현재는 1결제=1상품이라 사실상 A와 B가 거의 같아져버려.
+
+  Q5. 이거 어떻게 갈까?
+
+  - A) 프론트만 작업 — 일단 1결제=1상품 그대로 두고, settlement 화면을
+  /oth-path 기반으로 재구성. > 상세에서 결제 메타정보(상태/tx_hash/외부
+  결제ID 등) 보여주기. 묶음은 미래 작업.
+  - B) 백엔드부터 손대기 — payments 또는 새 orders 테이블에 cart_id /
+  order_group_id 추가 마이그레이션 → 체크아웃 API 수정 → 프론트 작업. (작업량
+  큼, 세이+미코+나츠 조합 필요)
+  - C) 절충 — 같은 created_at 초 단위 + 같은 user + 같은 method를 프론트에서 
+  그루핑해서 묶음처럼 보여주기 (해킹스럽지만 빠름)
+
+  장바구니 묶음 구매가 실제로 자주 일어나는 시나리오야? 우선순위 알려줘 🐱
+✻ Baked for 1m 1s
+
+❯ 백엔드부터 하자, 초기에 잡는게 낫지. B 로 선택                                
+
+⏺ 좋아 B! 초기에 잡는게 정답이야. 스코프가 커지니까 데이터 모델부터 정하자.
+
+  Q6. 묶음을 어떻게 표현할까?
+
+  - A) 새 orders 테이블 추가 ⭐ 추천
+    - orders(id, user_id, total_amount, currency, payment_method, status, 
+  created_at)
+    - payments.order_id FK 추가
+    - transactions.order_id FK 추가
+    - 장점: 깔끔, 미래 확장(주문취소·환불·영수증) 쉬움
+    - 단점: 마이그레이션 + 체크아웃 핸들러 리팩터 필요
+  - B) payments에 order_group_id 컬럼만 추가
+    - 같은 묶음 결제는 같은 UUID 공유
+    - 장점: 마이그레이션 작음, 코드 변경 적음
+    - 단점: "주문" 개념이 없어서 상태/총액 집계는 매번 GROUP BY
+  - C) payments를 1:N으로 만들기 (payments가 부모, 새 payment_items 자식)
+    - 장점: payments가 곧 주문 역할
+    - 단점: 기존 payments 의미가 바뀌어서 호환성 깨짐
+
+  A가 향후 환불/취소·영수증·정산 같은 머천트 작업에도 자연스러울 거 같은데 어때?
+   🐱
+
+❯ A 로 가자. 나중에 환불할때에는 부분 환불도 문제 없겠지?                       
+
+⏺ A 좋아! 부분환불도 orders 모델이 오히려 부분환불에 유리해.
+
+  왜 가능한가:
+  - orders = 묶음(헤더), transactions/payments = 라인아이템(자식)
+  - 부분환불은 "라인 단위 상태 변경"으로 표현됨:
+    - transactions.status 또는 새 컬럼 refund_status (none/partial/full)
+    - 각 라인에 refunded_amount 누적
+    - orders.status는 자식 상태 집계로 결정 (paid → partially_refunded →
+  refunded)
+
+  필요한 추가 설계 (지금 미리 잡아두면 좋은 것):
+
+  1. refunds 테이블 (나중에 만들더라도 자리는 남겨두기)
+    - id, order_id, transaction_id(nullable=전체환불), amount, reason, status, 
+  created_at
+    - transaction_id가 있으면 부분환불, 없으면 전체환불
+  2. orders.status enum 확장
+    - pending → paid → partially_refunded → refunded → cancelled
+  3. 금액 무결성 규칙
+    - sum(refunds.amount where order_id=X) ≤ orders.total_amount
+    - DB 트리거 or 애플리케이션 레벨 체크 (세이가 잡을 부분)
+
+  다만 주의: 결제수단별로 부분환불 가능 여부가 달라.
+  - USDT(크립토): 부분환불 = 새 송금 트랜잭션 발생 (가스비 이슈)
+  - PayPal/DANA/SmileyPay: PG사 API가 부분환불 지원 여부 확인 필요
+
+  지금 스펙에는 **"orders 모델은 부분환불을 수용 가능한 구조로 설계한다"**까지만
+   명시하고, 실제 환불 구현은 별도 페이즈로 미루는 게 좋아 보여.
+
+  ---
+  Q7. 이번 스펙(Phase 1)에 환불 관련해서 어디까지 포함할까?
+
+  - A) 스키마만 환불 대비 (orders.status enum + 컬럼 자리만), 환불 API/UI는 다음
+   페이즈 ⭐ 추천
+  - B) 환불 API까지 같이 (UI는 미래)
+  - C) 환불 전체 (API + 머천트 UI까지) — 스코프 폭발 ⚠️
+
+  🐱
+
+❯ A 로 가자 환불은 나중에 할일로 기억해줘. 다음은 뭐지?                         
+
+⏺ 환불 건은 메모리에 저장해둘게.
+
+  Listed 1 directory, wrote 2 memories (ctrl+o to expand)
+
+⏺ 메모리 저장 완료 ✅
+
+  ---
+  다음 단계 (Phase 1 진행도)
+
+  지금까지 결정된 것:
+  - ✅ User 구매내역 통합부터 (C 옵션, User → Merchant 순서)
+  - ✅ 결제 중심 리스트 (A안)
+  - ✅ 백엔드부터 손대기 (orders 모델 신규)
+  - ✅ 새 orders 테이블 도입 (option A)
+  - ✅ 환불은 추후 (스키마 자리만)
+
+  남은 결정:
+
+  Q8. 체크아웃 흐름 — 트랜잭션 경계
+
+  장바구니 4개 결제할 때 백엔드가 어떻게 처리할까?
+
+  - A) 1 order + 1 payment + N transactions ⭐ 추천
+    - 결제수단(예: PayPal) 1번 호출 → 총액으로 1번 결제 → 성공 시 N개 voucher
+  발행
+    - 장점: PG 수수료 1번, UX 단순 (체크아웃 1번)
+    - 단점: 일부 voucher 재고 부족 시 롤백 처리 필요
+  - B) 1 order + N payment + N transactions
+    - 묶음(order)은 논리적, 결제는 아이템별로 N번
+    - 장점: 부분 성공 가능 (3개 성공 1개 실패도 OK)
+    - 단점: PG 수수료 N배, UX 복잡
+  - C) 결제수단별 다름 (USDT는 1번, 카드는 N번 등)
+    - 단점: 케이스 폭발
+
+  A가 일반적인 이커머스 패턴이고 우리 도메인(기프티콘)에도 맞을 것 같아. 어때?
+  🐱
+
+❯ A 가 맞겠지..                                                                 
+
+⏺ 좋아 A 확정. 계속 진행할게.
+
+  ---
+  Q9. 재고 부족 시 롤백 정책
+
+  A안의 단점인 "일부 voucher 재고 부족 시" 처리:
+
+  - A) Pre-check 후 결제 ⭐ 추천
+    - 결제 호출 전에 모든 아이템 재고 락(reserve) → 다 OK면 PG 결제 → 성공 시
+  발행 → 실패 시 락 해제
+    - 장점: 결제 실패/환불 거의 없음
+    - 단점: 재고 락 TTL(예: 5분) 관리 필요
+  - B) 결제 후 발행 시점에 체크
+    - 결제 먼저 받고 발행 시 부족하면 자동 환불
+    - 단점: 환불 로직 필요(이번 페이즈 제외했음 ⚠️) → 모순
+  - C) 낙관적: 그냥 발행 시 fail → 전체 주문 실패 처리
+    - 단점: 결제는 성공했는데 주문 실패 = 환불 필요 → 같은 모순
+
+  환불을 미뤘으니 사실상 A밖에 답이 없어. 동의하면 A로 갈게.
+
+  Q10도 기다리고 있어:
+
+  Q10. orders 상태머신
+
+  pending → paid → fulfilled → (cancelled) 정도면 충분할까, 아니면 더 세분화?
+
+  - A) 단순: pending → paid → fulfilled (+ 환불 enum 자리만)
+  - B) 세분: pending → reserved → paid → fulfilling → fulfilled (재고락 단계
+  노출)
+
+  A면 충분할 거 같은데, 히즈키 의견은? 🐱
+
+❯ 당연히 먼저 체크 해야지. B로 하는게 좋을 듯. 혹시나 나중에 상세한 거 필요할   
+수 있어                                                                         
+
+⏺ 오케이! Q9=A(pre-check), Q10=B(세분 상태머신) 확정.
+
+  남은 큼직한 결정 빠르게 묶어서 갈게:
+
+  ---
+  Q11. API 엔드포인트 변경
+
+  - A) 신규 /oth-path 시리즈 ⭐ 추천
+    - POST /oth-path (체크아웃, 카트 → order 생성+pre-check+결제)
+    - GET /oth-path (목록)
+    - GET /oth-path (상세, 라인아이템 포함)
+    - 기존 /oth-path, /oth-path는 deprecated 처리 (당분간 유지)
+  - B) 기존 엔드포인트에 묶어서
+    - 기존 purchases 응답에 order_id 추가만 하고 프론트에서 그루핑
+    - 단점: 지난 결정(백엔드부터 제대로) 어김
+
+  A로 갈게, 동의?
+
+  ---
+  Q12. 프론트 화면 구조 (User)
+
+  - /(user)/settlement.tsx → 이름은 그대로 두고 내용만 교체할까, 아니면 새
+  라우트?
+  - A) settlement.tsx 폐기 → purchase-history.tsx 신규 + mypage 메뉴 1개로 통합
+  ⭐ 추천
+  - B) settlement.tsx 내용만 갈아끼우고 파일명 유지 (마이그레이션 흔적 적음)
+
+  A는 의미가 명확해지지만 라우트 변경. B는 실용적.
+
+  ---
+  Q13. 머천트 영역 영향
+
+  이번 Phase 1은 User 영역만 손대는 거 맞지? 머천트의
+  history.tsx/settlement.tsx는 Phase 2에서 다룰 예정인데, orders 모델 도입하면
+  머천트 쿼리도 영향받을 텐데:
+
+  - A) Phase 1: 백엔드 orders + User 화면만. 머천트 화면은 기존 API 그대로 두고
+  Phase 2에서 일괄 작업 ⭐ 추천
+  - B) Phase 1에서 머천트 백엔드 쿼리도 같이 마이그레이션
+
+  A로 가면 깔끔, 동의?
+
+  ---
+  세 개 한 번에 답해줘 (A/A/A 식으로). 그러면 디자인 문서 작성으로 넘어갈게! 🐱
+
+❯ 추천 대로 가자. 머천트영역은.. 천천히 하자. 모두 추천대로야                   
+
+⏺ 좋아! 모든 결정 확정 ✨ 디자인 문서 만들기 전에 최종 합의용 요약 보여줄게.
+
+  ---
+  📐 Phase 1 디자인 요약
+
+  목표
+
+  User 영역의 "구매내역/결제내역" 중복 메뉴를 제거하고, 장바구니 묶음 결제를
+  자연스럽게 표현하는 orders 모델 도입.
+
+  백엔드 (gitihubAPI 레포)
+
+  신규 마이그레이션:
+  CREATE TABLE orders (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    total_amount INTEGER NOT NULL,
+    currency TEXT NOT NULL,
+    payment_method TEXT NOT NULL,
+    status TEXT NOT NULL,  -- pending|reserved|paid|fulfilling|fulfilled|partial
+  ly_refunded|refunded|cancelled
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL
+  );
+  ALTER TABLE payments ADD COLUMN order_id TEXT REFERENCES orders(id);
+  ALTER TABLE transactions ADD COLUMN order_id TEXT REFERENCES orders(id);
+  CREATE INDEX idx_orders_user ON orders(user_id, created_at DESC);
+
+  상태머신: pending → reserved → paid → fulfilling → fulfilled (+ 환불/취소
+  자리)
+
+  신규 엔드포인트:
+  - POST /oth-path — 체크아웃: order 생성 → 재고 reserve(TTL 5분) → PG 결제 →
+  voucher 발행 → fulfilled
+  - GET /oth-path — 페이지네이션 목록 (요약: 총액/아이템수/상태/생성일)
+  - GET /oth-path — 상세 (라인아이템 voucher들 + payment 메타)
+
+  기존: /oth-path, /oth-path 는 deprecated 마킹 (Phase 2까지
+  유지)
+
+  프론트 (메인 레포)
+
+  파일 변경:
+  - ❌ app/(user)/settlement.tsx 제거
+  - ✨ app/(user)/purchase-history.tsx 신규 (orders 목록)
+  - ✨ app/(user)/purchase-history/[id].tsx 신규 (order 상세)
+  - ✏️ app/(user)/mypage.tsx — "구매 이력"·"결제 내역" 두 메뉴를 "구매 이력" 
+  1개로 통합, 라우트는 신규로
+  - ✏️ app/(user)/payment-process.tsx — 체크아웃 시 POST /oth-path 호출하도록
+  수정
+  - ✨ services/orders.ts 신규 — createOrder, getOrders, getOrder
+
+  UX:
+  - 목록 카드 = order 1건 (예: "2026-04-06 ₩45,000 · 4개 상품 · PayPal · 완료")
+  - > 탭 → 상세에서 라인아이템 4개 + 결제수단/상태/외부 결제ID
+
+  스코프 외 (이번엔 안 함)
+
+  - 환불 API/UI (스키마 자리만)
+  - 머천트 영역 (Phase 2)
+  - 웹 빌드 SecureStore 에러 (별도 작업)
+
+  ---
+  확인 부탁: 이대로 디자인
+  문서(docs/superpowers/specs/2026-04-06-user-orders-unification-design.md)에
+  작성해도 될까? 빠진 거나 바꿀 거 있어? 🐱
+
+❯ 응, 나중에 하것도 디자인문서에 포함해줘                                       
+
+⏺ Bash(mkdir -p docs/superpowers/specs)
+  ⎿  Done
+
+⏺ Write(docs/superpowers/specs/2026-04-06-user-orders-unification-design.md)
+  ⎿  Wrote 254 lines to
+     docs/superpowers/specs/2026-04-06-user-orders-unification-design.md
+       1 # User 구매내역 통합 + Orders 모델 도입 (Phase 1)
+       2 
+       3 **작성일:** 2026-04-06
+       4 **작성자:** 쿠로팀 (브레인스토밍: 히즈키 + 쿠로)
+       5 **상태:** 초안 (리뷰 대기)
+       6 **관련 레포:**
+       7 - 프론트: `/Users/weeinhwa/dev/gifticon/gfitihub` (이 레포)
+       8 - 백엔드: `/Users/weeinhwa/dev/gifticon/gitihubAPI` (Hono + Clou
+         dflare D1)
+       9 
+      10 ---
+     … +244 lines (ctrl+o to expand)
+
+⏺ Bash(git add
+      docs/superpowers/specs/2026-04-06-user-orders-unification-design.md && git
+       commit -m "$(cat <<'EOF'
+      docs: Phase 1 design — User 구매내역 통합 + orders 모델 도입…)
+  ⎿  [main aca7192] docs: Phase 1 design — User 구매내역 통합 + orders 모델
+      도입
+      1 file changed, 254 insertions(+)
+     … +2 lines (ctrl+o to expand)
+
+⏺ 디자인 문서 작성·커밋 완료! ✨
+
+  📄 docs/superpowers/specs/2026-04-06-user-orders-unification-design.md (커밋
+  aca7192)
+
+  자체 리뷰 결과: placeholder/모순 없음, 스코프 명확(Phase 1=User+백엔드
+  orders), 추후 작업(환불·머천트·웹 SecureStore)도 8장에 명시함.
+
+  ---
+  히즈키 리뷰 부탁 🐱
+
+  스펙 파일을 직접 확인해보고 빠진 거나 수정할 거 알려줘. 특히 봐줬으면 하는 곳:
+
+  1. 3장 데이터 모델 — orders.status enum, 환불 자리(refunded_amount)
+  2. 4장 API — POST /oth-path 요청/응답 구조
+  3. 5장 프론트 변경 목록 — 새 라우트 이름(purchase-history) OK?
+  4. 8장 추후 작업 — 머천트 작업 항목들이 히즈키가 말한 그대로 잡혔는지
+
+  수정사항 있으면 알려주고, OK면 다음 단계(writing-plans 스킬로 구현 계획서
+  작성)로 넘어갈게!
+✻ Churned for 1m 41s
+
+❯ 어 ? 2026-04-06-user-orders-unification-design.md 파일이 없는데?              
+/Users/weeinhwa/dev/gifticon/gitihubAPI/docs/superpowers/specs 에 있는거 아닌가 
+ ?                                                                              
+
+⏺ 아냐, 프론트 레포 쪽에 만들었어! 경로 확인:
+
+  📄 /Users/weeinhwa/dev/gifticon/gfitihub/docs/superpowers/specs/2026-04-06-use
+  r-orders-unification-design.md
+
+  (gfitihub ← 프론트, gitihubAPI ← 백엔드 — 헷갈리는 이름이지)
+
+  왜 프론트 레포에 뒀냐:
+  - 이 세션의 working directory가 프론트 레포라서 자동으로 여기 만들었어
+  - 근데 이 스펙은 양쪽 레포에 모두 영향(백엔드 orders 모델 + 프론트 화면)을
+  줘서 어디 두는 게 맞을지 애매해
+
+  옵션:
+  - A) 그대로 프론트 레포에 두기 (지금 상태)
+  - B) 백엔드 레포(gitihubAPI/docs/...)로 옮기기 — 마이그레이션이 거기서
+  일어나니까
+  - C) 양쪽 모두 복사 (싱크 부담 있음)
+  - D) 별도 docs 레포
+
+  어디로 할까? 옮기는 거면 git mv로 깔끔하게 처리할게 🐱
+
+❯ 어, 내가 원하는건 백엔드에 모든 기획, 디자인이 들어가는거야.                  
+
+⏺ 오케이! 백엔드 레포로 옮기고, 이건 앞으로 모든 작업에 적용될 규칙이니
+  메모리에도 저장할게.
+
+⏺ Bash(mkdir -p /Users/weeinhwa/dev/gifticon/gitihubAPI/docs/superpowers/specs
+      && git mv
+      docs/superpowers/specs/2026-04-06-user-orders-unification-design.md
+      /Users/wee…)
+  ⎿  fatal: '/Users/weeinhwa/dev/gifticon/gitihubAPI/docs/superpowers/specs
+     /' is outside repository at '/Users/weeinhwa/dev/gifticon/gfitihub'
+
+  Listed 1 directory (ctrl+o to expand)
+
+⏺ 파일 이동 완료. 기존 스펙들도 거기 있네 (settlement 설계까지!). 정리할 일들:
+
+⏺ Bash(git rm
+      docs/superpowers/specs/2026-04-06-user-orders-unification-design.md && git
+       commit -m "$(cat <<'EOF'
+      docs: move Phase 1 spec to backend repo (gitihubAPI)…)
+  ⎿  rm 'docs/superpowers/specs/2026-04-06-user-orders-unification-design.m
+     d'
+     [main df90229] docs: move Phase 1 spec to backend repo (gitihubAPI)
+     … +8 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to /Users/weeinhwa/dev/gifticon/gfitihub
+
+⏺ 메모리에도 저장할게:
+
+  Wrote 2 memories (ctrl+o to expand)
+
+⏺ 완료! ✅
+
+  현재 상태:
+  - 📄 스펙: /Users/weeinhwa/dev/gifticon/gitihubAPI/docs/superpowers/specs/2026
+  -04-06-user-orders-unification-design.md (커밋 5585ea2)
+  - 🧹 프론트 레포에서 제거 (커밋 df90229)
+  - 💾 메모리 저장: 앞으로 모든 스펙은 백엔드 레포에 작성
+
+  스펙 검토하고 OK면 다음 단계로 writing-plans 스킬 호출해서 구현 계획서 만들게
+  🐱
+
+✻ Baked for 42s
+
+❯ 오케이, 그럼 이후 구현(phase 2?) 쪽도, 유념해주고, 할일목록에 넣어줘. 다음    
+단계 가보자                                                                     
+
+  Wrote 2 memories (ctrl+o to expand)
+
+⏺ Phase 2 메모리 저장 완료 ✅ 이제 Phase 1 구현 계획서 작성으로 넘어갈게.
+
+⏺ Skill(superpowers:writing-plans)
+  ⎿  Successfully loaded skill
+
+⏺ writing-plans 스킬 시작할게.
+
+  스코프 체크: Phase 1 스펙은 사실상 두 개의 독립 구현 단위로 나뉘어 있어:
+
+  - Plan 1A (백엔드, gitihubAPI 레포): orders 마이그레이션 + 체크아웃 흐름 + 새
+  엔드포인트
+  - Plan 1B (프론트, gfitihub 레포): services/orders.ts + 새 화면 2개 + mypage
+  수정 + settlement 폐기
+
+  각각 독립적으로 테스트 가능하고, 1B는 1A가 배포된 후에 실행해야 해 (의존성).
+  두 개로 쪼개면:
+  - 각 플랜이 더 짧고 집중적
+  - 백엔드 먼저 배포·검증 후 프론트 작업
+  - 레포별로 PR 분리 가능
+
+  Q. 계획서를 어떻게 만들까?
+
+  - A) 두 개로 분리 ⭐ 추천: 2026-04-06-phase1a-orders-backend.md +
+  2026-04-06-phase1b-orders-frontend.md
+  - B) 하나로 통합: 2026-04-06-phase1-orders-unification.md (긴 파일이지만
+  한눈에 보임)
+
+  어느 쪽이 좋아? 🐱
+
+✻ Brewed for 50s
+
+❯ 좋아, 두 개 분리해서 진행 해 보자                                             
+⏺ 먼저 백엔드 구조를 파악해야 정확한 파일 경로/패턴으로 계획을 짤 수 있어.
+  빠르게 탐색할게.
+
+⏺ plugin:context-mode:context-mode - ctx_execute (MCP)(language: "shell", code:
+                                                      "cd /Users/weeinhwa/dev/gi
+                                                      fticon/gitihubAPI && ls &&
+                                                       echo \"---SRC---\" && ls
+                                                      src/ && echo
+                                                      \"---ROUTES---\" && ls
+                                                      src/routes/ 2>/dev/null &&
+                                                       echo \"---MIGRATIONS---\"
+                                                       && ls migrations/ | tail
+                                                      -20")
+
+⏺ plugin:context-mode:context-mode - ctx_execute (MCP)(language: "shell", code:
+                                                      "cd /Users/weeinhwa/dev/gi
+                                                      fticon/gitihubAPI && cat
+                                                      package.json | head -40 &&
+                                                       echo \"---\" && grep -rn
+                                                      \"purchaseProduct\\|/store
+                                                      /.*purchase\\|payments \"
+                                                      src/routes/store.ts
+                                                      src/routes/payment.ts
+                                                      2>/dev/null | head -20 &&
+                                                      echo \"---ACCOUNT---\" &&
+                                                      grep -n \"purchases\\|paym
+                                                      ents\\|orders\"
+                                                      src/routes/account.ts |
+                                                      head -20")
+
+⏺ plugin:context-mode:context-mode - ctx_execute (MCP)(language: "shell", code:
+                                                      "cd /Users/weeinhwa/dev/gi
+                                                      fticon/gitihubAPI && find
+                                                      . -name \"*.test.ts\" -not
+                                                       -path
+                                                      \"*/node_modules/*\"
+                                                      2>/dev/null | head -10 &&
+                                                      echo \"---\" && grep -l
+                                                      \"describe\\|it(\" src/ -r
+                                                       2>/dev/null | head -5 &&
+                                                      echo \"---PKG SCRIPTS---\"
+                                                       && grep -A2 \"test\"
+                                                      package.json | head -10")
+
+⏺ plugin:context-mode:context-mode - ctx_execute (MCP)(language: "shell", code:
+                                                      "cd /Users/weeinhwa/dev/gi
+                                                      fticon/gitihubAPI && sed
+                                                      -n '160,280p'
+                                                      src/routes/store.ts")
+
+⏺ 좋아 충분한 컨텍스트 수집했어. 핵심 발견:
+
+  - 테스트 프레임워크 없음 — type-check + 수동 curl/db query 검증으로 대체
+  - 마이그레이션 다음 번호: 0032
+  - 기존 패턴: src/routes/store.ts:170 POST /oth-path가 단일 상품
+  결제 핸들러 (이걸 새 orders 흐름으로 대체)
+  - Hono + D1 + Wrangler 구성
+
+  이제 두 개 플랜 작성할게.
+
+⏺ 좋아 충분한 컨텍스트야. 백엔드는 테스트 프레임워크 없이 type-check + curl + D1
+   쿼리로 검증하는 패턴이라 그에 맞춰 짤게. 다음 마이그레이션 번호는 0032.
+
+  플랜 두 개를 순차로 쓸게. 먼저 Plan 1A (백엔드).
+
+⏺ Write(~/dev/gifticon/gitihubAPI/docs/superpowers/plans/2026-04-06-phase1a-orde
+       rs-backend.md)
+  ⎿  Wrote 825 lines to
+     ../gitihubAPI/docs/superpowers/plans/2026-04-06-phase1a-orders-backend.md
+      1 # Phase 1A: Orders Backend Implementation Plan
+      2 
+      3 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:su
+        bagent-driven-development (recommended) or superpowers:executing-
+        plans to implement this plan task-by-task. Steps use checkbox (`-
+         [ ]`) syntax for tracking.
+      4 
+      5 **Goal:** 백엔드(`gitihubAPI`)에 `orders` 테이블을 신설하고, 장바
+        구니 묶음 결제를 1 order + 1 payment + N transactions로 표현하는 
+        새 체크아웃 API와 조회 API를 구현한다.
+      6 
+      7 **Architecture:** Hono + Cloudflare D1. 새 마이그레이션으로 `orde
+        rs` 테이블 + `payments`/`transactions`에 `order_id` FK 추가. `POS
+        T /oth-path`는 reserve → pay → fulfill 상태머신을 D1 트랜잭션 
+        안에서 구동한다. 기존 `POST /oth-path`는 deprecated
+         마킹 후 유지. 조회 엔드포인트(`GET /oth-path`, `GET /oth-path
+        /orders/:id`)를 신설.
+      8 
+      9 **Tech Stack:** Hono 4, Cloudflare Workers, D1 (SQLite), TypeScri
+        pt, wrangler
+     … +815 lines (ctrl+o to expand)
+
+⏺ Plan 1A 완료. 이제 Plan 1B (프론트).
+
+⏺ Plan 1A 완료. 이제 Plan 1B (프론트) 작성할게.
+
+⏺ Write(~/dev/gifticon/gitihubAPI/docs/superpowers/plans/2026-04-06-phase1b-orde
+       rs-frontend.md)
+  ⎿  Wrote 614 lines to
+     ../gitihubAPI/docs/superpowers/plans/2026-04-06-phase1b-orders-frontend.md
+      1 # Phase 1B: Orders Frontend Implementation Plan
+      2 
+      3 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:su
+        bagent-driven-development (recommended) or superpowers:executing-
+        plans to implement this plan task-by-task. Steps use checkbox (`-
+         [ ]`) syntax for tracking.
+      4 
+      5 **Goal:** 사용자 앱(`gfitihub`)에 새 `orders` API를 연동하여 "구
+        매 이력" 화면을 신설하고, 마이페이지의 중복 메뉴(구매 이력/결제 
+        내역)를 정리한다. 결제 흐름은 가능한 곳부터 `POST /oth-path`로 
+        전환.
+      6 
+      7 **Architecture:** Expo Router. 신규 `services/orders.ts`로 API 래
+        핑, `purchase-history` 라우트 신설, 기존 `settlement.tsx` 폐기. 
+        마이페이지 메뉴 단순화. `payment-process.tsx`는 dev_pay 묶음결제
+        만 새 API로 전환하고, 다른 결제수단은 기존 단건 흐름 유지.
+      8 
+      9 **Tech Stack:** Expo 50+, expo-router, React Native, NativeWind/T
+        ailwind, lucide-react-native
+     … +604 lines (ctrl+o to expand)
+
+⏺ Bash(cd /Users/weeinhwa/dev/gifticon/gitihubAPI && git add
+      docs/superpowers/plans/ && git commit -m "$(cat <<'EOF'
+      docs(plans): Phase 1A backend + Phase 1B frontend…)
+  ⎿  [main 7240f7a] docs(plans): Phase 1A backend + Phase 1B frontend imple
+     mentation plans
+      2 files changed, 1439 insertions(+)
+     … +4 lines (ctrl+o to expand)
+  ⎿  Shell cwd was reset to /Users/weeinhwa/dev/gifticon/gfitihub
+
+⏺ 두 플랜 작성·커밋 완료! ✨
+
+  📋 결과물
+
+  파일: gitihubAPI/docs/superpowers/plans/2026-04-06-phase1a-orders-backend.md
+  내용: 백엔드: 마이그레이션 → 라우트 신설 → 체크아웃 → 조회 → deprecated → 배포
+
+    (9 Tasks)
+  ────────────────────────────────────────
+  파일: gitihubAPI/docs/superpowers/plans/2026-04-06-phase1b-orders-frontend.md
+  내용: 프론트: services/orders.ts → 목록 → 상세 → mypage → settlement 폐기 →
+    payment-process 전환 (7 Tasks)
+
+  커밋: 7240f7a (gitihubAPI 레포)
+
+  자체 리뷰 결과:
+  - ✅ 스펙 모든 요구사항 커버 (orders 테이블, status 머신, 새 API 3종, 프론트
+  화면 2종, mypage 정리, deprecated 처리)
+  - ✅ 환불은 스키마 자리만 (refunded_amount 컬럼, 상태 enum) — 본문 작업 없음
+  - ✅ 머천트 작업은 "추후" 섹션으로 명시 분리
+  - ⚠️ Phase 1.5 (PG 묶음결제 어댑터)가 자연스럽게 발견됨 — dev_pay만 묶음 지원,
+   나머지는 단건 흐름 유지. 이게 가장 큰 트레이드오프야.
+
+  ---
+  🚀 다음 단계: 실행 방식 선택
+
+  플랜 검토하고 OK면 구현 시작할 수 있어. 두 가지 옵션:
+
+  1. 🤖 Subagent-Driven (추천) — 태스크별로 fresh subagent 디스패치, 태스크 사이
+   리뷰. 컨텍스트 절약 + 빠른 반복.
+  2. 📝 Inline Execution — 이 세션에서 그대로 실행, 체크포인트마다 리뷰.
+
+  근데 그 전에 히즈키가 두 플랜을 한 번 훑어봐야 해. 특히 봐줬으면 하는 부분:
+
+  - Plan 1A Task 1 — 마이그레이션 SQL 백필 로직 (기존 데이터 1:1 매핑 방식)
+  - Plan 1A Task 4-5a — voucher util 시그니처 변경 + 단건 라우트도 자동 order
+  생성 (A안)
+  - Plan 1B Task 6 — dev_pay만 새 API 사용, 나머지 결제수단은 단건 유지 (Phase
+  1.5로 분리)
+
+  🐱
+
+✻ Worked for 8m 6s
+
+❯ 음, dev_pay 는 결제수단의 차이일 뿐 나머지결제수단이 들어오면 동일하게        
+처리하는거야. 장바구니에 여러개의 동일통화인 경우에 한번에 결제 및 결제건       
+매칭로직에 들어오게 해야 하지.                                                  
+
+⏺ 아 맞다! 그게 핵심 의도지. dev_pay만 묶음 지원하는 건 절름발이야. 모든
+  결제수단이 동일하게 묶음 지원해야 해. 플랜 두 개 다 수정할게.
+
+  핵심 수정 방향:
+  - POST /oth-path는 결제수단 무관하게 동일한 입구
+  - dev_pay: 동기 처리, 응답 시점에 이미 fulfilled
+  - paypal/dana/smileypay/usdt_trc20: 응답 시점엔 reserved + payment intent 반환
+   → 사용자가 PG에서 결제 → 웹훅이 order 단위로 fulfill
+  - src/routes/payment.ts 웹훅 핸들러를 order 단위 fulfillment로 리팩터 (현재는
+  voucher 1건씩 발행)
+  - Plan 1B Task 6: 모든 결제수단 createOrder 사용
+
+  Plan 1A부터 수정:
+
+⏺ Update(~/dev/gifticon/gitihubAPI/docs/superpowers/plans/2026-04-06-phase1a-ord
+        ers-backend.md)
+  ⎿  Added 5 lines, removed 1 line
+       4  
+       5  **Goal:** 백엔드(`gitihubAPI`)에 `orders` 테이블을 신설하고, 장
+          바구니 묶음 결제를 1 order + 1 payment + N transactions로 표현
+          하는 새 체크아웃 API와 조회 API를 구현한다.
+       6  
+       7 -**Architecture:** Hono + Cloudflare D1. 새 마이그레이션으로 `or
+         -ders` 테이블 + `payments`/`transactions`에 `order_id` FK 추가. 
+         -`POST /oth-path`는 reserve → pay → fulfill 상태머신을 D1 트랜
+         -잭션 안에서 구동한다. 기존 `POST /oth-path`는 dep
+         -recated 마킹 후 유지. 조회 엔드포인트(`GET /oth-path`, `GE
+         -T /oth-path`)를 신설.                                 
+       7 +**Architecture:** Hono + Cloudflare D1. 새 마이그레이션으로 `or
+         +ders` 테이블 + `payments`/`transactions`에 `order_id` FK 추가. 
+         +`POST /oth-path`는 결제수단 무관하게 단일 입구로 동작:       
+       8 +- **dev_pay**: 동기 처리, 응답 시점에 `fulfilled`              
+       9 +- **paypal/dana/smileypay/usdt_trc20**: 응답 시점엔 `reserved` 
+         ++ payment intent(redirect URL/QR/주소 등) 반환. 사용자가 PG에서
+         + 결제 완료 → **웹훅이 order 단위로 fulfill** (라인아이템 N개 vo
+         +ucher를 한꺼번에 발행)                                         
+      10  
+      11 +기존 `src/routes/payment.ts` 웹훅 핸들러는 voucher 1건 발행 패 
+         +턴이므로 **order 단위 fulfillment로 리팩터** 한다. 기존 `POST /
+         +api/store/:id/purchase`는 deprecated 마킹 후 유지. 조회 엔드포 
+         +인트(`GET /oth-path`, `GET /oth-path`)를 신설.   
+      12 +                                                               
+      13  **Tech Stack:** Hono 4, Cloudflare Workers, D1 (SQLite), TypeSc
+          ript, wrangler
+      14  
+      15  **Spec:** `docs/superpowers/specs/2026-04-06-user-orders-unific
+          ation-design.md`
+⏺ Update(~/dev/gifticon/gitihubAPI/docs/superpowers/plans/2026-04-06-phase1a-ord
+        ers-backend.md)
+  ⎿  Added 2 lines, removed 1 line
+      27  | Modify | `src/index.ts` | orders 라우트 마운트 |
+      28  | Modify | `src/routes/account.ts` | 기존 /purchases·/payments
+          에 deprecated 헤더 추가 |
+      29  | Modify | `src/routes/store.ts` | 기존 단건 purchase에 depreca
+          ted 헤더 (제거는 Phase 2) |
+      30 -| Modify | `src/routes/payment.ts` | PayPal/DANA/SmileyPay/USDT
+         - 콜백에서 order 상태 갱신 추가 |                               
+      30 +| Modify | `src/routes/payment.ts` | PayPal/DANA/SmileyPay/USDT
+         + 웹훅을 order 단위 fulfillment로 리팩터 |                      
+      31 +| Create | `src/utils/fulfill.ts` | order fulfill 공통 함수 (라
+         +인아이템 N개 voucher 발행) |                                   
+      32  | Create | `src/utils/orders.ts` | 상태 전이/금액 검증 헬퍼 |
+      33  | Create | `docs/api/orders.md` | 새 엔드포인트 문서 |
+      34  
+
+⏺ 이제 핵심인 Task 4 전체를 리팩터:
+
+⏺ Update(~/dev/gifticon/gitihubAPI/docs/superpowers/plans/2026-04-06-phase1a-ord
+        ers-backend.md)
+  ⎿  Added 62 lines, removed 25 lines
+      368  await setOrderStatus(c.env.DB, orderId, 'reserved')
+      369  ```
+      370  
+      371 -### 4-4. payments 레코드 + PG 분기                            
+      371 +### 4-4. payments 레코드 + 결제수단별 PG 분기 (모든 수단 묶음 
+          +지원)                                                         
+      372  
+      373 -- [ ] **Step 4: 1 payment 생성 + dev_pay 즉시처리 / 그 외는 기
+          -존 PG 흐름 위임**                                             
+      373 +- [ ] **Step 4: 1 payment 행 생성 (모든 수단 공통)**          
+      374  
+      375 -기존 `src/routes/store.ts`의 단건 핸들러는 결제수단별로 분기(d
+          -ev_pay/paypal/dana/smileypay/usdt_trc20)되어 있다. **이번 페이
+          -즈에서는 dev_pay만 묶음 지원**, 나머지는 기존 단건 흐름으로 폴
+          -백 or 501.                                                    
+      376 -                                                              
+      375  ```typescript
+      376  const paymentId = crypto.randomUUID()
+      377  const expiresAt = now + 30 * 60
+     ...
+      383     VALUES (?, 'order_checkout', ?, ?, ?, ?, ?, 'pending', ?, ?
+           , ?, ?)`
+      384  ).bind(
+      385    paymentId, orderId, me.sub, totalAmountUsd, body.payment_met
+           hod,
+      388 -  JSON.stringify({ items: lineDetails.map(d => d.product.id) }
+          -),                                                            
+      386 +  JSON.stringify({                                            
+      387 +    items: lineDetails.map(d => ({                            
+      388 +      product_id: d.product.id,                               
+      389 +      amount_usd: d.amountUsd,                                
+      390 +      flexible_amount: (d.item as any).flexible_amount ?? null
+          +,                                                             
+      391 +    })),                                                      
+      392 +  }),                                                         
+      393    expiresAt, now, now, orderId,
+      394  ).run()
+      395 +```                                                           
+      396  
+      392 -if (body.payment_method !== 'dev_pay') {                      
+      393 -  // 미지원 결제수단은 reserved 상태에서 멈추고 501.          
+      394 -  // (Phase 1.5에서 paypal/dana/smileypay/usdt_trc20 묶음결제 
+          -어댑터 추가 예정)                                             
+      395 -  await setOrderStatus(c.env.DB, orderId, 'cancelled')        
+      396 -  return c.json({                                             
+      397 -    error: '묶음 결제는 현재 dev_pay만 지원됩니다. 단건은 /oth-path
+          -/store/:id/purchase 사용',                                    
+      398 -    order_id: orderId,                                        
+      399 -  }, 501)                                                     
+      400 -}                                                             
+      397 +- [ ] **Step 5: 결제수단별 분기 (dev_pay = 동기 fulfill, 그 외
+          + = PG intent 반환)**                                          
+      398  
+      402 -// dev_mode 검증                                              
+      403 -const devRow = await c.env.DB.prepare(                        
+      404 -  `SELECT value FROM system_settings WHERE key = 'dev_mode'`  
+      405 -).first<{ value: string }>()                                  
+      406 -if (!devRow || devRow.value !== '1') {                        
+      407 -  await setOrderStatus(c.env.DB, orderId, 'cancelled')        
+      408 -  return c.json({ error: '개발페이는 개발 모드에서만 사용할 수
+          - 있습니다' }, 400)                                            
+      399 +기존 `src/routes/store.ts`의 단건 핸들러를 **결제수단별 어댑터
+          + 함수**로 추출하여 재사용한다. 어댑터 시그니처는 단건 amount가
+          + 아닌 **order 총액(amountUsd)** 을 받도록 통일.               
+      400 +                                                              
+      401 +`src/utils/payment-adapters.ts` 신설(또는 기존 `src/routes/sto
+          +re.ts`에서 이전):                                             
+      402 +```typescript                                                 
+      403 +export interface PaymentIntent {                              
+      404 +  // 클라이언트가 후속 진행에 사용할 정보. 결제수단별로 다름. 
+      405 +  redirect_url?: string         // paypal/smileypay           
+      406 +  qr_url?: string                // dana                      
+      407 +  wallet_address?: string        // usdt_trc20                
+      408 +  amount_crypto?: number                                      
+      409 +  expires_at: number                                          
+      410  }
+      411  
+      411 -await setOrderStatus(c.env.DB, orderId, 'paid')               
+      412 -await c.env.DB.prepare(                                       
+      413 -  `UPDATE payments SET status = 'completed', updated_at = ? WH
+          -ERE id = ?`                                                   
+      414 -).bind(now, paymentId).run()                                  
+      412 +export async function createPaypalIntent(c: Context, args: {  
+      413 +  paymentId: string; orderId: string; amountUsd: number; userI
+          +d: string;                                                    
+      414 +}): Promise<PaymentIntent> { /* PayPal Order API 호출, payment
+          +s.external_id 갱신 */ }                                       
+      415 +                                                              
+      416 +// dana, smileypay, usdt_trc20 도 동일 시그니처               
+      417  ```
+      418  
+      419 +기존 `src/routes/store.ts`에서 단건 결제 시 호출하던 PG 코드를
+          + 위 함수들로 추출하면 두 라우트(`/oth-path`, `/a
+          +pi/orders`)가 같은 어댑터를 공유한다. **단건 라우트는 amountUs
+          +d가 product.price_usd, 묶음은 합계 — 그 외 동작은 동일.**     
+      420 +                                                              
+      421 +```typescript                                                 
+      422 +// orders 라우트에서:                                         
+      423 +let intent: PaymentIntent | null = null                       
+      424 +                                                              
+      425 +if (body.payment_method === 'dev_pay') {                      
+      426 +  // ── 동기 처리: dev_mode 확인 후 즉시 paid → fulfill ──    
+      427 +  const devRow = await c.env.DB.prepare(                      
+      428 +    `SELECT value FROM system_settings WHERE key = 'dev_mode'`
+      429 +  ).first<{ value: string }>()                                
+      430 +  if (!devRow || devRow.value !== '1') {                      
+      431 +    await setOrderStatus(c.env.DB, orderId, 'cancelled')      
+      432 +    return c.json({ error: '개발페이는 개발 모드에서만 사용할 
+          +수 있습니다' }, 400)                                          
+      433 +  }                                                           
+      434 +  await c.env.DB.prepare(                                     
+      435 +    `UPDATE payments SET status = 'completed', updated_at = ? 
+          +WHERE id = ?`                                                 
+      436 +  ).bind(now, paymentId).run()                                
+      437 +  await setOrderStatus(c.env.DB, orderId, 'paid')             
+      438 +  // → 4-5에서 fulfillOrder 호출로 fulfilled까지 진행         
+      439 +} else if (body.payment_method === 'paypal') {                
+      440 +  intent = await createPaypalIntent(c, { paymentId, orderId, a
+          +mountUsd: totalAmountUsd, userId: me.sub })                   
+      441 +} else if (body.payment_method === 'dana') {                  
+      442 +  intent = await createDanaIntent(c, { paymentId, orderId, amo
+          +untUsd: totalAmountUsd, userId: me.sub })                     
+      443 +} else if (body.payment_method === 'smileypay') {             
+      444 +  intent = await createSmileypayIntent(c, { paymentId, orderId
+          +, amountUsd: totalAmountUsd, userId: me.sub })                
+      445 +} else if (body.payment_method === 'usdt_trc20') {            
+      446 +  intent = await createUsdtIntent(c, { paymentId, orderId, amo
+          +untUsd: totalAmountUsd, userId: me.sub })                     
+      447 +}                                                             
+      448 +```                                                           
+      449 +                                                              
+      450 +PG intent를 받은 경우 order는 `reserved` 상태에 머물고, 응답에
+          + `intent`가 포함된다. fulfill은 웹훅(Task 6)에서 일어남.      
+      451 +                                                              
+      452 +> ⚠️ 어댑터 추출은 기존 단건 라우트를 깨뜨리지 않도록 **먼저  
+          +기존 코드를 그대로 함수로 옮기고, 호출만 교체**하는 단계가 선 
+          +행되어야 한다. 이걸 Task 4 시작 전 별도 사전 작업으로 분리하는
+          + 게 안전. **Task 3.5(어댑터 추출 리팩터)** 를 새로 추가한다.  
+      453 +                                                              
+      454  > 💡 PG 어댑터(paypal 등) 묶음 지원은 Task 4-7로 별도 추가 예
+           정. 이번 페이즈에서는 dev_pay까지만 묶음 가능, 실제 결제는 단
+           건 라우트 경유.
+      455  
+      456  ### 4-5. fulfill — voucher 발행 루프
+
+⏺ 이제 Task 3.5(어댑터 추출), Task 4-5(fulfill), Task 6(웹훅 리팩터) 추가:
+  ⎿  Error editing file
+
+⏺ Update(~/dev/gifticon/gitihubAPI/docs/superpowers/plans/2026-04-06-phase1a-ord
+        ers-backend.md)
+  ⎿  Added 70 lines
+      265  
+      266  ---
+      267  
+      268 +## Task 3.5: PG 어댑터 추출 (선행 리팩터)                     
+      269 +                                                              
+      270 +**Files:**                                                    
+      271 +- Create: `src/utils/payment-adapters.ts`                     
+      272 +- Modify: `src/routes/store.ts`                               
+      273 +                                                              
+      274 +> 목적: 기존 `src/routes/store.ts`의 단건 결제 분기에서 결제수
+          +단별 PG 호출 로직을 추출하여 단건/묶음이 동일 함수를 공유하게 
+          +만든다. **이 단계는 동작 변화 없는 순수 리팩터.**             
+      275 +                                                              
+      276 +- [ ] **Step 1: 어댑터 인터페이스 정의**                      
+      277 +                                                              
+      278 +```typescript                                                 
+      279 +// src/utils/payment-adapters.ts                              
+      280 +import type { Context } from 'hono'                           
+      281 +                                                              
+      282 +export interface PaymentIntent {                              
+      283 +  redirect_url?: string                                       
+      284 +  qr_url?: string                                             
+      285 +  wallet_address?: string                                     
+      286 +  amount_crypto?: number                                      
+      287 +  crypto_rate?: number                                        
+      288 +  expires_at: number                                          
+      289 +}                                                             
+      290 +                                                              
+      291 +export interface AdapterArgs {                                
+      292 +  paymentId: string                                           
+      293 +  orderId: string                                             
+      294 +  amountUsd: number                                           
+      295 +  userId: string                                              
+      296 +}                                                             
+      297 +```                                                           
+      298 +                                                              
+      299 +- [ ] **Step 2: store.ts의 paypal/dana/smileypay/usdt_trc20 분
+          +기 코드를 함수로 추출**                                       
+      300 +                                                              
+      301 +각 분기를 `createPaypalIntent(c, args)`, `createDanaIntent`, `
+          +createSmileypayIntent`, `createUsdtIntent`로 옮긴다. 함수가 pa
+          +yments 행을 갱신(`external_id`, `qr_url` 등) 후 PaymentIntent 
+          +반환. 시그니처는 `amountUsd: number`로 받아 단건/묶음 모두 호 
+          +환.                                                           
+      302 +                                                              
+      303 +- [ ] **Step 3: store.ts 단건 핸들러를 어댑터 호출로 교체**   
+      304 +                                                              
+      305 +```typescript                                                 
+      306 +if (paymentMethod === 'paypal') {                             
+      307 +  const intent = await createPaypalIntent(c, {                
+      308 +    paymentId, orderId: legacyOrderId, amountUsd, userId: me.s
+          +ub                                                            
+      309 +  })                                                          
+      310 +  return c.json({ payment_id: paymentId, ...intent })         
+      311 +}                                                             
+      312 +```                                                           
+      313 +                                                              
+      314 +단건 라우트는 시작부에서 `INSERT INTO orders ... 'reserved' ..
+          +.` 1줄로 자동 order 생성 (Task 4 Step 5a 결정 반영). 이 order_
+          +id를 어댑터에 넘긴다.                                         
+      315 +                                                              
+      316 +- [ ] **Step 4: 타입 체크**                                   
+      317 +                                                              
+      318 +Run: `npm run type-check`                                     
+      319 +Expected: 에러 없음                                           
+      320 +                                                              
+      321 +- [ ] **Step 5: 단건 회귀 검증**                              
+      322 +                                                              
+      323 +```bash                                                       
+      324 +curl -X POST -H "Authorization: Bearer $TOKEN" -H "Content-Typ
+          +e: application/json" \                                        
+      325 +  -d '{"payment_method":"dev_pay"}' http://localhost:8787/api/
+          +store/<id>/purchase                                           
+      326 +```                                                           
+      327 +Expected: 기존과 동일하게 정상 발행, transactions/payments 행 
+          +에 order_id 채워짐                                            
+      328 +                                                              
+      329 +- [ ] **Step 6: 커밋**                                        
+      330 +                                                              
+      331 +```bash                                                       
+      332 +git add src/utils/payment-adapters.ts src/routes/store.ts     
+      333 +git commit -m "refactor(payment): extract PG adapters for reus
+          +e by single/bundle checkout"                                  
+      334 +```                                                           
+      335 +                                                              
+      336 +---                                                           
+      337 +                                                              
+      338  ## Task 4: POST /oth-path — 체크아웃 구현
+      339  
+      340  **Files:**
+
+⏺ 이제 Task 4-5(fulfill)를 fulfillOrder 공통 함수 사용하도록 수정하고, Task
+  6(웹훅 리팩터) 새로 끼워넣기:
+
+⏺ Update(~/dev/gifticon/gitihubAPI/docs/superpowers/plans/2026-04-06-phase1a-ord
+        ers-backend.md)
+  ⎿  Added 90 lines, removed 31 lines
+      523  
+      524  > 💡 PG 어댑터(paypal 등) 묶음 지원은 Task 4-7로 별도 추가 예
+           정. 이번 페이즈에서는 dev_pay까지만 묶음 가능, 실제 결제는 단
+           건 라우트 경유.
+      525  
+      526 -### 4-5. fulfill — voucher 발행 루프                          
+      526 +### 4-5. fulfill — 공통 함수 `fulfillOrder` 신설              
+      527  
+      528 -- [ ] **Step 5: fulfilling → fulfilled**                      
+      528 +- [ ] **Step 5a (선행): voucher util 시그니처에 orderId 추가**
+      529  
+      530 +`src/utils/voucher.ts`에서 transactions INSERT 부분을 찾아 `or
+          +der_id` 컬럼/바인딩 추가. `issueVoucherFromStorage`/`issueVouc
+          +herDirect` 인자 타입에 `orderId: string` 필수 추가. 모든 호출 
+          +처(`src/routes/store.ts`, `src/routes/marketplace.ts`, `src/ro
+          +utes/payment.ts` 콜백) 업데이트.                              
+      531 +                                                              
+      532 +- [ ] **Step 5b: `fulfillOrder` 함수 신설**                   
+      533 +                                                              
+      534 +`src/utils/fulfill.ts`:                                       
+      535  ```typescript
+      531 -import { issueVoucherFromStorage, issueVoucherDirect } from '.
+          -./utils/voucher'                                              
+      536 +import { setOrderStatus } from './orders'                     
+      537 +import { issueVoucherFromStorage, issueVoucherDirect } from '.
+          +/voucher'                                                     
+      538 +import type { D1Database } from '@cloudflare/workers-types'   
+      539  
+      533 -await setOrderStatus(c.env.DB, orderId, 'fulfilling')         
+      540 +export interface FulfillResult {                              
+      541 +  transaction_id: string                                      
+      542 +  voucher_id: string                                          
+      543 +}                                                             
+      544  
+      535 -const issued: Array<{ transaction_id: string; voucher_id: stri
+          -ng }> = []                                                    
+      536 -for (const d of lineDetails) {                                
+      537 -  const result = d.product.product_type === 'flexible'        
+      538 -    ? await issueVoucherDirect(c.env.DB, {                    
+      539 -        storageId: d.product.id,                              
+      540 -        userId: me.sub,                                       
+      541 -        product: d.product,                                   
+      542 -        flexibleAmount: (d.item as any).flexible_amount,      
+      543 -        flexibleCurrency: d.product.flexible_currency ?? 'KRW'
+          -,                                                             
+      544 -        flexibleAmountUsd: d.amountUsd,                       
+      545 -        flexibleAmountKrw: 0, 
+      546 -        paymentId,                                            
+      547 -        paymentMethod: 'dev_pay',                             
+      548 -        paymentTxId: null,                                    
+      549 -        orderId,                                
+      550 -      })                                                      
+      551 -    : await issueVoucherFromStorage(c.env.DB, {               
+      552 -        storageId: d.product.id,                              
+      553 -        userId: me.sub,                                       
+      554 -        product: d.product,                                   
+      555 -        paymentId,                                            
+      556 -        paymentMethod: 'dev_pay',                             
+      557 -        paymentTxId: null,                                    
+      558 -        orderId,                                
+      559 -      })                                                      
+      560 -  issued.push(result)                                         
+      545 +export async function fulfillOrder(                           
+      546 +  db: D1Database,                                             
+      547 +  orderId: string,                                            
+      548 +  paymentId: string,                                          
+      549 +): Promise<FulfillResult[]> {                                 
+      550 +  await setOrderStatus(db, orderId, 'fulfilling')             
+      551 +                                                              
+      552 +  
+      553 +  const payment = await db.prepare(                           
+      554 +    `SELECT meta, payment_method, user_id FROM payments WHERE 
+          +id = ?`                                                       
+      555 +  ).bind(paymentId).first<{ meta: string; payment_method: stri
+          +ng; user_id: string }>()                                      
+      556 +  if (!payment) throw new Error(`payment not found: ${paymentI
+          +d}`)                                                          
+      557 +                                                              
+      558 +  const meta = JSON.parse(payment.meta ?? '{}')               
+      559 +  const items: Array<{ product_id: string; amount_usd: number;
+          + flexible_amount: number | null }> = meta.items ?? []         
+      560 +                                                              
+      561 +  const issued: FulfillResult[] = []                          
+      562 +  for (const it of items) {                                   
+      563 +    const product = await db.prepare(                         
+      564 +      `SELECT id, name, brand_slug, product_type, flexible_cur
+          +rency, image_url, thumb_url, validity_days                    
+      565 +       FROM gifticon_storage WHERE id = ?`                    
+      566 +    ).bind(it.product_id).first<any>()                        
+      567 +    if (!product) throw new Error(`product not found: ${it.pro
+          +duct_id}`)                                                    
+      568 +                                                              
+      569 +    const result = product.product_type === 'flexible'        
+      570 +      ? await issueVoucherDirect(db, {                        
+      571 +          storageId: product.id,                              
+      572 +          userId: payment.user_id,                            
+      573 +          product,                                            
+      574 +          flexibleAmount: it.flexible_amount!,                
+      575 +          flexibleCurrency: product.flexible_currency ?? 'KRW'
+          +,                                                             
+      576 +          flexibleAmountUsd: it.amount_usd,                   
+      577 +          flexibleAmountKrw: 0,  
+          + 시 보정                                                      
+      578 +          paymentId,                                          
+      579 +          paymentMethod: payment.payment_method as any,       
+      580 +          paymentTxId: null,                                  
+      581 +          orderId,                                            
+      582 +        })                                                    
+      583 +      : await issueVoucherFromStorage(db, {                   
+      584 +          storageId: product.id,                              
+      585 +          userId: payment.user_id,                            
+      586 +          product,                                            
+      587 +          paymentId,                                          
+      588 +          paymentMethod: payment.payment_method as any,       
+      589 +          paymentTxId: null,                                  
+      590 +          orderId,                                            
+      591 +        })                                                    
+      592 +    issued.push(result)                                       
+      593 +  }                                                           
+      594 +                                                              
+      595 +  await setOrderStatus(db, orderId, 'fulfilled')              
+      596 +  return issued                                               
+      597  }
+      598 +```                                                           
+      599  
+      563 -await setOrderStatus(c.env.DB, orderId, 'fulfilled')          
+      600 +- [ ] **Step 5c: orders 라우트의 dev_pay 분기에서 fulfillOrder
+          + 호출**                                                       
+      601 +                                                              
+      602 +```typescript                                                 
+      603 +import { fulfillOrder } from '../utils/fulfill'               
+      604 +                                                              
+      605 +if (body.payment_method === 'dev_pay') {                      
+      606 +  
+      607 +  const issued = await fulfillOrder(c.env.DB, orderId, payment
+          +Id)                                                           
+      608 +  
+      609 +}                                                             
+      610  ```
+      611  
+      612 +- [ ] **Step 5d: PG 결제수단은 reserved 상태에서 응답 반환** (
+          +fulfill은 웹훅에서)                                           
+      613 +                                                              
+      614 +```typescript                                                 
+      615 +if (intent) {                                                 
+      616 +  
+      617 +  return c.json({                                             
+      618 +    order: await getOrderRow(c.env.DB, orderId),              
+      619 +    payment: { id: paymentId, status: 'pending' },            
+      620 +    intent,                                                   
+      621 +  })                                                          
+      622 +}                                                             
+      623 +```                                                           
+      624 +                                                              
+      625  > ⚠️ `issueVoucherFromStorage` / `issueVoucherDirect` 시그니처
+           에 `orderId`를 추가해야 한다. 두 함수는 `src/utils/voucher.ts`
+           (이름 추정)에서 transactions INSERT 시 `order_id` 컬럼을 채우
+           도록 수정. 이 변경이 1차로 필요. **선행 작업으로 Step 5 직전에
+            처리.**
+      626  
+      627  - [ ] **Step 5a (voucher util 수정 선행):**
+
+⏺ 이제 Task 6을 웹훅 리팩터로 새로 끼워넣고, 기존 Task 6(deprecated)을 Task 7로
+  밀기:
+
+⏺ Update(~/dev/gifticon/gitihubAPI/docs/superpowers/plans/2026-04-06-phase1a-ord
+        ers-backend.md)
+  ⎿  Added 69 lines, removed 1 line
+      808  
+      809  ---
+      810  
+      811 -## Task 6: 기존 엔드포인트 deprecated 처리                    
+      811 +## Task 6: PG 웹훅을 order 단위 fulfillment로 리팩터          
+      812  
+      813  **Files:**
+      814 +- Modify: `src/routes/payment.ts`                             
+      815 +                                                              
+      816 +> 목적: 기존 PG 콜백/웹훅 핸들러는 **payments 행 1건 → voucher
+          + 1건 발행** 패턴이다. order 묶음 결제를 지원하려면 웹훅이 결제
+          + 확인 후 `fulfillOrder(orderId, paymentId)`를 호출하도록 바꿔 
+          +야 한다.                                                      
+      817 +                                                              
+      818 +해당 핸들러:                                                  
+      819 +- PayPal capture 성공 콜백 (`src/routes/payment.ts:248~`)     
+      820 +- DANA 콜백 (`src/routes/payment.ts:329~`)                    
+      821 +- SmileyPay 콜백 (`src/routes/payment.ts:387~`)               
+      822 +- USDT 트랜잭션 confirm (`src/routes/payment.ts:138~`)        
+      823 +                                                              
+      824 +- [ ] **Step 1: 각 핸들러 공통 패턴 식별**                    
+      825 +                                                              
+      826 +기존 흐름: PG가 보낸 식별자로 payments 조회 → status='complete
+          +d' 갱신 → `issueVoucher*` 호출.                               
+      827 +                                                              
+      828 +새 흐름: payments 조회 후 **`payment.order_id` 기준으로 `fulfi
+          +llOrder` 호출**. 단건이든 묶음이든 동일하게 동작 (단건 = 라인 
+          +아이템 1개인 order).                                          
+      829 +                                                              
+      830 +- [ ] **Step 2: PayPal capture 핸들러 수정**                  
+      831 +                                                              
+      832 +```typescript                                                 
+      833 +import { fulfillOrder } from '../utils/fulfill'               
+      834 +import { setOrderStatus } from '../utils/orders'              
+      835 +                                                              
+      836 +
+      837 +const now = Math.floor(Date.now() / 1000)                     
+      838 +await c.env.DB.prepare(                                       
+      839 +  `UPDATE payments SET status='completed', external_id=?, upda
+          +ted_at=? WHERE id=?`                                          
+      840 +).bind(captureId, now, payment.id).run()                      
+      841 +                                                              
+      842 +if (payment.order_id) {                                       
+      843 +  await setOrderStatus(c.env.DB, payment.order_id, 'paid')    
+      844 +  await fulfillOrder(c.env.DB, payment.order_id, payment.id)  
+      845 +} else {                                                      
+      846 +  
+          +경고 로그                                                     
+      847 +  console.warn('payment without order_id', payment.id)        
+      848 +}                                                             
+      849 +```                                                           
+      850 +                                                              
+      851 +- [ ] **Step 3: DANA / SmileyPay / USDT 핸들러 동일 패턴 적용*
+          +*                                                             
+      852 +                                                              
+      853 +각 핸들러에서 `issueVoucher*` 호출 라인을 찾아 위와 동일한 `fu
+          +lfillOrder` 호출로 교체. payments status 갱신은 그대로 유지.  
+      854 +                                                              
+      855 +> ⚠️ 주의: USDT는 비동기 컨펌 폴링 기반일 수 있음. 확정 시점에
+          +서만 fulfillOrder 호출 (idempotency 확인 — fulfillOrder가 이미
+          + fulfilled 상태인 order에 대해 두 번 호출되어도 안전하도록 set
+          +OrderStatus가 transition validation으로 막아줌).              
+      856 +                                                              
+      857 +- [ ] **Step 4: 타입 체크**                                   
+      858 +                                                              
+      859 +Run: `npm run type-check`                                     
+      860 +Expected: 에러 없음                                           
+      861 +                                                              
+      862 +- [ ] **Step 5: 단건 회귀 (PayPal 시뮬레이션)**               
+      863 +                                                              
+      864 +가능하면 PayPal sandbox 또는 mock 콜백으로 단건 결제 → fulfill
+          +Order가 호출되어 voucher 1건 발행되는지 확인.                 
+      865 +                                                              
+      866 +- [ ] **Step 6: 묶음 회귀 (가능하면)**                        
+      867 +                                                              
+      868 +PayPal sandbox에서 묶음 결제 → 1 webhook → N voucher 발행 + or
+          +der.status=fulfilled 확인.                                    
+      869 +                                                              
+      870 +- [ ] **Step 7: 커밋**                                        
+      871 +                                                              
+      872 +```bash                                                       
+      873 +git add src/routes/payment.ts                                 
+      874 +git commit -m "refactor(payment): use fulfillOrder in PG webho
+          +oks (single+bundle)"                                          
+      875 +```                                                           
+      876 +                                                              
+      877 +---                                                           
+      878 +                                                              
+      879 +## Task 7: 기존 엔드포인트 deprecated 처리                    
+      880 +                                                              
+      881 +**Files:**                                                    
+      882  - Modify: `src/routes/account.ts`
+      883  - Modify: `src/routes/store.ts`
+      884  
+
+⏺ 기존 Task 7,8,9 번호도 +1 해야 하고, "추후 작업"의 Phase 1.5 항목 제거. 한
+  번에:
+
+⏺ Update(~/dev/gifticon/gitihubAPI/docs/superpowers/plans/2026-04-06-phase1a-ord
+        ers-backend.md)
+  ⎿  Added 1 line, removed 1 line
+      926  
+      927  ---
+      928  
+      929 -## Task 7: API 문서                                           
+      929 +## Task 8: API 문서                                           
+      930  
+      931  **Files:**
+      932  - Create: `docs/api/orders.md`
+
+⏺ Update(~/dev/gifticon/gitihubAPI/docs/superpowers/plans/2026-04-06-phase1a-ord
+        ers-backend.md)
+  ⎿  Added 1 line, removed 1 line
+      984  
+      985  ---
+      986  
+      987 -## Task 8: 회귀 확인                                          
+      987 +## Task 9: 회귀 확인                                          
+      988  
+      989  - [ ] **Step 1: 단건 구매 회귀 (legacy 라우트)**
+      990  
+
+⏺ Update(~/dev/gifticon/gitihubAPI/docs/superpowers/plans/2026-04-06-phase1a-ord
+        ers-backend.md)
+  ⎿  Added 1 line, removed 1 line
+      1021  
+      1022  ---
+      1023  
+      1024 -## Task 9: 원격 마이그레이션 (배포 시)                       
+      1024 +## Task 10: 원격 마이그레이션 (배포 시)                      
+      1025  
+      1026  > 로컬 검증 끝난 후, 히즈키 승인을 받고 진행. 자동 실행 금지.
+      1027  
+
+⏺ Update(~/dev/gifticon/gitihubAPI/docs/superpowers/plans/2026-04-06-phase1a-ord
+        ers-backend.md)
+  ⎿  Added 1 line, removed 2 lines
+      1059  
+      1060  ## 추후(이 플랜 외) 작업
+      1061  
+      1062 -- **Phase 1.5:** PayPal/DANA/SmileyPay/USDT 묶음결제 어댑터 (
+           -PG 콜백에서 order 상태 갱신)                                 
+      1062  - **Phase 2:** 머천트 영역 마이그레이션, legacy 엔드포인트 제
+            거
+      1064 -- **별도:** 환불 API, 재고 락 TTL 정밀화, 좀비 락 정리 cron  
+      1063 +- **별도:** 환불 API, 재고 락 TTL 정밀화 + 좀비 락 정리 cron,
+           + package(bundle) 묶음 결제 지원                              
+
+⏺ 이제 Task 4-4의 응답 부분("dev_pay만 지원" 잔재) 정리, 그리고 Task 8(API
+  문서)의 "501: dev_pay 외" 잔재 수정:
+
+⏺ Update(~/dev/gifticon/gitihubAPI/docs/superpowers/plans/2026-04-06-phase1a-ord
+        ers-backend.md)
+  ⎿  Added 1 line, removed 1 line
+      964  - 400: items 비어있음, payment_method 잘못됨
+      965  - 404: 상품 없음
+      966  - 409: 재고 부족, 구매 불가 상태
+      967 -- 501: dev_pay 외 결제수단 (Phase 1.5에서 추가)               
+      967 +- 500: PG 어댑터 호출 실패                                    
+      968  
+      969  ## GET /oth-path
+      970  페이지네이션 목록.
+
+⏺ 이제 응답 예시도 PG intent 케이스 추가:
+
+⏺ Update(~/dev/gifticon/gitihubAPI/docs/superpowers/plans/2026-04-06-phase1a-ord
+        ers-backend.md)  ⎿  Added 14 lines, removed 1 line
+      951  }
+      952  \`\`\`
+      953  
+      954 -### Response (200)                                            
+      954 +### Response — dev_pay (동기 fulfilled)                       
+      955  \`\`\`json
+      956  {
+      957    "order": { "id": "ord_xxx", "status": "fulfilled", "total_am
+           ount_usd": 3.65, ... },
+     ...
+      960  }
+      961  \`\`\`
+      962  
+      963 +### Response — PayPal/DANA/SmileyPay/USDT (reserved + intent) 
+      964 +\`\`\`json                                                    
+      965 +{                                                             
+      966 +  "order": { "id": "ord_xxx", "status": "reserved", ... },    
+      967 +  "payment": { "id": "pay_xxx", "status": "pending" },        
+      968 +  "intent": {                                                 
+      969 +    "redirect_url": "https://www.paypal.com/checkoutnow?token=
+          +...",                                                         
+      970 +    "expires_at": 1717030000                                  
+      971 +  }                                                           
+      972 +}                                                             
+      973 +\`\`\`                                                        
+      974 +클라이언트는 `intent`로 PG 결제 진행 → PG 웹훅이 백엔드에 도달
+          + → fulfillOrder 자동 실행 → order.status='fulfilled'.         
+      975 +                                                              
+      976  ### Errors
+      977  - 400: items 비어있음, payment_method 잘못됨
+      978  - 404: 상품 없음
+
+⏺ 이제 Plan 1B Task 6 수정 (모든 결제수단 createOrder 사용):
+
+⏺ Update(~/dev/gifticon/gitihubAPI/docs/superpowers/plans/2026-04-06-phase1b-ord
+        ers-frontend.md)
+  ⎿  Added 1 line, removed 1 line
+       4  
+       5  **Goal:** 사용자 앱(`gfitihub`)에 새 `orders` API를 연동하여 "
+          구매 이력" 화면을 신설하고, 마이페이지의 중복 메뉴(구매 이력/결
+          제 내역)를 정리한다. 결제 흐름은 가능한 곳부터 `POST /oth-path
+          s`로 전환.
+       6  
+       7 -**Architecture:** Expo Router. 신규 `services/orders.ts`로 API 
+         -래핑, `purchase-history` 라우트 신설, 기존 `settlement.tsx` 폐 
+         -기. 마이페이지 메뉴 단순화. `payment-process.tsx`는 dev_pay 묶 
+         -음결제만 새 API로 전환하고, 다른 결제수단은 기존 단건 흐름 유지
+         -.                                                              
+       7 +**Architecture:** Expo Router. 신규 `services/orders.ts`로 API 
+         +래핑, `purchase-history` 라우트 신설, 기존 `settlement.tsx` 폐 
+         +기. 마이페이지 메뉴 단순화. `payment-process.tsx`는 **모든 결제
+         +수단**(dev_pay/paypal/dana/smileypay/usdt_trc20)을 `POST /oth-path
+         +rders` 단일 입구로 전환. PG 결제수단은 응답에 `intent`(redirect
+         + URL/QR/주소)가 포함되어 기존 진행 화면을 그대로 띄운다.       
+       8  
+       9  **Tech Stack:** Expo 50+, expo-router, React Native, NativeWind
+          /Tailwind, lucide-react-native
+      10  
+
+⏺ Update(~/dev/gifticon/gitihubAPI/docs/superpowers/plans/2026-04-06-phase1b-ord
+        ers-frontend.md)
+  ⎿  Added 85 lines, removed 45 lines
+      498  
+      499  ---
+      500  
+      501 -## Task 6: payment-process.tsx — dev_pay만 새 API로 전환      
+      501 +## Task 6: payment-process.tsx — 모든 결제수단을 createOrder로
+          + 통일                                                         
+      502  
+      503  **Files:**
+      504  - Modify: `app/(user)/payment-process.tsx`
+      505  
+      506 -> 이번 페이즈에서는 **dev_pay 결제만** `POST /oth-path`로 전
+          -환. 다른 결제수단은 백엔드(Phase 1.5)가 묶음 결제를 지원하기  
+          -전까지 기존 단건 흐름 유지.                                   
+      506 +> 모든 결제수단(dev_pay/paypal/dana/smileypay/usdt_trc20)을 `P
+          +OST /oth-path` 단일 입구로 전환. PG 결제수단은 응답의 `inten
+          +t`로 기존 진행 화면을 띄운다. 단건/묶음 모두 동일 흐름.       
+      507  
+      508  - [ ] **Step 1: 현재 흐름 파악**
+      509  
+      510 -`app/(user)/payment-process.tsx` 읽기. 장바구니의 items/packag
+          -eItems를 어떻게 결제 호출에 매핑하는지, dev_pay 분기가 어디 있
+          -는지 확인.                                                    
+      510 +`app/(user)/payment-process.tsx` 읽기. 장바구니의 items/packag
+          +eItems를 어떻게 결제 호출에 매핑하는지, 결제수단별 분기·기존 r
+          +edirect/QR 처리 위치 확인.                                    
+      511  
+      512 -- [ ] **Step 2: dev_pay 분기에 createOrder 호출 추가**        
+      512 +- [ ] **Step 2: createOrder 응답 타입 확장**                  
+      513  
+      514 -기존 dev_pay 호출(예: `purchaseProduct(id, { payment_method: "
+          -dev_pay" })` 반복) 대신:                                      
+      514 +`services/orders.ts`의 `CreateOrderResponse`에 PG intent 필드 
+          +추가:                                                         
+      515  
+      516 +```typescript                                                 
+      517 +export interface CreateOrderResponse {                        
+      518 +  order: OrderSummary;                                        
+      519 +  payment: { id: string; status: string };                    
+      520 +  items?: { transaction_id: string; voucher_id: string }[];   
+          +
+      521 +  intent?: {                                                  
+      522 +    redirect_url?: string;                                    
+      523 +    qr_url?: string;                                          
+      524 +    wallet_address?: string;                                  
+      525 +    amount_crypto?: number;                                   
+      526 +    crypto_rate?: number;                                     
+      527 +    expires_at: number;                                       
+      528 +  };                                                          
+      529 +}                                                             
+      530 +```                                                           
+      531 +                                                              
+      532 +- [ ] **Step 3: payment-process.tsx 통합 흐름**               
+      533 +                                                              
+      534  ```tsx
+      535  import { createOrder } from "@/services/orders";
+      536  
+      519 -
+      520 -if (method === "dev_pay") {                                   
+      521 -  const orderItems = [                                        
+      522 -    ...items.map((i) => ({                                    
+      523 -      type: "store" as const,                                 
+      524 -      product_id: i.product.id,                               
+      525 -      flexible_amount: i.flexibleAmount,                      
+      526 -    })),                                                      
+      527 -    
+          -건 흐름 유지                                                  
+      528 -  ];                                                          
+      537 +
+      538 +const orderItems = items.map((i) => ({                        
+      539 +  type: "store" as const,                                     
+      540 +  product_id: i.product.id,                                   
+      541 +  flexible_amount: i.flexibleAmount,                          
+      542 +}));                                                          
+      543 +
+          +별도 처리)                                                    
+      544  
+      530 -  if (orderItems.length === 0) {                              
+      531 -    
+      532 -    
+      533 -  } else {                                                    
+      534 -    try {                                                     
+      535 -      const result = await createOrder({                      
+      536 -        items: orderItems,                                    
+      537 -        currency: targetCurrency,                             
+      538 -        payment_method: "dev_pay",                            
+      539 -      });                                                     
+      540 -      
+      541 -      router.replace(`/(user)/purchase-history/${result.order.
+          -id}`);                                                        
+      542 -      return;                                                 
+      543 -    } catch (e) {                                             
+      544 -      Alert.alert("결제 실패", String(e));                    
+      545 -      return;                                                 
+      546 -    }                                                         
+      545 +try {                                                         
+      546 +  const result = await createOrder({                          
+      547 +    items: orderItems,                                        
+      548 +    currency: targetCurrency,                                 
+      549 +    payment_method: method,                                   
+      550 +  });                                                         
+      551 +                                                              
+      552 +  if (method === "dev_pay") {                                 
+      553 +    
+      554 +    router.replace(`/(user)/purchase-history/${result.order.id
+          +}`);                                                          
+      555 +    return;                                                   
+      556    }
+      557 +                                                              
+      558 +  
+      559 +  if (result.intent?.redirect_url) {                          
+      560 +    
+          +_url 열기                                                     
+      561 +    Linking.openURL(result.intent.redirect_url);              
+      562 +  } else if (result.intent?.qr_url) {                         
+      563 +    
+          +터로 전달                                                     
+      564 +    router.push({                                             
+      565 +      pathname: "/(user)/payment-process/qr",                 
+      566 +      params: { paymentId: result.payment.id, qrUrl: result.in
+          +tent.qr_url, orderId: result.order.id },                      
+      567 +    });                                                       
+      568 +  } else if (result.intent?.wallet_address) {                 
+      569 +    
+      570 +    router.push({                                             
+      571 +      pathname: "/(user)/usdt-deposit",                       
+      572 +      params: {                                               
+      573 +        paymentId: result.payment.id,                         
+      574 +        orderId: result.order.id,                             
+      575 +        address: result.intent.wallet_address,                
+      576 +        amount: String(result.intent.amount_crypto),          
+      577 +      },                                                      
+      578 +    });                                                       
+      579 +  }                                                           
+      580 +} catch (e) {                                                 
+      581 +  Alert.alert("결제 실패", String(e));                        
+      582  }
+      583  ```
+      584  
+      551 -- [ ] **Step 3: 다른 결제수단(paypal/dana/smileypay/usdt_trc20
+          -) 분기는 그대로**                                             
+      585 +> 위 redirect/QR/wallet 처리 코드는 기존 단건 결제 흐름과 호환
+          +되어야 한다. 기존 PaymentProcess 화면이 어떻게 polling/완료 처
+          +리를 했는지 보고 동일 패턴을 재사용. 폴링 대상은 `getOrder(ord
+          +erId)`로 변경 (status가 `fulfilled`가 되면 상세 화면으로 이동)
+          +.                                                             
+      586  
+      553 -기존 단건 호출 흐름 유지. 코드 변경 없음.                     
+      587 +- [ ] **Step 4: 결제 완료 폴링 → order 기반 전환**            
+      588  
+      555 -- [ ] **Step 4: 타입 체크**                                   
+      589 +기존에 `getPaymentStatus(paymentId)` 폴링이 있다면, **`getOrde
+          +r(orderId)`로 교체** 후 `order.status === 'fulfilled'`일 때 `p
+          +urchase-history/[id]`로 이동.                                 
+      590  
+      591 +- [ ] **Step 5: 타입 체크**                                   
+      592 +                                                              
+      593  Run: `npx tsc --noEmit`
+      594  Expected: 에러 없음
+      595  
+      560 -- [ ] **Step 5: 수동 검증**                                   
+      596 +- [ ] **Step 6: 수동 검증 (dev_pay 다중)**                    
+      597  
+      562 -dev_mode 환경에서:                                            
+      563 -1. 장바구니에 store 상품 2개 추가                             
+      564 -2. KRW 결제 → 개발페이 선택 → 결제                            
+      565 -3. Expected: 구매 이력 상세 화면으로 자동 이동, 라인아이템 2개
+          - 표시                                                         
+      598 +dev_mode 환경에서 장바구니 store 상품 2개 → KRW 결제 → 개발페 
+          +이 → 결제                                                     
+      599 +Expected: 구매 이력 상세 화면으로 자동 이동, 라인아이템 2개   
+      600  
+      567 -- [ ] **Step 6: 회귀: PayPal 등 단건 흐름**                   
+      601 +- [ ] **Step 7: 수동 검증 (PayPal 단건)**                     
+      602  
+      569 -장바구니에 1건 + PayPal 선택 → 기존 흐름대로 결제 진행 화면 진
+          -입 확인 (백엔드 변경 없음 가정).                              
+      603 +PayPal sandbox 가능한 환경에서 장바구니 1건 → PayPal → 결제 완
+          +료                                                            
+      604 +Expected: redirect → 결제 완료 → 폴링으로 fulfilled 감지 → 구 
+          +매 이력 상세 진입                                             
+      605  
+      571 -- [ ] **Step 7: 커밋**                                        
+      606 +- [ ] **Step 8: 수동 검증 (PayPal 묶음)**                     
+      607  
+      608 +장바구니 2건 → PayPal → 1번 결제 → 2개 voucher 발행 + order.st
+          +atus=fulfilled                                                
+      609 +Expected: 묶음 결제 정상 동작                                 
+      610 +                                                              
+      611 +- [ ] **Step 9: 커밋**                                        
+      612 +                                                              
+      613  ```bash
+      574 -git add "app/(user)/payment-process.tsx"                      
+      575 -git commit -m "feat(user): use POST /oth-path for dev_pay mu
+          -lti-item checkout"                                            
+      614 +git add "app/(user)/payment-process.tsx" services/orders.ts   
+      615 +git commit -m "feat(user): unify all payment methods through P
+          +OST /oth-path"                                              
+      616  ```
+      617  
+      618  ---
+
+⏺ 추후 작업 섹션의 Phase 1.5 잔재 제거:
+
+⏺ Update(~/dev/gifticon/gitihubAPI/docs/superpowers/plans/2026-04-06-phase1b-ord
+        ers-frontend.md)
+  ⎿  Removed 1 line
+      648  
+      649  ## 추후(이 플랜 외) 작업
+      650  
+      651 -- **Phase 1.5:** 백엔드 PG 묶음 결제 어댑터 완성 후 paypal/dan
+          -a/smileypay/usdt_trc20 분기도 createOrder로 전환              
+      651  - **Phase 2:** 머천트 영역 화면 (정산정책 페이지, 회차별 정산
+           현황, 정산요청 버튼) — 별도 스펙·플랜 작성
+      652  - **별도 이슈:** 웹 빌드 `expo-secure-store` 미지원으로 인한 `
+           getValueWithKeyAsync is undefined` 에러 — `Platform.OS === 'we
+           b'` 분기로 `localStorage` 폴백 추가
+      653  - **별도:** legacy `services/account.ts`의 `getPurchases`/`get
+           Payments` 호출처 정리 (어디서 쓰는지 grep 후 제거 또는 마이그
+           레이션)
+
+⏺ 수정 커밋:
+
+⏺ Bash(cd /Users/weeinhwa/dev/gifticon/gitihubAPI && git add
+      docs/superpowers/plans/ && git commit -m "$(cat <<'EOF'
+      docs(plans): unify all payment methods through ord…)
+  ⎿  [main 0e5f2d2] docs(plans): unify all payment methods through orders f
+     low
+      2 files changed, 406 insertions(+), 116 deletions(-)
+  ⎿  Shell cwd was reset to /Users/weeinhwa/dev/gifticon/gfitihub
+
+⏺ 수정 완료! 커밋 0e5f2d2 (gitihubAPI 레포). +406 / -116 라인.
+
+  🔄 핵심 변경사항
+
+  Plan 1A (백엔드) — 4개 신규/수정 태스크:
+  - ✨ Task 3.5 신설: PG 어댑터 추출 (src/utils/payment-adapters.ts) — 기존
+  store.ts의 PG 분기를 함수로 추출, 단건/묶음 공유
+  - 🔧 Task 4-4/5 수정: dev_pay만 동기 fulfilled, PG 결제수단은 reserved +
+  intent 반환
+  - ✨ Task 4-5b 신설: fulfillOrder(db, orderId, paymentId) 공통 함수
+  (src/utils/fulfill.ts) — payments.meta에서 라인아이템 복원해 N개 voucher 발행
+  - ✨ Task 6 신설: PG 웹훅을 fulfillOrder 호출로 리팩터
+  (PayPal/DANA/SmileyPay/USDT 모두) — payments.order_id 기준으로 fulfill
+  - 🔢 기존 Task 6,7,8 → 7,8,9,10으로 번호 이동
+
+  Plan 1B (프론트) — Task 6 통합:
+  - 🔧 모든 결제수단을 createOrder 단일 호출로 통일
+  - ✨ CreateOrderResponse에 intent 필드 추가
+  (redirect_url/qr_url/wallet_address)
+  - 🔧 결제 완료 폴링을 getPaymentStatus → getOrder(orderId)로 전환
+  (order.status === 'fulfilled' 감지)
+  - ➕ PayPal 단건/묶음 회귀 검증 단계 추가
+
+  ---
+  🚀 다음
+
+  플랜 두 개 다시 훑어보고 OK면 실행 방식 골라줘:
+
+  1. 🤖 Subagent-Driven (추천) — 태스크별 fresh 서브에이전트, 사이사이 리뷰
+  2. 📝 Inline Execution — 이 세션에서 그대로 실행
+
+  또는 다른 수정사항 있으면 알려줘! 🐱
+
+✻ Churned for 4m 41s
+
+❯ /context                                                                      
+  ⎿  Context Usage
+     ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛀ ⛀ ⛀   Opus 4.6
+                           claude-opus-4-6
+     ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁   126.4k/200k tokens (63%)
+
+     ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁   Estimated usage by category
+                           ⛁ System prompt: 6.4k tokens (3.2%)
+     ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁   ⛁ System tools: 7.8k tokens (3.9%)
+                           ⛁ MCP tools: 573 tokens (0.3%)
+     ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁   ⛁ Custom agents: 247 tokens (0.1%)
+                           ⛁ Memory files: 567 tokens (0.3%)
+     ⛁ ⛁ ⛁ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛁ Skills: 1.6k tokens (0.8%)
+                           ⛁ Messages: 84.9k tokens (42.5%)
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛶ Free space: 76.9k (38.5%)
+                           ⛝ Autocompact buffer: 21k tokens (10.5%)
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ 
+
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛝ 
+
+     ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ 
+
+     MCP tools · /mcp (loaded on-demand)
+
+     Loaded
+     └ mcp__plugin_context-mode_context-mode__ctx_execute: 573 tokens
+
+     Available
+     └ mcp__claude_ai_Gmail__gmail_create_draft
+     └ mcp__claude_ai_Gmail__gmail_get_profile
+     └ mcp__claude_ai_Gmail__gmail_list_drafts
+     └ mcp__claude_ai_Gmail__gmail_list_labels
+     └ mcp__claude_ai_Gmail__gmail_read_message
+     └ mcp__claude_ai_Gmail__gmail_read_thread
+     └ mcp__claude_ai_Gmail__gmail_search_messages
+     └ mcp__claude_ai_Google_Calendar__authenticate
+     └ mcp__plugin_context-mode_context-mode__ctx_batch_execute
+     └ mcp__plugin_context-mode_context-mode__ctx_doctor
+     └ mcp__plugin_context-mode_context-mode__ctx_execute_file
+     └ mcp__plugin_context-mode_context-mode__ctx_fetch_and_index
+     └ mcp__plugin_context-mode_context-mode__ctx_index
+     └ mcp__plugin_context-mode_context-mode__ctx_search
+     └ mcp__plugin_context-mode_context-mode__ctx_stats
+     └ mcp__plugin_context-mode_context-mode__ctx_upgrade
+
+     Custom agents · /agents
+
+     Plugin
+     └ superpowers:code-reviewer: 247 tokens
+
+     Memory files · /memory
+     └ ~/.claude/CLAUDE.md: 567 tokens
+
+     Skills · /skills
+
+     Plugin
+     └ context-mode: 308 tokens
+     └ verification-before-completion: 67 tokens
+     └ receiving-code-review: 67 tokens
+     └ finishing-a-development-branch: 61 tokens
+     └ using-git-worktrees: 59 tokens
+     └ brainstorming: 56 tokens
+     └ ctx-stats: 48 tokens
+     └ using-superpowers: 47 tokens
+     └ ctx-upgrade: 46 tokens
+     └ ctx-doctor: 42 tokens
+     └ dispatching-parallel-agents: 37 tokens
+     └ requesting-code-review: 36 tokens
+     └ executing-plans: 33 tokens
+     └ subagent-driven-development: 31 tokens
+     └ writing-skills: 31 tokens
+     └ systematic-debugging: 31 tokens
+     └ test-driven-development: 29 tokens
+     └ writing-plans: 28 tokens
+     └ superpowers:execute-plan: 22 tokens
+     └ superpowers:brainstorm: 21 tokens
+     └ superpowers:write-plan: 21 tokens

@@ -1,6 +1,6 @@
 import { ScreenHeader } from "@/components/ScreenHeader";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
 import { useI18n } from "@/context/I18nContext";
 import { formatPrice } from "@/lib/currency";
 import { resolveImageUrl } from "@/lib/image";
@@ -11,7 +11,7 @@ import {
   type BundleSettlementRequest,
   type MerchantBundle,
 } from "@/services/bundle";
-import { Package } from "lucide-react-native";
+import { Calendar, Package } from "lucide-react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -27,10 +27,25 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useAlertShim } from "@/components/ui/alert-shim";
 type Tab = "items" | "requests";
 
-const REQ_STATUS_META: Record<string, { labelKey: string; color: string }> = {
-  pending: { labelKey: "merchant.bundles.reqStatusPending", color: "text-yellow-600" },
-  approved: { labelKey: "merchant.bundles.reqStatusApproved", color: "text-green-600" },
-  rejected: { labelKey: "merchant.bundles.reqStatusRejected", color: "text-red-600" },
+const REQ_STATUS_META: Record<
+  string,
+  { labelKey: string; pillClass: string; labelClass: string }
+> = {
+  pending: {
+    labelKey: "merchant.bundles.reqStatusPending",
+    pillClass: "border border-amber-500/35 bg-amber-500/12",
+    labelClass: "text-amber-800",
+  },
+  approved: {
+    labelKey: "merchant.bundles.reqStatusApproved",
+    pillClass: "border border-emerald-500/35 bg-emerald-500/12",
+    labelClass: "text-emerald-800",
+  },
+  rejected: {
+    labelKey: "merchant.bundles.reqStatusRejected",
+    pillClass: "border border-red-500/35 bg-red-500/12",
+    labelClass: "text-red-800",
+  },
 };
 
 const VOUCHER_STATUS_META: Record<string, { labelKey: string; variant: "default" | "secondary" | "destructive" }> = {
@@ -55,6 +70,13 @@ type SingleItem = {
 };
 
 type ListItem = { type: "set"; data: MerchantBundle } | { type: "single"; data: SingleItem };
+
+function splitBundleStatusParts(raw: string): string[] {
+  return raw
+    .split(/[,，/|]\s*|\n+/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
 
 export default function MyBundlesScreen() {
   const { t } = useI18n();
@@ -127,33 +149,50 @@ export default function MyBundlesScreen() {
   const renderItem = ({ item }: { item: ListItem }) => {
     if (item.type === "set") {
       const b = item.data;
+      const badgeText = t("merchant.bundles.bundleBadge").replace(/\{\{count\}\}/g, String(b.voucher_count));
+      const statusRaw = b.statuses?.trim() ?? "";
+      const split = statusRaw ? splitBundleStatusParts(b.statuses) : [];
+      const statusParts = statusRaw ? (split.length > 0 ? split : [statusRaw]) : [];
       return (
-        <View className="mx-4 mb-2 bg-card rounded-xl border border-primary/30 px-4 py-3">
-          <View className="flex-row items-center mb-2">
-            <View className="w-7 h-7 rounded-lg bg-primary/10 items-center justify-center mr-2">
-              <Package size={14} color="#CE3630" />
+        <View className="mx-4 mb-3 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+          <View className="flex-row items-center gap-3 border-b border-border bg-primary/5 px-4 py-3">
+            <View className="h-10 w-10 items-center justify-center rounded-full border border-primary/20 bg-white">
+              <Package size={20} color="#CE3630" strokeWidth={2} />
             </View>
-            <Text className="text-xs font-semibold text-primary">
-              {t("merchant.bundles.bundleBadge").replace(/\{\{count\}\}/g, String(b.voucher_count))}
+            <Text className="min-w-0 flex-1 text-sm font-bold text-primary" numberOfLines={2}>
+              {badgeText}
             </Text>
           </View>
-          <View className="flex-row justify-between items-start">
-            <View className="flex-1 mr-3">
-              <Text className="text-sm font-semibold text-foreground">{b.set_name}</Text>
-              <Text className="text-xs text-muted-foreground mt-0.5">
-                {t("merchant.bundles.statusPrefix")} {b.statuses}
+
+          <View className="p-4">
+            <Text className="text-lg font-bold leading-snug text-foreground" numberOfLines={2}>
+              {b.set_name}
+            </Text>
+            {b.set_description ? (
+              <Text className="mt-1.5 text-xs leading-5 text-muted-foreground" numberOfLines={2}>
+                {b.set_description}
               </Text>
+            ) : null}
+            {statusParts.length > 0 ? (
+              <View className="mt-2 flex-row flex-wrap items-center gap-x-2 gap-y-1.5">
+                <Text className="shrink-0 text-sm font-medium text-muted-foreground">
+                  {t("merchant.bundles.statusPrefix")}
+                </Text>
+                {statusParts.map((part, idx) => (
+                  <Badge key={`${part}-${idx}`} variant="outline" label={part} />
+                ))}
+              </View>
+            ) : null}
+
+            <View className="flex-row items-center justify-between rounded-xl bg-muted/50  py-3">
+              <Text className="text-md text-muted-foreground">{t("merchant.bundles.totalFace")}</Text>
+              <Text className="text-lg font-bold text-primary">₩{b.total_face_value.toLocaleString()}</Text>
             </View>
-            <Text className="text-base font-bold text-foreground">
-              {formatPrice(b.total_face_value, b.currency)}
-            </Text>
+
+            <Button onPress={() => handleRequestSettlement(b)} className="mt-3 w-full">
+              {t("merchant.bundles.requestBtn")}
+            </Button>
           </View>
-          <TouchableOpacity
-            onPress={() => handleRequestSettlement(b)}
-            className="mt-2 bg-primary rounded-lg py-2"
-          >
-            <Text className="text-center text-sm font-semibold text-primary-foreground">{t("merchant.bundles.requestBtn")}</Text>
-          </TouchableOpacity>
         </View>
       );
     }
@@ -189,37 +228,59 @@ export default function MyBundlesScreen() {
 
   const renderRequest = ({ item }: { item: BundleSettlementRequest }) => {
     const reqMeta = REQ_STATUS_META[item.status];
-    const status = reqMeta
-      ? { label: t(reqMeta.labelKey), color: reqMeta.color }
-      : { label: item.status, color: "text-foreground" };
+    const statusLabel = reqMeta ? t(reqMeta.labelKey) : item.status;
+    const pillClass = reqMeta?.pillClass ?? "border border-border bg-muted";
+    const labelClass = reqMeta?.labelClass ?? "text-foreground";
     const date = new Date(item.created_at * 1000);
-    const dateStr = `${date.getMonth() + 1}.${date.getDate()} ${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`;
+    const dateStr = `${date.getMonth() + 1}.${String(date.getDate()).padStart(2, "0")} ${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`;
 
     return (
-      <View className="mx-4 mb-2 bg-card rounded-xl border border-border px-4 py-3">
-        <View className="flex-row justify-between items-center mb-2">
-          <Text className="text-xs text-muted-foreground">{dateStr}</Text>
-          <Text className={`text-xs font-semibold ${status.color}`}>{status.label}</Text>
+      <View className="mx-4 mb-3 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+        <View className="flex-row items-center justify-between border-b border-border bg-muted/40 px-4 py-3">
+          <View className="flex-row items-center gap-2">
+            <View className="h-8 w-8 items-center justify-center rounded-full bg-white">
+              <Calendar size={16} color="#737373" />
+            </View>
+            <View>
+              <Text className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                {t("merchant.bundles.requestedAt")}
+              </Text>
+              <Text className="text-sm font-semibold text-foreground">{dateStr}</Text>
+            </View>
+          </View>
+          <View className={`rounded-full px-2.5 py-1 ${pillClass}`}>
+            <Text className={`text-xs font-semibold ${labelClass}`}>{statusLabel}</Text>
+          </View>
         </View>
-        <Separator className="mb-2" />
-        <View className="flex-row justify-between">
-          <View>
-            <Text className="text-xs text-muted-foreground">{t("merchant.bundles.purchasePrice")}</Text>
-            <Text className="text-sm font-medium text-foreground">
-              {formatPrice(item.purchase_price)}
-            </Text>
-          </View>
-          <View className="items-center">
-            <Text className="text-xs text-muted-foreground">{t("merchant.bundles.fee")}</Text>
-            <Text className="text-sm font-medium text-red-500">
-              -{formatPrice(item.fee_amount)}
-            </Text>
-          </View>
-          <View className="items-end">
-            <Text className="text-xs text-muted-foreground">{t("merchant.bundles.payout")}</Text>
-            <Text className="text-sm font-bold text-primary">
-              {formatPrice(item.net_amount)}
-            </Text>
+
+        <View className="p-4 pt-3">
+          <View className="flex-row gap-2 rounded-xl bg-muted/50 p-3">
+            <View className="min-w-0 flex-1">
+              <Text className="text-[11px] text-muted-foreground" numberOfLines={1}>
+                {t("merchant.bundles.purchasePrice")}
+              </Text>
+              <Text className="mt-0.5 text-sm font-semibold text-foreground" numberOfLines={1}>
+                ₩{item.purchase_price.toLocaleString()}
+              </Text>
+            </View>
+            <View className="w-px self-stretch bg-border" />
+            <View className="min-w-0 flex-1 items-center">
+              <Text className="text-[11px] text-muted-foreground" numberOfLines={1}>
+                {t("merchant.bundles.fee")}
+              </Text>
+              <Text className="mt-0.5 text-sm font-semibold text-red-600" numberOfLines={1}>
+                −₩{item.fee_amount.toLocaleString()}
+              </Text>
+            </View>
+            <View className="w-px self-stretch bg-border" />
+            <View className="min-w-0 flex-1 border-l-2 border-primary/35 pl-2">
+              <Text className="text-[11px] text-muted-foreground" numberOfLines={1}>
+                {t("merchant.bundles.payout")}
+              </Text>
+              <Text className="mt-0.5 text-base font-bold text-primary" numberOfLines={1}>
+                ₩{item.net_amount.toLocaleString()}
+              </Text>
+            </View>
           </View>
         </View>
       </View>
@@ -241,7 +302,7 @@ export default function MyBundlesScreen() {
                   }`}
               >
                 <Text
-                  className={`text-center text-sm font-medium ${tab === subTab ? "text-primary-foreground" : "text-foreground"
+                  className={`text-center font-medium ${tab === subTab ? "text-primary-foreground" : "text-foreground"
                     }`}
                 >
                   {subTab === "items" ? t("merchant.bundles.tabItems") : t("merchant.bundles.tabRequests")}

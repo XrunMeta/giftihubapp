@@ -342,6 +342,7 @@ export const zhHans: MessageTree = {
       voucherUsed: "已用",
       voucherExpired: "已过期",
       voucherListed: "出售中",
+      requestedAt: "申请时间",
       purchasePrice: "购入价",
       fee: "手续费",
       payout: "实付",

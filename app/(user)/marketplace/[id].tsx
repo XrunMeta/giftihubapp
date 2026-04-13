@@ -82,7 +82,10 @@ export default function MarketplaceDetailScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
-      <PageHeader title={t("userMarketplace.detail.title")} />
+      <PageHeader
+        title={t("userMarketplace.detail.title")}
+        onBackPress={() => router.navigate("/(user)/oth-path")}
+      />
       <ScrollView className="flex-1 px-5" contentContainerStyle={{ paddingBottom: 12 }}>
         {(() => {
           const imgUri = resolveImageUrl(listing.image_url, listing.brand_logo);

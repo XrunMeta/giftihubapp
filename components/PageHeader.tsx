@@ -7,6 +7,7 @@ import { Pressable, Text, View } from "react-native";
 interface PageHeaderProps {
   title: string;
   showBack?: boolean;
+  onBackPress?: () => void;
   rightAction?: React.ReactNode;
   className?: string;
 
@@ -15,27 +16,12 @@ interface PageHeaderProps {
   fallbackHref?: string;
 }
 
-export function PageHeader({
-  title,
-  showBack = true,
-  rightAction,
-  className,
-  onBack,
-  fallbackHref = "/(user)",
-}: PageHeaderProps) {
+export function PageHeader({ title, showBack = true, onBackPress, rightAction, className }: PageHeaderProps) {
   const router = useRouter();
 
   const handleBack = () => {
-    if (onBack) {
-      onBack();
-      return;
-    }
-
-    if (globalRouter.canGoBack?.()) {
-      router.back();
-    } else {
-      router.replace(fallbackHref as never);
-    }
+    if (onBackPress) onBackPress();
+    else router.back();
   };
 
   return (
