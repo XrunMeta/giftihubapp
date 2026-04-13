@@ -87,7 +87,7 @@ export default function v_df3264() {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <PageHeader title={v_8d41d7("userUsdtWithdraw.title")} />
+      <PageHeader title={v_8d41d7("userUsdtWithdraw.title")} fallbackHref="/(user)/mypage" />
       <ScrollView className="flex-1 px-6">
         <View className="bg-card border border-border rounded-xl p-4 mt-4">
           <Text className="text-xs text-muted-foreground">{v_8d41d7("userUsdtWithdraw.networkLabel")}</Text>

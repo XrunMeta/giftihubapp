@@ -16,12 +16,19 @@ interface PageHeaderProps {
   fallbackHref?: string;
 }
 
-export function v_258c1c({ title: v_9f1622, showBack: v_ea6f9c = true, onBackPress: v_f442f6, rightAction: v_4af61b, className: v_7ec75f }: PageHeaderProps) {
+export function v_258c1c({ title: v_9f1622, showBack: v_ea6f9c = true, onBackPress: v_f442f6, onBack: v_64ccfb, rightAction: v_4af61b, className: v_7ec75f, fallbackHref: v_9a5829 }: PageHeaderProps) {
   const v_904d46 = v_d1d90c();
 
   const v_6ca26b = () => {
-    if (v_f442f6) v_f442f6();
-    else v_904d46.back();
+    if (v_f442f6) {
+      v_f442f6();
+    } else if (v_64ccfb) {
+      v_64ccfb();
+    } else if (v_904d46.canGoBack()) {
+      v_904d46.back();
+    } else {
+      v_904d46.replace((v_9a5829 ?? "/(user)") as any);
+    }
   };
 
   return (

@@ -62,7 +62,7 @@ export default function v_301c5f() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={['top']}>
-      <PageHeader title={v_8d41d7('user.notifications.title')} />
+      <PageHeader title={v_8d41d7('user.notifications.title')} fallbackHref="/(user)/mypage" />
       {v_683210 ? (
         <ActivityIndicator size="large" color="#CE3630" className="mt-8" />
       ) : (

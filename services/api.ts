@@ -28,6 +28,7 @@ export function v_665fe7(): "local" | "remote" {
 }
 
 const v_1278db = "gifti_jwt";
+const v_125f91 = "gifti_user";
 const v_9c04d8 = "gifti_remember";
 const v_68354f = "gifti_saved_email";
 
@@ -41,6 +42,17 @@ export async function v_49c54d(v_21cc31): Promise<void> {
 
 export async function v_e91854(): Promise<void> {
   await v_350ceb.deleteItemAsync(v_1278db);
+  await v_e84827.removeItem(v_125f91);
+}
+
+export async function v_6e9d3e(): Promise<{ id: string; name: string; role: string } | null> {
+  const v_7ecfd1 = await v_e84827.getItem(v_125f91);
+  if (!v_7ecfd1) return null;
+  try { return JSON.parse(v_7ecfd1); } catch { return null; }
+}
+
+export async function v_84b1b1(v_625c74): Promise<void> {
+  await v_e84827.setItem(v_125f91, JSON.stringify(v_625c74));
 }
 
 export async function v_e48e3a(): Promise<boolean> {

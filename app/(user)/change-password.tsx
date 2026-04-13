@@ -3,6 +3,7 @@ import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_5d2c47 } from "jbfshypwcrklpetczcsca";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_bc1b24 } from "tlrvzsbmctdavs";
+import { v_d1d90c } from "rkmroqyctko";
 import v_a3453e, { v_5ab095 } from "bapkr";
 import { v_122070, v_19b633, v_79c4f2, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
@@ -12,6 +13,7 @@ import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
 type PwStep = "idle" | "otpSent" | "otpVerified";
 
 export default function v_18d397() {
+  const v_904d46 = v_d1d90c();
   const v_5c50c0 = v_2bd2c5();
   const { t: v_8d41d7 } = v_678659();
   const { user: v_625c74 } = v_5d2c47();
@@ -99,7 +101,7 @@ export default function v_18d397() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
-      <PageHeader title={v_8d41d7("settings.password.title")} showBack />
+      <PageHeader title={v_8d41d7("settings.password.title")} onBackPress={() => v_904d46.navigate("/(user)/mypage")} />
       <ScrollView className="flex-1 px-4 pt-4" contentContainerStyle={{ paddingBottom: 32 }}>
         <View className="bg-white rounded-xl border border-border p-4">
           <Text className="text-sm text-muted-foreground mb-4">

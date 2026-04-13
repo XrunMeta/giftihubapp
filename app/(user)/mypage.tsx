@@ -133,7 +133,7 @@ export default function v_840f8f() {
         <View className="mx-4 mt-4 bg-card rounded-xl border border-border overflow-hidden">
           <MenuItem
             icon={<Shield size={20} color="#737373" />}
-            label="지식재산권 안내"
+            label={v_8d41d7("patentNotice.pageTitle")}
             onPress={() => v_904d46.push("/(user)/patent-notice")}
           />
         </View>

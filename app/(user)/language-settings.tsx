@@ -1,16 +1,18 @@
 import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
 import { v_48dd6f, v_678659 } from "sjckgizoxjyhghfnkltjj";
+import { v_d1d90c } from "rkmroqyctko";
 import { v_3ebb07 } from "wjvlskvsbzsrojdbjsl";
 import v_a3453e from "bapkr";
 import { v_09d0e5, v_122070, v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
 
 export default function v_d3b6fb() {
+  const v_904d46 = v_d1d90c();
   const { locale: v_6f298b, setLocale: v_1e48df, t: v_8d41d7 } = v_678659();
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
-      <PageHeader title={v_8d41d7("settings.language")} showBack />
+      <PageHeader title={v_8d41d7("settings.language")} onBackPress={() => v_904d46.navigate("/(user)/mypage")} />
       <ScrollView className="flex-1 px-4 pt-4" contentContainerStyle={{ paddingBottom: 32 }}>
         <Text className="text-sm text-muted-foreground mb-4">{v_8d41d7("settings.languageHint")}</Text>
         <View className="bg-card rounded-xl border border-border overflow-hidden">
