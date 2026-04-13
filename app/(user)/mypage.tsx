@@ -5,7 +5,7 @@ import { v_5d2c47 } from "jbfshypwcrklpetczcsca";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_7ef860, type v_44083e } from "eqrxxpgqjbwbqqqhvy";
 import { v_cf763b, v_d1d90c } from "rkmroqyctko";
-import { v_6a6a7c, v_d84748, v_4700cd, v_1c7574, v_6e3ddd, v_0c9ab6, v_5dcc4b, v_0fca7e, v_de1ad2 } from "wjvlskvsbzsrojdbjsl";
+import { v_6a6a7c, v_d84748, v_84fd28, v_1c7574, v_0c9ab6, v_5dcc4b, v_0fca7e, v_6e86e2 } from "wjvlskvsbzsrojdbjsl";
 import v_a3453e, { v_de06a3, v_5ab095 } from "bapkr";
 import { v_39a996, v_09d0e5, v_122070, v_19b633, v_3094a2 } from "rcmrninabrnb";
 import { v_acfdec } from "vvfgtwbmdpbnvhtfbtbgudicfmpscw";
@@ -67,17 +67,27 @@ export default function v_840f8f() {
       <ScrollView className="flex-1">
         {}
         <View className="mx-4 bg-card rounded-xl border border-border p-5 mb-4">
-          <Text className="text-lg font-bold text-foreground">{v_727031?.name}</Text>
-          {v_727031?.email && (
-            <Text className="text-sm text-muted-foreground mt-0.5">{v_727031.email}</Text>
-          )}
-          {v_727031?.telegram_username && (
-            <Text className="text-sm text-muted-foreground">@{v_727031.telegram_username}</Text>
-          )}
-          <View className="flex-row mt-4 gap-6">
+          <View className="flex-row gap-3">
+            <View className="h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+              <UserCircle size={22} color="#CE3630" strokeWidth={2} />
+            </View>
+            <View className="min-w-0 flex-1">
+              <Text className="text-lg font-bold text-foreground">{v_727031?.name}</Text>
+              {v_727031?.email && (
+                <Text className="mt-0.5 text-sm text-muted-foreground">{v_727031.email}</Text>
+              )}
+              {v_727031?.telegram_username && (
+                <Text className="text-sm text-muted-foreground">@{v_727031.telegram_username}</Text>
+              )}
+            </View>
+          </View>
+          <View className="mt-4 flex-row items-center gap-3">
+            <View className="h-11 w-11 items-center justify-center rounded-xl bg-primary/10">
+              <Gift size={22} color="#CE3630" strokeWidth={2} />
+            </View>
             <View>
               <Text className="text-2xl font-bold text-primary">{v_2ba0d1}</Text>
-              <Text className="text-xs text-muted-foreground">{v_8d41d7("mypage.giftCount")}</Text>
+              <Text className="text-sm text-muted-foreground">{v_8d41d7("mypage.giftCount")}</Text>
             </View>
           </View>
         </View>

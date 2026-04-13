@@ -101,7 +101,7 @@ export default function v_f4f851() {
           <View className="items-start mb-8 flex-grow-1">
             <Image
               source={v_3b1fc0.logo}
-              className="w-[140px] h-[60px]"
+              className="w-[60px] h-[60px] mb-2"
               resizeMode="contain"
             />
             <Text className="text-2xl font-bold text-foreground">{v_8d41d7("auth.login.welcomeTitle")}</Text>
@@ -139,7 +139,7 @@ export default function v_f4f851() {
               <Switch
                 value={v_a964a4}
                 onValueChange={v_325cf5}
-                trackColor={{ false: "#d4d4d4", true: "#CE3630" }}
+                trackColor={{ false: "#d4d4d4", true: "#D33932" }}
                 thumbColor="#ffffff"
               />
             </View>

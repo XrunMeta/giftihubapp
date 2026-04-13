@@ -342,6 +342,7 @@ export const id: v_8695c5 = {
       voucherUsed: "Terpakai",
       voucherExpired: "Kedaluwarsa",
       voucherListed: "Dijual",
+      requestedAt: "Diajukan",
       purchasePrice: "Beli",
       fee: "Biaya",
       payout: "Bayar",

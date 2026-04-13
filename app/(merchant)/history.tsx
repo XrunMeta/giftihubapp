@@ -1,4 +1,7 @@
 import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
+import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
+import { v_0ddfa5 } from "pntqqtrakxjzccfwvrxdnuch";
+import { v_1b353f } from "ymbgtfrroootgjefkrxgp";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_be1e41 } from "hfombjcvpanldq";
 import { v_bc1b24 } from "tlrvzsbmctdavs";
@@ -9,7 +12,6 @@ import {
   v_9cabcb,
   v_aa7413,
   v_19b633,
-  v_79c4f2,
   v_4623af,
   v_3094a2,
 } from "rcmrninabrnb";
@@ -285,17 +287,10 @@ export default function v_ca8e36() {
       >
         <View className="flex-row items-center gap-3">
           {}
-          <TouchableOpacity
+          <Checkbox
+            checked={v_05e77d}
             onPress={() => v_9873ff(v_8c0b26.transaction_id)}
-            className={`w-5 h-5 rounded border-2 items-center justify-center ${
-              v_05e77d ? "bg-primary border-primary" : "border-border bg-white"
-            }`}
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-          >
-            {v_05e77d && (
-              <Text className="text-white text-xs font-bold">✓</Text>
-            )}
-          </TouchableOpacity>
+          />
 
           <View className="flex-1">
             <View className="flex-row justify-between items-start">
@@ -341,9 +336,9 @@ export default function v_ca8e36() {
       <ScreenHeader elevated title={v_8d41d7("merchant.history.title")} />
 
       {}
-      <View className="flex-row mx-4 mt-3 mb-2 gap-2">
-        <TextInput
-          className="flex-1 bg-card border border-border rounded-lg px-3 py-2.5 text-sm text-foreground"
+      <View className="flex-row mx-4 mb-2 gap-2">
+        <Input
+          className="flex-1 bg-card"
           placeholder={v_8d41d7("merchant.history.codeSuffixPlaceholder")}
           placeholderTextColor="#a1a1aa"
           value={v_1e43c9}
@@ -352,32 +347,21 @@ export default function v_ca8e36() {
           returnKeyType="search"
           autoCapitalize="characters"
         />
-        <TouchableOpacity
-          onPress={v_5e757d}
-          className="bg-primary px-4 rounded-lg items-center justify-center"
-        >
-          <Text className="text-primary-foreground text-sm font-medium">
-            {v_8d41d7("merchant.history.search")}
-          </Text>
-        </TouchableOpacity>
+        <Button onPress={v_5e757d} className="shrink-0 px-4">
+          {v_8d41d7("merchant.history.search")}
+        </Button>
       </View>
 
       {}
       {v_4622b9.length > 0 && (
         <TouchableOpacity
           onPress={v_0217e6}
-          className="flex-row items-center mx-4 mb-2 gap-2"
+          className="mx-4 mb-2 flex-row items-center gap-3 rounded-lg py-1 active:opacity-70"
+          accessibilityRole="checkbox"
+          accessibilityState={{ checked: v_5476b4 }}
         >
-          <View
-            className={`w-5 h-5 rounded border-2 items-center justify-center ${
-              v_5476b4 ? "bg-primary border-primary" : "border-border bg-white"
-            }`}
-          >
-            {v_5476b4 && (
-              <Text className="text-white text-xs font-bold">✓</Text>
-            )}
-          </View>
-          <Text className="text-sm text-muted-foreground">
+          <Checkbox checked={v_5476b4} />
+          <Text className="text-sm font-medium text-foreground">
             {v_8d41d7("merchant.history.selectAll")}
           </Text>
         </TouchableOpacity>

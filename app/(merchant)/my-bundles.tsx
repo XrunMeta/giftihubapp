@@ -1,6 +1,6 @@
 import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
 import { v_6185b9 } from "hqklsidyfbumojabxoewf";
-import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
+import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_be1e41 } from "hfombjcvpanldq";
 import { v_7ef52a } from "splenmyqnym";
@@ -11,7 +11,7 @@ import {
   type v_12efea,
   type v_920170,
 } from "uugztyivrmtvweuio";
-import { v_c62079 } from "wjvlskvsbzsrojdbjsl";
+import { v_429ab0, v_c62079 } from "wjvlskvsbzsrojdbjsl";
 import v_a3453e, { v_de06a3, v_c4deb2, v_5ab095 } from "bapkr";
 import {
   v_39a996,
@@ -28,9 +28,21 @@ import { v_2bd2c5 } from "hlsbiqaseofpjggplzcrgbjcth";
 type Tab = "items" | "requests";
 
 const v_2f8e17 = {
-  pending: { labelKey: "merchant.bundles.reqStatusPending", color: "text-yellow-600" },
-  approved: { labelKey: "merchant.bundles.reqStatusApproved", color: "text-green-600" },
-  rejected: { labelKey: "merchant.bundles.reqStatusRejected", color: "text-red-600" },
+  pending: {
+    labelKey: "merchant.bundles.reqStatusPending",
+    pillClass: "border border-amber-500/35 bg-amber-500/12",
+    labelClass: "text-amber-800",
+  },
+  approved: {
+    labelKey: "merchant.bundles.reqStatusApproved",
+    pillClass: "border border-emerald-500/35 bg-emerald-500/12",
+    labelClass: "text-emerald-800",
+  },
+  rejected: {
+    labelKey: "merchant.bundles.reqStatusRejected",
+    pillClass: "border border-red-500/35 bg-red-500/12",
+    labelClass: "text-red-800",
+  },
 };
 
 const v_ebe3bd = {
@@ -55,6 +67,13 @@ type SingleItem = {
 };
 
 type ListItem = { type: "set"; data: v_920170 } | { type: "single"; data: SingleItem };
+
+function v_62116f(v_479f05): string[] {
+  return v_479f05
+    .split(/[,，/|]\s*|\n+/)
+    .map((v_fd5f43) => v_fd5f43.trim())
+    .filter(Boolean);
+}
 
 export default function v_8f53d1() {
   const { t: v_8d41d7 } = v_678659();
@@ -127,33 +146,50 @@ export default function v_8f53d1() {
   const v_fcf6ec = ({ item: v_8c0b26 }: { item: ListItem }) => {
     if (v_8c0b26.type === "set") {
       const v_148ff6 = v_8c0b26.data;
+      const v_138072 = v_8d41d7("merchant.bundles.bundleBadge").replace(/\{\{count\}\}/g, String(v_148ff6.voucher_count));
+      const v_ab55ae = v_148ff6.statuses?.trim() ?? "";
+      const v_e5ac9e = v_ab55ae ? v_62116f(v_148ff6.statuses) : [];
+      const v_b99f97 = v_ab55ae ? (v_e5ac9e.length > 0 ? v_e5ac9e : [v_ab55ae]) : [];
       return (
-        <View className="mx-4 mb-2 bg-card rounded-xl border border-primary/30 px-4 py-3">
-          <View className="flex-row items-center mb-2">
-            <View className="w-7 h-7 rounded-lg bg-primary/10 items-center justify-center mr-2">
-              <Package size={14} color="#CE3630" />
+        <View className="mx-4 mb-3 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+          <View className="flex-row items-center gap-3 border-b border-border bg-primary/5 px-4 py-3">
+            <View className="h-10 w-10 items-center justify-center rounded-full border border-primary/20 bg-white">
+              <Package size={20} color="#CE3630" strokeWidth={2} />
             </View>
-            <Text className="text-xs font-semibold text-primary">
-              {v_8d41d7("merchant.bundles.bundleBadge").replace(/\{\{count\}\}/g, String(v_148ff6.voucher_count))}
+            <Text className="min-w-0 flex-1 text-sm font-bold text-primary" numberOfLines={2}>
+              {v_138072}
             </Text>
           </View>
-          <View className="flex-row justify-between items-start">
-            <View className="flex-1 mr-3">
-              <Text className="text-sm font-semibold text-foreground">{v_148ff6.set_name}</Text>
-              <Text className="text-xs text-muted-foreground mt-0.5">
-                {v_8d41d7("merchant.bundles.statusPrefix")} {v_148ff6.statuses}
+
+          <View className="p-4">
+            <Text className="text-lg font-bold leading-snug text-foreground" numberOfLines={2}>
+              {v_148ff6.set_name}
+            </Text>
+            {v_148ff6.set_description ? (
+              <Text className="mt-1.5 text-xs leading-5 text-muted-foreground" numberOfLines={2}>
+                {v_148ff6.set_description}
               </Text>
+            ) : null}
+            {v_b99f97.length > 0 ? (
+              <View className="mt-2 flex-row flex-wrap items-center gap-x-2 gap-y-1.5">
+                <Text className="shrink-0 text-sm font-medium text-muted-foreground">
+                  {v_8d41d7("merchant.bundles.statusPrefix")}
+                </Text>
+                {v_b99f97.map((v_910cfa, v_e86ad8) => (
+                  <Badge key={`${v_910cfa}-${v_e86ad8}`} variant="outline" label={v_910cfa} />
+                ))}
+              </View>
+            ) : null}
+
+            <View className="flex-row items-center justify-between rounded-xl bg-muted/50  py-3">
+              <Text className="text-md text-muted-foreground">{v_8d41d7("merchant.bundles.totalFace")}</Text>
+              <Text className="text-lg font-bold text-primary">₩{v_148ff6.total_face_value.toLocaleString()}</Text>
             </View>
-            <Text className="text-base font-bold text-foreground">
-              {v_be1e41(v_148ff6.total_face_value, v_148ff6.currency)}
-            </Text>
+
+            <Button onPress={() => v_df5cad(v_148ff6)} className="mt-3 w-full">
+              {v_8d41d7("merchant.bundles.requestBtn")}
+            </Button>
           </View>
-          <TouchableOpacity
-            onPress={() => v_df5cad(v_148ff6)}
-            className="mt-2 bg-primary rounded-lg py-2"
-          >
-            <Text className="text-center text-sm font-semibold text-primary-foreground">{v_8d41d7("merchant.bundles.requestBtn")}</Text>
-          </TouchableOpacity>
         </View>
       );
     }
@@ -189,37 +225,59 @@ export default function v_8f53d1() {
 
   const v_9c30ea = ({ item: v_8c0b26 }: { item: v_12efea }) => {
     const v_fa219c = v_2f8e17[v_8c0b26.status];
-    const v_d308b5 = v_fa219c
-      ? { label: v_8d41d7(v_fa219c.labelKey), color: v_fa219c.color }
-      : { label: v_8c0b26.status, color: "text-foreground" };
+    const v_c4180e = v_fa219c ? v_8d41d7(v_fa219c.labelKey) : v_8c0b26.status;
+    const v_11e3c6 = v_fa219c?.pillClass ?? "border border-border bg-muted";
+    const v_19452c = v_fa219c?.labelClass ?? "text-foreground";
     const v_8dffde = new Date(v_8c0b26.created_at * 1000);
-    const v_f8e6b9 = `${v_8dffde.getMonth() + 1}.${v_8dffde.getDate()} ${v_8dffde.getHours().toString().padStart(2, "0")}:${v_8dffde.getMinutes().toString().padStart(2, "0")}`;
+    const v_f8e6b9 = `${v_8dffde.getMonth() + 1}.${String(v_8dffde.getDate()).padStart(2, "0")} ${v_8dffde.getHours().toString().padStart(2, "0")}:${v_8dffde.getMinutes().toString().padStart(2, "0")}`;
 
     return (
-      <View className="mx-4 mb-2 bg-card rounded-xl border border-border px-4 py-3">
-        <View className="flex-row justify-between items-center mb-2">
-          <Text className="text-xs text-muted-foreground">{v_f8e6b9}</Text>
-          <Text className={`text-xs font-semibold ${v_d308b5.color}`}>{v_d308b5.label}</Text>
+      <View className="mx-4 mb-3 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+        <View className="flex-row items-center justify-between border-b border-border bg-muted/40 px-4 py-3">
+          <View className="flex-row items-center gap-2">
+            <View className="h-8 w-8 items-center justify-center rounded-full bg-white">
+              <Calendar size={16} color="#737373" />
+            </View>
+            <View>
+              <Text className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                {v_8d41d7("merchant.bundles.requestedAt")}
+              </Text>
+              <Text className="text-sm font-semibold text-foreground">{v_f8e6b9}</Text>
+            </View>
+          </View>
+          <View className={`rounded-full px-2.5 py-1 ${v_11e3c6}`}>
+            <Text className={`text-xs font-semibold ${v_19452c}`}>{v_c4180e}</Text>
+          </View>
         </View>
-        <Separator className="mb-2" />
-        <View className="flex-row justify-between">
-          <View>
-            <Text className="text-xs text-muted-foreground">{v_8d41d7("merchant.bundles.purchasePrice")}</Text>
-            <Text className="text-sm font-medium text-foreground">
-              {v_be1e41(v_8c0b26.purchase_price)}
-            </Text>
-          </View>
-          <View className="items-center">
-            <Text className="text-xs text-muted-foreground">{v_8d41d7("merchant.bundles.fee")}</Text>
-            <Text className="text-sm font-medium text-red-500">
-              -{v_be1e41(v_8c0b26.fee_amount)}
-            </Text>
-          </View>
-          <View className="items-end">
-            <Text className="text-xs text-muted-foreground">{v_8d41d7("merchant.bundles.payout")}</Text>
-            <Text className="text-sm font-bold text-primary">
-              {v_be1e41(v_8c0b26.net_amount)}
-            </Text>
+
+        <View className="p-4 pt-3">
+          <View className="flex-row gap-2 rounded-xl bg-muted/50 p-3">
+            <View className="min-w-0 flex-1">
+              <Text className="text-[11px] text-muted-foreground" numberOfLines={1}>
+                {v_8d41d7("merchant.bundles.purchasePrice")}
+              </Text>
+              <Text className="mt-0.5 text-sm font-semibold text-foreground" numberOfLines={1}>
+                ₩{v_8c0b26.purchase_price.toLocaleString()}
+              </Text>
+            </View>
+            <View className="w-px self-stretch bg-border" />
+            <View className="min-w-0 flex-1 items-center">
+              <Text className="text-[11px] text-muted-foreground" numberOfLines={1}>
+                {v_8d41d7("merchant.bundles.fee")}
+              </Text>
+              <Text className="mt-0.5 text-sm font-semibold text-red-600" numberOfLines={1}>
+                −₩{v_8c0b26.fee_amount.toLocaleString()}
+              </Text>
+            </View>
+            <View className="w-px self-stretch bg-border" />
+            <View className="min-w-0 flex-1 border-l-2 border-primary/35 pl-2">
+              <Text className="text-[11px] text-muted-foreground" numberOfLines={1}>
+                {v_8d41d7("merchant.bundles.payout")}
+              </Text>
+              <Text className="mt-0.5 text-base font-bold text-primary" numberOfLines={1}>
+                ₩{v_8c0b26.net_amount.toLocaleString()}
+              </Text>
+            </View>
           </View>
         </View>
       </View>
@@ -241,7 +299,7 @@ export default function v_8f53d1() {
                   }`}
               >
                 <Text
-                  className={`text-center text-sm font-medium ${v_11083e === v_4abce2 ? "text-primary-foreground" : "text-foreground"
+                  className={`text-center font-medium ${v_11083e === v_4abce2 ? "text-primary-foreground" : "text-foreground"
                     }`}
                 >
                   {v_4abce2 === "items" ? v_8d41d7("merchant.bundles.tabItems") : v_8d41d7("merchant.bundles.tabRequests")}

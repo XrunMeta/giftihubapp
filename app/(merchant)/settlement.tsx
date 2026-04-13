@@ -1,8 +1,10 @@
 import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
+import { v_b34ce5 } from "oenczknsnztwieeomtluxbmbxyebkkqcr";
 import { v_474c83 } from "gibjbbaijzglfubmjstefxfyl";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_be1e41 } from "hfombjcvpanldq";
 import { v_bc1b24 } from "tlrvzsbmctdavs";
+import { v_429ab0, v_9265a9 } from "wjvlskvsbzsrojdbjsl";
 import v_a3453e, { v_de06a3, v_c4deb2, v_df9f57, v_5ab095 } from "bapkr";
 import {
   v_39a996,
@@ -90,17 +92,24 @@ export default function v_0842da() {
   }, [v_783ad3, v_11083e, v_77b1a5]);
 
   const v_e01a2e = ({ item: v_8c0b26 }: { item: DailyItem }) => (
-    <View className="mx-4 mb-2 bg-card rounded-xl border border-border px-4 py-3">
-      <View className="flex-row justify-between items-center">
-        <View>
-          <Text className="text-sm font-medium text-foreground">{v_8c0b26.date}</Text>
-          <Text className="text-xs text-muted-foreground mt-0.5">
-            {v_8c0b26.count}
-            {v_8d41d7("merchant.settlement.countSuffix")}
-          </Text>
+    <View className="mx-4 mb-3 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+      <View className="flex-row items-center justify-between px-4 py-4">
+        <View className="min-w-0 flex-1 flex-row items-center gap-3">
+          <View className="h-11 w-11 shrink-0 items-center justify-center rounded-full bg-muted">
+            <Calendar size={20} color="#737373" strokeWidth={2} />
+          </View>
+          <View className="min-w-0 flex-1">
+            <Text className="text-base font-bold text-foreground" numberOfLines={1}>
+              {v_8c0b26.date}
+            </Text>
+            <Text className="mt-1 text-sm text-muted-foreground">
+              {v_8c0b26.count}
+              {v_8d41d7("merchant.settlement.countSuffix")}
+            </Text>
+          </View>
         </View>
-        <Text className="text-base font-bold text-foreground">
-          {v_be1e41(v_8c0b26.total_amount)}
+        <Text className="ml-2 shrink-0 text-lg font-bold text-primary">
+          ₩{v_8c0b26.total_amount?.toLocaleString()}
         </Text>
       </View>
     </View>
@@ -121,39 +130,57 @@ export default function v_0842da() {
     } as Record<string, string>)[v_fd5f43] ?? v_fd5f43;
 
   const v_bc6f27 = ({ item: v_8c0b26 }: { item: SettlementRecord }) => (
-    <View className="mx-4 mb-2 bg-card rounded-xl border border-border p-4">
-      <View className="flex-row justify-between items-start mb-2">
-        <View className="flex-1">
-          <Text className="text-xs text-muted-foreground">
-            {v_8c0b26.period_from} ~ {v_8c0b26.period_to}
-          </Text>
-          <Text className="text-sm font-semibold text-foreground mt-0.5">
-            {v_8c0b26.type === "bundle" ? v_8d41d7("merchant.settlement.typeBundle") : v_8d41d7("merchant.settlement.typeNormal")} · {v_8c0b26.item_count}
-            {v_8d41d7("merchant.settlement.countSuffix")}
-          </Text>
+    <View className="mx-4 mb-3 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+      <View className="flex-row items-start justify-between gap-3 border-b border-border bg-muted/30 px-4 py-3">
+        <View className="min-w-0 flex-1 flex-row items-start gap-3">
+          <View className="mt-0.5 h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white">
+            <ReceiptText size={18} color="#737373" strokeWidth={2} />
+          </View>
+          <View className="min-w-0 flex-1">
+            <Text className="text-sm font-medium leading-5 text-muted-foreground">
+              {v_8c0b26.period_from} ~ {v_8c0b26.period_to}
+            </Text>
+            <Text className="mt-1.5 text-base font-bold text-foreground">
+              {v_8c0b26.type === "bundle" ? v_8d41d7("merchant.settlement.typeBundle") : v_8d41d7("merchant.settlement.typeNormal")} ·{" "}
+              {v_8c0b26.item_count}
+              {v_8d41d7("merchant.settlement.countSuffix")}
+            </Text>
+          </View>
         </View>
-        <View className="px-2 py-1 rounded-full" style={{ backgroundColor: (v_d8cb4d[v_8c0b26.status] ?? "#737373") + "20" }}>
-          <Text className="text-xs font-medium" style={{ color: v_d8cb4d[v_8c0b26.status] ?? "#737373" }}>
+        <View
+          className="shrink-0 rounded-full px-2.5 py-1.5"
+          style={{ backgroundColor: (v_d8cb4d[v_8c0b26.status] ?? "#737373") + "22" }}
+        >
+          <Text className="text-sm font-semibold" style={{ color: v_d8cb4d[v_8c0b26.status] ?? "#737373" }}>
             {v_fe653f(v_8c0b26.status)}
           </Text>
         </View>
       </View>
-      <View className="flex-row justify-between mt-1">
-        <Text className="text-xs text-muted-foreground">{v_8d41d7("merchant.settlement.totalLabel")}</Text>
-        <Text className="text-xs text-foreground font-medium">{v_be1e41(v_8c0b26.total_amount)}</Text>
+
+      <View className="gap-2.5 px-4 py-3">
+        <View className="flex-row items-center justify-between">
+          <Text className="text-sm text-muted-foreground">{v_8d41d7("merchant.settlement.totalLabel")}</Text>
+          <Text className="text-sm font-semibold text-foreground">₩{v_8c0b26.total_amount?.toLocaleString()}</Text>
+        </View>
+        <View className="flex-row items-center justify-between">
+          <Text className="text-sm text-muted-foreground">{v_8d41d7("merchant.settlement.feeLabel")}</Text>
+          <Text className="text-sm font-semibold text-red-600">−₩{v_8c0b26.fee_amount?.toLocaleString()}</Text>
+        </View>
+        <View className="h-px bg-border" />
+        <View className="flex-row items-center justify-between">
+          <Text className="text-sm font-medium text-foreground">{v_8d41d7("merchant.settlement.netLabel")}</Text>
+          <Text className="text-lg font-bold text-primary">₩{v_8c0b26.net_amount?.toLocaleString()}</Text>
+        </View>
       </View>
-      <View className="flex-row justify-between mt-0.5">
-        <Text className="text-xs text-muted-foreground">{v_8d41d7("merchant.settlement.feeLabel")}</Text>
-        <Text className="text-xs text-muted-foreground">-{v_be1e41(v_8c0b26.fee_amount)}</Text>
-      </View>
-      <View className="flex-row justify-between mt-0.5">
-        <Text className="text-xs text-muted-foreground">{v_8d41d7("merchant.settlement.netLabel")}</Text>
-        <Text className="text-sm font-bold text-primary">{v_be1e41(v_8c0b26.net_amount)}</Text>
-      </View>
+
       {(v_8c0b26.tx_hash || v_8c0b26.bank_ref) && (
-        <Text className="text-xs text-muted-foreground mt-2" numberOfLines={1}>
-          {v_8c0b26.tx_hash ? `${v_8d41d7("merchant.settlement.txPrefix")}${v_8c0b26.tx_hash}` : `${v_8d41d7("merchant.settlement.bankPrefix")}${v_8c0b26.bank_ref}`}
-        </Text>
+        <View className="border-t border-border bg-muted/20 px-4 py-2.5">
+          <Text className="text-xs leading-5 text-muted-foreground" numberOfLines={2}>
+            {v_8c0b26.tx_hash
+              ? `${v_8d41d7("merchant.settlement.txPrefix")}${v_8c0b26.tx_hash}`
+              : `${v_8d41d7("merchant.settlement.bankPrefix")}${v_8c0b26.bank_ref}`}
+          </Text>
+        </View>
       )}
     </View>
   );
@@ -168,7 +195,7 @@ export default function v_0842da() {
             }`}
         >
           <Text
-            className={`text-center text-sm font-medium ${v_11083e === v_4abce2 ? "text-primary-foreground" : "text-foreground"
+            className={`text-center font-medium ${v_11083e === v_4abce2 ? "text-primary-foreground" : "text-foreground"
               }`}
           >
             {v_4abce2 === "settlement"
@@ -187,40 +214,33 @@ export default function v_0842da() {
       {v_11083e === "settlement" ? (
         <>
           {}
-          <View className="flex-row mx-4 mb-3 gap-2">
-            {v_21af5b.map((v_e2a85c) => (
-              <TouchableOpacity
-                key={v_e2a85c.key}
-                onPress={() => v_6fa4d3(v_e2a85c.key)}
-                className={`flex-1 py-3 rounded-lg border ${v_783ad3 === v_e2a85c.key ? "bg-primary border-primary" : "bg-card border-border"
-                  }`}
-              >
-                <Text
-                  className={`text-center text-sm font-medium ${v_783ad3 === v_e2a85c.key ? "text-primary-foreground" : "text-foreground"
-                    }`}
-                >
-                  {v_e2a85c.label}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
+          <SegmentedControl<Period>
+            className="mx-4 mb-3"
+            value={v_783ad3}
+            onChange={v_6fa4d3}
+            options={v_21af5b.map((v_e2a85c) => ({ value: v_e2a85c.key, label: v_e2a85c.label }))}
+          />
 
           {}
           {v_b595e3 && !v_0636ca && (
-            <View className="mx-4 mb-3 bg-card rounded-xl border border-border p-4">
+            <View className="mx-4 mb-3 overflow-hidden rounded-2xl border border-border bg-card shadow-sm p-5">
               <View className="flex-row justify-between">
-                <View className="items-center flex-1">
-                  <Text className="text-xs text-muted-foreground">{v_8d41d7("merchant.settlement.totalCountLabel")}</Text>
-                  <Text className="text-xl font-bold text-foreground mt-1">
+                <View className="flex-1 items-center">
+                  <Text className="text-sm font-medium text-muted-foreground">
+                    {v_8d41d7("merchant.settlement.totalCountLabel")}
+                  </Text>
+                  <Text className="mt-2 text-2xl font-bold text-foreground">
                     {v_b595e3.summary.total_count}
                     {v_8d41d7("merchant.settlement.countSuffix")}
                   </Text>
                 </View>
                 <Separator orientation="vertical" />
-                <View className="items-center flex-1">
-                  <Text className="text-xs text-muted-foreground">{v_8d41d7("merchant.settlement.totalAmountLabel")}</Text>
-                  <Text className="text-xl font-bold text-primary mt-1">
-                    {v_be1e41(v_b595e3.summary.total_amount)}
+                <View className="flex-1 items-center">
+                  <Text className="text-sm font-medium text-muted-foreground">
+                    {v_8d41d7("merchant.settlement.totalAmountLabel")}
+                  </Text>
+                  <Text className="mt-2 text-2xl font-bold text-primary">
+                    ₩{v_b595e3.summary.total_amount?.toLocaleString()}
                   </Text>
                 </View>
               </View>
@@ -237,10 +257,10 @@ export default function v_0842da() {
               data={v_b595e3?.daily ?? []}
               keyExtractor={(v_8c0b26) => v_8c0b26.date}
               renderItem={v_e01a2e}
-              contentContainerStyle={{ paddingBottom: 0 }}
+              contentContainerStyle={{ paddingBottom: 20 }}
               ListEmptyComponent={
                 <View className="flex-1 items-center justify-center py-20">
-                  <Text className="text-muted-foreground">{v_8d41d7("merchant.settlement.emptyDaily")}</Text>
+                  <Text className="text-base text-muted-foreground">{v_8d41d7("merchant.settlement.emptyDaily")}</Text>
                 </View>
               }
             />
@@ -257,7 +277,7 @@ export default function v_0842da() {
                 className={`px-3 py-1.5 rounded-full border ${v_ded9f6 === v_8b5cd8.key ? "bg-primary border-primary" : "bg-card border-border"
                   }`}
               >
-                <Text className={`text-xs font-medium ${v_ded9f6 === v_8b5cd8.key ? "text-primary-foreground" : "text-foreground"}`}>
+                <Text className={`text-sm font-medium ${v_ded9f6 === v_8b5cd8.key ? "text-primary-foreground" : "text-foreground"}`}>
                   {v_8b5cd8.label}
                 </Text>
               </TouchableOpacity>
@@ -273,10 +293,10 @@ export default function v_0842da() {
               data={v_678155}
               keyExtractor={(v_8c0b26) => v_8c0b26.id}
               renderItem={v_bc6f27}
-              contentContainerStyle={{ paddingBottom: 0 }}
+              contentContainerStyle={{ paddingBottom: 20 }}
               ListEmptyComponent={
                 <View className="flex-1 items-center justify-center py-20">
-                  <Text className="text-muted-foreground">{v_8d41d7("merchant.settlement.emptyRecords")}</Text>
+                  <Text className="text-base text-muted-foreground">{v_8d41d7("merchant.settlement.emptyRecords")}</Text>
                 </View>
               }
             />
