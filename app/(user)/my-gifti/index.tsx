@@ -3,6 +3,8 @@ import { Badge, type BadgeVariant } from "@/components/ui/badge";
 import { useI18n } from "@/context/I18nContext";
 import { resolveImageUrl } from "@/lib/image";
 import { cn } from "@/lib/utils";
+import type { Locale } from "@/locales/types";
+import { getKeywords, type Keyword } from "@/services/marketplace";
 import { getMyVouchers, type Voucher, type VoucherStatus } from "@/services/vouchers";
 import { format } from "date-fns";
 import { useFocusEffect, useRouter } from "expo-router";
@@ -11,15 +13,18 @@ import React, { useCallback, useMemo, useState } from "react";
 import { ActivityIndicator, FlatList, Image, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const SYM: Record<string, string> = { KRW: "₩", USD: "$", IDR: "Rp" };
-function fmtPrice(amount: number, currency?: string) {
-  const sym = SYM[currency ?? "KRW"] ?? "₩";
-  return `${sym}${amount.toLocaleString()}`;
+import { formatPrice as fmtPrice } from "@/lib/currency";
+
+function kwLabel(kw: Keyword, locale: Locale): string {
+  if (locale === "en" && kw.name_en) return kw.name_en;
+  if (locale === "id" && kw.name_id) return kw.name_id;
+  return kw.name;
 }
 
 const TAB_KEYS: { key: string; labelKey: string }[] = [
   { key: "all", labelKey: "myGifti.list.tabAll" },
   { key: "active", labelKey: "myGifti.list.tabActive" },
+  { key: "gifted", labelKey: "myGifti.list.tabGifted" },
   { key: "listed", labelKey: "myGifti.list.tabListed" },
   { key: "used", labelKey: "myGifti.list.tabUsed" },
   { key: "expired", labelKey: "myGifti.list.tabExpired" },
@@ -31,6 +36,7 @@ const STATUS_BADGE_META: Record<string, { labelKey: string; variant: BadgeVarian
   listed: { labelKey: "myGifti.list.statusListed", variant: "info" },
   used: { labelKey: "myGifti.list.statusUsed", variant: "secondary" },
   expired: { labelKey: "myGifti.list.statusExpired", variant: "destructive" },
+  gifted: { labelKey: "myGifti.list.statusGifted", variant: "info" },
   transferred: { labelKey: "myGifti.list.statusTransferred", variant: "success" },
   cancel_request_pending: { labelKey: "myGifti.detail.cancelRequestPendingLabel", variant: "warning" },
 };
@@ -45,7 +51,7 @@ function statusBadge(t: (path: string) => string, status: string, cancelPending?
 }
 
 export default function MyGiftiScreen() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const router = useRouter();
   const tabs = useMemo(
     () => TAB_KEYS.map((row) => ({ key: row.key, label: t(row.labelKey) })),
@@ -54,16 +60,26 @@ export default function MyGiftiScreen() {
   const [vouchers, setVouchers] = useState<Voucher[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("all");
+  const [keywords, setKeywords] = useState<Keyword[]>([]);
+  const [activeKeyword, setActiveKeyword] = useState<number | null>(null);
 
   const [error, setError] = useState<string | null>(null);
   const [debugInfo, setDebugInfo] = useState<string>("");
+
+  useFocusEffect(
+    useCallback(() => {
+      getKeywords()
+        .then((res) => setKeywords(res.keywords))
+        .catch(() => {});
+    }, []),
+  );
 
   const loadVouchers = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
       const status = activeTab === "all" ? undefined : (activeTab as VoucherStatus);
-      const res = await getMyVouchers(status);
+      const res = await getMyVouchers(status, activeKeyword ?? undefined);
       setVouchers(res.vouchers);
       const sets = new Set(res.vouchers.filter((v: Voucher) => v.set_id).map((v: Voucher) => v.set_id));
       setDebugInfo(
@@ -88,14 +104,14 @@ export default function MyGiftiScreen() {
     } finally {
       setLoading(false);
     }
-  }, [activeTab, t]);
+  }, [activeTab, activeKeyword, t]);
 
   const loadRef = React.useRef(loadVouchers);
   loadRef.current = loadVouchers;
   useFocusEffect(
     useCallback(() => {
       loadRef.current();
-    }, [activeTab]),
+    }, [activeTab, activeKeyword]),
   );
 
   type ListItem = { type: "single"; voucher: Voucher } | { type: "bundle"; setId: string; vouchers: Voucher[] };
@@ -245,33 +261,68 @@ export default function MyGiftiScreen() {
           ) : undefined
         }
         bottom={
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
-            className="mb-3"
-          >
-            {tabs.map((tab) => {
-              const isActive = tab.key === activeTab;
-              return (
-                <Pressable
-                  key={tab.key}
-                  onPress={() => setActiveTab(tab.key)}
-                  style={{ alignSelf: "flex-start" }}
-                  className={cn("rounded-full px-4 py-2", isActive ? "bg-primary" : "bg-secondary")}
-                >
-                  <Text
-                    className={cn(
-                      "text-sm font-medium",
-                      isActive ? "text-primary-foreground" : "text-muted-foreground",
-                    )}
+          <>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
+              className="mb-3"
+            >
+              {tabs.map((tab) => {
+                const isActive = tab.key === activeTab;
+                return (
+                  <Pressable
+                    key={tab.key}
+                    onPress={() => setActiveTab(tab.key)}
+                    style={{ alignSelf: "flex-start" }}
+                    className={cn("rounded-full px-4 py-2", isActive ? "bg-primary" : "bg-secondary")}
                   >
-                    {tab.label}
+                    <Text
+                      className={cn(
+                        "text-sm font-medium",
+                        isActive ? "text-primary-foreground" : "text-muted-foreground",
+                      )}
+                    >
+                      {tab.label}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </ScrollView>
+            {keywords.length > 0 && (
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
+                className="mb-3"
+              >
+                <Pressable
+                  onPress={() => setActiveKeyword(null)}
+                  style={{ alignSelf: "flex-start" }}
+                  className={cn("rounded-full px-3 py-1.5", activeKeyword === null ? "bg-primary" : "bg-secondary")}
+                >
+                  <Text className={cn("text-xs font-medium", activeKeyword === null ? "text-primary-foreground" : "text-muted-foreground")}>
+                    {t("myGifti.list.tabAll")}
                   </Text>
                 </Pressable>
-              );
-            })}
-          </ScrollView>
+                {keywords.map((kw) => {
+                  const isActive = activeKeyword === kw.id;
+                  return (
+                    <Pressable
+                      key={kw.id}
+                      onPress={() => setActiveKeyword(isActive ? null : kw.id)}
+                      style={{ alignSelf: "flex-start" }}
+                      className={cn("rounded-full px-3 py-1.5", isActive ? "bg-primary" : "bg-secondary")}
+                    >
+                      <Text className={cn("text-xs font-medium", isActive ? "text-primary-foreground" : "text-muted-foreground")}>
+                        {kwLabel(kw, locale)}
+                      </Text>
+                    </Pressable>
+                  );
+                })}
+              </ScrollView>
+            )}
+          </>
         }
       />
       <FlatList

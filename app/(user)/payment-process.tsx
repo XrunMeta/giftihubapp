@@ -1,44 +1,55 @@
 import { Button } from "@/components/ui/button";
-import { useCart } from "@/context/CartContext";
+import { getItemCurrency, useCart } from "@/context/CartContext";
 import { useI18n } from "@/context/I18nContext";
 import { purchaseBundle } from "@/services/bundle";
 import { getPaymentStatus } from "@/services/payment";
 import { purchaseProduct, type PaymentMethod } from "@/services/store";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
 import { CheckCircle, XCircle } from "lucide-react-native";
-import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, Text, View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { ActivityIndicator, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 export default function PaymentProcessScreen() {
   const { t } = useI18n();
-  const { method, currency } = useLocalSearchParams<{ method: string; currency?: string }>();
+  const alert = useAlertShim();
+  const { method, currency, nonce } = useLocalSearchParams<{ method: string; currency?: string; nonce?: string }>();
   const router = useRouter();
-  const { items, packageItems, clearByCurrency, clearCart } = useCart();
+  const { items, packageItems, clearByCurrency, clearCart, selectedItemIds, selectedPackageIds, removeFromCart, removePackage } = useCart();
   const [status, setStatus] = useState<"processing" | "success" | "failed">("processing");
   const [debugError, setDebugError] = useState<string>("");
+  const processedNonceRef = useRef<string | null>(null);
 
   const targetCurrency = currency || "KRW";
 
   useEffect(() => {
+    const key = `${method}|${currency}|${nonce ?? "none"}`;
+    if (processedNonceRef.current === key) {
+      console.log(`[pay] skip duplicate key=${key}`);
+      return;
+    }
+    processedNonceRef.current = key;
+    console.log(`[pay] trigger key=${key} itemsLen=${items.length} pkgLen=${packageItems.length}`);
     setStatus("processing");
     setDebugError("");
     processPayment();
-  }, [method, currency]);
+  }, [method, currency, nonce]);
 
   const processPayment = async () => {
     if (!method) {
-      Alert.alert(t("userPaymentProcess.errNoMethodTitle"), t("userPaymentProcess.errNoMethodBody"));
+      alert(t("userPaymentProcess.errNoMethodTitle"), t("userPaymentProcess.errNoMethodBody"));
       setStatus("failed");
       return;
     }
 
-    const targetPackages = packageItems.filter((p) => p.currency === targetCurrency);
-    const targetItems = items.filter((i) => {
-      if (i.flexibleAmount) return (i.product.flexible_currency ?? "KRW") === targetCurrency;
-      return targetCurrency === "KRW";
-    });
+    const targetPackages = packageItems.filter(
+      (p) => p.currency === targetCurrency && p.id && selectedPackageIds.has(p.id),
+    );
+    const targetItems = items.filter(
+      (i) => getItemCurrency(i) === targetCurrency && i.cartId && selectedItemIds.has(i.cartId),
+    );
 
     console.log("[payment-process] debug:", JSON.stringify({
       targetCurrency,
@@ -55,7 +66,7 @@ export default function PaymentProcessScreen() {
     }));
 
     if (!targetPackages.length && !targetItems.length) {
-      Alert.alert(
+      alert(
         t("userPaymentProcess.errNoMethodTitle"),
         t("userPaymentProcess.errNoItems")
           .replace("{{currency}}", targetCurrency)
@@ -66,51 +77,78 @@ export default function PaymentProcessScreen() {
     }
 
     try {
+      console.log(`[pay] START loop pkgs=${targetPackages.length} items=${targetItems.length}`);
 
-      for (const pkg of targetPackages) {
+      for (let pi = 0; pi < targetPackages.length; pi++) {
+        const pkg = targetPackages[pi];
+        console.log(`[pay] pkg[${pi}] cur=${pkg.currency} amt=${pkg.composition?.target_amount}`);
         const composition = pkg.composition;
         if (!composition) {
-          Alert.alert(t("userPaymentProcess.errNoMethodTitle"), t("userPaymentProcess.errNoComposition"));
+          console.error(`[pay] pkg[${pi}] NO COMPOSITION`);
+          alert(t("userPaymentProcess.errNoMethodTitle"), t("userPaymentProcess.errNoComposition"));
           setStatus("failed");
           return;
         }
 
+        console.log(`[pay] pkg[${pi}] calling purchaseBundle...`);
         const res = await purchaseBundle(
           composition.target_amount,
           pkg.currency,
           method as PaymentMethod,
           composition,
         );
+        console.log(`[pay] pkg[${pi}] bundleRes=${JSON.stringify({ status: res.status, payment_id: res.payment_id, redirect: !!res.redirect_url })}`);
 
         if (res.status === "completed" || method === "dev_pay") {
+          console.log(`[pay] pkg[${pi}] SKIP poll (status=${res.status}, method=${method})`);
           continue;
         }
 
         if (res.redirect_url) {
+          console.log(`[pay] pkg[${pi}] opening redirect`);
           await WebBrowser.openBrowserAsync(res.redirect_url);
         }
 
         const completed = await pollStatusAsync(res.payment_id);
+        console.log(`[pay] pkg[${pi}] polled=${completed}`);
         if (!completed) {
-          Alert.alert(t("userPaymentProcess.pollFailTitle"), t("userPaymentProcess.pollFailBody"));
+          alert(t("userPaymentProcess.pollFailTitle"), t("userPaymentProcess.pollFailBody"));
           setStatus("failed");
           return;
         }
       }
 
-      for (const item of targetItems) {
+      for (let ii = 0; ii < targetItems.length; ii++) {
+        const item = targetItems[ii];
+        console.log(`[pay] item[${ii}] id=${item.product.id} name=${item.product.name} flexAmt=${item.flexibleAmount}`);
+        console.log(`[pay] item[${ii}] calling purchaseProduct...`);
         const res = await purchaseProduct(item.product.id, method as PaymentMethod, item.flexibleAmount);
+        console.log(`[pay] item[${ii}] res=${JSON.stringify({ status: res.status, payment_id: res.payment_id, redirect: !!res.redirect_url })}`);
         if (res.status !== "completed" && method !== "dev_pay") {
-          if (res.redirect_url) await WebBrowser.openBrowserAsync(res.redirect_url);
+          if (res.redirect_url) {
+            console.log(`[pay] item[${ii}] opening redirect`);
+            await WebBrowser.openBrowserAsync(res.redirect_url);
+          }
           const completed = await pollStatusAsync(res.payment_id);
+          console.log(`[pay] item[${ii}] polled=${completed}`);
           if (!completed) {
             setStatus("failed");
             return;
           }
+        } else {
+          console.log(`[pay] item[${ii}] SKIP poll (status=${res.status}, method=${method})`);
         }
       }
 
-      clearByCurrency(targetCurrency);
+      console.log(`[pay] LOOP DONE — removing purchased items only, setting success`);
+
+      for (const it of targetItems) {
+        if (it.cartId) removeFromCart(it.cartId);
+      }
+      for (const pkg of targetPackages) {
+        const idx = packageItems.findIndex((p) => p.id === pkg.id);
+        if (idx >= 0) removePackage(idx);
+      }
       setStatus("success");
     } catch (err: any) {
       const detail = err.body?.error || err.message || t("userPaymentProcess.failDetailFallback");
@@ -121,7 +159,7 @@ export default function PaymentProcessScreen() {
       );
       console.error("[payment-process] error:", debugInfo);
       setDebugError(debugInfo);
-      Alert.alert(
+      alert(
         t("userPaymentProcess.failTitle"),
         t("userPaymentProcess.failBody")
           .replace("{{detail}}", detail)
@@ -133,13 +171,32 @@ export default function PaymentProcessScreen() {
 
   const pollStatusAsync = async (id: string): Promise<boolean> => {
     const maxAttempts = 30;
+    let consecutiveErrors = 0;
     for (let i = 0; i < maxAttempts; i++) {
       try {
         const res = await getPaymentStatus(id);
+        console.log(`[payment-process] poll #${i + 1} payment_id=${id} status=${res.status}`);
+        consecutiveErrors = 0;
         if (res.status === "completed") return true;
         if (res.status === "failed" || res.status === "expired") return false;
-      } catch {
-
+      } catch (err: any) {
+        consecutiveErrors += 1;
+        const info = {
+          attempt: i + 1,
+          payment_id: id,
+          status: err?.status,
+          body: err?.body,
+          message: err?.message,
+        };
+        console.error("[payment-process] poll error:", JSON.stringify(info));
+        setDebugError(JSON.stringify(info, null, 2));
+        if (consecutiveErrors >= 3) {
+          alert(
+            t("userPaymentProcess.pollFailTitle"),
+            `poll error x${consecutiveErrors}\nstatus=${err?.status}\n${err?.message ?? ""}`,
+          );
+          return false;
+        }
       }
       await new Promise((r) => setTimeout(r, 3000));
     }

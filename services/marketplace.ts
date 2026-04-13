@@ -18,6 +18,7 @@ export interface MarketplaceListing {
   brand_logo: string | null;
   set_id?: string | null;
   set_count?: number | null;
+  currency?: string;
 }
 
 export type MarketplaceCategory =
@@ -30,8 +31,21 @@ export type MarketplaceSort = "price_asc" | "price_desc" | "newest";
 
 interface ListingsParams {
   category?: MarketplaceCategory;
+  keyword?: number;
   q?: string;
   sort?: MarketplaceSort;
+}
+
+export interface Keyword {
+  id: number;
+  name: string;
+  name_en: string | null;
+  name_id: string | null;
+  display_order: number;
+}
+
+export async function getKeywords(): Promise<{ keywords: Keyword[] }> {
+  return apiFetch("/oth-path", { skipAuth: true });
 }
 
 export async function getMarketplaceListings(
@@ -39,6 +53,7 @@ export async function getMarketplaceListings(
 ): Promise<{ listings: MarketplaceListing[] }> {
   const searchParams = new URLSearchParams();
   if (params?.category) searchParams.set("category", params.category);
+  if (params?.keyword) searchParams.set("keyword", String(params.keyword));
   if (params?.q) searchParams.set("q", params.q);
   if (params?.sort) searchParams.set("sort", params.sort);
   const query = searchParams.toString();
@@ -90,6 +105,32 @@ export async function cancelListing(
   id: string,
 ): Promise<{ ok: true }> {
   return apiFetch(`/oth-path${id}`, { method: "DELETE" });
+}
+
+export interface MyListing {
+  id: string;
+  voucher_id: string | null;
+  set_id: string | null;
+  status: string;
+  selling_price: number;
+}
+
+export async function getMyListings(): Promise<{ listings: MyListing[] }> {
+  return apiFetch(`/oth-path`);
+}
+
+export async function findActiveListing(opts: {
+  voucherId?: string;
+  setId?: string;
+}): Promise<MyListing | null> {
+  const { listings } = await getMyListings();
+  const hit = listings.find(
+    (l) =>
+      l.status === "active" &&
+      ((opts.voucherId && l.voucher_id === opts.voucherId) ||
+        (opts.setId && l.set_id === opts.setId)),
+  );
+  return hit ?? null;
 }
 
 export async function createSetListing(

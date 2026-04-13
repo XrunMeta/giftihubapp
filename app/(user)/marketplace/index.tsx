@@ -1,53 +1,63 @@
 import { ScreenHeader } from "@/components/ScreenHeader";
 import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
+import { formatPrice } from "@/lib/currency";
 import { resolveImageUrl } from "@/lib/image";
 import { cn } from "@/lib/utils";
 import {
+  getKeywords,
   getMarketplaceListings,
-  type MarketplaceCategory,
+  type Keyword,
   type MarketplaceListing,
 } from "@/services/marketplace";
+import type { Locale } from "@/locales/types";
 import { useFocusEffect, useRouter } from "expo-router";
 import { Package } from "lucide-react-native";
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { ActivityIndicator, FlatList, Image, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const CATEGORY_TAB_KEYS: { key: string; labelKey: string }[] = [
-  { key: "all", labelKey: "userMarketplace.list.tabAll" },
-  { key: "food", labelKey: "userMarketplace.list.catFood" },
-  { key: "culture", labelKey: "userMarketplace.list.catCulture" },
-  { key: "convenience", labelKey: "userMarketplace.list.catConvenience" },
-  { key: "beauty", labelKey: "userMarketplace.list.catBeauty" },
-  { key: "etc", labelKey: "userMarketplace.list.catEtc" },
-];
+function kwLabel(kw: Keyword, locale: Locale): string {
+  if (locale === "en" && kw.name_en) return kw.name_en;
+  if (locale === "id" && kw.name_id) return kw.name_id;
+  return kw.name;
+}
 
 export default function MarketplaceScreen() {
-  const { t } = useI18n();
-  const categoryTabs = useMemo(
-    () => CATEGORY_TAB_KEYS.map((row) => ({ key: row.key, label: t(row.labelKey) })),
-    [t],
-  );
+  const { t, locale } = useI18n();
   const router = useRouter();
+  const { user } = useAuth();
   const [listings, setListings] = useState<MarketplaceListing[]>([]);
+  const [keywords, setKeywords] = useState<Keyword[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("all");
+  const [activeKeyword, setActiveKeyword] = useState<number | null>(null);
   const [search, setSearch] = useState("");
   const listRef = useRef<FlatList>(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      getKeywords()
+        .then((res) => setKeywords(res.keywords))
+        .catch(() => {});
+    }, []),
+  );
 
   const loadListings = useCallback(async () => {
     setLoading(true);
     try {
-      const category = activeTab === "all" ? undefined : (activeTab as MarketplaceCategory);
-      const res = await getMarketplaceListings({ category, q: search || undefined });
-      setListings(res.listings);
+      const res = await getMarketplaceListings({
+        keyword: activeKeyword ?? undefined,
+        q: search || undefined,
+      });
+      const filtered = user ? res.listings.filter((l) => l.seller_id !== user.id) : res.listings;
+      setListings(filtered);
     } catch {
       console.error("Failed to load marketplace listings");
     } finally {
       setLoading(false);
     }
-  }, [activeTab, search]);
+  }, [activeKeyword, search, user]);
 
   useFocusEffect(
     useCallback(() => {
@@ -92,10 +102,10 @@ export default function MarketplaceScreen() {
               <View className="flex-row justify-between items-center mt-1">
                 <View className="flex-row items-baseline gap-1">
                   <Text className="text-base font-bold text-foreground">
-                    ₩{item.selling_price.toLocaleString()}
+                    {formatPrice(item.selling_price, item.currency)}
                   </Text>
                   <Text className="text-xs text-muted-foreground line-through">
-                    ₩{item.original_price.toLocaleString()}
+                    {formatPrice(item.original_price, item.currency)}
                   </Text>
                 </View>
                 <Text className="text-xs text-muted-foreground">{item.seller_name}</Text>
@@ -133,10 +143,10 @@ export default function MarketplaceScreen() {
           <View className="flex-row justify-between items-center mt-2">
             <View className="flex-row items-baseline gap-2">
               <Text className="text-base font-bold text-foreground">
-                ₩{item.selling_price.toLocaleString()}
+                {formatPrice(item.selling_price, item.currency)}
               </Text>
               <Text className="text-xs text-muted-foreground line-through">
-                ₩{item.original_price.toLocaleString()}
+                {formatPrice(item.original_price, item.currency)}
               </Text>
             </View>
             <Text className="text-xs text-muted-foreground">{item.seller_name}</Text>
@@ -157,36 +167,55 @@ export default function MarketplaceScreen() {
           placeholder: t("userMarketplace.list.searchPlaceholder"),
         }}
         bottom={
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
-            className="mb-3"
-          >
-            {categoryTabs.map((tab) => {
-              const isActive = tab.key === activeTab;
-              return (
-                <Pressable
-                  key={tab.key}
-                  onPress={() => setActiveTab(tab.key)}
-                  style={{ alignSelf: "flex-start" }}
+          keywords.length > 0 ? (
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ alignItems: "center", gap: 8, paddingHorizontal: 16 }}
+              className="mb-3"
+            >
+              <Pressable
+                onPress={() => setActiveKeyword(null)}
+                style={{ alignSelf: "flex-start" }}
+                className={cn(
+                  "rounded-full px-4 py-2",
+                  activeKeyword === null ? "bg-primary" : "bg-secondary",
+                )}
+              >
+                <Text
                   className={cn(
-                    "rounded-full px-4 py-2",
-                    isActive ? "bg-primary" : "bg-secondary",
+                    "text-sm font-medium",
+                    activeKeyword === null ? "text-primary-foreground" : "text-muted-foreground",
                   )}
                 >
-                  <Text
+                  {t("userMarketplace.list.tabAll")}
+                </Text>
+              </Pressable>
+              {keywords.map((kw) => {
+                const isActive = activeKeyword === kw.id;
+                return (
+                  <Pressable
+                    key={kw.id}
+                    onPress={() => setActiveKeyword(isActive ? null : kw.id)}
+                    style={{ alignSelf: "flex-start" }}
                     className={cn(
-                      "text-sm font-medium",
-                      isActive ? "text-primary-foreground" : "text-muted-foreground",
+                      "rounded-full px-4 py-2",
+                      isActive ? "bg-primary" : "bg-secondary",
                     )}
                   >
-                    {tab.label}
-                  </Text>
-                </Pressable>
-              );
-            })}
-          </ScrollView>
+                    <Text
+                      className={cn(
+                        "text-sm font-medium",
+                        isActive ? "text-primary-foreground" : "text-muted-foreground",
+                      )}
+                    >
+                      {kwLabel(kw, locale)}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </ScrollView>
+          ) : undefined
         }
       />
       <FlatList

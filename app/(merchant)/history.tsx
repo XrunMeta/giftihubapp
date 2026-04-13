@@ -3,12 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { useI18n } from "@/context/I18nContext";
+import { formatPrice } from "@/lib/currency";
 import { apiFetch } from "@/services/api";
 import { format } from "date-fns";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   FlatList,
   Modal,
   Text,
@@ -16,6 +16,8 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+import { useAlertShim } from "@/components/ui/alert-shim";
 
 type UsedVoucherItem = {
   transaction_id: string;
@@ -30,6 +32,7 @@ type UsedVoucherItem = {
   cancel_window_remaining_sec: number;
   status: "used" | "cancelled" | "request_pending";
   cancellation_request_id: string | null;
+  requested_by?: "user" | "merchant" | null;
 };
 
 type UsedVouchersResponse = {
@@ -50,6 +53,7 @@ type ReasonCode = (typeof REASON_CODES)[number];
 
 export default function MerchantHistoryScreen() {
   const { t } = useI18n();
+  const alert = useAlertShim();
 
   const [codeSuffix, setCodeSuffix] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -145,20 +149,20 @@ export default function MerchantHistoryScreen() {
         method: "POST",
         body: JSON.stringify(body),
       });
-      Alert.alert(
+      alert(
         t("merchant.history.settlementRequest"),
         t("merchant.history.settlementDone"),
       );
       setSelected(new Set());
       setAllSelected(false);
     } catch {
-      Alert.alert(t("merchant.history.settlementRequest"), t("merchant.history.settlementFail"));
+      alert(t("merchant.history.settlementRequest"), t("merchant.history.settlementFail"));
     }
   };
 
   const pickReasonCode = (): Promise<ReasonCode | null> =>
     new Promise((resolve) => {
-      Alert.alert(
+      alert(
         t("merchant.history.cancelReasonTitle"),
         undefined,
         [
@@ -199,7 +203,7 @@ export default function MerchantHistoryScreen() {
       setModalItem(null);
       fetchItems(1, true, codeSuffix);
     } catch {
-      Alert.alert(t("merchant.history.cancelDirect"), t("merchant.history.actionFail"));
+      alert(t("merchant.history.cancelDirect"), t("merchant.history.actionFail"));
     } finally {
       setActionLoading(false);
     }
@@ -221,10 +225,44 @@ export default function MerchantHistoryScreen() {
       setModalItem(null);
       fetchItems(1, true, codeSuffix);
     } catch {
-      Alert.alert(t("merchant.history.cancelRequest"), t("merchant.history.actionFail"));
+      alert(t("merchant.history.cancelRequest"), t("merchant.history.actionFail"));
     } finally {
       setActionLoading(false);
     }
+  };
+
+  const handleRejectUserRequest = async (item: UsedVoucherItem) => {
+    if (!item.cancellation_request_id) return;
+    alert(
+      t("merchant.history.rejectUserRequest"),
+      t("merchant.history.rejectConfirmBody"),
+      [
+        { text: t("merchant.history.rejectNo"), style: "cancel" },
+        {
+          text: t("merchant.history.rejectYes"),
+          style: "destructive",
+          onPress: async () => {
+            setActionLoading(true);
+            try {
+              await apiFetch(
+                `/oth-path${item.cancellation_request_id}/reject`,
+                {
+                  method: "POST",
+                  body: JSON.stringify({ note: cancelMemo }),
+                },
+              );
+              setModalItem(null);
+              setCancelMemo("");
+              fetchItems(1, true, codeSuffix);
+            } catch {
+              alert(t("merchant.history.rejectUserRequest"), t("merchant.history.actionFail"));
+            } finally {
+              setActionLoading(false);
+            }
+          },
+        },
+      ],
+    );
   };
 
   const statusLabel = (status: UsedVoucherItem["status"]) => {
@@ -267,7 +305,7 @@ export default function MerchantHistoryScreen() {
               </View>
               <View className="items-end ml-2">
                 <Text className="text-base font-bold text-primary">
-                  ₩{item.amount?.toLocaleString()}
+                  {formatPrice(item.amount)}
                 </Text>
                 <Text className="text-xs text-muted-foreground mt-0.5">
                   {format(new Date(item.used_at * 1000), "MM.dd HH:mm")}
@@ -400,13 +438,13 @@ export default function MerchantHistoryScreen() {
                   <View className="flex-row justify-between">
                     <Text className="text-sm text-muted-foreground">금액</Text>
                     <Text className="text-sm font-medium text-foreground">
-                      ₩{modalItem.amount?.toLocaleString()}
+                      {formatPrice(modalItem.amount)}
                     </Text>
                   </View>
                   <View className="flex-row justify-between">
                     <Text className="text-sm text-muted-foreground">액면가</Text>
                     <Text className="text-sm font-medium text-foreground">
-                      ₩{modalItem.face_value?.toLocaleString()}
+                      {formatPrice(modalItem.face_value)}
                     </Text>
                   </View>
                   <View className="flex-row justify-between">
@@ -484,6 +522,32 @@ export default function MerchantHistoryScreen() {
                           </Text>
                         )}
                       </TouchableOpacity>
+                    ) : modalItem.requested_by === "user" && modalItem.cancellation_request_id ? (
+                      <>
+                        <TextInput
+                          className="border border-border rounded-xl px-4 py-3 text-sm text-foreground bg-white"
+                          placeholder={t("merchant.history.rejectNotePh")}
+                          placeholderTextColor="#a1a1aa"
+                          value={cancelMemo}
+                          onChangeText={setCancelMemo}
+                          multiline
+                          numberOfLines={2}
+                          maxLength={200}
+                        />
+                        <TouchableOpacity
+                          onPress={() => handleRejectUserRequest(modalItem)}
+                          disabled={actionLoading}
+                          className="bg-destructive rounded-xl py-4 items-center"
+                        >
+                          {actionLoading ? (
+                            <ActivityIndicator size="small" color="#fff" />
+                          ) : (
+                            <Text className="text-white font-semibold text-base">
+                              {t("merchant.history.rejectUserRequest")}
+                            </Text>
+                          )}
+                        </TouchableOpacity>
+                      </>
                     ) : (
                       <View className="border border-amber-300 bg-amber-50 rounded-xl py-4 items-center">
                         <Text className="text-amber-700 font-medium text-sm">

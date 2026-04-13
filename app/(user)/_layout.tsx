@@ -84,7 +84,11 @@ export default function UserLayout() {
       <Tabs.Screen name="settlement" options={{ href: null }} />
       <Tabs.Screen name="usdt-withdraw" options={{ href: null }} />
       <Tabs.Screen name="settings" options={{ href: null }} />
+      <Tabs.Screen name="edit-profile" options={{ href: null }} />
+      <Tabs.Screen name="change-password" options={{ href: null }} />
+      <Tabs.Screen name="language-settings" options={{ href: null }} />
       <Tabs.Screen name="notifications" options={{ href: null }} />
+      <Tabs.Screen name="patent-notice" options={{ href: null }} />
     </Tabs>
   );
 }

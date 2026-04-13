@@ -3,17 +3,18 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useI18n } from "@/context/I18nContext";
+import { formatPrice, currencySymbol } from "@/lib/currency";
 import { resolveImageUrl } from "@/lib/image";
-import { createSetListing } from "@/services/marketplace";
+import { cancelListing, createSetListing, findActiveListing, type MyListing } from "@/services/marketplace";
 import { getSetDetail, type SetDetail, type Voucher } from "@/services/vouchers";
 import { format } from "date-fns";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Package, ShoppingCart } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, FlatList, Image, Pressable, Text, TextInput, View } from "react-native";
-import QRCode from "react-native-qrcode-svg";
+import { ActivityIndicator, FlatList, Image, Pressable, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 const STATUS_BADGE_META: Record<string, { labelKey: string; variant: "default" | "secondary" | "destructive" }> = {
   active: { labelKey: "myGifti.list.statusActive", variant: "default" },
   used: { labelKey: "myGifti.list.statusUsed", variant: "secondary" },
@@ -24,6 +25,7 @@ const STATUS_BADGE_META: Record<string, { labelKey: string; variant: "default" |
 
 export default function SetDetailScreen() {
   const { t } = useI18n();
+  const alert = useAlertShim();
   const { setId } = useLocalSearchParams<{ setId: string }>();
   const router = useRouter();
   const [data, setData] = useState<SetDetail | null>(null);
@@ -31,20 +33,34 @@ export default function SetDetailScreen() {
   const [showSellForm, setShowSellForm] = useState(false);
   const [sellingPrice, setSellingPrice] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [activeListing, setActiveListing] = useState<MyListing | null>(null);
+  const [cancellingListing, setCancellingListing] = useState(false);
+
+  const load = async () => {
+    if (!setId) return;
+    try {
+      const res = await getSetDetail(setId);
+      setData(res);
+      const isListed = res.vouchers.some((v: Voucher) => v.status === "listed") || (res.set as any).status === "listed";
+      if (isListed) {
+        try {
+          const hit = await findActiveListing({ setId });
+          setActiveListing(hit);
+        } catch {  }
+      } else {
+        setActiveListing(null);
+      }
+    } catch {
+      alert(t("myGifti.setDetail.loadErrorTitle"), t("myGifti.setDetail.loadErrorBody"));
+      router.back();
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    if (!setId) return;
-    (async () => {
-      try {
-        const res = await getSetDetail(setId);
-        setData(res);
-      } catch {
-        Alert.alert(t("myGifti.setDetail.loadErrorTitle"), t("myGifti.setDetail.loadErrorBody"));
-        router.back();
-      } finally {
-        setLoading(false);
-      }
-    })();
+    load();
+
   }, [setId]);
 
   if (loading || !data) {
@@ -63,17 +79,17 @@ export default function SetDetailScreen() {
 
   const handleSell = async () => {
     if (!sellingPrice || Number(sellingPrice) <= 0) {
-      Alert.alert(t("myGifti.setDetail.alertPriceTitle"), t("myGifti.setDetail.alertPriceBody"));
+      alert(t("myGifti.setDetail.alertPriceTitle"), t("myGifti.setDetail.alertPriceBody"));
       return;
     }
     setSubmitting(true);
     try {
       await createSetListing(setId!, Number(sellingPrice));
-      Alert.alert(t("myGifti.setDetail.successTitle"), t("myGifti.setDetail.successBody"), [
+      alert(t("myGifti.setDetail.successTitle"), t("myGifti.setDetail.successBody"), [
         { text: t("myGifti.setDetail.ok"), onPress: () => router.back() },
       ]);
     } catch (err: any) {
-      Alert.alert(t("myGifti.setDetail.failTitle"), err.body?.error || t("myGifti.setDetail.failBody"));
+      alert(t("myGifti.setDetail.failTitle"), err.body?.error || t("myGifti.setDetail.failBody"));
     } finally {
       setSubmitting(false);
     }
@@ -108,7 +124,7 @@ export default function SetDetailScreen() {
           </View>
           <View className="flex-row justify-between items-center mt-1">
             <Text className="text-sm font-bold text-foreground">
-              ₩{item.face_value?.toLocaleString()}
+              {formatPrice(item.face_value, item.base_currency)}
             </Text>
             <Text className="text-xs text-muted-foreground">
               {item.expiry_date ? format(new Date(item.expiry_date * 1000), "yyyy.MM.dd") : "-"}
@@ -122,17 +138,9 @@ export default function SetDetailScreen() {
   const listHeader = (
     <>
       {}
-      <View className="mx-4 mb-4 bg-card rounded-xl border border-border overflow-hidden">
-        <View className="p-5 items-center">
-          <View className="flex-row items-center mb-3">
-            <Package size={20} color="#CE3630" />
-            <Text className="text-base font-bold text-foreground ml-2">{t("myGifti.setDetail.bundleLabel")}</Text>
-          </View>
-          <View className="p-3 bg-white rounded-lg">
-            <QRCode value={`gifti-set:${setId}`} size={160} />
-          </View>
-          <Text className="text-xs text-muted-foreground mt-2">{t("myGifti.setDetail.qrHint")}</Text>
-        </View>
+      <View className="mx-4 mt-2 mb-3 flex-row items-center">
+        <Package size={20} color="#CE3630" />
+        <Text className="text-base font-bold text-foreground ml-2">{t("myGifti.setDetail.bundleLabel")}</Text>
       </View>
 
       {}
@@ -153,10 +161,55 @@ export default function SetDetailScreen() {
         <View className="flex-row justify-between">
           <Text className="text-sm font-semibold text-foreground">{t("myGifti.setDetail.totalFace")}</Text>
           <Text className="text-base font-bold text-foreground">
-            ₩{summary.total_value?.toLocaleString()}
+            {formatPrice(summary.total_value, set.currency)}
           </Text>
         </View>
       </View>
+
+      {}
+      {activeListing && (
+        <View className="mx-4 mb-4">
+          <Button
+            variant="destructive"
+            disabled={cancellingListing}
+            onPress={() => {
+              alert(
+                t("userMarketplace.detail.cancelConfirmTitle"),
+                t("userMarketplace.detail.cancelConfirmBody"),
+                [
+                  { text: t("userMarketplace.detail.cancelNo"), style: "cancel" },
+                  {
+                    text: t("userMarketplace.detail.cancelYes"),
+                    style: "destructive",
+                    onPress: async () => {
+                      setCancellingListing(true);
+                      try {
+                        await cancelListing(activeListing.id);
+                        alert(
+                          t("userMarketplace.detail.cancelDoneTitle"),
+                          t("userMarketplace.detail.cancelDoneBody"),
+                        );
+                        await load();
+                      } catch (err: any) {
+                        alert(
+                          t("userMarketplace.detail.cancelFailTitle"),
+                          String(err?.message ?? err),
+                        );
+                      } finally {
+                        setCancellingListing(false);
+                      }
+                    },
+                  },
+                ],
+              );
+            }}
+          >
+            {cancellingListing
+              ? t("userMarketplace.detail.cancelling")
+              : t("userMarketplace.detail.cancelListing")}
+          </Button>
+        </View>
+      )}
 
       {}
       {canSell && !showSellForm && (
@@ -189,16 +242,16 @@ export default function SetDetailScreen() {
           <View className="mt-3">
             <View className="flex-row justify-between mb-1">
               <Text className="text-xs text-muted-foreground">{t("myGifti.setDetail.totalFace")}</Text>
-              <Text className="text-xs text-foreground">₩{summary.total_value?.toLocaleString()}</Text>
+              <Text className="text-xs text-foreground">{formatPrice(summary.total_value, set.currency)}</Text>
             </View>
             <View className="flex-row justify-between mb-1">
               <Text className="text-xs text-muted-foreground">{t("myGifti.setDetail.feeLabel")}</Text>
-              <Text className="text-xs text-foreground">₩{fee.toLocaleString()}</Text>
+              <Text className="text-xs text-foreground">{formatPrice(fee, set.currency)}</Text>
             </View>
             <Separator className="my-1.5" />
             <View className="flex-row justify-between">
               <Text className="text-sm font-semibold text-foreground">{t("myGifti.setDetail.payoutLabel")}</Text>
-              <Text className="text-sm font-bold text-primary">₩{payout.toLocaleString()}</Text>
+              <Text className="text-sm font-bold text-primary">{formatPrice(payout, set.currency)}</Text>
             </View>
           </View>
           <View className="flex-row gap-2 mt-3">

@@ -1,16 +1,17 @@
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { useCart } from "@/context/CartContext";
+import { getItemCurrency, useCart } from "@/context/CartContext";
 import { useI18n } from "@/context/I18nContext";
 import type { PaymentMethod } from "@/services/store";
 import { getDevMode } from "@/services/system";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Banknote, Coins, CreditCard, Zap } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
-import { Alert, Pressable, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 const BASE_PAYMENT_METHODS: { key: PaymentMethod; labelKey?: string; label?: string; icon: React.ReactNode; devOnly?: boolean }[] = [
   { key: "dev_pay", labelKey: "userPurchase.payDev", icon: <Zap size={20} color="#3b82f6" />, devOnly: true },
   { key: "paypal", label: "PayPal", icon: <CreditCard size={20} color="#0a0a0a" /> },
@@ -19,13 +20,14 @@ const BASE_PAYMENT_METHODS: { key: PaymentMethod; labelKey?: string; label?: str
   { key: "usdt_trc20", label: "USDT (TRC-20)", icon: <Coins size={20} color="#0a0a0a" /> },
 ];
 
-const SYM: Record<string, string> = { KRW: "₩", USD: "$", IDR: "Rp" };
+import { currencySymbol } from "@/lib/currency";
 
 export default function PurchaseScreen() {
   const { t } = useI18n();
+  const alert = useAlertShim();
   const router = useRouter();
   const { currency } = useLocalSearchParams<{ currency?: string }>();
-  const { items, packageItems } = useCart();
+  const { items, packageItems, selectedItemIds, selectedPackageIds } = useCart();
   const [selected, setSelected] = useState<PaymentMethod | null>(null);
   const [devMode, setDevMode] = useState(false);
 
@@ -37,13 +39,12 @@ export default function PurchaseScreen() {
 
   const targetCurrency = currency || "KRW";
   const pkgTotal = packageItems
-    .filter((p) => p.currency === targetCurrency)
+    .filter((p) => p.currency === targetCurrency && p.id && selectedPackageIds.has(p.id))
     .reduce((s, p) => s + p.totalBudget, 0);
 
-  const targetItems = items.filter((i) => {
-    if (i.flexibleAmount) return (i.product.flexible_currency ?? "KRW") === targetCurrency;
-    return targetCurrency === "KRW";
-  });
+  const targetItems = items.filter((i) =>
+    getItemCurrency(i) === targetCurrency && i.cartId && selectedItemIds.has(i.cartId),
+  );
   const itemTotal = targetItems.reduce((s, i) => {
     if (i.flexibleAmount) return s + i.flexibleAmount;
     return s + i.product.price * i.quantity;
@@ -54,12 +55,12 @@ export default function PurchaseScreen() {
 
   const handlePay = () => {
     if (!selected) {
-      Alert.alert(t("userPurchase.needMethodTitle"), t("userPurchase.needMethodBody"));
+      alert(t("userPurchase.needMethodTitle"), t("userPurchase.needMethodBody"));
       return;
     }
     router.push({
       pathname: "/(user)/payment-process",
-      params: { method: selected, currency: targetCurrency },
+      params: { method: selected, currency: targetCurrency, nonce: String(Date.now()) },
     });
   };
 
@@ -78,7 +79,7 @@ export default function PurchaseScreen() {
           <View className="flex-row justify-between">
             <Text className="text-base font-semibold text-foreground">{t("userPurchase.payAmount")}</Text>
             <Text className="text-xl font-bold text-primary">
-              {SYM[targetCurrency] ?? ""}{totalPrice.toLocaleString()}
+              {currencySymbol(targetCurrency)}{totalPrice.toLocaleString()}
             </Text>
           </View>
         </View>

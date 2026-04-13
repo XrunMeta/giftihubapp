@@ -3,22 +3,57 @@ import { Badge } from "@/components/ui/badge";
 import { Package } from "lucide-react-native";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
+import { formatPrice, currencySymbol } from "@/lib/currency";
 import { resolveImageUrl } from "@/lib/image";
-import { getListingDetail, type MarketplaceListing, type SetVoucher } from "@/services/marketplace";
+import { cancelListing, getListingDetail, type MarketplaceListing, type SetVoucher } from "@/services/marketplace";
 import { format } from "date-fns";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, Image, ScrollView, Text, View } from "react-native";
+import { ActivityIndicator, Image, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 export default function MarketplaceDetailScreen() {
   const { t } = useI18n();
+  const alert = useAlertShim();
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
+  const { user } = useAuth();
   const [listing, setListing] = useState<MarketplaceListing | null>(null);
   const [setVouchers, setSetVouchers] = useState<SetVoucher[]>([]);
   const [loading, setLoading] = useState(true);
+  const [cancelling, setCancelling] = useState(false);
+
+  const isOwner = !!(user && listing && listing.seller_id === user.id);
+
+  const handleCancel = () => {
+    if (!listing) return;
+    alert(
+      t("userMarketplace.detail.cancelConfirmTitle"),
+      t("userMarketplace.detail.cancelConfirmBody"),
+      [
+        { text: t("userMarketplace.detail.cancelNo"), style: "cancel" },
+        {
+          text: t("userMarketplace.detail.cancelYes"),
+          style: "destructive",
+          onPress: async () => {
+            setCancelling(true);
+            try {
+              await cancelListing(listing.id);
+              alert(t("userMarketplace.detail.cancelDoneTitle"), t("userMarketplace.detail.cancelDoneBody"));
+              router.back();
+            } catch (err: any) {
+              alert(t("userMarketplace.detail.cancelFailTitle"), String(err?.message ?? err));
+            } finally {
+              setCancelling(false);
+            }
+          },
+        },
+      ],
+    );
+  };
 
   useEffect(() => {
     if (id) loadListing();
@@ -30,7 +65,7 @@ export default function MarketplaceDetailScreen() {
       setListing(res.listing);
       setSetVouchers(res.set_vouchers ?? []);
     } catch {
-      Alert.alert(t("userMarketplace.detail.loadErrorTitle"), t("userMarketplace.detail.loadErrorBody"));
+      alert(t("userMarketplace.detail.loadErrorTitle"), t("userMarketplace.detail.loadErrorBody"));
       router.back();
     } finally {
       setLoading(false);
@@ -89,13 +124,13 @@ export default function MarketplaceDetailScreen() {
             <View className="flex-row justify-between">
               <Text className="text-sm text-muted-foreground">{t("userMarketplace.detail.originalPrice")}</Text>
               <Text className="text-sm text-muted-foreground line-through">
-                ₩{listing.original_price.toLocaleString()}
+                {formatPrice(listing.original_price, listing.currency)}
               </Text>
             </View>
             <View className="flex-row justify-between">
               <Text className="text-base font-semibold text-foreground">{t("userMarketplace.detail.salePrice")}</Text>
               <Text className="text-xl font-bold text-primary">
-                ₩{listing.selling_price.toLocaleString()}
+                {formatPrice(listing.selling_price, listing.currency)}
               </Text>
             </View>
             <View className="flex-row justify-between">
@@ -117,7 +152,7 @@ export default function MarketplaceDetailScreen() {
               {t("userMarketplace.detail.includedItems")}
             </Text>
             {setVouchers.map((v, i) => {
-              const sym = { KRW: "₩", USD: "$", IDR: "Rp" }[v.base_currency] ?? "₩";
+              const sym = currencySymbol(v.base_currency);
               const price = v.face_value_base || v.face_value;
               return (
                 <View key={i} className="flex-row justify-between items-center py-1.5 border-b border-border last:border-b-0">
@@ -134,16 +169,22 @@ export default function MarketplaceDetailScreen() {
       </ScrollView>
 
       <View className="px-5 py-3 border-t border-border bg-white">
-        <Button
-          onPress={() =>
-            router.push({
-              pathname: "/(user)/oth-path",
-              params: { listingId: listing.id },
-            })
-          }
-        >
-          {t("userMarketplace.detail.purchase")}
-        </Button>
+        {isOwner ? (
+          <Button variant="destructive" disabled={cancelling} onPress={handleCancel}>
+            {cancelling ? t("userMarketplace.detail.cancelling") : t("userMarketplace.detail.cancelListing")}
+          </Button>
+        ) : (
+          <Button
+            onPress={() =>
+              router.push({
+                pathname: "/(user)/oth-path",
+                params: { listingId: listing.id },
+              })
+            }
+          >
+            {t("userMarketplace.detail.purchase")}
+          </Button>
+        )}
       </View>
     </SafeAreaView>
   );

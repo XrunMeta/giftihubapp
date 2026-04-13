@@ -11,12 +11,14 @@ import * as Linking from "expo-linking";
 import { useRouter } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
 import React, { useEffect, useState } from "react";
-import { Alert, Image, KeyboardAvoidingView, Platform, Pressable, ScrollView, Switch, Text, View } from "react-native";
+import { Image, KeyboardAvoidingView, Platform, Pressable, ScrollView, Switch, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 export default function LoginScreen() {
   const router = useRouter();
   const { t } = useI18n();
+  const alert = useAlertShim();
   const { login } = useAuth();
   const isDevMode = useDevMode();
   const [email, setEmail] = useState("");
@@ -36,7 +38,7 @@ export default function LoginScreen() {
 
   const handleEmailLogin = async () => {
     if (!email || !password) {
-      Alert.alert(t("auth.login.alertInputTitle"), t("auth.login.alertInputBody"));
+      alert(t("auth.login.alertInputTitle"), t("auth.login.alertInputBody"));
       return;
     }
     setLoading(true);
@@ -52,7 +54,7 @@ export default function LoginScreen() {
       const dest = res.user.role === "merchant" ? "/(merchant)" : "/(user)/store";
       router.replace(dest);
     } catch (err: any) {
-      Alert.alert(t("auth.login.alertFailTitle"), err.body?.error || t("auth.login.alertFailBody"));
+      alert(t("auth.login.alertFailTitle"), err.body?.error || t("auth.login.alertFailBody"));
     } finally {
       setLoading(false);
     }
@@ -77,12 +79,12 @@ export default function LoginScreen() {
             const dest = role === "merchant" ? "/(merchant)" : "/(user)/store";
             router.replace(dest);
           } catch {
-            Alert.alert(t("auth.login.alertTokenTitle"), t("auth.login.alertTokenBody"));
+            alert(t("auth.login.alertTokenTitle"), t("auth.login.alertTokenBody"));
           }
         }
       }
     } catch {
-      Alert.alert(t("auth.login.alertTelegramTitle"), t("auth.login.alertTelegramBody"));
+      alert(t("auth.login.alertTelegramTitle"), t("auth.login.alertTelegramBody"));
     }
   };
 
@@ -127,6 +129,10 @@ export default function LoginScreen() {
                 onChangeText={setPassword}
               />
             </View>
+
+            <Pressable onPress={() => router.push("/(auth)/forgot-password")} className="mb-2">
+              <Text className="text-sm text-primary">{t("auth.forgotPassword")}</Text>
+            </Pressable>
 
             <View className="flex-row items-center justify-between mb-6">
               <Text className="text-sm text-muted-foreground">{t("auth.login.rememberMe")}</Text>

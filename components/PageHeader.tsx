@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { useRouter } from "expo-router";
+import { router as globalRouter, useRouter } from "expo-router";
 import { ChevronLeft } from "lucide-react-native";
 import React from "react";
 import { Pressable, Text, View } from "react-native";
@@ -10,6 +10,10 @@ interface PageHeaderProps {
   onBackPress?: () => void;
   rightAction?: React.ReactNode;
   className?: string;
+
+  onBack?: () => void;
+
+  fallbackHref?: string;
 }
 
 export function PageHeader({ title, showBack = true, onBackPress, rightAction, className }: PageHeaderProps) {

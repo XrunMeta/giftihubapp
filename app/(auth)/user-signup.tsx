@@ -6,12 +6,14 @@ import { useI18n } from "@/context/I18nContext";
 import { register } from "@/services/auth";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Alert, KeyboardAvoidingView, Platform, ScrollView, Text, View } from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 export default function UserSignupScreen() {
   const router = useRouter();
   const { t } = useI18n();
+  const alert = useAlertShim();
   const { login } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -21,22 +23,22 @@ export default function UserSignupScreen() {
 
   const handleSignup = async () => {
     if (!name || !email || !password) {
-      Alert.alert(t("auth.userSignup.alertFieldTitle"), t("auth.userSignup.alertFieldBody"));
+      alert(t("auth.userSignup.alertFieldTitle"), t("auth.userSignup.alertFieldBody"));
       return;
     }
     if (password !== confirmPassword) {
-      Alert.alert(t("auth.userSignup.alertMismatchTitle"), t("auth.userSignup.alertMismatchBody"));
+      alert(t("auth.userSignup.alertMismatchTitle"), t("auth.userSignup.alertMismatchBody"));
       return;
     }
     setLoading(true);
     try {
       const res = await register(email, password, name);
       await login(res.token, res.user);
-      Alert.alert(t("auth.userSignup.alertSuccessTitle"), t("auth.userSignup.alertSuccessBody"), [
+      alert(t("auth.userSignup.alertSuccessTitle"), t("auth.userSignup.alertSuccessBody"), [
         { text: t("auth.userSignup.ok"), onPress: () => router.replace("/(user)/store") },
       ]);
     } catch (err: any) {
-      Alert.alert(t("auth.userSignup.alertFailTitle"), err.body?.error || t("auth.userSignup.alertFailBody"));
+      alert(t("auth.userSignup.alertFailTitle"), err.body?.error || t("auth.userSignup.alertFailBody"));
     } finally {
       setLoading(false);
     }

@@ -1,4 +1,5 @@
 import Barcode128 from "@/components/Barcode128";
+import { formatPrice } from "@/lib/currency";
 import { PageHeader } from "@/components/PageHeader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -6,16 +7,18 @@ import { Separator } from "@/components/ui/separator";
 import { useI18n } from "@/context/I18nContext";
 import { useDevMode } from "@/hooks/use-dev-mode";
 import { resolveImageUrl } from "@/lib/image";
+import { cancelListing, findActiveListing, type MyListing } from "@/services/marketplace";
 import { getVoucherBarcode, getVoucherDetail, type Voucher } from "@/services/vouchers";
 import { format } from "date-fns";
 import * as Clipboard from "expo-clipboard";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
-import { ArrowLeftRight, ArrowRight, CheckCircle, Clock, Send, ShoppingBag, Store, XCircle } from "lucide-react-native";
+import { ArrowLeftRight, ArrowRight, CheckCircle, Clock, Gift, Send, ShoppingBag, Store, XCircle } from "lucide-react-native";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Alert, Animated, Image, Pressable, ScrollView, Text, TouchableOpacity, useWindowDimensions, View } from "react-native";
+import { ActivityIndicator, Animated, Image, Pressable, ScrollView, Text, TouchableOpacity, useWindowDimensions, View } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 const REFRESH_SECONDS = 30;
 
 const STATUS_META: Record<
@@ -62,6 +65,7 @@ const STATUS_META: Record<
 
 export default function GiftiDetailScreen() {
   const { t } = useI18n();
+  const alert = useAlertShim();
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const isDevMode = useDevMode();
@@ -69,6 +73,8 @@ export default function GiftiDetailScreen() {
   const [voucher, setVoucher] = useState<Voucher | null>(null);
   const [barcode, setBarcode] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [activeListing, setActiveListing] = useState<MyListing | null>(null);
+  const [cancellingListing, setCancellingListing] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const progressAnim = useRef(new Animated.Value(1)).current;
 
@@ -112,8 +118,17 @@ export default function GiftiDetailScreen() {
             loadBarcode();
             intervalRef.current = setInterval(loadBarcode, 5000);
           }
+
+          if (v.status === "listed") {
+            try {
+              const hit = await findActiveListing({ voucherId: v.id, setId: v.set_id ?? undefined });
+              setActiveListing(hit);
+            } catch {  }
+          } else {
+            setActiveListing(null);
+          }
         } catch {
-          Alert.alert(t("myGifti.detail.loadErrorTitle"), t("myGifti.detail.loadErrorBody"));
+          alert(t("myGifti.detail.loadErrorTitle"), t("myGifti.detail.loadErrorBody"));
           router.back();
         } finally {
           setLoading(false);
@@ -168,7 +183,7 @@ export default function GiftiDetailScreen() {
                       <TouchableOpacity
                         onPress={() => {
                           Clipboard.setStringAsync(barcode!);
-                          Alert.alert(t("myGifti.detail.copyTitle"), barcode!);
+                          alert(t("myGifti.detail.copyTitle"), barcode!);
                         }}
                         className="ml-2 px-2 py-1 bg-muted rounded"
                       >
@@ -242,6 +257,54 @@ export default function GiftiDetailScreen() {
           })()
         ) : null}
 
+        {voucher.status === "listed" && activeListing && (
+          <Pressable
+            disabled={cancellingListing}
+            className="mt-4 flex-row items-center justify-center gap-2 bg-white border border-destructive rounded-xl py-3 px-4"
+            onPress={() => {
+              alert(
+                t("userMarketplace.detail.cancelConfirmTitle"),
+                t("userMarketplace.detail.cancelConfirmBody"),
+                [
+                  { text: t("userMarketplace.detail.cancelNo"), style: "cancel" },
+                  {
+                    text: t("userMarketplace.detail.cancelYes"),
+                    style: "destructive",
+                    onPress: async () => {
+                      setCancellingListing(true);
+                      try {
+                        await cancelListing(activeListing.id);
+                        alert(
+                          t("userMarketplace.detail.cancelDoneTitle"),
+                          t("userMarketplace.detail.cancelDoneBody"),
+                        );
+
+                        const res = await getVoucherDetail(id!);
+                        setVoucher(res.voucher);
+                        setActiveListing(null);
+                      } catch (err: any) {
+                        alert(
+                          t("userMarketplace.detail.cancelFailTitle"),
+                          String(err?.message ?? err),
+                        );
+                      } finally {
+                        setCancellingListing(false);
+                      }
+                    },
+                  },
+                ],
+              );
+            }}
+          >
+            <XCircle size={16} color="#ef4444" />
+            <Text className="text-sm font-medium text-destructive">
+              {cancellingListing
+                ? t("userMarketplace.detail.cancelling")
+                : t("userMarketplace.detail.cancelListing")}
+            </Text>
+          </Pressable>
+        )}
+
         {voucher.status === "used" && (
           voucher.cancel_request_pending ? (
             <View className="mt-4 mb-4 flex-row items-center justify-center gap-2 bg-gray-100 border border-gray-300 rounded-xl py-3 px-4">
@@ -298,7 +361,7 @@ export default function GiftiDetailScreen() {
             <View className="flex-row justify-between">
               <Text className="text-sm text-muted-foreground">{t("myGifti.detail.faceValue")}</Text>
               <Text className="text-sm font-medium text-foreground">
-                ₩{voucher.face_value?.toLocaleString() ?? "0"}
+                {formatPrice(voucher.face_value, voucher.base_currency)}
               </Text>
             </View>
             <View className="flex-row justify-between">
@@ -333,10 +396,13 @@ export default function GiftiDetailScreen() {
               <Button
                 variant="outline"
                 className="flex-1 flex-row gap-2 bg-white"
-                onPress={() => router.push(`/(user)/oth-path${id}/refund`)}
+                onPress={() => router.push({
+                  pathname: `/(user)/oth-path${id}/gift` as any,
+                  params: { voucherName: voucher.name },
+                })}
               >
-                <ArrowLeftRight size={16} color="#0a0a0a" />
-                <Text className="text-sm font-medium text-foreground">{t("myGifti.detail.actionRefund")}</Text>
+                <Gift size={16} color="#CE3630" />
+                <Text className="text-sm font-medium text-primary">{t("myGifti.detail.actionGift")}</Text>
               </Button>
             </View>
             <Button

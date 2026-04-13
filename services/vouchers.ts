@@ -27,13 +27,18 @@ export type VoucherStatus =
   | "used"
   | "expired"
   | "transferred"
-  | "listed";
+  | "listed"
+  | "gifted";
 
 export async function getMyVouchers(
   status?: VoucherStatus,
+  keyword?: number,
 ): Promise<{ vouchers: Voucher[] }> {
-  const query = status ? `?status=${status}` : "";
-  return apiFetch<{ vouchers: Voucher[] }>(`/oth-path${query}`);
+  const params = new URLSearchParams();
+  if (status) params.set("status", status);
+  if (keyword) params.set("keyword", String(keyword));
+  const query = params.toString();
+  return apiFetch<{ vouchers: Voucher[] }>(`/oth-path${query ? `?${query}` : ""}`);
 }
 
 export async function getVoucherDetail(
@@ -75,11 +80,11 @@ export async function getSetDetail(setId: string): Promise<SetDetail> {
 
 export async function transferVoucher(
   id: string,
-  recipientEmail: string,
+  recipientId: string,
 ): Promise<{ ok: true; transfer_count: number }> {
   return apiFetch(`/oth-path${id}/transfer`, {
     method: "POST",
-    body: JSON.stringify({ recipient_email: recipientEmail }),
+    body: JSON.stringify({ recipient_id: recipientId }),
   });
 }
 
@@ -99,4 +104,30 @@ export async function useVoucher(
   return apiFetch(`/oth-path${id}/use`, {
     method: "POST",
   });
+}
+
+export interface SearchUser {
+  id: string;
+  name: string;
+  email_masked: string;
+  telegram_username: string | null;
+  telegram_photo: string | null;
+}
+
+export async function searchUsers(q: string): Promise<{ users: SearchUser[] }> {
+  return apiFetch<{ users: SearchUser[] }>(`/oth-path?q=${encodeURIComponent(q)}`);
+}
+
+export async function createGiftLink(
+  id: string,
+  message?: string,
+): Promise<{ gift_code: string; expires_at: number }> {
+  return apiFetch(`/oth-path${id}/gift-link`, {
+    method: "POST",
+    body: JSON.stringify({ message }),
+  });
+}
+
+export async function cancelGiftLink(id: string): Promise<{ ok: true }> {
+  return apiFetch(`/oth-path${id}/gift-link`, { method: "DELETE" });
 }

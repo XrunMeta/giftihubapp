@@ -4,17 +4,19 @@ import { useI18n } from "@/context/I18nContext";
 import { apiFetch } from "@/services/api";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Alert, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 export default function RefundScreen() {
   const { t } = useI18n();
+  const alert = useAlertShim();
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   const handleRefund = () => {
-    Alert.alert(
+    alert(
       t("myGifti.refund.confirmTitle"),
       t("myGifti.refund.confirmBody"),
       [
@@ -26,11 +28,11 @@ export default function RefundScreen() {
             setLoading(true);
             try {
               await apiFetch(`/oth-path${id}/refund`, { method: "POST" });
-              Alert.alert(t("myGifti.refund.doneTitle"), t("myGifti.refund.doneBody"), [
+              alert(t("myGifti.refund.doneTitle"), t("myGifti.refund.doneBody"), [
                 { text: t("myGifti.refund.ok"), onPress: () => router.back() },
               ]);
             } catch (err: any) {
-              Alert.alert(t("myGifti.refund.failTitle"), err.body?.error || t("myGifti.refund.failBody"));
+              alert(t("myGifti.refund.failTitle"), err.body?.error || t("myGifti.refund.failBody"));
             } finally {
               setLoading(false);
             }

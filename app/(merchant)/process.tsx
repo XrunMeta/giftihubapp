@@ -1,15 +1,18 @@
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/context/I18nContext";
+import { formatPrice } from "@/lib/currency";
 import { apiFetch } from "@/services/api";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { CheckCircle, XCircle } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, Text, View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 export default function ProcessScreen() {
   const { t } = useI18n();
+  const alert = useAlertShim();
   const { barcode } = useLocalSearchParams<{ barcode: string }>();
   const router = useRouter();
   const [status, setStatus] = useState<"validating" | "valid" | "invalid">("validating");
@@ -48,7 +51,7 @@ export default function ProcessScreen() {
       });
       router.replace("/(merchant)/process-complete");
     } catch (err: any) {
-      Alert.alert(t("merchant.process.failTitle"), err.body?.error || t("merchant.process.failBody"));
+      alert(t("merchant.process.failTitle"), err.body?.error || t("merchant.process.failBody"));
     }
   };
 
@@ -71,7 +74,7 @@ export default function ProcessScreen() {
               <Text className="text-sm text-muted-foreground">{voucherInfo.brand}</Text>
               <Text className="text-base font-semibold text-foreground">{voucherInfo.name}</Text>
               <Text className="text-lg font-bold text-primary mt-2">
-                ₩{voucherInfo.face_value?.toLocaleString()}
+                {formatPrice(voucherInfo.face_value)}
               </Text>
             </View>
             <Button className="w-full mt-6" onPress={handleUse}>

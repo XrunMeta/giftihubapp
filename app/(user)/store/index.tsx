@@ -1,13 +1,12 @@
 import { BundleComposer } from "@/components/BundleComposer";
 import { ScreenHeader } from "@/components/ScreenHeader";
 import { useI18n } from "@/context/I18nContext";
+import { currencySymbol } from "@/lib/currency";
 import { getProductImageUrl, getStoreProducts, type Product } from "@/services/store";
 import { useFocusEffect, useRouter } from "expo-router";
 import React, { useCallback, useState } from "react";
 import { ActivityIndicator, FlatList, Image, Pressable, Text, useWindowDimensions, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-const SYM: Record<string, string> = { KRW: "₩", USD: "$", IDR: "Rp" };
 
 const LIST_HORIZONTAL_PAD = 12;
 const GRID_COLUMN_GAP = 8;
@@ -83,7 +82,7 @@ export default function StoreScreen() {
           <View className="flex-row items-center  mt-1 gap-1.5">
             {isFlexible ? (
               <Text className="text-base font-bold text-foreground">
-                {SYM[item.flexible_currency ?? "KRW"] ?? "₩"}{(item.flexible_min ?? 0).toLocaleString()}~
+                {currencySymbol(item.flexible_currency)}{(item.flexible_min ?? 0).toLocaleString()}~
               </Text>
             ) : (
               <>
@@ -92,7 +91,7 @@ export default function StoreScreen() {
                   <Text className="text-base font-bold text-red-500">{discount}%</Text>
                 )}
                 <Text className="text-base font-bold text-foreground">
-                  {SYM[item.display_currency] ?? "₩"}{(item.price ?? 0).toLocaleString()}
+                  {currencySymbol(item.display_currency)}{(item.price ?? 0).toLocaleString()}
                 </Text>
               </>
             )}

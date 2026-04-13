@@ -3,13 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useI18n } from "@/context/I18nContext";
+import { formatPrice } from "@/lib/currency";
 import { createListing } from "@/services/marketplace";
 import { getMyVouchers, type Voucher } from "@/services/vouchers";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -19,8 +19,10 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 export default function MarketplaceSellScreen() {
   const { t } = useI18n();
+  const alert = useAlertShim();
   const router = useRouter();
   const { voucherId } = useLocalSearchParams<{ voucherId?: string }>();
   const [vouchers, setVouchers] = useState<Voucher[]>([]);
@@ -57,17 +59,17 @@ export default function MarketplaceSellScreen() {
 
   const handleSubmit = async () => {
     if (!selectedVoucher || !sellingPrice) {
-      Alert.alert(t("userMarketplace.sell.alertMissingTitle"), t("userMarketplace.sell.alertMissingBody"));
+      alert(t("userMarketplace.sell.alertMissingTitle"), t("userMarketplace.sell.alertMissingBody"));
       return;
     }
     setSubmitting(true);
     try {
       await createListing(selectedVoucher.id, Number(sellingPrice));
-      Alert.alert(t("userMarketplace.sell.successTitle"), t("userMarketplace.sell.successBody"), [
+      alert(t("userMarketplace.sell.successTitle"), t("userMarketplace.sell.successBody"), [
         { text: t("userMarketplace.sell.ok"), onPress: () => router.back() },
       ]);
     } catch (err: any) {
-      Alert.alert(t("userMarketplace.sell.failTitle"), err.body?.error || t("userMarketplace.sell.failBody"));
+      alert(t("userMarketplace.sell.failTitle"), err.body?.error || t("userMarketplace.sell.failBody"));
     } finally {
       setSubmitting(false);
     }
@@ -109,7 +111,7 @@ export default function MarketplaceSellScreen() {
                 <Text className="text-xs text-muted-foreground">{v.brand}</Text>
                 <Text className="text-sm font-medium text-foreground">{v.name}</Text>
                 <Text className="text-sm font-bold text-foreground mt-1">
-                  ₩{v.face_value.toLocaleString()}
+                  {formatPrice(v.face_value, v.base_currency)}
                 </Text>
               </Pressable>
             ))}
@@ -132,12 +134,12 @@ export default function MarketplaceSellScreen() {
             <View className="bg-card rounded-xl border border-border p-4">
               <View className="flex-row justify-between">
                 <Text className="text-sm text-muted-foreground">{t("userMarketplace.sell.feeLabel")}</Text>
-                <Text className="text-sm text-foreground">₩{fee.toLocaleString()}</Text>
+                <Text className="text-sm text-foreground">{formatPrice(fee, selectedVoucher?.base_currency)}</Text>
               </View>
               <Separator className="my-2" />
               <View className="flex-row justify-between">
                 <Text className="text-base font-semibold text-foreground">{t("userMarketplace.sell.payoutLabel")}</Text>
-                <Text className="text-base font-bold text-primary">₩{payout.toLocaleString()}</Text>
+                <Text className="text-base font-bold text-primary">{formatPrice(payout, selectedVoucher?.base_currency)}</Text>
               </View>
             </View>
 

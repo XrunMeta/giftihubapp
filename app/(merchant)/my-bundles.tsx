@@ -2,6 +2,7 @@ import { ScreenHeader } from "@/components/ScreenHeader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/context/I18nContext";
+import { formatPrice } from "@/lib/currency";
 import { resolveImageUrl } from "@/lib/image";
 import {
   getBundleSettlementRequests,
@@ -14,7 +15,6 @@ import { Calendar, Package } from "lucide-react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   FlatList,
   Image,
   RefreshControl,
@@ -24,6 +24,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 type Tab = "items" | "requests";
 
 const REQ_STATUS_META: Record<
@@ -59,6 +60,7 @@ type SingleItem = {
   brand: string;
   name: string;
   face_value: number;
+  base_currency?: string;
   status: string;
   expiry_date: number;
   image_url: string | null;
@@ -78,6 +80,7 @@ function splitBundleStatusParts(raw: string): string[] {
 
 export default function MyBundlesScreen() {
   const { t } = useI18n();
+  const alert = useAlertShim();
   const [tab, setTab] = useState<Tab>("items");
   const [bundles, setBundles] = useState<MerchantBundle[]>([]);
   const [singles, setSingles] = useState<SingleItem[]>([]);
@@ -114,9 +117,9 @@ export default function MyBundlesScreen() {
   };
 
   const handleRequestSettlement = (bundle: MerchantBundle) => {
-    Alert.alert(
+    alert(
       t("merchant.bundles.settlementTitle"),
-      `${bundle.set_name}\n${t("merchant.bundles.totalFace")}: ₩${bundle.total_face_value.toLocaleString()}\n${bundle.voucher_count}${t("merchant.bundles.voucherUnit")}\n\n${t("merchant.bundles.askSettlement")}`,
+      `${bundle.set_name}\n${t("merchant.bundles.totalFace")}: ${formatPrice(bundle.total_face_value, bundle.currency)}\n${bundle.voucher_count}${t("merchant.bundles.voucherUnit")}\n\n${t("merchant.bundles.askSettlement")}`,
       [
         { text: t("merchant.bundles.cancel"), style: "cancel" },
         {
@@ -124,13 +127,13 @@ export default function MyBundlesScreen() {
           onPress: async () => {
             try {
               const res = await requestBundleSettlement(bundle.set_id);
-              Alert.alert(
+              alert(
                 t("merchant.bundles.requestDoneTitle"),
-                `${t("merchant.bundles.feeLine")}: ₩${res.fee_amount.toLocaleString()} (${(res.fee_rate * 100).toFixed(1)}%)\n${t("merchant.bundles.netLine")}: ₩${res.net_amount.toLocaleString()}`,
+                `${t("merchant.bundles.feeLine")}: ${formatPrice(res.fee_amount)} (${(res.fee_rate * 100).toFixed(1)}%)\n${t("merchant.bundles.netLine")}: ${formatPrice(res.net_amount)}`,
               );
               fetchData();
             } catch (e) {
-              Alert.alert(t("merchant.bundles.requestFailTitle"), e instanceof Error ? e.message : t("merchant.bundles.requestFailBody"));
+              alert(t("merchant.bundles.requestFailTitle"), e instanceof Error ? e.message : t("merchant.bundles.requestFailBody"));
             }
           },
         },
@@ -216,7 +219,7 @@ export default function MyBundlesScreen() {
             <Badge variant={badge.variant} label={badge.label} />
           </View>
           <Text className="text-sm font-bold text-foreground mt-1">
-            ₩{s.face_value.toLocaleString()}
+            {formatPrice(s.face_value, s.base_currency)}
           </Text>
         </View>
       </View>

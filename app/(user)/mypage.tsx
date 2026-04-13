@@ -5,14 +5,16 @@ import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
 import { getMe, type MeResponse } from "@/services/account";
 import { useFocusEffect, useRouter } from "expo-router";
-import { ChevronRight, CreditCard, Gift, History, LogOut, Settings, UserCircle } from "lucide-react-native";
+import { ChevronRight, CreditCard, Gift, History, LogOut, Settings, Shield, UserCircle } from "lucide-react-native";
 import React, { useCallback, useState } from "react";
-import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from "react-native";
+import { ActivityIndicator, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 export default function MyPageScreen() {
   const router = useRouter();
   const { t } = useI18n();
+  const alert = useAlertShim();
   const { user, logout } = useAuth();
   const [me, setMe] = useState<MeResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -35,7 +37,7 @@ export default function MyPageScreen() {
   };
 
   const handleLogout = () => {
-    Alert.alert(t("mypage.alertLogoutTitle"), t("mypage.alertLogoutBody"), [
+    alert(t("mypage.alertLogoutTitle"), t("mypage.alertLogoutBody"), [
       { text: t("mypage.cancel"), style: "cancel" },
       {
         text: t("mypage.logout"),
@@ -91,6 +93,26 @@ export default function MyPageScreen() {
         </View>
 
         {}
+        <View className="mx-4 bg-card rounded-xl border border-border overflow-hidden mb-4">
+          <MenuItem
+            icon={<UserPen size={20} color="#737373" />}
+            label={t("mypage.editProfile")}
+            onPress={() => router.push("/(user)/edit-profile")}
+          />
+          <Separator />
+          <MenuItem
+            icon={<KeyRound size={20} color="#737373" />}
+            label={t("mypage.changePassword")}
+            onPress={() => router.push("/(user)/change-password")}
+          />
+          <Separator />
+          <MenuItem
+            icon={<Globe size={20} color="#737373" />}
+            label={t("settings.language")}
+            onPress={() => router.push("/(user)/language-settings")}
+          />
+        </View>
+
         <View className="mx-4 bg-card rounded-xl border border-border overflow-hidden">
           <MenuItem
             icon={<History size={20} color="#737373" />}
@@ -103,11 +125,13 @@ export default function MyPageScreen() {
             label={t("mypage.paymentHistory")}
             onPress={() => router.push("/(user)/settlement")}
           />
-          <Separator />
+        </View>
+
+        <View className="mx-4 mt-4 bg-card rounded-xl border border-border overflow-hidden">
           <MenuItem
-            icon={<Settings size={20} color="#737373" />}
-            label={t("mypage.settings")}
-            onPress={() => router.push("/(user)/settings")}
+            icon={<Shield size={20} color="#737373" />}
+            label="지식재산권 안내"
+            onPress={() => router.push("/(user)/patent-notice")}
           />
         </View>
 

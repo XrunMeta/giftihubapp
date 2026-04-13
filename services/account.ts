@@ -10,8 +10,20 @@ export interface MeResponse {
   user: User & {
     created_at: number;
     updated_at: number;
+    has_password?: boolean;
   };
   voucher_stats: VoucherStat[];
+}
+
+export async function updateProfile(payload: {
+  name?: string;
+  current_password?: string;
+  new_password?: string;
+}): Promise<{ ok: true }> {
+  return apiFetch<{ ok: true }>("/oth-path", {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
 }
 
 interface PaginationParams {

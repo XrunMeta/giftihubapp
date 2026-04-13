@@ -3,17 +3,20 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useI18n } from "@/context/I18nContext";
+import { formatPrice } from "@/lib/currency";
 import { resolveImageUrl } from "@/lib/image";
 import { getListingDetail, type MarketplaceListing } from "@/services/marketplace";
 import { format } from "date-fns";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Package } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, Image, ScrollView, Text, View } from "react-native";
+import { ActivityIndicator, Image, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 export default function MerchantMarketDetailScreen() {
   const { t } = useI18n();
+  const alert = useAlertShim();
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const [listing, setListing] = useState<MarketplaceListing | null>(null);
@@ -28,7 +31,7 @@ export default function MerchantMarketDetailScreen() {
       const res = await getListingDetail(id!);
       setListing(res.listing);
     } catch {
-      Alert.alert(t("merchant.marketDetail.loadErrorTitle"), t("merchant.marketDetail.loadErrorBody"));
+      alert(t("merchant.marketDetail.loadErrorTitle"), t("merchant.marketDetail.loadErrorBody"));
       router.back();
     } finally {
       setLoading(false);
@@ -86,13 +89,13 @@ export default function MerchantMarketDetailScreen() {
             <View className="flex-row justify-between">
               <Text className="text-sm text-muted-foreground">{t("merchant.marketDetail.originalPrice")}</Text>
               <Text className="text-sm text-muted-foreground line-through">
-                ₩{listing.original_price.toLocaleString()}
+                {formatPrice(listing.original_price, listing.currency)}
               </Text>
             </View>
             <View className="flex-row justify-between">
               <Text className="text-base font-semibold text-foreground">{t("merchant.marketDetail.salePrice")}</Text>
               <Text className="text-xl font-bold text-primary">
-                ₩{listing.selling_price.toLocaleString()}
+                {formatPrice(listing.selling_price, listing.currency)}
               </Text>
             </View>
             <View className="flex-row justify-between">

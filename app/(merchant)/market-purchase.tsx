@@ -8,9 +8,10 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
 import { Banknote, Coins, CreditCard, Zap } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
-import { Alert, Pressable, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { useAlertShim } from "@/components/ui/alert-shim";
 const BASE_METHODS: { key: PaymentMethod; labelKey?: string; label?: string; icon: React.ReactNode; devOnly?: boolean }[] = [
   { key: "dev_pay", labelKey: "merchant.marketPurchase.payDev", icon: <Zap size={20} color="#3b82f6" />, devOnly: true },
   { key: "paypal", label: "PayPal", icon: <CreditCard size={20} color="#0a0a0a" /> },
@@ -21,6 +22,7 @@ const BASE_METHODS: { key: PaymentMethod; labelKey?: string; label?: string; ico
 
 export default function MerchantMarketPurchaseScreen() {
   const { t } = useI18n();
+  const alert = useAlertShim();
   const { listingId } = useLocalSearchParams<{ listingId: string }>();
   const router = useRouter();
   const [selected, setSelected] = useState<PaymentMethod | null>(null);
@@ -39,7 +41,7 @@ export default function MerchantMarketPurchaseScreen() {
     try {
       const res = await purchaseFromMarketplace(listingId, selected);
       if (selected === "dev_pay" || res.payment_method === "dev_pay") {
-        Alert.alert(t("merchant.marketPurchase.successTitle"), t("merchant.marketPurchase.successBody"), [
+        alert(t("merchant.marketPurchase.successTitle"), t("merchant.marketPurchase.successBody"), [
           { text: t("merchant.marketPurchase.ok"), onPress: () => router.replace("/(merchant)/my-bundles") },
         ]);
         return;
@@ -47,11 +49,11 @@ export default function MerchantMarketPurchaseScreen() {
       if (res.redirect_url) {
         await WebBrowser.openBrowserAsync(res.redirect_url);
       }
-      Alert.alert(t("merchant.marketPurchase.progressTitle"), t("merchant.marketPurchase.progressBody"), [
+      alert(t("merchant.marketPurchase.progressTitle"), t("merchant.marketPurchase.progressBody"), [
         { text: t("merchant.marketPurchase.ok"), onPress: () => router.replace("/(merchant)/my-bundles") },
       ]);
     } catch (err: any) {
-      Alert.alert(t("merchant.marketPurchase.failTitle"), err.body?.error || t("merchant.marketPurchase.failBody"));
+      alert(t("merchant.marketPurchase.failTitle"), err.body?.error || t("merchant.marketPurchase.failBody"));
     } finally {
       setLoading(false);
     }

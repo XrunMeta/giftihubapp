@@ -59,15 +59,19 @@ export async function purchaseBundle(
   paymentMethod: PaymentMethod,
   composition: BundleComposition,
 ): Promise<PurchaseResponse> {
-  return apiFetch<PurchaseResponse>("/oth-path", {
-    method: "POST",
-    body: JSON.stringify({
-      amount,
-      currency,
-      payment_method: paymentMethod,
-      composition,
-    }),
-  });
+  const payload = { amount, currency, payment_method: paymentMethod, composition };
+  console.log(`[bundle.purchaseBundle] REQ`, JSON.stringify({ amount, currency, paymentMethod, compKeys: Object.keys(composition ?? {}) }));
+  try {
+    const res = await apiFetch<PurchaseResponse>("/oth-path", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+    console.log(`[bundle.purchaseBundle] RES`, JSON.stringify(res));
+    return res;
+  } catch (err: any) {
+    console.error(`[bundle.purchaseBundle] ERR`, JSON.stringify({ status: err?.status, body: err?.body, message: err?.message }));
+    throw err;
+  }
 }
 
 export interface MerchantBundle {
@@ -77,6 +81,7 @@ export interface MerchantBundle {
   voucher_count: number;
   total_face_value: number;
   statuses: string;
+  currency?: string;
 }
 
 export interface BundleSettlementRequest {

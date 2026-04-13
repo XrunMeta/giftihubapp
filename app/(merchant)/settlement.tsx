@@ -2,6 +2,7 @@ import { ScreenHeader } from "@/components/ScreenHeader";
 import { SegmentedControl } from "@/components/ui/segmented-control";
 import { Separator } from "@/components/ui/separator";
 import { useI18n } from "@/context/I18nContext";
+import { formatPrice } from "@/lib/currency";
 import { apiFetch } from "@/services/api";
 import { Calendar, ReceiptText } from "lucide-react-native";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
