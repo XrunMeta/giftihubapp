@@ -106,7 +106,7 @@ export default function MerchantSettingsScreen() {
           />
           <Separator />
           <MenuItem
-            icon={<Settings2 size={20} color="#737373" />
+            icon={<Settings2 size={20} color="#737373" />}
             label={t("merchant.mSettings.settlementPolicy")}
             onPress={() => router.push("/(merchant)/settlement-policy")}
           />
