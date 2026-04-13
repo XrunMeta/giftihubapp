@@ -624,6 +624,7 @@ export const ja: v_8695c5 = {
       purchaseAmount: "購入金額 ({{currency}})",
       discountFmt: "{{pct}}% OFF",
       quantity: "数量",
+      description: "商品説明",
       addToCart: "カートに入れる",
       buyNow: "購入する",
     },

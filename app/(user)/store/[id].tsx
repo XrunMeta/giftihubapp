@@ -2,6 +2,7 @@ import { v_258c1c } from "dkpdpdecefocsdaaoqazekt";
 import { v_1a40c4 } from "qdgvidsewwtecwvcsfolnn";
 import { v_7a943b } from "dxfmfnfvriitbtghyppor";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
+import { v_7ef52a } from "splenmyqnym";
 import { v_5e3aed, v_afc1d9, type v_678322 } from "vhkgxwheyyipiczd";
 import { v_d1a7ac, v_d1d90c } from "rkmroqyctko";
 import { v_3b9c43, v_a07c02 } from "wjvlskvsbzsrojdbjsl";
@@ -96,6 +97,7 @@ export default function v_2b70c8() {
   };
 
   const v_74f4a3 = v_afc1d9(v_01bee9);
+  const v_7ca587 = v_7ef52a(v_01bee9.detail_image_url);
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50" edges={["top"]}>
@@ -110,103 +112,120 @@ export default function v_2b70c8() {
           className="flex-1"
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 16, paddingBottom: 16 }}
+          contentContainerStyle={{ paddingBottom: 16 }}
         >
-          <View className="overflow-hidden p-4">
-            {v_74f4a3 ? (
-              <Image source={{ uri: v_74f4a3 }} className="w-full h-52" resizeMode="contain" />
-            ) : (
-              <View className="w-full h-56 bg-muted/60 items-center justify-center py-10">
-                <Text className="text-5xl">🎁</Text>
-                <Text className="text-sm text-muted-foreground mt-3">{v_01bee9.brand_name}</Text>
-              </View>
-            )}
-          </View>
+          {v_74f4a3 ? (
+            <Image source={{ uri: v_74f4a3 }} className="w-full aspect-square" resizeMode="cover" />
+          ) : (
+            <View className="w-full aspect-square bg-muted/60 items-center justify-center">
+              <Text className="text-5xl">🎁</Text>
+              <Text className="text-sm text-muted-foreground mt-3">{v_01bee9.brand_name}</Text>
+            </View>
+          )}
 
-          <View className="bg-white rounded-2xl border border-border p-5">
-            <Text className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
-              {v_01bee9.brand_name}
-            </Text>
-            <Text className="text-xl font-bold text-foreground  leading-7">{v_01bee9.name}</Text>
+          <View className="px-4 mt-4">
+            <View className="bg-white rounded-2xl border border-border p-5">
+              <Text className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
+                {v_01bee9.brand_name}
+              </Text>
+              <Text className="text-xl font-bold text-foreground leading-7">{v_01bee9.name}</Text>
 
-            {v_e567dc ? (
-              <>
-                <View className="mt-2 bg-secondary/80 rounded-xl py-3">
-                  <Text className="text-sm text-muted-foreground">{v_8d41d7("userStore.detail.purchasableRange")}</Text>
-                  <Text className="text-smd font-semibold text-foreground mt-1">
-                    {v_c37780}
-                    {(v_01bee9.flexible_min ?? 0).toLocaleString()} ~ {v_c37780}
-                    {(v_01bee9.flexible_max ?? 0).toLocaleString()}
+              {v_e567dc ? (
+                <>
+                  <View className="mt-2 bg-secondary/80 rounded-xl py-3">
+                    <Text className="text-sm text-muted-foreground">{v_8d41d7("userStore.detail.purchasableRange")}</Text>
+                    <Text className="text-smd font-semibold text-foreground mt-1">
+                      {v_c37780}
+                      {(v_01bee9.flexible_min ?? 0).toLocaleString()} ~ {v_c37780}
+                      {(v_01bee9.flexible_max ?? 0).toLocaleString()}
+                    </Text>
+                  </View>
+                  <Text className="text-sm font-medium text-foreground mt-2 mb-2">
+                    {v_8d41d7("userStore.detail.purchaseAmount").replace("{{currency}}", v_d6ed0e)}
                   </Text>
-                </View>
-                <Text className="text-sm font-medium text-foreground mt-2 mb-2">
-                  {v_8d41d7("userStore.detail.purchaseAmount").replace("{{currency}}", v_d6ed0e)}
-                </Text>
-                <View className="flex-row items-center bg-secondary rounded-xl border border-border px-4 py-3">
-                  <Text className="text-base font-bold text-muted-foreground mr-2">{v_c37780}</Text>
-                  <TextInput
-                    className="flex-1 text-lg font-semibold text-foreground py-0.5"
-                    placeholder={v_f89181(String(v_01bee9.flexible_min ?? 0))}
-                    placeholderTextColor="#737373"
-                    keyboardType="numeric"
-                    value={v_f89181(v_e4a1e9)}
-                    onChangeText={(v_c70495) => v_72c7ee(v_c70495.replace(/\D/g, ""))}
-                  />
-                </View>
-              </>
-            ) : (
-              <>
-                <View className="flex-row items-end justify-between gap-3 mt-4">
-                  {v_3ae14a > 0 ? (
-                    <>
-                      <View className="flex-1 min-w-0">
-                        <View className="bg-primary/12 self-start rounded-full ">
-                          <Text className="text-sm font-bold text-primary">
-                            {v_8d41d7("userStore.detail.discountFmt").replace("{{pct}}", String(v_3ae14a))}
+                  <View className="flex-row items-center bg-secondary rounded-xl border border-border px-4 py-3">
+                    <Text className="text-base font-bold text-muted-foreground mr-2">{v_c37780}</Text>
+                    <TextInput
+                      className="flex-1 text-lg font-semibold text-foreground py-0.5"
+                      placeholder={v_f89181(String(v_01bee9.flexible_min ?? 0))}
+                      placeholderTextColor="#737373"
+                      keyboardType="numeric"
+                      value={v_f89181(v_e4a1e9)}
+                      onChangeText={(v_c70495) => v_72c7ee(v_c70495.replace(/\D/g, ""))}
+                    />
+                  </View>
+                </>
+              ) : (
+                <>
+                  <View className="flex-row items-end justify-between gap-3 mt-4">
+                    {v_3ae14a > 0 ? (
+                      <>
+                        <View className="flex-1 min-w-0">
+                          <View className="bg-primary/12 self-start rounded-full ">
+                            <Text className="text-sm font-bold text-primary">
+                              {v_8d41d7("userStore.detail.discountFmt").replace("{{pct}}", String(v_3ae14a))}
+                            </Text>
+                          </View>
+                          <Text className="text-sm text-muted-foreground line-through">
+                            {v_581cd0(v_01bee9.display_currency)}
+                            {(v_01bee9.face_value ?? 0).toLocaleString()}
                           </Text>
                         </View>
-                        <Text className="text-sm text-muted-foreground line-through">
+                        <Text className="text-2xl font-bold text-foreground shrink-0">
                           {v_581cd0(v_01bee9.display_currency)}
-                          {(v_01bee9.face_value ?? 0).toLocaleString()}
+                          {(v_01bee9.price ?? 0).toLocaleString()}
                         </Text>
-                      </View>
-                      <Text className="text-2xl font-bold text-foreground shrink-0">
+                      </>
+                    ) : (
+                      <Text className="text-2xl font-bold text-foreground">
                         {v_581cd0(v_01bee9.display_currency)}
                         {(v_01bee9.price ?? 0).toLocaleString()}
                       </Text>
-                    </>
-                  ) : (
-                    <Text className="text-2xl font-bold text-foreground">
-                      {v_581cd0(v_01bee9.display_currency)}
-                      {(v_01bee9.price ?? 0).toLocaleString()}
-                    </Text>
-                  )}
-                </View>
+                    )}
+                  </View>
 
-                <Text className="text-sm font-medium text-foreground mt-4 mb-1">{v_8d41d7("userStore.detail.quantity")}</Text>
-                <View className="flex-row items-center self-start bg-secondary rounded-xl border border-border">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="rounded-xl rounded-r-none"
-                    onPress={() => v_c94a71(Math.max(1, v_ac2689 - 1))}
-                  >
-                    <Minus size={18} color="#0a0a0a" />
-                  </Button>
-                  <Text className="text-base font-semibold min-w-[44px] text-center text-foreground">
-                    {v_ac2689}
-                  </Text>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="rounded-xl rounded-l-none"
-                    onPress={() => v_c94a71(v_ac2689 + 1)}
-                  >
-                    <Plus size={18} color="#0a0a0a" />
-                  </Button>
+                  <Text className="text-sm font-medium text-foreground mt-4 mb-1">{v_8d41d7("userStore.detail.quantity")}</Text>
+                  <View className="flex-row items-center self-start bg-secondary rounded-xl border border-border">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="rounded-xl rounded-r-none"
+                      onPress={() => v_c94a71(Math.max(1, v_ac2689 - 1))}
+                    >
+                      <Minus size={18} color="#0a0a0a" />
+                    </Button>
+                    <Text className="text-base font-semibold min-w-[44px] text-center text-foreground">
+                      {v_ac2689}
+                    </Text>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="rounded-xl rounded-l-none"
+                      onPress={() => v_c94a71(v_ac2689 + 1)}
+                    >
+                      <Plus size={18} color="#0a0a0a" />
+                    </Button>
+                  </View>
+                </>
+              )}
+            </View>
+
+            <View className="bg-white rounded-2xl border border-border overflow-hidden mt-3">
+              {v_7ca587 ? (
+                <Image source={{ uri: v_7ca587 }} className="w-full" style={{ aspectRatio: 1 }} resizeMode="cover" />
+              ) : (
+                <View className="w-full py-10 items-center justify-center bg-muted/30">
+                  <Text className="text-3xl">🖼️</Text>
+                  <Text className="text-xs text-muted-foreground mt-2">{v_8d41d7("userStore.detail.description")}</Text>
                 </View>
-              </>
-            )}
+              )}
+              <View className="p-5">
+                <Text className="text-sm font-semibold text-foreground mb-2">{v_8d41d7("userStore.detail.description")}</Text>
+                <Text className="text-sm text-muted-foreground leading-5">
+                  {v_01bee9.description || "-"}
+                </Text>
+              </View>
+            </View>
           </View>
         </ScrollView>
 

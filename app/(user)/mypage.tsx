@@ -15,7 +15,7 @@ export default function v_840f8f() {
   const v_904d46 = v_d1d90c();
   const { t: v_8d41d7 } = v_678659();
   const v_5c50c0 = v_2bd2c5();
-  const { user: v_625c74, logout: v_d7d5a2 } = v_5d2c47();
+  const { user: v_625c74, logout: v_d7d5a2, updateUser: v_19fcbf } = v_5d2c47();
   const [v_b32680, v_ee70ba] = v_5ab095<v_44083e | null>(null);
   const [v_683210, v_34a50a] = v_5ab095(true);
 
@@ -29,6 +29,9 @@ export default function v_840f8f() {
     try {
       const v_9390e8 = await v_7ef860();
       v_ee70ba(v_9390e8);
+      if (v_9390e8.user) {
+        v_19fcbf(v_9390e8.user);
+      }
     } catch {
 
     } finally {

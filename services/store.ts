@@ -7,6 +7,7 @@ export interface Product {
   brand_name: string;
   brand_logo: string | null;
   name: string;
+  description: string | null;
   face_value: number;
   face_value_usd: number;
   price: number;
@@ -14,6 +15,7 @@ export interface Product {
   display_currency: string;
   image_url: string | null;
   thumb_url: string | null;
+  detail_image_url: string | null;
   stock_count: number | null;
   total_issued: number;
   status: string;

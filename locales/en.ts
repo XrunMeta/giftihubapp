@@ -624,6 +624,7 @@ export const en: v_8695c5 = {
       purchaseAmount: "Amount ({{currency}})",
       discountFmt: "{{pct}}% off",
       quantity: "Quantity",
+      description: "Product Description",
       addToCart: "Add to cart",
       buyNow: "Buy now",
     },

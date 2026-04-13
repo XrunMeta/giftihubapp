@@ -624,6 +624,7 @@ export const id: v_8695c5 = {
       purchaseAmount: "Jumlah ({{currency}})",
       discountFmt: "Diskon {{pct}}%",
       quantity: "Jumlah",
+      description: "Deskripsi Produk",
       addToCart: "Ke keranjang",
       buyNow: "Beli",
     },

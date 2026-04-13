@@ -624,6 +624,7 @@ export const zhHans: v_8695c5 = {
       purchaseAmount: "购买金额 ({{currency}})",
       discountFmt: "{{pct}}% 折扣",
       quantity: "数量",
+      description: "商品说明",
       addToCart: "加入购物车",
       buyNow: "购买",
     },

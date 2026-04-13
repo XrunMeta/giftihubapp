@@ -234,11 +234,11 @@ export default function v_14045c() {
                 : `\n${v_8d41d7("userPaymentProcess.successCheckMy")}`}
             </Text>
             {v_6bbe19 ? (
-              <Button className="mt-6 w-full" onPress={() => v_904d46.replace("/(user)/cart")}>
+              <Button className="mt-6 w-full" textClassName="w-full text-center" onPress={() => v_904d46.replace("/(user)/cart")}>
                 {v_8d41d7("userPaymentProcess.backToCart")}
               </Button>
             ) : (
-              <Button className="mt-6 w-full" onPress={() => v_904d46.replace("/(user)/oth-path")}>
+              <Button className="mt-6 w-full" textClassName="w-full text-center" onPress={() => v_904d46.replace("/(user)/oth-path")}>
                 {v_8d41d7("userPaymentProcess.viewMyGifti")}
               </Button>
             )}
@@ -258,7 +258,7 @@ export default function v_14045c() {
               {v_f0e6fe}
             </Text>
           ) : null}
-          <Button className="mt-6 w-full" onPress={() => v_904d46.back()}>
+          <Button className="mt-6 w-full" textClassName="w-full text-center" onPress={() => v_904d46.back()}>
             {v_8d41d7("userPaymentProcess.goBack")}
           </Button>
         </View>
