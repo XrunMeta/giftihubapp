@@ -1,6 +1,5 @@
 import { ScreenHeader } from "@/components/ScreenHeader";
 import { Badge } from "@/components/ui/badge";
-import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
 import { formatPrice } from "@/lib/currency";
 import { resolveImageUrl } from "@/lib/image";
@@ -27,7 +26,6 @@ function kwLabel(kw: Keyword, locale: Locale): string {
 export default function MarketplaceScreen() {
   const { t, locale } = useI18n();
   const router = useRouter();
-  const { user } = useAuth();
   const [listings, setListings] = useState<MarketplaceListing[]>([]);
   const [keywords, setKeywords] = useState<Keyword[]>([]);
   const [loading, setLoading] = useState(true);
@@ -50,14 +48,13 @@ export default function MarketplaceScreen() {
         keyword: activeKeyword ?? undefined,
         q: search || undefined,
       });
-      const filtered = user ? res.listings.filter((l) => l.seller_id !== user.id) : res.listings;
-      setListings(filtered);
+      setListings(res.listings);
     } catch {
       console.error("Failed to load marketplace listings");
     } finally {
       setLoading(false);
     }
-  }, [activeKeyword, search, user]);
+  }, [activeKeyword, search]);
 
   useFocusEffect(
     useCallback(() => {
