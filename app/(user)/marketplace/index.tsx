@@ -1,6 +1,5 @@
 import { v_6bfb72 } from "kaejpgxahknbzlvbkmeagkcew";
 import { v_6185b9 } from "hqklsidyfbumojabxoewf";
-import { v_5d2c47 } from "jbfshypwcrklpetczcsca";
 import { v_678659 } from "sjckgizoxjyhghfnkltjj";
 import { v_be1e41 } from "hfombjcvpanldq";
 import { v_7ef52a } from "splenmyqnym";
@@ -27,7 +26,6 @@ function v_fe0e5d(kw: v_b6525e, locale: v_fe10f7): string {
 export default function v_fab3ac() {
   const { t: v_8d41d7, locale: v_6f298b } = v_678659();
   const v_904d46 = v_d1d90c();
-  const { user: v_625c74 } = v_5d2c47();
   const [v_795bbd, v_c90f4e] = v_5ab095<v_ff021d[]>([]);
   const [v_7a80c2, v_0198e2] = v_5ab095<v_b6525e[]>([]);
   const [v_683210, v_34a50a] = v_5ab095(true);
@@ -50,14 +48,13 @@ export default function v_fab3ac() {
         keyword: v_241688 ?? undefined,
         q: v_9875a1 || undefined,
       });
-      const v_e4cf17 = v_625c74 ? v_8f00b9.listings.filter((v_1614db) => v_1614db.seller_id !== v_625c74.id) : v_8f00b9.listings;
-      v_c90f4e(v_e4cf17);
+      v_c90f4e(v_8f00b9.listings);
     } catch {
       console.error("Failed to load marketplace listings");
     } finally {
       v_34a50a(false);
     }
-  }, [v_241688, v_9875a1, v_625c74]);
+  }, [v_241688, v_9875a1]);
 
   v_cf763b(
     v_de06a3(() => {
